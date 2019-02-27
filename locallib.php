@@ -15,17 +15,36 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This file is used when adding/editing a flashcard to a cardbox.
+ *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @authors   Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+/**
+ * Function creates a new record in cardbox_cards table.
+ *
+ * @global obj $DB
+ * @global obj $USER
+ * @param int $cardboxid
+ * @param string $topic
+ * @return int
+ */
+function cardbox_save_new_card($cardboxid, $topic = null) {
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2019022702; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+    global $DB, $USER;
+
+    $cardrecord = new stdClass();
+    $cardrecord->cardbox = $cardboxid;
+    $cardrecord->topic = $topic;
+    $cardrecord->author = $USER->id;
+    $cardrecord->timecreated = time();
+    $cardrecord->timemodified = null;
+    $cardrecord->approvedby = null;
+    $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
+
+    return $cardid;
+
+}

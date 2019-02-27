@@ -27,6 +27,7 @@
 
 require('../../config.php');
 require_once('lib.php');
+require_once('locallib.php');
  
 $cmid = required_param('id', PARAM_INT);
 

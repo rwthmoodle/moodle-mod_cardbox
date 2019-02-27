@@ -147,5 +147,27 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019022605, 'cardbox');
     }
+    
+    if ($oldversion < 2019022700) {
+
+        
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019022700, 'cardbox');
+    }
+    
+     if ($oldversion < 2019022702) {
+
+        // Define field cardside to be added to cardbox_cardcontents.
+        $table = new xmldb_table('cardbox_cardcontents');
+        $field = new xmldb_field('cardside', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, null, 'card');
+
+        // Conditionally launch add field cardside.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019022702, 'cardbox');
+    }
 
 }

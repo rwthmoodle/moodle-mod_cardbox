@@ -23,11 +23,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-/* *********************************************** Display page Add a flashcard *********************************************** */
+/* *********************************************** Add a flashcard *********************************************** */
 
 if ($action === 'addflashcard') {
 
-    global $USER;
+    global $USER, $DB;
     
     require_once('card_form.php');
 
@@ -48,9 +48,6 @@ if ($action === 'addflashcard') {
     $component = 'mod_cardbox';
     $filearea = 'content';
 
-    // Load any preexisting files into the draftarea.
-    //file_prepare_standard_filemanager($data, $filearea, $options, $context, $component, $filearea, $data->id);
-
     $mform = new mod_cardbox_card_form();
     $mform->set_data($entry);
     
@@ -60,26 +57,41 @@ if ($action === 'addflashcard') {
 
     // If submitted: get files from filemanager
     } else if ($mform->get_data()) {
-
-        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted.)
+        
+        // Create a new entry in cardbox_cards table
+        $topic = null; // TODO im Formular mitschicken
+        $cardid = cardbox_save_new_card($cardbox->id, $topic);
+        
+        echo "mform->get_data():<br>";
+        print_r($mform->get_data());
+        
+        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
         $draftitemid = file_get_submitted_draft_itemid('cardimage');
         
-        // Copy all the files from the 'real' area, into the draft area
+        // Copy all the files from the 'real' area, into the draft area.
         file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, 0, array('subdirs'=>true));
 
+        // Save the file.
         if ($draftitemid != null) {
-
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);
-            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {            
+            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
                 echo 'Fehlerbehandlung!';
             } else {
                 foreach ($files as $file) {
-                    $fileid = $file->get_id();
-                    file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, 3, $options);
+
+                    // Save a reference to the image data in cardbox_cardcontents.
+                    $imagerecord = new stdClass();
+                    $imagerecord->card = $cardid;
+                    $imagerecord->cardside = 0;
+                    $imagerecord->contenttype = 1; // XXX Make dynamic (SQL join, install.php)
+                    $imagerecord->content = $file->get_filename();
+                    $itemid = $DB->insert_record('cardbox_cardcontents', $imagerecord, true);
+
+                    // Save the actual image data in moodle.
+                    file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
                 }
-
             }
 
 // @Ahmad
@@ -108,6 +120,8 @@ if ($action === 'addflashcard') {
 
     } 
 }
+
+/* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
     

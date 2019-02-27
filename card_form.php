@@ -15,9 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file is used when adding/editing a cardbox module to a course.
- * It contains the elements that will be displayed on the form responsible
- * for creating/installing an instance of cardbox.
+ * This file is used when adding/editing a flashcard to a cardbox.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
@@ -27,8 +25,7 @@
 
 defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
 
-// moodleform is defined in formslib.php
-require_once("$CFG->libdir/formslib.php");
+require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
 
 class mod_cardbox_card_form extends moodleform {
 
@@ -56,7 +53,7 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
         
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
-        $torepeat = array($mform->createElement('textarea', 'question', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
+        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         $initialrepeats = 1;
         $options = array();
         $repeathiddenname = 'answer_repeat';
