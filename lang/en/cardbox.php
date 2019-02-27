@@ -32,8 +32,7 @@ $string['pluginadministration'] = 'Card Box Administration';
 // Tab navigation
 $string['addflashcard'] = 'Add flashcard';
 $string['practice'] = 'Practice';
-$string['tab3'] = 'Tab3';
-$string['tab4'] = 'Tab4';
+$string['review'] = 'Review';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'Add flashcard';

@@ -23,17 +23,22 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-/* *********************************************** Add a flashcard *********************************************** */
+/* *********************************************** Add a new flashcard *********************************************** */
+
+$question = optional_param('question', null, PARAM_ALPHANUM);
+
+if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
+    $action = 'addflashcard';
+}
 
 if ($action === 'addflashcard') {
 
     global $USER, $DB;
-    
+
     require_once('card_form.php');
 
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
-    
 
     // Contextual data to pass on to the card form.
     if (empty($entry)) {
@@ -56,18 +61,27 @@ if ($action === 'addflashcard') {
         redirect($returnurl);
 
     // If submitted: get files from filemanager
-    } else if ($mform->get_data()) {
-        
+    } else if ($formdata = $mform->get_data()) {
+
         // Create a new entry in cardbox_cards table
         $topic = null; // TODO im Formular mitschicken
         $cardid = cardbox_save_new_card($cardbox->id, $topic);
-        
+
+        // Save the question text if there is any.
+        if (!empty($formdata->question)) {
+            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
+        }
+        // Save the text of the answer/s.
+        foreach ($formdata->answer as $answer) {
+            cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
+        }
+
         echo "mform->get_data():<br>";
-        print_r($mform->get_data());
-        
+        print_r($formdata);
+
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
         $draftitemid = file_get_submitted_draft_itemid('cardimage');
-        
+
         // Copy all the files from the 'real' area, into the draft area.
         file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, 0, array('subdirs'=>true));
 
@@ -79,15 +93,8 @@ if ($action === 'addflashcard') {
                 echo 'Fehlerbehandlung!';
             } else {
                 foreach ($files as $file) {
-
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $imagerecord = new stdClass();
-                    $imagerecord->card = $cardid;
-                    $imagerecord->cardside = 0;
-                    $imagerecord->contenttype = 1; // XXX Make dynamic (SQL join, install.php)
-                    $imagerecord->content = $file->get_filename();
-                    $itemid = $DB->insert_record('cardbox_cardcontents', $imagerecord, true);
-
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -125,7 +132,8 @@ if ($action === 'addflashcard') {
 
 if ($action === 'practice') {
     
-    echo $OUTPUT->heading(get_string('titleforpractice', 'cardbox'));
+//    echo $OUTPUT->heading(get_string('titleforpractice', 'cardbox'));
+    echo $OUTPUT->heading("$cardbox->name");
     
     $fs = get_file_storage();
     if ($files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', false, 'sortorder', false)) {
@@ -138,4 +146,13 @@ if ($action === 'practice') {
     } else {
             echo '<p>Please upload an image first</p>';
     }  
+}
+
+/* **************************************************** Approve/edit cards **************************************************** */
+
+if ($action === 'review') {
+    
+    
+    
+    
 }

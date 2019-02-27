@@ -32,15 +32,14 @@ $string['pluginadministration'] = 'Karteikasten Administration';
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
 $string['practice'] = 'Üben';
-$string['tab3'] = 'Tab3';
-$string['tab4'] = 'Tab4';
+$string['review'] = 'Freigabe';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'Karte anlegen';
 $string['titleforpractice'] = 'Üben';
 
 // Form elements for creating a new card
-$string['enterquestion'] = 'Frage/Stichwort eingeben';
+$string['enterquestion'] = 'Frage/Begriff eingeben';
 $string['image'] = 'Bild hinzufügen';
 $string['enteranswer'] = 'Lösung eingeben';
 $string['addanswer'] = 'weitere Lösung';

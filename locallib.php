@@ -48,3 +48,27 @@ function cardbox_save_new_card($cardboxid, $topic = null) {
     return $cardid;
 
 }
+/**
+ * Function creates a new record in cardbox_cardcontents table.
+ *
+ * @global obj $DB
+ * @param int $cardid
+ * @param int $cardside
+ * @param int $contenttype
+ * @param string $name
+ * @return int
+ */
+function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name) {
+
+    global $DB;
+
+    $cardcontent = new stdClass();
+    $cardcontent->card = $cardid;
+    $cardcontent->cardside = $cardside; // 0 for question page
+    $cardcontent->contenttype = $contenttype; // 1 for image; // XXX Make dynamic (SQL join, install.php)
+    $cardcontent->content = $name; // $file->get_filename();
+    $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
+
+    return $itemid;
+
+}

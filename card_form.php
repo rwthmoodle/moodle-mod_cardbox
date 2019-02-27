@@ -55,12 +55,12 @@ class mod_cardbox_card_form extends moodleform {
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
         $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         $initialrepeats = 1;
-        $options = array();
+        $roptions = array();
         $repeathiddenname = 'answer_repeat';
         $addfieldsname = 'answer_add_fields';
         $addfieldsno = 1;
         $addstring = get_string('addanswer', 'cardbox');
-        $this->repeat_elements($torepeat, $initialrepeats, $options, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
+        $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
         
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 

@@ -110,16 +110,19 @@ class mod_cardbox_renderer extends plugin_renderer_base {
      * @param type $inactive
      * @return type
      */
-    public function cardbox_render_tabs(moodle_url $baseurl, $selected = null, $cardboxname, $context, $inactive = null) {
+    public function cardbox_render_tabs(moodle_url $baseurl, $selected = null, $context, $inactive = null) {
 
-        $overviewtab = $this->cardbox_create_tab($baseurl, 'addflashcard', 'addflashcard');
+        global $USER;
 
         $level1 = array(
-            $overviewtab,
-            $this->cardbox_create_tab($baseurl, 'practice', 'practice', $cardboxname),
-            $this->cardbox_create_tab($baseurl, 'tab3', 'tab3'),
-            $this->cardbox_create_tab($baseurl, 'tab4', 'tab4'),
+            $this->cardbox_create_tab($baseurl, 'addflashcard', 'addflashcard'),
+            $this->cardbox_create_tab($baseurl, 'practice', 'practice')
         );
+
+        if (has_capability('mod/cardbox:approvecard', $context)) {
+            $level1[] = $this->cardbox_create_tab($baseurl, 'review', 'review');
+        }
+
         return $this->tabtree($level1, $selected, $inactive);
     }
 
