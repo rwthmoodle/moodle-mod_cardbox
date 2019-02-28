@@ -131,9 +131,27 @@ if ($action === 'addflashcard') {
 /* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
-    
-//    echo $OUTPUT->heading(get_string('titleforpractice', 'cardbox'));
+
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
+
     echo $OUTPUT->heading("$cardbox->name");
+    
+    // 1. Give javascript access to the language string repository and add it to the page.
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
+    
+    // If needed:
+//    $params = array($pdfannotator->id);
+//    $PAGE->requires->js_init_call('startOverview', $params, true); // 1. name of JS function, 2. parameters.
+    
+    // 2. Capability check. // TODO
+    
+    
+    
+    $imgurls = array();
     
     $fs = get_file_storage();
     if ($files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', false, 'sortorder', false)) {
@@ -141,11 +159,19 @@ if ($action === 'practice') {
                 $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
                 // Display the image
                 $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
-            echo '<a href="' . $download_url . '">' . $file->get_filename() . '</a><br/>';
+                $imgurls[] = $download_url;
+                break; // TODO: wieder entfernen
+//                echo '<a href="' . $download_url . '">' . $file->get_filename() . '</a><br/>';
             }
     } else {
             echo '<p>Please upload an image first</p>';
     }  
+    
+    // 3. Render the page.
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $studyview = new cardbox_studyview($imgurls, array('Küstenseeschwalbe')); // maybe add parameters
+    echo $renderer->cardbox_render_studyview($studyview);
+    
 }
 
 /* **************************************************** Approve/edit cards **************************************************** */

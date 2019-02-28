@@ -58,6 +58,7 @@ echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 // Note, however, that we forbid file replacement in order to prevent a change of meaning in other people's comments.
 $cardbox->revision = 1;
 
+//require_once($CFG->dirroot . '/mod/cardbox/styles.css');
 require_once($CFG->dirroot . '/mod/cardbox/controller.php');
 
 // Display left-side navigation, blocks to the right as well as the actual footer.
