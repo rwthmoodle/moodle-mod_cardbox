@@ -39,6 +39,10 @@ $string['titleforaddflashcard'] = 'Add flashcard';
 $string['titleforpractice'] = 'Practice';
 
 // Form elements for creating a new card
+$string['choosetopic'] = 'Topic';
+$string['notopic'] = 'not assigned';
+$string['addnewtopic'] = 'create a topic';
+$string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Enter a prompt or question';
 $string['image'] = 'Add an image';
 $string['enteranswer'] = 'Enter the solution';

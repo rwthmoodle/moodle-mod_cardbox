@@ -24,6 +24,33 @@
  */
 
 /**
+ * Function creates a new record in cardbox_topics table.
+ * 
+ * @global obj $DB
+ * @param string $topicname
+ * @return int id of the new topic
+ */
+function cardbox_save_new_topic($topicname) {
+
+    global $DB;
+    $topic = new stdClass();
+    $topic->topicname = $topicname;
+    return $DB->insert_record('cardbox_topics', $topic, true);
+
+}
+
+function cardbox_get_topics() {
+    
+    global $DB;
+    $topics = $DB->get_records('cardbox_topics', array());
+    $options = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));
+    foreach ($topics as $topic) {
+        $options[$topic->id] = $topic->topicname;
+    }
+    return $options;
+}
+
+/**
  * Function creates a new record in cardbox_cards table.
  *
  * @global obj $DB
@@ -32,13 +59,13 @@
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $topic = null) {
+function cardbox_save_new_card($cardboxid, $topicid = null) {
 
     global $DB, $USER;
 
     $cardrecord = new stdClass();
     $cardrecord->cardbox = $cardboxid;
-    $cardrecord->topic = $topic;
+    $cardrecord->topic = $topicid;
     $cardrecord->author = $USER->id;
     $cardrecord->timecreated = time();
     $cardrecord->timemodified = null;

@@ -63,9 +63,24 @@ if ($action === 'addflashcard') {
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
 
+        // Create or select a topic for the card.
+        switch ($formdata->topic) {
+            case -1: // Card belongs to no topic.
+                $topicid = null;
+                break;
+            case 0: // Card belongs to a new topic that is to be created.
+                if (!empty($formdata->newtopic)) {
+                    $topicid = cardbox_save_new_topic($formdata->newtopic);
+                } else {
+                    $topicid = null;
+                }
+                break;
+            default: // Card belongs to an already existing topic
+                $topicid = $formdata->topic;
+        }
+
         // Create a new entry in cardbox_cards table
-        $topic = null; // TODO im Formular mitschicken
-        $cardid = cardbox_save_new_card($cardbox->id, $topic);
+        $cardid = cardbox_save_new_card($cardbox->id, $topicid);
 
         // Save the question text if there is any.
         if (!empty($formdata->question)) {
@@ -117,8 +132,10 @@ if ($action === 'addflashcard') {
 
             
         }
+        
+        // add user feedback
 
-//        redirect($returnurl);
+//        redirect($actionurl);
     
     } else {
 

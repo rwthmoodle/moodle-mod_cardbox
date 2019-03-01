@@ -26,6 +26,7 @@
 defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
 
 require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
+require_once('locallib.php');
 
 class mod_cardbox_card_form extends moodleform {
 
@@ -44,6 +45,16 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_INT);
         
+        // Get topics to choose from when creating a new card.
+        $topiclist = cardbox_get_topics();
+//        $topics = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));
+        $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist, array('onchange' => 'javascript:myFunctionToDoSomething();'));
+        
+        // Text input field for creating a new topic.
+        $mform->addElement('text', 'newtopic', ''); // $mform->addElement('text', 'newtopic', get_string('entertopic', 'cardbox'));
+        $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
+        $mform->disabledIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to
+
         // Enter a prompt or question. // XXX Make width / number of columns dynamic
         $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
 
