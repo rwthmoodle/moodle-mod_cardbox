@@ -48,3 +48,6 @@ $string['image'] = 'Add an image';
 $string['enteranswer'] = 'Enter the solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
+
+// Success notifications
+$string['success:addnewcard'] = 'The flashcard was created and awaits approval.';

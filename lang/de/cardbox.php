@@ -48,3 +48,6 @@ $string['image'] = 'Bild hinzufügen';
 $string['enteranswer'] = 'Lösung eingeben';
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
+
+// Success notifications
+$string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';

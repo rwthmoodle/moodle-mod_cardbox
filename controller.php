@@ -91,9 +91,6 @@ if ($action === 'addflashcard') {
             cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
         }
 
-        echo "mform->get_data():<br>";
-        print_r($formdata);
-
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
         $draftitemid = file_get_submitted_draft_itemid('cardimage');
 
@@ -116,26 +113,10 @@ if ($action === 'addflashcard') {
                 }
             }
 
-// @Ahmad
-//            $fs = get_file_storage();
-//            $usercontext = context_user::instance($USER->id);
-//            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {            
-//                echo 'Fehlerbehandlung!';
-//            }
-            
-//            $options = array('subdirs' => true, 'embed' => false);
-//            file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, 0, $options);
-
-// @Ahmad
-//            $file = reset($files);
-//            file_set_sortorder($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename(), 1);
-
-            
         }
         
-        // add user feedback
-
-//        redirect($actionurl);
+        // Give user feedback and go back to practice.
+        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     
     } else {
 
