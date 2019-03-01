@@ -1,20 +1,22 @@
 
+.path-mod-cardbox .cardbox-studyview {
 
+}
 .path-mod-cardbox .cardbox-cardcontainer {
-    padding: 30px;
+    /*padding: 30px;*/
 }
 
 .path-mod-cardbox .cardbox-card {
     margin: 0 auto;
-    max-width: 700px;
+    /*max-width: 700px;
     border: 0.5px solid !important;
     border-color: #cccccc !important;
-    padding-bottom: 15px;
+    padding-bottom: 15px;*/
 }
 
 .path-mod-cardbox .cardbox-image {
-    margin: 0 auto;
-    max-width: 700px;
+    /*margin: 0 auto;
+    max-width: 700px;*/
 }
 
 .path-mod-cardbox .cardbox-text {
@@ -26,6 +28,6 @@
     margin-bottom: 15px;
 }
 
-.path-mod-cardbox .form-control {
+/*.path-mod-cardbox .form-control {
     width: 50% !important;
-}
+}*/

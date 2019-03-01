@@ -46,9 +46,7 @@ class cardbox_studyview implements \renderable, \templatable {
                 $this->fronttexts[] = array("fronttext" => $text);
             }
         }
-        
-        
-        
+
     }
     
     public function export_for_template(\renderer_base $output) {

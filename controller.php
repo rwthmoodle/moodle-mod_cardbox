@@ -114,7 +114,9 @@ if ($action === 'addflashcard') {
             }
 
         }
-        
+
+        // TODO: check for errors, validate form
+
         // Give user feedback and go back to practice.
         redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     

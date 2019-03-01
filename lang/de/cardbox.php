@@ -41,7 +41,7 @@ $string['titleforpractice'] = 'Üben';
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';
 $string['notopic'] = 'nicht zugeordnet';
-$string['addnewtopic'] = 'neues Thema anlegen';
+$string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
 $string['enterquestion'] = 'Frage/Begriff eingeben';
 $string['image'] = 'Bild hinzufügen';

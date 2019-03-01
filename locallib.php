@@ -38,7 +38,13 @@ function cardbox_save_new_topic($topicname) {
     return $DB->insert_record('cardbox_topics', $topic, true);
 
 }
-
+/**
+ * Function returns an array of options for the 'select/create a topic' dropdown
+ * in the card_form.
+ *
+ * @global obj $DB
+ * @return type
+ */
 function cardbox_get_topics() {
     
     global $DB;

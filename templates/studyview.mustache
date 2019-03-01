@@ -1,14 +1,21 @@
-<div class="cardbox-studyview">
-    
-    <div id="cardbox-cardcontainer">
-        {{> mod_cardbox/card }}
-    </div>
+<div class="container-fluid cardbox-studyview">
 
-    <div id"cardbox-inputform">
-        <form>
-            <input id="cardbox-userinput" type="text" name "answer" class="form-control">
-            <input type="submit" value="Abschicken" class="btn btn-primary">
-        </form>
+    <div class="row">
+        <div class="col-sm-2" style="background-color:blue;"></div>
+        <div id="cardbox-cardcontainer" class="col-sm-8">
+            {{> mod_cardbox/card }}
+        </div>
+        <div class="col-sm-2" style="background-color:blue;"></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2" style="background-color:orange;"></div>
+        <div id"cardbox-inputform" class="col-sm-8">
+            <form>
+                <input id="cardbox-userinput" type="text" name "answer" class="form-control">
+                <input type="submit" value="Abschicken" class="btn btn-primary">
+            </form>
+        </div>
+        <div class="col-sm-2" style="background-color:orange;"></div>
     </div>
 
 </div>
