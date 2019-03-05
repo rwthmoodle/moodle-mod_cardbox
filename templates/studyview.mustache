@@ -1,21 +1,21 @@
 <div class="container-fluid cardbox-studyview">
 
     <div class="row">
-        <div class="col-sm-2" style="background-color:blue;"></div>
+        <div class="col-sm-2"></div>
         <div id="cardbox-cardcontainer" class="col-sm-8">
             {{> mod_cardbox/card }}
         </div>
-        <div class="col-sm-2" style="background-color:blue;"></div>
+        <div class="col-sm-2"></div>
     </div>
     <div class="row">
-        <div class="col-sm-2" style="background-color:orange;"></div>
+        <div class="col-sm-2"></div>
         <div id"cardbox-inputform" class="col-sm-8">
             <form>
-                <input id="cardbox-userinput" type="text" name "answer" class="form-control">
+                <input id="cardbox-userinput{{answerno}}" type="text" name="answer" class="form-control">
                 <input type="submit" value="Abschicken" class="btn btn-primary">
             </form>
         </div>
-        <div class="col-sm-2" style="background-color:orange;"></div>
+        <div class="col-sm-2"></div>
     </div>
 
 </div>

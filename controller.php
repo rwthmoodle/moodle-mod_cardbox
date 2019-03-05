@@ -169,7 +169,7 @@ if ($action === 'practice') {
     
     // 3. Render the page.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($imgurls, array('Küstenseeschwalbe')); // maybe add parameters
+    $studyview = new cardbox_studyview($imgurls, array('Regenpfeifer')); // maybe add parameters
     echo $renderer->cardbox_render_studyview($studyview);
     
 }
