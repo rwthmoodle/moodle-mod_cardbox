@@ -178,6 +178,13 @@ if ($action === 'practice') {
 
 if ($action === 'review') {
     
+    require_once('model/cardbox.class.php');
+    
+//    cardbox_select_cards_for_practice();
+    
+    $cardbox = new cardbox_cardboxmodel($cmid);
+    
+    
     
     
     
