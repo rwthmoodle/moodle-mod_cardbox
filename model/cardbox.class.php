@@ -22,49 +22,161 @@ defined('MOODLE_INTERNAL') || die();
  * @authors   Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class cardbox_cardboxmodel {
+class cardbox_cardboxmodel { // use this class as a templatable as well?
 
-    private $cardcount;
-    private $box0 = array();
-    private $box1 = array();
-    private $box2 = array();
-    private $box3 = array();
-    private $box4 = array();
+    private $cardcount = 0;
+    private $boxes = array(1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array());
+    private $selection;
 
-    public function __construct($cmid) {
+    public function __construct($cardboxid) {
 
         global $DB, $USER;
 
-//        $sql = "SELECT progress.*, topic.topicname, content.id as contentid, content.cardside, content.contenttype, content.content, type.name as typename"
-//                . " FROM {cardbox_progress} progress"
-//                . " INNER JOIN {cardbox_cards} card ON progress.card = card.id"
-//                . " LEFT JOIN {cardbox_topics} topic ON card.topic = topic.id"
-//                . " INNER JOIN {cardbox_cardcontents} content ON progress.card = content.card"
-//                . " INNER JOIN {cardbox_contenttypes} type ON content.contenttype = type.id"
-//                . " WHERE progress.userid = ? AND card.cardbox = ?";
-
-//        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, "
-//                . "top.topicname, "
-//                . "cont.cardside, cont.content "
-//                . "FROM {cardbox_progress} p "
-//                . "INNER JOIN {cardbox_cards} c ON c.id = p.card "
-//                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
-//                . "RIGHT JOIN {cardbox_cardcontents} cont ON cont.card = p.card"; // THIS LINE CAUSES TROUBLE.
-                
+        // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
+        cardbox_add_new_cards();
         
-        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, "
-                . "top.topicname, "
-                . "cont.cardside, cont.content "
-                . "FROM {cardbox_progress} p "
-                . "JOIN {cardbox_cardcontents} cont ON cont.card = p.card "
-                . "JOIN {cardbox_cards} c ON c.id = cont.card "
-                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id ";
-                
+        // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
+        $this->cardbox_get_users_cards($cardboxid);
 
-        $flashcards = $DB->get_records_sql($sql, array($USER->id, $cmid));
+        // 3. Select 21 flashcards for a practice session.
+        $this->cardbox_select_cards_for_practice();
         
-        var_dump($flashcards);
-   
+        // 4. Access and arrange the content of each selected card.
+        
+        
     }
     
+    /**
+     * Function retrieves all flashcards that
+     * 1. belong to the current cardbox plugin instance
+     * 2. are registered for the current user in the progress table which is the virtual cardbox
+     *
+     * Each card is filed into one of the 5 cardboxes.
+     *
+     * @global obj $DB
+     * @global obj $USER
+     * @return array of objects or null
+     */
+    public function cardbox_get_users_cards($cardboxid) {
+
+        global $DB, $USER;
+
+        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
+                . "FROM {cardbox_progress} p "
+                . "LEFT JOIN {cardbox_cards} c ON c.id = p.card "
+                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
+                . "WHERE p.userid = ? AND c.cardbox = ? "
+                . "ORDER BY p.cardposition";
+
+        $flashcards =  $DB->get_records_sql($sql, array($USER->id, $cardboxid));
+
+        if (empty($flashcards)) {
+            // Blaue Box printen
+            return;
+        }
+        
+        $this->cardcount = count($flashcards);
+        
+        foreach ($flashcards as $card) {
+            $this->boxes[$card->cardposition][] = $card;
+        }
+
+    }
+    /**
+     * Function contains algorithm for selecting 21 cards for a practice session.
+     *
+     */
+    public function cardbox_select_cards_for_practice() {
+        
+        $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 3, 4 => 2, 5 => 1);
+        $selection = array();
+        $newvocab = array();
+        
+        // 0. If there are not enough cards in the last box, select the missing amount from the first box if possible.
+        $initialdiff = $cardsperbox[5] - count($this->boxes[5]);
+        $addextra = ($initialdiff <= 0) ? 0 : $initialdiff;
+
+        for ($i = 0; $i < 6; $i++) {
+            
+            $box = $this->boxes[$i];
+            $cardsperbox[$i] += $addextra;
+            
+            // 1. Prioritize cards in each box.
+            usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
+            
+            // 2. Select cards from each box.
+            for ($j = 0; $j < $cardsperbox[$i]; $j++) {
+                if (!empty($box[$j])) {
+                    if ($i != 0) {
+                        $selection[] = $box[$j];
+                    } else {
+                        $newvocab[] = $box[$j];
+                    }
+                    
+                }
+            }
+            
+            // 3. If there are not enough cards in the box, select the missing amount from the next box if possible.
+            $diff = $cardsperbox[$i] - count($box);
+            if ($diff > 0 && $i < 5) {
+                $addextra = $diff;
+            }
+
+        }
+        // 4. Account for the (primacy and) recency effect by (beginning with difficult terms and) ending with new ones.
+        foreach ($newvocab as $voc) {
+            $selection[] = $voc;
+        }
+
+        $this->selection = $selection;
+    }
+    
+    /**
+     * This function prioritises cards within a box according to
+     * the time they were last practised and the number of repetitions
+     * that the user needed so far for this card.
+     *
+     * @param type $a
+     * @param type $b
+     * @return int
+     */
+    static function cardbox_compare_cards($a, $b) {
+        
+        if ($a->lastpracticed == null) {
+            return -1;
+        }
+        if ($b->lastpracticed == null) {
+            return 1;
+        }
+
+        if ($a->lastpracticed == $b->lastpracticed) {
+            
+            if ($a->repetitions == $b->repetitions) {
+                return 0;
+            }
+            // Cards that were difficult for this user in the past get second priority.
+            return ($a->repetitions > $b->repetitions) ? -1 : 1;
+            
+        }
+        // Cards that were last practiced longer ago get first priority.
+        return ($a->lastpracticed < $b->lastpracticed) ? -1 : 1;
+        
+    }
+
 }
+
+
+
+
+        // This gets all card contents with the card info duplicated. // working :)
+//        $sql = "SELECT cont.id as contentid, p.card, cont.cardside, cont.content, "
+//                . "p.cardposition, p.lastpracticed, p.repetitions, "
+//                . "top.topicname "
+//                . "FROM {cardbox_progress} p "
+//                . "JOIN {cardbox_cardcontents} cont ON cont.card = p.card "
+//                . "LEFT JOIN {cardbox_cards} c ON c.id = cont.card "
+//                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
+//                . "WHERE p.userid = ? AND c.cardbox = ? "
+//                . "ORDER BY p.card, cont.cardside";
+//
+//        $flashcards = $DB->get_records_sql($sql, array($USER->id, $cardboxid));

@@ -179,10 +179,11 @@ if ($action === 'practice') {
 if ($action === 'review') {
     
     require_once('model/cardbox.class.php');
+
+    //cardbox_add_new_cards();
     
-//    cardbox_select_cards_for_practice();
-    
-    $cardbox = new cardbox_cardboxmodel($cmid);
+    // Create a virtual cardbox for this practice session.
+    $cardbox = new cardbox_cardboxmodel($cardbox->id);
     
     
     
