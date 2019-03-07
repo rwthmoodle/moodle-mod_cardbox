@@ -75,11 +75,11 @@ if ($action === 'addflashcard') {
                     $topicid = null;
                 }
                 break;
-            default: // Card belongs to an already existing topic
+            default: // Card belongs to an already existing topic.
                 $topicid = $formdata->topic;
         }
 
-        // Create a new entry in cardbox_cards table
+        // Create a new entry in cardbox_cards table.
         $cardid = cardbox_save_new_card($cardbox->id, $topicid);
 
         // Save the question text if there is any.
@@ -149,8 +149,6 @@ if ($action === 'practice') {
     
     // 2. Capability check. // TODO
     
-    
-    
     $imgurls = array();
     
     $fs = get_file_storage();
@@ -182,11 +180,7 @@ if ($action === 'review') {
 
     //cardbox_add_new_cards();
     
-    // Create a virtual cardbox for this practice session.
+    // Create a virtual cardbox for this practice session. // TODO move to other action.
     $cardbox = new cardbox_cardboxmodel($cardbox->id);
-    
-    
-    
-    
-    
+
 }
