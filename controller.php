@@ -178,8 +178,9 @@ if ($action === 'choosesettings') {
 
 if ($action === 'practice') {
 
+    require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
+//    require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
 
     echo $OUTPUT->heading("$cardbox->name");
     
@@ -188,6 +189,14 @@ if ($action === 'practice') {
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
+    
+    // 2. Create a virtual cardbox for this practice session.
+    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+    // 3. 
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $studyview = new cardbox_studyview($cardbox);
+    echo $renderer->cardbox_render_studyview($studyview);
+    
     
     // If needed:
 //    $params = array($pdfannotator->id);
@@ -212,9 +221,9 @@ if ($action === 'practice') {
     }  
     
     // 3. Render the page.
-    $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($imgurls, array('Regenpfeifer')); // maybe add parameters
-    echo $renderer->cardbox_render_studyview($studyview);
+//    $renderer = $PAGE->get_renderer('mod_cardbox');
+//    $studyview = new cardbox_studyview($imgurls, array('Regenpfeifer')); // maybe add parameters
+//    echo $renderer->cardbox_render_studyview($studyview);
     
 }
 

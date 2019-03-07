@@ -162,6 +162,73 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         return ($a->lastpracticed < $b->lastpracticed) ? -1 : 1;
         
     }
+    
+    
+    public function cardbox_get_first_card() {
+        return $this->selection[0];
+    }
+    
+    public function cardbox_get_card($number) {
+        return $this->selection[$number];
+    }
+    
+    /**
+     * Function returns all content items belonging to this card.
+     *
+     * @global obj $DB
+     * @param type $cardid
+     * @return type
+     */
+    public function cardbox_get_card_contents($cardid) { // TODO: exception handling.
+
+        global $DB;
+        $contents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
+        usort($contents, array('cardbox_cardboxmodel', 'cardbox_compare_cardcontents'));
+        return $contents;
+    }
+    
+    /**
+     * This function orders the content elements of a card, e.g. groups question and answer elements.
+     *
+     * @param type $a
+     * @param type $b
+     * @return int
+     */
+    static function cardbox_compare_cardcontents($a, $b) {
+        
+        if ($a->cardside == $b->cardside) {
+            
+            if ($a->contenttype == $b->contenttype) {
+                return 0;
+            }
+            // Pictures precede text.
+            return ($a->contenttype < $b->contenttype) ? -1 : 1;
+            
+        }
+        // Questions precede answers.
+        return ($a->cardside < $b->cardside) ? -1 : 1;
+        
+    }
+    
+    
+    /**
+     * Function returns the topic a card belongs to (if any).
+     *
+     * @global obj $DB
+     * @param type $cardid
+     * @return string or null
+     */
+//    public function cardbox_get_card_topic($cardid) {
+//        
+//        global $DB;
+//        
+//        $sql = "SELECT t.topicname "
+//                . "FROM {cardbox_cards} c JOIN {cardbox_topics} t ON c.topic = t.id "
+//                . "WHERE c.id = ?";
+//
+//        return $DB->get_record_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
+//
+//    }
 
 }
 

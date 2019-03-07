@@ -28,12 +28,33 @@ class cardbox_studyview implements \renderable, \templatable {
     private $frontimages;
     private $fronttexts;
     private $backimages;
-    private $backimagesrc;
+//    private $backimagesrc;
     private $backtexts;
-    private $backtext;
+//    private $backtext;
     
-    public function __construct($imgurls = null, $texts = null) {
+    public function __construct($cardbox) {
         
+        $firstcard = $cardbox->cardbox_get_first_card();
+        $contents = $cardbox->cardbox_get_card_contents($firstcard->card);
+        $topic = $firstcard->topicname;
+
+        echo "<br><br>firstcard: ";
+        var_dump($firstcard);
+        
+        echo "<br><br>contents: ";
+        var_dump($contents);
+//        
+        echo "<br><br>topic: ";
+        print_r($topic);
+        
+        foreach ($contents as $content) {
+            if ($content->contenttype == 1) {
+                
+            } else {
+                
+            }
+        }
+//        
         if (!empty($imgurls)) {
             $this->frontimages = array();
             foreach ($imgurls as $imgurl) {
@@ -54,10 +75,52 @@ class cardbox_studyview implements \renderable, \templatable {
         $data = array();
         $data['frontimages'] = $this->frontimages;
         $data['fronttexts'] = $this->fronttexts;
+        $data['backimages'] = $this->backimages;
+        $data['backtexts'] = $this->backtexts;
         
         return $data;
-        
-        
+
     }
     
 }
+
+
+
+//class cardbox_studyview implements \renderable, \templatable {
+//
+//    private $frontimages;
+//    private $fronttexts;
+//    private $backimages;
+//    private $backimagesrc;
+//    private $backtexts;
+//    private $backtext;
+//    
+//    public function __construct($imgurls = null, $texts = null) {
+//        
+//        if (!empty($imgurls)) {
+//            $this->frontimages = array();
+//            foreach ($imgurls as $imgurl) {
+//                $this->frontimages[] = array("frontimagesrc" => $imgurl);
+//            }
+//        }
+//        if (!empty($texts)) {
+//            $this->fronttexts = array();
+//            foreach ($texts as $text) {
+//                $this->fronttexts[] = array("fronttext" => $text);
+//            }
+//        }
+//
+//    }
+//    
+//    public function export_for_template(\renderer_base $output) {
+//        
+//        $data = array();
+//        $data['frontimages'] = $this->frontimages;
+//        $data['fronttexts'] = $this->fronttexts;
+//        
+//        return $data;
+//        
+//        
+//    }
+//    
+//}
