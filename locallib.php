@@ -167,3 +167,28 @@ function cardbox_add_new_cards() {
     $DB->insert_records('cardbox_progress', $dataobjects);
 
 }
+
+function cardbox_get_download_url($context, $itemid, $filename = null) {
+    
+    $fs = get_file_storage();
+//    $file = $fs->get_file($context, 'mod_cardbox', 'content', $itemid, '/', $filename);
+    
+//    print_r($file);
+
+    $files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', $itemid, 'sortorder', false);
+    
+    
+    foreach ($files as $file) { // find better solution than foreach to get the first and only element.
+        $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+        $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
+        return $download_url;
+//        if ($content->cardside == 0) {
+//        $this->frontimages[] = array("frontimagesrc" => $download_url);
+//        } else {
+//            $this->backimages[] = array("backimagesrc" => $download_url);
+//        }
+//        break;
+    }
+    
+    
+}

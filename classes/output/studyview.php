@@ -28,43 +28,50 @@ class cardbox_studyview implements \renderable, \templatable {
     private $frontimages;
     private $fronttexts;
     private $backimages;
-//    private $backimagesrc;
     private $backtexts;
-//    private $backtext;
     
-    public function __construct($cardbox) {
-        
-        $firstcard = $cardbox->cardbox_get_first_card();
-        $contents = $cardbox->cardbox_get_card_contents($firstcard->card);
-        $topic = $firstcard->topicname;
+    /**
+     * Function builds the view of a flashcard during practice.
+     *
+     * @global type $CFG
+     * @param type $context
+     * @param obj $cardbox
+     */
+    public function __construct($context, $cardbox = null, $cardid = null) {
 
-        echo "<br><br>firstcard: ";
-        var_dump($firstcard);
-        
-        echo "<br><br>contents: ";
-        var_dump($contents);
-//        
-        echo "<br><br>topic: ";
-        print_r($topic);
-        
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
+
+        if (!empty($cardbox)) {
+            $card = $cardbox->cardbox_get_first_card();
+        } else {
+            $card = cardbox_get_card($cardid);
+        }
+        $contents = $cardbox->cardbox_get_card_contents($card->card);
+        $topic = $card->topicname;
+
+        $this->frontimages = array();
+        $this->fronttexts = array();
+        $this->backimages = array();
+        $this->backtexts = array();
+
+        $fs = get_file_storage();
         foreach ($contents as $content) {
-            if ($content->contenttype == 1) {
-                
+
+            if ($content->contenttype == 1) { // XXX: make dynamic!
+
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                if ($content->cardside == 0) {
+                    $this->frontimages[] = array("frontimagesrc" => $download_url);
+                } else {
+                    $this->backimages[] = array("backimagesrc" => $download_url);
+                }
+
+            } else if ($content->cardside == 0) {
+                $this->fronttexts[] = array("fronttext" => $content->content);
+
             } else {
-                
-            }
-        }
-//        
-        if (!empty($imgurls)) {
-            $this->frontimages = array();
-            foreach ($imgurls as $imgurl) {
-                $this->frontimages[] = array("frontimagesrc" => $imgurl);
-            }
-        }
-        if (!empty($texts)) {
-            $this->fronttexts = array();
-            foreach ($texts as $text) {
-                $this->fronttexts[] = array("fronttext" => $text);
+                $this->backtexts[] = array("backtext" => $content->content);
             }
         }
 

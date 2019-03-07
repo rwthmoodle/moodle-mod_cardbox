@@ -194,7 +194,7 @@ if ($action === 'practice') {
     $cardbox = new cardbox_cardboxmodel($cardbox->id);
     // 3. 
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($cardbox);
+    $studyview = new cardbox_studyview($context, $cardbox);
     echo $renderer->cardbox_render_studyview($studyview);
     
     

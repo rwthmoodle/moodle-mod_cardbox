@@ -42,3 +42,7 @@
 /*.path-mod-cardbox .form-control {
     width: 50% !important;
 }*/
+
+.path-mod-cardbox .hidden {    
+    display: none;
+}
