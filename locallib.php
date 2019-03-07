@@ -45,11 +45,16 @@ function cardbox_save_new_topic($topicname) {
  * @global obj $DB
  * @return type
  */
-function cardbox_get_topics() {
+function cardbox_get_topics($extra = false) {
     
     global $DB;
     $topics = $DB->get_records('cardbox_topics', array());
-    $options = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));
+    $options = array(-1 => get_string('notopic', 'cardbox'));
+    if ($extra) {
+        $options = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));
+    } else {
+        $options = array(-1 => get_string('notopicpreferred', 'cardbox'));
+    }
     foreach ($topics as $topic) {
         $options[$topic->id] = $topic->topicname;
     }

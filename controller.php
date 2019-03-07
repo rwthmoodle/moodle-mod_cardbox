@@ -125,7 +125,53 @@ if ($action === 'addflashcard') {
         echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
         $mform->display();
 
-    } 
+    }
+}
+
+/* ************************************************ Settings for Practice ************************************************* */
+
+if ($action === 'choosesettings') {
+
+    require_once('practicesettings_form.php');
+
+    $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
+    $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
+
+    // Contextual data to pass on to the card form.
+    if (empty($entry)) {
+        $entry = new stdClass();
+        $entry->id = $cmid;
+        $entry->course = $cm->course;
+        $entry->action = 'practice';
+    }
+
+    $mform = new mod_cardbox_practicesettings_form();
+    $mform->set_data($entry);
+    
+    if ($mform->is_cancelled()) {
+
+        redirect($returnurl);
+
+    // If submitted: get files from filemanager
+    } else if ($formdata = $mform->get_data()) {
+
+
+        // TODO: check for errors, validate form
+
+        // Give user feedback and go back to practice.
+        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
+    
+    } else {
+
+        echo $OUTPUT->heading(get_string('titleforchoosesettings', 'cardbox'));
+        $mform->display();
+
+    }
+    
+    
+    
+    
+    
 }
 
 /* **************************************************** Practice cards **************************************************** */

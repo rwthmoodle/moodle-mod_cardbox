@@ -51,3 +51,10 @@ $string['savecard'] = 'Speichern';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
+
+// Title and form elements for choosing the settings for a new practice session
+$string['titleforchoosesettings'] = 'Was möchten Sie üben?';
+$string['weightopic'] = 'Thema gewichten';
+$string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
+$string['notopicpreferred'] = 'keine Gewichtung';
+$string['beginpractice'] = 'Start';

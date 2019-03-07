@@ -46,7 +46,7 @@ class mod_cardbox_card_form extends moodleform {
         $mform->setType('action', PARAM_INT);
         
         // Get topics to choose from when creating a new card.
-        $topiclist = cardbox_get_topics();
+        $topiclist = cardbox_get_topics(true);
         $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist, array('onchange' => 'javascript:myFunctionToDoSomething();'));
         
         // Text input field for creating a new topic.
