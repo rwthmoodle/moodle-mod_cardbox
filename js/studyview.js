@@ -33,7 +33,7 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
 
         var position = 0;
-        var answeredCorrectly = 0;
+//        var answeredCorrectly = 0;
 //        var toRepeat = array();
 
         registerEventListeners();
@@ -56,45 +56,42 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
                 proceed(0);
             });
         }
-        
-        
-        
-        
-        
-//        document.getElementById('cardbox-get-next-card').addEventListener('click', function(e) {
-//            proceed();
-//
-//        });
-        
+
         function flipCard() {    
 
             // 1. Hide the question and the send button and display the answer instead.
             $('.cardbox-image').toggleClass('hidden');
             $('.cardbox-text').toggleClass('hidden');
             $('#cardbox-submit-answer').toggleClass('hidden');
-            
+
             // 2. Check answer or let user check their answer
             if (__selfchecking) {
                 selfCheck();
-                
+
             } else {
                 check();
             }
-            
+
         }
-        
+
         function selfCheck() {
             $('#cardbox-mark-as-correct').toggleClass('hidden');
             $('#cardbox-mark-as-incorrect').toggleClass('hidden');
             
         }
-        
+
         function check() {
             
         }
-        
-        
-        function proceed(iscorrect) {
+
+        /**
+         * Function initiates update of the progress status of the current card
+         * and then renders the next card.
+         *
+         * @param {type} iscorrect
+         * @returns {undefined}
+         */
+        function proceed(iscorrect) { // XXX: Error notifications for error cases AND collect wrong cards for repetition.
             
             $.ajax({
                 type: 'POST',
@@ -104,42 +101,24 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
                     
                     result = JSON.parse(result);
                     
+                    position = position + 1;
+                    
                     (function (templates, data) {
                                 templates.render('mod_cardbox/studyview', data)
                                         .then(function (html, js) {
-                                            templates.replaceNodeContents('#cardbox-cardcontainer', html, js);
+                                            templates.replaceNodeContents('#cardbox-studyview', html, js);
 
                                         }).then(function () {
-                                            
-                                            $('#cardbox-mark-as-correct').toggleClass('hidden');
-                                            $('#cardbox-mark-as-incorrect').toggleClass('hidden');
-                                            $('#cardbox-submit-answer').toggleClass('hidden');
+                                                registerEventListeners();
                                             
                                         }); // Add a catch.
                     })(templates, result.newdata);
 
-
                 }
             });
-            
-            
-            
-            
-//            return $.ajax({
-//                    type: "POST",
-//                    url: "action.php",
-//                    data: { "documentId": documentId, "page_Number": pageNumber, "action": 'read', sesskey: M.cfg.sesskey}
-//                }).then(function(data){
-//                    return JSON.parse(data);
-//                });
-            
-            
-            
+
         }
-        
-        
+
     });
- 
-    
     
 }
