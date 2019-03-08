@@ -45,7 +45,18 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         
         
     }
-    
+    /**
+     * Function returns the ids of those cards selected for practice.
+     *
+     * @return array of ints
+     */
+    public function cardbox_get_card_selection() {
+        $selection = array();
+        foreach ($this->selection as $card) {
+            $selection[] = $card->card;
+        }
+        return $selection;
+    }
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
@@ -168,8 +179,30 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         return $this->selection[0];
     }
     
-    public function cardbox_get_card($number) {
-        return $this->selection[$number];
+//    public function cardbox_get_card($number) {
+//        return $this->selection[$number];
+//    }
+    
+    /**
+     * 
+     * @global obj $DB
+     * @global obj $USER
+     * @param type $cardid
+     * @return type
+     */
+    static function cardbox_get_card($cardid) {
+
+        global $DB, $USER;        
+        
+        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
+                . "FROM {cardbox_progress} p "
+                . "LEFT JOIN {cardbox_cards} c ON c.id = p.card "
+                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
+                . "WHERE p.userid = ? AND c.id = ? "
+                . "ORDER BY p.cardposition";
+
+        return $DB->get_record_sql($sql, array($USER->id, $cardid), MUST_EXIST);
+
     }
     
     /**
@@ -179,7 +212,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @param type $cardid
      * @return type
      */
-    public function cardbox_get_card_contents($cardid) { // TODO: exception handling.
+    static function cardbox_get_card_contents($cardid) { // TODO: exception handling.
 
         global $DB;
         $contents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid));

@@ -184,14 +184,27 @@ if ($action === 'practice') {
 
     echo $OUTPUT->heading("$cardbox->name");
     
-    // 1. Give javascript access to the language string repository and add it to the page.
+    // 1. Create a virtual cardbox for this practice session.
+    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+    $selection = $cardbox->cardbox_get_card_selection();
+    
+    // 2. Give javascript access to the language string repository and add it to the page.
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
     
-    // 2. Create a virtual cardbox for this practice session.
-    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+//    $capabilities = new stdClass();
+//    $capabilities->viewquestions = has_capability('mod/pdfannotator:viewquestions', $context);
+//    $capabilities->viewanswers = has_capability('mod/pdfannotator:viewanswers', $context);
+
+//    $params = array($pdfannotator->id, $cmid, $capabilities);
+    $params = array($cmid, $selection, true); // true means: the user checks their own results.
+    $PAGE->requires->js_init_call('startPractice', $params, true);
+    
+    
+    
+    
     // 3. 
     $renderer = $PAGE->get_renderer('mod_cardbox');
     $studyview = new cardbox_studyview($context, $cardbox);
@@ -204,22 +217,22 @@ if ($action === 'practice') {
     
     // 2. Capability check. // TODO
     
-    $imgurls = array();
-    
-    $fs = get_file_storage();
-    if ($files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', false, 'sortorder', false)) {
-            foreach ($files as $file) {
-                $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-                // Display the image
-                $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
-                $imgurls[] = $download_url;
-                break; // TODO: wieder entfernen
-//                echo '<a href="' . $download_url . '">' . $file->get_filename() . '</a><br/>';
-            }
-    } else {
-            echo '<p>Please upload an image first</p>';
-    }  
-    
+//    $imgurls = array();
+//    
+//    $fs = get_file_storage();
+//    if ($files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', false, 'sortorder', false)) {
+//            foreach ($files as $file) {
+//                $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+//                // Display the image
+//                $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
+//                $imgurls[] = $download_url;
+//                break; // TODO: wieder entfernen
+////                echo '<a href="' . $download_url . '">' . $file->get_filename() . '</a><br/>';
+//            }
+//    } else {
+//            echo '<p>Please upload an image first</p>';
+//    }  
+//    
     // 3. Render the page.
 //    $renderer = $PAGE->get_renderer('mod_cardbox');
 //    $studyview = new cardbox_studyview($imgurls, array('Regenpfeifer')); // maybe add parameters
@@ -233,8 +246,6 @@ if ($action === 'review') {
     
     require_once('model/cardbox.class.php');
 
-    //cardbox_add_new_cards();
-    
     // Create a virtual cardbox for this practice session. // TODO move to other action.
     $cardbox = new cardbox_cardboxmodel($cardbox->id);
 

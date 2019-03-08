@@ -39,15 +39,18 @@ class cardbox_studyview implements \renderable, \templatable {
      */
     public function __construct($context, $cardbox = null, $cardid = null) {
 
-        global $CFG;
+        global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
+        require_once('model/cardbox.class.php');
 
         if (!empty($cardbox)) {
             $card = $cardbox->cardbox_get_first_card();
+            
         } else {
-            $card = cardbox_get_card($cardid);
+            $card = cardbox_cardboxmodel::cardbox_get_card($cardid);
+
         }
-        $contents = $cardbox->cardbox_get_card_contents($card->card);
+        $contents = cardbox_cardboxmodel::cardbox_get_card_contents($card->card);
         $topic = $card->topicname;
 
         $this->frontimages = array();
@@ -74,9 +77,12 @@ class cardbox_studyview implements \renderable, \templatable {
                 $this->backtexts[] = array("backtext" => $content->content);
             }
         }
+//        if (!empty($this->frontimages) && empty($this->backimages)) {
+//            $this->backimages[] = $this->frontimages[0];
+//        }
 
     }
-    
+
     public function export_for_template(\renderer_base $output) {
         
         $data = array();

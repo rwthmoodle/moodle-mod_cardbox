@@ -58,3 +58,8 @@ $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 $string['notopicpreferred'] = 'keine Gewichtung';
 $string['beginpractice'] = 'Start';
+
+// Practice mode: Buttons.
+$string['submitanswer'] = 'Überprüfen';
+$string['markascorrect'] = 'Gewusst';
+$string['markasincorrect'] = 'Nicht gewusst';

@@ -46,3 +46,13 @@
 .path-mod-cardbox .hidden {    
     display: none;
 }
+
+.path-mod-cardbox #cardbox-mark-as-correct {
+    background-color: #00b33c;
+    border: none;
+}
+
+.path-mod-cardbox #cardbox-mark-as-incorrect {
+    background-color: #ff9900;
+    border: none;
+}

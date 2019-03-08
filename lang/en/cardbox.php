@@ -59,3 +59,8 @@ $string['weightopic_help'] = 'Sie können die Kartenauswahl für diesen Übungsd
 //$string['weightopic_help'] = 'Angeklickte Themen werden bei der Kartenauswahl für diesen Übungsdurchlauf bevorzugt behandelt.';
 $string['notopicpreferred'] = 'no preference';
 $string['beginpractice'] = 'Start';
+
+// Practice mode: Buttons.
+$string['submitanswer'] = 'Check';
+$string['markascorrect'] = 'Correct';
+$string['markasincorrect'] = 'Incorrect';
