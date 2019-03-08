@@ -48,6 +48,12 @@ class mod_cardbox_practicesettings_form extends moodleform {
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_INT);
         
+        $radioarray = array();
+        $radioarray[] = $mform->createElement('radio', 'correctionmode', '', get_string('selfcorrection', 'cardbox'), 0);
+        $radioarray[] = $mform->createElement('radio', 'correctionmode', '', get_string('autocorrection', 'cardbox'), 1);
+        $mform->addGroup($radioarray, 'correctionmodegroup', get_string('choosecorrectionmode', 'cardbox'), array(' '), false);
+        $mform->addHelpButton('correctionmodegroup', 'choosecorrectionmode', 'cardbox');
+        
         // Get topics to choose from when creating a new card.
         $topiclist = cardbox_get_topics();
 //        if (!empty($topiclist) && count($topiclist) > 1) {

@@ -53,7 +53,11 @@ $string['savecard'] = 'Speichern';
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
 
 // Title and form elements for choosing the settings for a new practice session
-$string['titleforchoosesettings'] = 'Was möchten Sie üben?';
+$string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
+$string['choosecorrectionmode'] = 'Korrekturmodus';
+$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. Auch bei der automatischen Kontrolle können Sie entscheiden, ob eine Antwort als richtig bewertet werden soll.';
+$string['selfcorrection'] = 'Selbstkonstrolle';
+$string['autocorrection'] = 'Automatisierte Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 $string['notopicpreferred'] = 'keine Gewichtung';

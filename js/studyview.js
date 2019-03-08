@@ -33,6 +33,7 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
 
         var position = 0;
+        var cardcount = __selection.length;
 //        var answeredCorrectly = 0;
 //        var toRepeat = array();
 

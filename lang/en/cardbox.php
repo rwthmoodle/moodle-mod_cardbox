@@ -53,7 +53,11 @@ $string['savecard'] = 'Save';
 $string['success:addnewcard'] = 'The flashcard was created and awaits approval.';
 
 // Title and form elements for choosing the settings for a new practice session
-$string['titleforchoosesettings'] = 'Was möchten Sie üben?';
+$string['titleforchoosesettings'] = 'What and how would you like to practice?';
+$string['choosecorrectionmode'] = 'Correction mode';
+$string['choosecorrectionmode_help'] = 'Would you like to ...?';
+$string['selfcorrection'] = 'Self-check';
+$string['autocorrection'] = 'Automatic check';
 $string['weightopic'] = 'Priority topic';
 $string['weightopic_help'] = 'Sie können die Kartenauswahl für diesen Übungsdurchlauf beeinflussen, indem Sie ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 //$string['weightopic_help'] = 'Angeklickte Themen werden bei der Kartenauswahl für diesen Übungsdurchlauf bevorzugt behandelt.';
