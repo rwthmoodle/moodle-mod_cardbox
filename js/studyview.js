@@ -37,6 +37,8 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
 //        var answeredCorrectly = 0;
 //        var toRepeat = array();
 
+        console.log('__selection: ', __selection);
+
         registerEventListeners();
         
         

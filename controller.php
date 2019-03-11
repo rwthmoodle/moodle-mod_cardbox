@@ -167,11 +167,7 @@ if ($action === 'choosesettings') {
         $mform->display();
 
     }
-    
-    
-    
-    
-    
+
 }
 
 /* **************************************************** Practice cards **************************************************** */
@@ -201,16 +197,12 @@ if ($action === 'practice') {
 //    $params = array($pdfannotator->id, $cmid, $capabilities);
     $params = array($cmid, $selection, true); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
-    
-    
-    
-    
+
     // 3. 
     $renderer = $PAGE->get_renderer('mod_cardbox');
     $studyview = new cardbox_studyview($context, $cardbox);
     echo $renderer->cardbox_render_studyview($studyview);
-    
-    
+
     // If needed:
 //    $params = array($pdfannotator->id);
 //    $PAGE->requires->js_init_call('startOverview', $params, true); // 1. name of JS function, 2. parameters.

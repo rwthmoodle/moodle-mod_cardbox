@@ -98,39 +98,42 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      *
      */
     public function cardbox_select_cards_for_practice() {
-        
-        $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 3, 4 => 2, 5 => 1);
+
+        $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 4, 4 => 3, 5 => 2);
         $selection = array();
         $newvocab = array();
         
         // 0. If there are not enough cards in the last box, select the missing amount from the first box if possible.
         $initialdiff = $cardsperbox[5] - count($this->boxes[5]);
         $addextra = ($initialdiff <= 0) ? 0 : $initialdiff;
-
+        
         for ($i = 0; $i < 6; $i++) {
-            
+
+            $select = $cardsperbox[$i] + $addextra;
+
             $box = $this->boxes[$i];
-            $cardsperbox[$i] += $addextra;
-            
+
             // 1. Prioritize cards in each box.
             usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
-            
+
             // 2. Select cards from each box.
-            for ($j = 0; $j < $cardsperbox[$i]; $j++) {
-                if (!empty($box[$j])) {
-                    if ($i != 0) {
-                        $selection[] = $box[$j];
-                    } else {
-                        $newvocab[] = $box[$j];
-                    }
-                    
+            for ($j = 0; $j < $select; $j++) {
+                if (empty($box[$j])) {
+                    break;
+                }
+                if ($i != 0) {
+                    $selection[] = $box[$j];
+                } else {
+                    $newvocab[] = $box[$j];
                 }
             }
-            
+
             // 3. If there are not enough cards in the box, select the missing amount from the next box if possible.
-            $diff = $cardsperbox[$i] - count($box);
-            if ($diff > 0 && $i < 5) {
+            $diff = $select - count($box);
+            if ($diff > 0) {
                 $addextra = $diff;
+            } else {
+                $addextra = 0;
             }
 
         }
@@ -141,7 +144,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         $this->selection = $selection;
     }
-    
+
     /**
      * This function prioritises cards within a box according to
      * the time they were last practised and the number of repetitions
