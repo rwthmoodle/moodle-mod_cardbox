@@ -67,3 +67,4 @@ $string['beginpractice'] = 'Start';
 $string['submitanswer'] = 'Überprüfen';
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
+$string['sessioncompleted'] = 'Fertig! :-)';

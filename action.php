@@ -69,11 +69,17 @@ if ($action === 'updateandnext') {
     }
 
     // 2. Get next card and pass it to javascript for rendering.
-    $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($context, null, $next);
-    $newdata = $studyview->export_for_template($renderer);
+    if ($next != 0) {
+        $renderer = $PAGE->get_renderer('mod_cardbox');
+        $studyview = new cardbox_studyview($context, null, $next);
+        $newdata = $studyview->export_for_template($renderer);
 
-    echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+        echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+
+    } else {
+        echo json_encode(['status' => 'finished']);
+    }
+    
 
 }
 

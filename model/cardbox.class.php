@@ -25,7 +25,7 @@ defined('MOODLE_INTERNAL') || die();
 class cardbox_cardboxmodel { // use this class as a templatable as well?
 
     private $cardcount = 0;
-    private $boxes = array(1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array());
+    private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array());
     private $selection;
 
     public function __construct($cardboxid) {
@@ -113,10 +113,12 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
             $box = $this->boxes[$i];
 
-            // 1. Prioritize cards in each box.
-            usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
+            // 1. Prioritize the cards within the box.
+            if (!empty($box)) {
+                usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
+            }
 
-            // 2. Select cards from each box.
+            // 2. Select cards from the box.
             for ($j = 0; $j < $select; $j++) {
                 if (empty($box[$j])) {
                     break;

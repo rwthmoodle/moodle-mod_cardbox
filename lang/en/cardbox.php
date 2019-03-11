@@ -68,3 +68,4 @@ $string['beginpractice'] = 'Start';
 $string['submitanswer'] = 'Check';
 $string['markascorrect'] = 'Correct';
 $string['markasincorrect'] = 'Incorrect';
+$string['sessioncompleted'] = 'Finished! :-)';

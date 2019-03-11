@@ -56,3 +56,8 @@
     background-color: #ff9900;
     border: none;
 }
+
+.path-mod-cardbox #cardbox-practice-feedback {
+/*    height: 100px !important;
+    width: 100px !important;*/
+}
