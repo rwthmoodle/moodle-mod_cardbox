@@ -183,6 +183,7 @@ if ($action === 'practice') {
     // 1. Create a virtual cardbox for this practice session.
     $cardbox = new cardbox_cardboxmodel($cardbox->id);
     $selection = $cardbox->cardbox_get_card_selection();
+    $cardboxstatus = $cardbox->cardbox_get_status();
     
     // 2. Give javascript access to the language string repository and add it to the page.
     $stringman = get_string_manager();
@@ -196,7 +197,7 @@ if ($action === 'practice') {
 //    $capabilities->viewanswers = has_capability('mod/pdfannotator:viewanswers', $context);
 
 //    $params = array($pdfannotator->id, $cmid, $capabilities);
-    $params = array($cmid, $selection, true); // true means: the user checks their own results.
+    $params = array($cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
     // 3. 

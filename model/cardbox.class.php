@@ -26,6 +26,12 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
     private $cardcount = 0;
     private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array());
+    private $countnew;
+    private $countboxone;
+    private $countboxtwo;
+    private $countboxthree;
+    private $countboxfour;
+    private $countboxfive;
     private $selection;
 
     public function __construct($cardboxid) {
@@ -57,6 +63,18 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
         return $selection;
     }
+    /**
+     * Function returns an array specifying how many cards there are in each box
+     * (for this user and this cardbox instance).
+     *
+     * @return array
+     */
+    public function cardbox_get_status() {
+        
+        return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive);
+
+    }
+    
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
@@ -91,6 +109,13 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         foreach ($flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;
         }
+        
+        $this->countnew = count($this->boxes[0]);
+        $this->countboxone = count($this->boxes[1]);
+        $this->countboxtwo = count($this->boxes[2]);
+        $this->countboxthree = count($this->boxes[3]);
+        $this->countboxfour = count($this->boxes[4]);
+        $this->countboxfive = count($this->boxes[5]);
 
     }
     /**

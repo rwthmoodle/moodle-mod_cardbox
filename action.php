@@ -51,10 +51,12 @@ if ($action === 'updateandnext') {
 
     // 1. Update card entry. XXX in class card auslagern?
     $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
-    
+
     if (empty($dataobject)) {
         echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
     }
+    $lastposition = $dataobject->cardposition;
+    
     $dataobject->lastpracticed = time(); 
     if ($iscorrect == 1) {
         $dataobject->cardposition++; // TODO What happens after box 5?
@@ -74,10 +76,10 @@ if ($action === 'updateandnext') {
         $studyview = new cardbox_studyview($context, null, $next);
         $newdata = $studyview->export_for_template($renderer);
 
-        echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+        echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);
 
     } else {
-        echo json_encode(['status' => 'finished']);
+        echo json_encode(['status' => 'finished', 'lastposition' => $lastposition]);
     }
     
 

@@ -28,18 +28,18 @@
  * @param array __selection ids of those cards selected for practice
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper function that is called by controller.php
+function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
-        var position = 0;
         var cardcount = __selection.length; // to be used for statistics/progress bar.
+        var position = 0;
         var countright = 0;
-        var countwrong = 0;
-//        var answeredCorrectly = 0;
+        var countwrong = 0;        
 //        var toRepeat = array();
 
         console.log('__selection: ', __selection);
+        console.log('__boxcount: ', __boxcount);
 
         registerEventListeners();
         
@@ -99,11 +99,7 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
          */
         function proceed(iscorrect) { // XXX: Error notifications for error cases AND collect wrong cards for repetition.
 
-            if (iscorrect == 1) {
-                countright++;
-            } else {
-                countwrong++;
-            }
+            
             if (position == (cardcount-1)) {
                 var next = 0; // This was the last card of this practice session.
             } else {
@@ -115,12 +111,27 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
                 url: 'action.php',
                 data: {id: __cmid, action: 'updateandnext', cardid: __selection[position], iscorrect: iscorrect, next: next, sesskey: M.cfg.sesskey},
                 success: function(result){
+                    result = JSON.parse(result);
+                    
+                    var boxslot = result.lastposition;
+                    
+                    __boxcount[boxslot]--;
+
+                    if (iscorrect === 1) {
+                        countright++;
+                        boxslot++;
+                        __boxcount[boxslot]++;
+                        
+                    } else {
+                        countwrong++;
+                        __boxcount[1]++;
+                        
+                    }
 
                     if (next == 0) {
                         finishPractice();
 
-                    } else {
-                        result = JSON.parse(result);
+                    } else {                        
                         renderNewCard(result.newdata);
                     }
 
@@ -161,24 +172,78 @@ function startPractice(Y, __cmid, __selection, __selfchecking) { // Wrapper func
                     ]
                 }],
 
-                // These labels appear in the legend and in the tooltips when hovering different arcs
+                // These labels appear in the legend and in the tooltips when hovering different arcs.
                 labels: [
-                    'correct',
-                    'incorrect'
+                    M.util.get_string('right', 'cardbox'),
+                    M.util.get_string('wrong', 'cardbox')
                 ]
             };
             
             var myDoughnutChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: chartdata,
-                //options: options
                 options: {
+                    title: {
+                        display: true,
+                        text: M.util.get_string('titleprogresschart', 'cardbox'),
+                        fontSize: 16,
+                        position: 'top'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
                     rotation: 1 * Math.PI,
-                    circumference: 1 * Math.PI
+                    circumference: 1 * Math.PI,
+                    cutoutPercentage: 60
                 }
             });
 
-            myDoughnutChart.classList.remove('chartjs-render-monitor');
+//            myDoughnutChart.classList.remove('chartjs-render-monitor');
+            
+            
+            var ctx2 = document.getElementById("cardbox-overall-status").getContext("2d");
+            
+            var boxlabel = M.util.get_string('box', 'cardbox');
+            
+            var cardboxdata = {
+                
+                // These labels appear in the legend and in the tooltips when hovering different arcs.
+                labels: [
+                    M.util.get_string('new', 'cardbox'),
+                    boxlabel + ' 1',
+                    boxlabel + ' 2',
+                    boxlabel + ' 3',
+                    boxlabel + ' 4',
+                    boxlabel + ' 5'
+                ],
+
+                datasets: [{
+                    label: M.util.get_string('flashcards', 'cardbox'),
+//                    data: [countnew, countboxone, countboxtwo, countboxthree, countboxfour, countboxfive],
+                    data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5]],
+                    backgroundColor: '#0066ff'
+                }]
+
+            };
+
+            var myBarChart = new Chart(ctx2, {
+                type: 'bar',
+                data: cardboxdata,
+                options: {
+                    title: {
+                        display: true,
+                        text: M.util.get_string('titleoverviewchart', 'cardbox'),
+                        fontSize: 16,
+                        position: 'top'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }//,
+//                    barPercentage: 1,
+//                    categoryPercentage: 1
+                }
+            });
+            
             
         }
 

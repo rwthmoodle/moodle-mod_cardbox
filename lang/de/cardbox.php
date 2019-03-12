@@ -67,4 +67,14 @@ $string['beginpractice'] = 'Start';
 $string['submitanswer'] = 'Überprüfen';
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
+// Practice mode: Feedback
 $string['sessioncompleted'] = 'Fertig! :-)';
+
+$string['titleprogresschart'] = 'Ergebnis';
+$string['right'] = 'richtig';
+$string['wrong'] = 'falsch';
+
+$string['titleoverviewchart'] = 'Karteikasten';
+$string['new'] = 'neu';
+$string['flashcards'] = 'Karten';
+$string['box'] = 'Kästchen';
