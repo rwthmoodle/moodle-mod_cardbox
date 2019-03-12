@@ -48,27 +48,33 @@ if ($action === 'updateandnext') {
     $cardid = required_param('cardid', PARAM_INT);
     $iscorrect = required_param('iscorrect', PARAM_INT);
     $next = required_param('next', PARAM_INT);
+    $isrepetition = required_param('isrepetition', PARAM_INT);
 
-    // 1. Update card entry. XXX in class card auslagern?
-    $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
+    $lastposition = -1;
+    if ($isrepetition == 0) {
 
-    if (empty($dataobject)) {
-        echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
+        // 1. Update card entry. XXX in class card auslagern?
+        $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
+
+        if (empty($dataobject)) {
+            echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
+        }
+        $lastposition = $dataobject->cardposition;
+
+        $dataobject->lastpracticed = time(); 
+        if ($iscorrect == 1) {
+            $dataobject->cardposition++; // TODO What happens after box 5?
+        } else {
+            $dataobject->cardposition = 1;
+        }
+        $dataobject->repetitions++;
+        $success = $DB->update_record('cardbox_progress', $dataobject, false);
+
+        if (empty($success)) {
+            echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
+        }
     }
-    $lastposition = $dataobject->cardposition;
     
-    $dataobject->lastpracticed = time(); 
-    if ($iscorrect == 1) {
-        $dataobject->cardposition++; // TODO What happens after box 5?
-    } else {
-        $dataobject->cardposition = 1;
-    }
-    $dataobject->repetitions++;
-    $success = $DB->update_record('cardbox_progress', $dataobject, false);
-
-    if (empty($success)) {
-        echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
-    }
 
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {

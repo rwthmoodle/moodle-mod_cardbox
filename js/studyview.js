@@ -33,13 +33,14 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
         var cardcount = __selection.length; // to be used for statistics/progress bar.
+        // Information about the current flashcard.
         var position = 0;
+        var cardId = __selection[0];
+        var isrepetition = 0;
+        // 
         var countright = 0;
         var countwrong = 0;        
-//        var toRepeat = array();
-
-        console.log('__selection: ', __selection);
-        console.log('__boxcount: ', __boxcount);
+        var toRepeat = []; // Collects cards that were answered wrongly. They will be repeated but their status in the DB won't change.
 
         registerEventListeners();
         
@@ -99,46 +100,118 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
          */
         function proceed(iscorrect) { // XXX: Error notifications for error cases AND collect wrong cards for repetition.
 
+            var willBeRepetition = 0;
+            var next;
             
-            if (position == (cardcount-1)) {
-                var next = 0; // This was the last card of this practice session.
+            // This was the last card of this practice session.
+            if (position == (cardcount-1) && toRepeat.length === 0) {
+                next = 0;
+
+            // There are only regular cards left.
+            } else if (position < (cardcount-1) && toRepeat.length === 0) {
+                next = __selection[position+1];
+            
+            // There are only cards left that are to be repeated.
+            } else if (position == (cardcount-1) && toRepeat.length !== 0) {
+                next = toRepeat.shift();
+                willBeRepetition = 1;
+                
+            // There are both regular cards and cards to be repeated left.
             } else {
-                var next = __selection[position+1];
+                if (getRandomInt(3) < 2) {
+                    next = __selection[position+1];
+                } else {
+                    next = toRepeat.shift();
+                    willBeRepetition = 1;
+                }
             }
 
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: __cmid, action: 'updateandnext', cardid: __selection[position], iscorrect: iscorrect, next: next, sesskey: M.cfg.sesskey},
+                data: {id: __cmid, action: 'updateandnext', cardid: __selection[position], iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
                 success: function(result){
                     result = JSON.parse(result);
-                    
-                    var boxslot = result.lastposition;
-                    
-                    __boxcount[boxslot]--;
 
-                    if (iscorrect === 1) {
-                        countright++;
-                        boxslot++;
-                        __boxcount[boxslot]++;
+                    /********* Deal with the current/old card. *********/
+                    
+                    // Regular cards:
+                    if (isrepetition == 0) {
                         
-                    } else {
-                        countwrong++;
-                        __boxcount[1]++;
+                        // Adjust the card counts of the boxes.
+                        var boxslot = result.lastposition;
+                    
+                        __boxcount[boxslot]--;
+
+                        if (iscorrect === 1) {
+                            countright++;
+                            boxslot++;
+                            __boxcount[boxslot]++;
+
+                        } else {
+                            countwrong++;
+                            __boxcount[1]++;
+                            // If a wrong answer was given, mark this card for repetition.
+                            //toRepeat.push(__selection[position]);
+                            toRepeat.push(cardId);
+                        }
+                    
+                    // Cards that are repeated because they were answered wrongly before:
+                    // If it was answered wrongly again:
+                    } else if (iscorrect == 0) {
+                        // Mark the card for repetition once more.
+                        toRepeat.push(cardId);
                         
                     }
-
+                    
+                    /********* Deal with the new card. *********/
                     if (next == 0) {
                         finishPractice();
 
-                    } else {                        
-                        renderNewCard(result.newdata);
+                    } else {
+
+                        isrepetition = willBeRepetition;
+                        renderNewCard(result.newdata, next);
+                        
                     }
 
                 }
             });
 
         }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * (max));
+        }
+
+        /**
+         * Function rerenders the template with the question data of a new flashcard.
+         *
+         * @param {type} newdata
+         * @returns {undefined}
+         */
+        function renderNewCard(newdata, next) {
+
+            if (isrepetition === 0) {
+                position = position + 1;
+                cardId = __selection[position];
+            } else {
+                cardId = next;
+            }
+
+            (function (templates, data) {
+                        templates.render('mod_cardbox/studyview', data)
+                                .then(function (html, js) {
+                                    templates.replaceNodeContents('#cardbox-studyview', html, js);
+
+                                }).then(function () {
+                                        registerEventListeners();
+
+                                }); // Add a catch.
+            })(templates, newdata);
+
+        }
+
 
         /**
          * Function tells the user that the session is finished.
@@ -247,28 +320,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
             
         }
 
-        /**
-         * Function rerenders the template with the question data of a new flashcard.
-         *
-         * @param {type} newdata
-         * @returns {undefined}
-         */
-        function renderNewCard(newdata) {
-
-            position = position + 1;
-
-            (function (templates, data) {
-                        templates.render('mod_cardbox/studyview', data)
-                                .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-studyview', html, js);
-
-                                }).then(function () {
-                                        registerEventListeners();
-
-                                }); // Add a catch.
-            })(templates, newdata);
-
-        }
+        
 
     });
 
