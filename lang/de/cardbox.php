@@ -78,3 +78,9 @@ $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['flashcards'] = 'Karten';
 $string['box'] = 'Kästchen';
+
+// Review.
+$string['approve'] = 'Freigeben';
+$string['reject'] = 'Ablehnen';
+$string['edit'] = 'Bearbeiten';
+$string['skip'] = 'Überspringen';

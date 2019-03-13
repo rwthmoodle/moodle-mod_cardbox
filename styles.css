@@ -1,3 +1,6 @@
+.path-mod-cardbox button {
+    border: none !important;
+}
 
 .path-mod-cardbox .cardbox-studyview {
 
@@ -61,3 +64,54 @@
 /*    height: 100px !important;
     width: 100px !important;*/
 }
+
+.path-mod-cardbox .col-gold-lg {
+    background-color: green;
+}
+
+.path-mod-cardbox .col-gold-sm {
+    background-color: gold;
+}
+
+.path-mod-cardbox .reviewcontent {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.path-mod-cardbox .cardbox-review-item {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    margin: 1em;
+    padding: 2em;
+}
+
+.path-mod-cardbox .cardbox-review-button {
+    border-radius: 0px;
+    margin-left: 2m;
+    margin-left: 2m;
+}
+/*.path-mod-cardbox .cardbox-review-button {
+    border-radius: 70%;
+    margin-bottom: 3em;
+}
+
+.path-mod-cardbox #cardbox-approve {
+    background-color: #00b33c;
+    margin-right: 1em;
+}
+
+.path-mod-cardbox #cardbox-edit {
+    background-color: #ff9900;
+    margin-right: 1em;
+}
+
+.path-mod-cardbox #cardbox-reject {
+    background-color: #ff3300;
+    margin-right: 1em;
+}*/
+
+/*
+
+.path-mod-cardbox #cardbox-skip {
+    background-color: #00b33c;
+}*/

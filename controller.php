@@ -238,9 +238,12 @@ if ($action === 'practice') {
 
 if ($action === 'review') {
     
-    require_once('model/cardbox.class.php');
-
-    // Create a virtual cardbox for this practice session. // TODO move to other action.
-    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+    require_once('model/cardcollection.class.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
+    
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $review = new cardbox_review();
+    echo $renderer->cardbox_render_review($review);
+    
 
 }

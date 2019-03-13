@@ -33,14 +33,19 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
         var cardcount = __selection.length; // to be used for statistics/progress bar.
+
         // Information about the current flashcard.
         var position = 0;
         var cardId = __selection[0];
         var isrepetition = 0;
-        // 
+
+        // Statistical information that will be displayed to the user at the end of practice.
         var countright = 0;
-        var countwrong = 0;        
-        var toRepeat = []; // Collects cards that were answered wrongly. They will be repeated but their status in the DB won't change.
+        var countwrong = 0;
+
+        // Collection of cards that were answered wrongly. They will be repeated until answered correctly once.
+        // Their status in the DB won't change, however, i.e. they go back to the first box.
+        var toRepeat = [];
 
         registerEventListeners();
         
@@ -98,7 +103,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
          * @param {type} iscorrect
          * @returns {undefined}
          */
-        function proceed(iscorrect) { // XXX: Error notifications for error cases AND collect wrong cards for repetition.
+        function proceed(iscorrect) { // XXX: Error notifications for error cases.
 
             var willBeRepetition = 0;
             var next;

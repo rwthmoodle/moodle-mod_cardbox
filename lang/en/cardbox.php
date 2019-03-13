@@ -77,3 +77,9 @@ $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
 $string['flashcards'] = 'flashcards';
 $string['box'] = 'box';
+
+// Review.
+$string['approve'] = 'Approve';
+$string['reject'] = 'Reject';
+$string['edit'] = 'Edit';
+$string['skip'] = 'Skip';
