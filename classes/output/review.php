@@ -25,14 +25,65 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_review implements \renderable, \templatable {
     
+    private $frontimages;
+    private $fronttexts;
+    private $backimages;
+    private $backtexts;
+    private $cardid;
     
-    
-    public function __construct() {
+    public function __construct($context, $cardboxid = null, $cardid = null) {
         
+        require_once('model/cardcollection.class.php');
+        
+        if (!empty($cardboxid)) {
+            $collection = new cardbox_cardcollection($cardboxid);
+            $contents = $collection->cardbox_get_cardcontents_initial();
+            $this->cardid = $collection->cardbox_get_first_cardid();
+
+        } else if (!empty($cardid)) {
+            $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
+            $this->cardid = $cardid;
+
+        } else {
+            // TODO: Fehlerbehandlung
+        }
+        $this->topic = cardbox_cardcollection::cardbox_get_topic($this->cardid);
+
+        $this->frontimages = array();
+        $this->fronttexts = array();
+        $this->backimages = array();
+        $this->backtexts = array();
+
+        $fs = get_file_storage();
+        foreach ($contents as $content) {
+
+            if ($content->contenttype == 1) { // XXX: make dynamic!
+
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                if ($content->cardside == 0) {
+                    $this->frontimages[] = array("frontimagesrc" => $download_url);
+                } else {
+                    $this->backimages[] = array("backimagesrc" => $download_url);
+                }
+
+            } else if ($content->cardside == 0) {
+                $this->fronttexts[] = array("fronttext" => $content->content);
+
+            } else {
+                $this->backtexts[] = array("backtext" => $content->content);
+            }
+        }
+
     }
 
     public function export_for_template(\renderer_base $output) {
-        $data['cards'] = 'Nilpferd';
+        $data['cardid'] = $this->cardid;
+        $data['topic'] = $this->topic;
+        $data['frontimages'] = $this->frontimages;
+        $data['fronttexts'] = $this->fronttexts;
+        $data['backimages'] = $this->backimages;
+        $data['backtexts'] = $this->backtexts;
+        $data['cards'] = true;
         return $data;
     }
 }

@@ -1,11 +1,32 @@
 <div id="cardbox-review" class="container-fluid cardbox-studyview">
 
-    
-
-    <div id="cardbox-card-in-review-{{cardid}}" class="row reviewcontent">
+    <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
         <div class="col-sm-2"></div>
-        <div class="col-sm-4 cardbox-review-item">Nilpferd loremp ipsum dolor manet etcetera bla blubb und überhaupt wird hier viel zu wenig geschwafelt</div>
-        <div class="col-sm-4 cardbox-review-item">Flamingo loremp ipsum dolor manet etcetera bla blubb und überhaupt wird hier viel zu wenig geschwafelt</div>
+        <div class="col-sm-4 cardbox-review-item">
+            {{#frontimages}}
+                <div class="cardbox-image container-fluid">
+                    <img src='{{frontimagesrc}}' class='img-fluid mx-auto d-block'>
+                </div>
+            {{/frontimages}}
+            {{#fronttexts}}
+                <div class="cardbox-text text-center">
+                    <h3>{{{fronttext}}}</h3>
+                </div>
+            {{/fronttexts}}
+        </div>
+        <div class="col-sm-4 cardbox-review-item">
+            {{#backimages}}
+                <div class="cardbox-image cardbox-back">
+                    <img src='{{backimagesrc}}' class='img-fluid mx-auto d-block'>
+                </div>
+            {{/backimages}}
+
+            {{#backtexts}}
+                <div class="cardbox-text cardbox-back text-center">
+                    <h2>{{{backtext}}}</h2>
+                </div>
+            {{/backtexts}}
+        </div>
         <div class="col-sm-2"></div>
     </div>
     <div class="row">
@@ -20,7 +41,5 @@
         </div>
         <div class="col-sm-4"></div>
     </div>
-
-    
 
 </div>

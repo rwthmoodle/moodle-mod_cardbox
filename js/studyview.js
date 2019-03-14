@@ -22,6 +22,7 @@
  */
 
 /**
+ * This script controlls the behaviour of the page during practice.
  *
  * @param {type} Y required by moodle
  * @param int __cmid course module id

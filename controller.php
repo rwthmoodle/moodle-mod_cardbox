@@ -176,22 +176,22 @@ if ($action === 'practice') {
 
     require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
-//    require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
+    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
 
     echo $OUTPUT->heading("$cardbox->name");
-    
+
     // 1. Create a virtual cardbox for this practice session.
     $cardbox = new cardbox_cardboxmodel($cardbox->id);
     $selection = $cardbox->cardbox_get_card_selection();
     $cardboxstatus = $cardbox->cardbox_get_status();
-    
+
     // 2. Give javascript access to the language string repository and add it to the page.
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
-    
+
 //    $capabilities = new stdClass();
 //    $capabilities->viewquestions = has_capability('mod/pdfannotator:viewquestions', $context);
 //    $capabilities->viewanswers = has_capability('mod/pdfannotator:viewanswers', $context);
@@ -237,13 +237,23 @@ if ($action === 'practice') {
 /* **************************************************** Approve/edit cards **************************************************** */
 
 if ($action === 'review') {
-    
-    require_once('model/cardcollection.class.php');
+
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
-    
+
+    // 2. Include scripts to controll the behaviour of the page.
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('cardbox', 'en');
+    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js")); // TODO: Entfernen, falls doch nicht benutzt.
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
+    $params = array(); //$cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
+    $PAGE->requires->js_init_call('startReview', $params, true);
+
+    // 3. Create a view controller.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $review = new cardbox_review();
-    echo $renderer->cardbox_render_review($review);
+    $review = new cardbox_review($context, $cardbox->id);
     
+    // 4. Render the view.
+    echo $renderer->cardbox_render_review($review);
 
 }

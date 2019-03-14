@@ -100,7 +100,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $flashcards =  $DB->get_records_sql($sql, array($USER->id, $cardboxid));
 
         if (empty($flashcards)) {
-            // Blaue Box printen
+            // TODO Blaue Box printen
             return;
         }
         

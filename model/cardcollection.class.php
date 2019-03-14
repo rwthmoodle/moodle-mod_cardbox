@@ -24,22 +24,68 @@ defined('MOODLE_INTERNAL') || die();
  */
 
 class cardbox_cardcollection {
-    
-    
-    
+
+    private $cardbox;
+    private $flashcards; // new/unapproved flashcards.
     
     public function __construct($cardboxid, $getall = false) {
         
         global $DB;
-        
-        $sql = "SELECT c.card, top.topicname "
-                . "FROM {cardbox_cards} c "
-                . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
-                . "WHERE c.cardbox = ? AND approvedby IS NULL";
-
-        $flashcards =  $DB->get_records_sql($sql, array($cardboxid));
-        
+        $this->cardbox = $cardboxid;
+        $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approvedby IS NULL', array($cardboxid));
         
     }
+    
+    /**
+     * Function returns all flashcards that have yet to be approved.
+     *
+     * @return array card ids
+     */
+    public function cardbox_get_card_list() {
+        return $this->flashcards;
+    }
+    
+    public function cardbox_get_first_cardid() {
+        return $this->flashcards[0];
+    }
+    
+//    public function cardbox_get_card_for_review($cardid) {
+//
+//        global $DB;
+//
+//        $sql = "SELECT c.id, t.topicname "
+//                . "FROM {cardbox_cards} c "
+//                . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
+//                . "WHERE c.cardbox = ? AND approvedby IS NULL";
+//
+//        return $DB->get_record_sql($sql, array($this->cardbox, $cardid), MUST_EXIST);
+//    }
+    
+    public function cardbox_get_cardcontents_initial() {
+        return self::cardbox_get_cardcontents($this->flashcards[0]);
+    }
+    
+    static function cardbox_get_cardcontents($cardid) {
+
+        global $DB;
+        return $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
+
+    }
+    /**
+     * 
+     * @global type $DB
+     * @param type $cardid
+     * @return type
+     */
+    static function cardbox_get_topic($cardid) { // XXX move to locallib
+        global $DB;
+        $sql = "SELECT t.topicname "
+                . "FROM {cardbox_cards} c "
+                . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
+                . "WHERE c.id = ?";
+        return $DB->get_field_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
+    }
+    
+    
     
 }
