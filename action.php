@@ -60,13 +60,13 @@ if ($action === 'review') {
             break;
         
         case 'skip':
+            $success = 1;
             break;
         
     }
     
-    
     if (empty($success)) {
-        echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
+        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // TODO: check double string entries.
     }
     
 //    $success = $DB->update_record('cardbox_cards', $dataobject, false);

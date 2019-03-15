@@ -75,4 +75,15 @@ class mod_cardbox_card_form extends moodleform {
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
     }
+    
+    // Loads the old file in the filemanager.
+//    public function data_preprocessing(&$defaultvalues) {
+//        if ($this->current->instance) {
+//            $contextid = $this->context->id;
+//            $draftitemid = file_get_submitted_draft_itemid('cardimage');
+//            file_prepare_draft_area($draftitemid, $contextid, 'mod_cardbox', 'content', 0, array('subdirs' => true));
+//            $defaultvalues['cardimage'] = $draftitemid;
+////            $this->_form->disabledIf('files', 'update', 'notchecked', 2);
+//        }
+//    }
 }

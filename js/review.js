@@ -53,7 +53,11 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                 skip();
             });
         }
-        
+        /**
+         * 
+         * @param {type} status
+         * @returns {undefined}
+         */
         function controlUpdate(status) {
             
             $.ajax({
@@ -65,22 +69,30 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                     result = JSON.parse(result);
                     
                     if (result.status === 'success') {
-                        // TODO: Success message
-                        notification.addNotification({
+                        
+                        if (status != 'skip') {
+                            notification.addNotification({
                                 message: M.util.get_string('success:'+status, 'cardbox'),
                                 type: "success"
-                        });
-                        
-                        
-                        
-                        
+                            });
+                        }
+
                         updateStatus();
                         renderNewCard(result.newdata);
 
                     } else if (result.status === 'finished') {
-                        // TODO: message that there are no more cards for review.
+                        
+                        notification.addNotification({
+                                message: M.util.get_string('success:'+status, 'cardbox'),
+                                type: "success"
+                        });
+
                     } else {
-                        // TODO: Error message
+                        notification.addNotification({
+                                message: result.reason,
+                                type: "error"
+                        });
+
                     }
                     // Remove the notification box after 3 seconds.
                     setTimeout(function(){
@@ -89,6 +101,20 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                             notificationpanel.removeChild(notificationpanel.firstChild);
                         } 
                     }, 5000);
+                    
+                    // Clean up if this was the last card to be reviewed.
+                    if (result.status === 'finished') {
+                        
+                        var view = document.getElementById('cardbox-review');
+                        view.remove();
+                        
+                        notification.addNotification({
+                                message: M.util.get_string('nocardsavailableforreview', 'cardbox'),
+                                type: "info"
+                        });
+                        
+                        
+                    }
                     
                 }
             });
@@ -114,51 +140,15 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
         }
         
         function edit() {
-            
-            $.ajax({
-                type: 'POST',
-                url: 'action.php',
-                data: {id: __cmid, action: 'editandgetnext', card: cardinreview, nextcard: next, sesskey: M.cfg.sesskey},
-                success: function(result){
-                    result = JSON.parse(result);
-                    
-                    
-                    }
-                });
-            
-            
+            openCardFormForEditing();
         }
         
         function reject() {
-            
-            $.ajax({
-                type: 'POST',
-                url: 'action.php',
-                data: {id: __cmid, action: 'editandgetnext', card: cardinreview, nextcard: next, sesskey: M.cfg.sesskey},
-                success: function(result){
-                    result = JSON.parse(result);
-                    
-                    
-                    }
-                });
-            
-            
+            controlUpdate('reject');
         }
         
         function skip() {
-            
-            $.ajax({
-                type: 'POST',
-                url: 'action.php',
-                data: {id: __cmid, action: 'editandgetnext', card: cardinreview, nextcard: next, sesskey: M.cfg.sesskey},
-                success: function(result){
-                    result = JSON.parse(result);
-                    
-                    
-                    }
-                });
-            
-            
+            controlUpdate('skip');
         }
         
         function renderNewCard(newdata) {
@@ -173,6 +163,11 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                                     }); // Add a catch.
             })(templates, newdata);
         
+        }
+        
+        function openCardFormForEditing() {
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinreview;
+            window.location.href = goTo;
         }
         
     });

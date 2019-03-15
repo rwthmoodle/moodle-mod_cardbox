@@ -37,6 +37,8 @@ $string['review'] = 'Review';
 // Subpage titles
 $string['titleforaddflashcard'] = 'Add flashcard';
 $string['titleforpractice'] = 'Practice';
+$string['titleforreview'] = 'Check flashcard';
+$string['titleforcardedit'] = 'Edit flashcard';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';
@@ -55,6 +57,13 @@ $string['success:approve'] = 'The flashcard was approved and is now free to use.
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
 $string['success:reject'] = '.';
 $string['success:skip'] = '.';
+
+// Error notifications
+$string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.'; // TODO: translate
+
+// Info notifications
+$string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
+
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'What and how would you like to practice?';

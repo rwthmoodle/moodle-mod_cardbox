@@ -37,6 +37,8 @@ $string['review'] = 'Freigabe';
 // Subpage titles
 $string['titleforaddflashcard'] = 'Karte anlegen';
 $string['titleforpractice'] = 'Üben';
+$string['titleforreview'] = 'Karte überprüfen';
+$string['titleforcardedit'] = 'Karte bearbeiten';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';
@@ -52,9 +54,15 @@ $string['savecard'] = 'Speichern';
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
-$string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
+$string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = '.';
 $string['success:skip'] = '.';
+
+// Error notifications
+$string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
+
+// Info notifications
+$string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
