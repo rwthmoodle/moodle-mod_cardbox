@@ -51,6 +51,10 @@ $string['savecard'] = 'Save';
 
 // Success notifications
 $string['success:addnewcard'] = 'The flashcard was created and awaits approval.';
+$string['success:approve'] = 'The flashcard was approved and is now free to use.';
+$string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
+$string['success:reject'] = '.';
+$string['success:skip'] = '.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'What and how would you like to practice?';

@@ -51,6 +51,10 @@ $string['savecard'] = 'Speichern';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
+$string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
+$string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
+$string['success:reject'] = '.';
+$string['success:skip'] = '.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';

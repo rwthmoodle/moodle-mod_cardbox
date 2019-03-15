@@ -39,6 +39,54 @@ $context = context_module::instance($cmid);
 $action = required_param('action', PARAM_ALPHA); // ...'$action' determines what is to be done; see below.
 
 
+if ($action === 'review') {
+    
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
+    
+    $cardid = required_param('cardid', PARAM_INT);
+    $newstatus = required_param('status', PARAM_TEXT);
+    $nextcard = optional_param('nextcard', 0, PARAM_INT);
+
+    $dataobject = new stdClass();
+    $dataobject->id = $cardid;
+    switch($newstatus) {
+        
+        case 'approve':
+            $dataobject->approvedby = $USER->id;
+            $success = $DB->update_record('cardbox_cards', $dataobject, false);
+            break;
+        
+        case 'reject':
+            break;
+        
+        case 'skip':
+            break;
+        
+    }
+    
+    
+    if (empty($success)) {
+        echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
+    }
+    
+//    $success = $DB->update_record('cardbox_cards', $dataobject, false);
+    
+    
+    if ($nextcard != 0) {
+        $renderer = $PAGE->get_renderer('mod_cardbox');
+        $review = new cardbox_review($context, null, $nextcard);
+        $newdata = $review->export_for_template($renderer);
+
+        echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+
+    } else {
+        echo json_encode(['status' => 'finished']);
+    }
+    
+    
+}
+
+
 /* * ********************** move card to the next box and return next card *********************** */
 
 if ($action === 'updateandnext') {

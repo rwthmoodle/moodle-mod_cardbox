@@ -31,12 +31,17 @@ class cardbox_review implements \renderable, \templatable {
     private $backtexts;
     private $cardid;
     
-    public function __construct($context, $cardboxid = null, $cardid = null) {
+    /**
+     * 
+     * @param obj $context
+     * @param obj $collection
+     * @param int $cardid
+     */
+    public function __construct($context, $collection = null, $cardid = null) {
         
         require_once('model/cardcollection.class.php');
         
-        if (!empty($cardboxid)) {
-            $collection = new cardbox_cardcollection($cardboxid);
+        if (!empty($collection)) {
             $contents = $collection->cardbox_get_cardcontents_initial();
             $this->cardid = $collection->cardbox_get_first_cardid();
 

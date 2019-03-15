@@ -238,21 +238,28 @@ if ($action === 'practice') {
 
 if ($action === 'review') {
 
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
+    require_once('model/cardcollection.class.php'); // model.
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
 
-    // 2. Include scripts to controll the behaviour of the page.
+    // 1. Create the model.
+    $collection = new cardbox_cardcollection($cardbox->id);
+    $list = $collection->cardbox_get_card_list();
+    
+    // 2. Include scripts to control the behaviour of the page.
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js")); // TODO: Entfernen, falls doch nicht benutzt.
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js")); // TODO: Entfernen, falls doch nicht benutzt.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
-    $params = array(); //$cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
+
+    // 3. Call script wrapper function.
+    $params = array($cmid, $list);
     $PAGE->requires->js_init_call('startReview', $params, true);
 
-    // 3. Create a view controller.
+    // 3. Create the view controller.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $review = new cardbox_review($context, $cardbox->id);
-    
+    $review = new cardbox_review($context, $collection);
+
     // 4. Render the view.
     echo $renderer->cardbox_render_review($review);
 
