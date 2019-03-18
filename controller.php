@@ -348,7 +348,7 @@ if ($action === 'review') {
     $list = $collection->cardbox_get_card_list();
     
     if (empty($list)) {
-        $info = get_string('info:nocardsavailable', 'cardbox');
+        $info = get_string('info:nocardsavailableforreview', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
     }
