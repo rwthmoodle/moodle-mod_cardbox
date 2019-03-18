@@ -59,10 +59,11 @@ $string['success:reject'] = '.';
 $string['success:skip'] = '.';
 
 // Error notifications
-$string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.'; // TODO: translate
+$string['error:updateafterreview'] = 'Update failed.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
+$string['info:nocardsavailable'] = 'There are no flashcards in your cardbox at present.';
 
 
 // Title and form elements for choosing the settings for a new practice session

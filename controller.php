@@ -23,8 +23,6 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-/* *********************************************** Add a new flashcard *********************************************** */
-
 $question = optional_param('question', null, PARAM_ALPHANUM);
 $isedit = optional_param('isedit', null, PARAM_INT);
 
@@ -35,6 +33,8 @@ if (!empty($question) && !empty($isedit)) { // XXX dirty solution. For some reas
         $action = 'editcard';
     }
 }
+
+/* *********************************************** Add a new flashcard *********************************************** */
 
 if ($action === 'addflashcard') {
 
@@ -138,8 +138,6 @@ if ($action === 'addflashcard') {
 /* ************************************************ Edit a flashcard ************************************************* */
 
 if ($action === 'editcard') {
-    
-    echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
 
     global $DB;
 
@@ -178,7 +176,7 @@ if ($action === 'editcard') {
         for ($i = 0; $i < $answercount; $i++) {
             $entry->answer[$i] = $answers[$i];
         }
-        $entry->cardimage = $draftitemid; // TODO: insert content item id here???
+        $entry->cardimage = $draftitemid;
         $entry->action = 'editcard';
     }
     $mform->set_data($entry);
@@ -248,6 +246,7 @@ if ($action === 'editcard') {
     
     } else {
 
+        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
         $mform->display();
 
@@ -323,46 +322,14 @@ if ($action === 'practice') {
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
 
-//    $capabilities = new stdClass();
-//    $capabilities->viewquestions = has_capability('mod/pdfannotator:viewquestions', $context);
-//    $capabilities->viewanswers = has_capability('mod/pdfannotator:viewanswers', $context);
-
-//    $params = array($pdfannotator->id, $cmid, $capabilities);
     $params = array($cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
-    // 3. 
+    // 3. Render the page.
     $renderer = $PAGE->get_renderer('mod_cardbox');
     $studyview = new cardbox_studyview($context, $cardbox);
     echo $renderer->cardbox_render_studyview($studyview);
 
-    // If needed:
-//    $params = array($pdfannotator->id);
-//    $PAGE->requires->js_init_call('startOverview', $params, true); // 1. name of JS function, 2. parameters.
-    
-    // 2. Capability check. // TODO
-    
-//    $imgurls = array();
-//    
-//    $fs = get_file_storage();
-//    if ($files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', false, 'sortorder', false)) {
-//            foreach ($files as $file) {
-//                $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-//                // Display the image
-//                $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
-//                $imgurls[] = $download_url;
-//                break; // TODO: wieder entfernen
-////                echo '<a href="' . $download_url . '">' . $file->get_filename() . '</a><br/>';
-//            }
-//    } else {
-//            echo '<p>Please upload an image first</p>';
-//    }  
-//    
-    // 3. Render the page.
-//    $renderer = $PAGE->get_renderer('mod_cardbox');
-//    $studyview = new cardbox_studyview($imgurls, array('Regenpfeifer')); // maybe add parameters
-//    echo $renderer->cardbox_render_studyview($studyview);
-    
 }
 
 /* **************************************************** Approve/edit cards **************************************************** */

@@ -63,6 +63,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
+$string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
@@ -81,7 +82,6 @@ $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 // Practice mode: Feedback
 $string['sessioncompleted'] = 'Fertig! :-)';
-
 $string['titleprogresschart'] = 'Ergebnis';
 $string['right'] = 'richtig';
 $string['wrong'] = 'falsch';

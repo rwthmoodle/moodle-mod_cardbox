@@ -111,7 +111,7 @@ if ($action === 'updateandnext') {
 
         $dataobject->lastpracticed = time(); 
         if ($iscorrect == 1) {
-            $dataobject->cardposition++; // TODO What happens after box 5?
+            $dataobject->cardposition++;
         } else {
             $dataobject->cardposition = 1;
         }
@@ -122,7 +122,6 @@ if ($action === 'updateandnext') {
             echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
         }
     }
-    
 
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {

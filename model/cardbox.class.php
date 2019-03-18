@@ -100,7 +100,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $flashcards =  $DB->get_records_sql($sql, array($USER->id, $cardboxid));
 
         if (empty($flashcards)) {
-            // TODO Blaue Box printen
+            $info = get_string('info:nocardsavailable', 'cardbox');
+            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
             return;
         }
         
