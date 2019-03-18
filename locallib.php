@@ -189,3 +189,53 @@ function cardbox_get_download_url($context, $itemid, $filename = null) {
     }
     
 }
+/**
+ * Function returns the topic of the card, if a topic was selected.
+ *
+ * @global obj $DB
+ * @param int $cardid
+ * @return int
+ */
+function cardbox_get_topic($cardid) { // XXX opject-oriented with card class?
+    
+    global $DB;
+    
+    $topic = $DB->get_field('cardbox_cards', 'topic', array('id' => $cardid), IGNORE_MISSING);
+
+    if (empty($topic)) {
+        $topic = -1; // no topic selected.
+    }
+    
+    return $topic;
+
+}
+/**
+ * Function returns the question text (if there is one) of the specified card.
+ *
+ * @global obj $DB
+ * @param int $cardid
+ * @return string
+ */
+function cardbox_get_questiontext($cardid) {
+
+    global $DB;
+    $questiontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2), IGNORE_MISSING);
+    if (empty($questiontext)) {
+        $questiontext = '';
+    }
+    return $questiontext;
+
+}
+/**
+ * Function returns 1...n answer items belonging to the specified card.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_answers($cardid) {
+    
+    global $DB;
+    return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ?', array($cardid, 1, 2));
+
+}

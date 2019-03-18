@@ -62,7 +62,7 @@ if ($action === 'addflashcard') {
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
-
+        
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -131,41 +131,50 @@ if ($action === 'addflashcard') {
 /* ************************************************ Edit a flashcard ************************************************* */
 
 if ($action === 'editcard') {
-    
+
     global $DB;
-    
+
     require_once('card_form.php');
     $cardid = required_param('cardid', PARAM_INT);
-    
+
 //TODO: mark Freigabe as the current tab.
 
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => $action));
-    
-    ////////////////////
-    $draftitemid = file_get_submitted_draft_itemid('cardimage');
+
+    $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
+
     $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => 1), IGNORE_MISSING);
-    
-    $mform = new mod_cardbox_card_form();
-    
-    // Contextual data to pass on to the card form.
-    if (empty($entry)) {
-        $entry = new stdClass();
-        $entry->id = $cmid;
-        $entry->course = $cm->course;
-        $entry->cardimage = $draftitemid; // TODO: insert content item id here
-        $entry->action = $action;
-    }
+
+    $topic = cardbox_get_topic($cardid);
+    $answers = cardbox_get_answers($cardid);
+    $answercount = count($answers);
+
+    $customdata = array('topic' => $topic, 'answercount' => $answercount);
+    $mform = new mod_cardbox_card_form(null, $customdata);
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
                           'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
     $component = 'mod_cardbox';
     $filearea = 'content';
-    
-    // Copy all the files from the 'real' area, into the draft area.
-    file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, array('subdirs'=>true));
 
-    
+    // Copy all the files from the 'real' area, into the draft area.
+    file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+
+    // Pass the data of this card to the card_form for editing.
+    if (empty($entry)) {
+        $entry = new stdClass();
+        $entry->id = $cmid;
+        $entry->course = $cm->course;
+        $entry->cardid = $cardid;
+        $entry->question = cardbox_get_questiontext($cardid);
+        for ($i = 0; $i < $answercount; $i++) {
+            $entry->answer[$i] = $answers[$i];
+        }
+        $entry->cardimage = $draftitemid; // TODO: insert content item id here
+        $entry->action = $action;
+    }
+
     $mform->set_data($entry);
     
     if ($mform->is_cancelled()) {
@@ -176,61 +185,61 @@ if ($action === 'editcard') {
     } else if ($formdata = $mform->get_data()) {
 
         // Create or select a topic for the card.
-        switch ($formdata->topic) {
-            case -1: // Card belongs to no topic.
-                $topicid = null;
-                break;
-            case 0: // Card belongs to a new topic that is to be created.
-                if (!empty($formdata->newtopic)) {
-                    $topicid = cardbox_save_new_topic($formdata->newtopic);
-                } else {
-                    $topicid = null;
-                }
-                break;
-            default: // Card belongs to an already existing topic.
-                $topicid = $formdata->topic;
-        }
-
-        // Update the entry in cardbox_cards table. // TODO: Update topic and timemodified
-        $cardid = cardbox_save_new_card($cardbox->id, $topicid);
-
-        // Save the question text if there is any.
-        if (!empty($formdata->question)) {
-            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
-        }
-        // Save the text of the answer/s.
-        foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
-        }
-
-        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
-        $draftitemid = file_get_submitted_draft_itemid('cardimage');
-
-        // Copy all the files from the 'real' area, into the draft area.
-        file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, 0, array('subdirs'=>true));
-
-        // Save the file.
-        if ($draftitemid != null) {
-            $fs = get_file_storage();
-            $usercontext = context_user::instance($USER->id);
-            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
-                echo 'Fehlerbehandlung!';
-            } else {
-                foreach ($files as $file) {
-                    // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
-                    // Save the actual image data in moodle.
-                    file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
-                    break;
-                }
-            }
-
-        }
+//        switch ($formdata->topic) {
+//            case -1: // Card belongs to no topic.
+//                $topicid = null;
+//                break;
+//            case 0: // Card belongs to a new topic that is to be created.
+//                if (!empty($formdata->newtopic)) {
+//                    $topicid = cardbox_save_new_topic($formdata->newtopic);
+//                } else {
+//                    $topicid = null;
+//                }
+//                break;
+//            default: // Card belongs to an already existing topic.
+//                $topicid = $formdata->topic;
+//        }
+//
+//        // Update the entry in cardbox_cards table. // TODO: Update topic and timemodified
+//        $cardid = cardbox_save_new_card($cardbox->id, $topicid);
+//
+//        // Save the question text if there is any.
+//        if (!empty($formdata->question)) {
+//            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
+//        }
+//        // Save the text of the answer/s.
+//        foreach ($formdata->answer as $answer) {
+//            cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
+//        }
+//
+//        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
+//        $draftitemid = file_get_submitted_draft_itemid('cardimage');
+//
+//        // Copy all the files from the 'real' area, into the draft area.
+//        file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, 0, array('subdirs'=>true));
+//
+//        // Save the file.
+//        if ($draftitemid != null) {
+//            $fs = get_file_storage();
+//            $usercontext = context_user::instance($USER->id);
+//            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
+//                echo 'Fehlerbehandlung!';
+//            } else {
+//                foreach ($files as $file) {
+//                    // Save a reference to the image data in cardbox_cardcontents.
+//                    $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
+//                    // Save the actual image data in moodle.
+//                    file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+//                    break;
+//                }
+//            }
+//
+//        }
 
         // TODO: check for errors, validate form
 
         // Give user feedback and go back to practice.
-        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
+//        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     
     } else {
 
@@ -241,8 +250,7 @@ if ($action === 'editcard') {
     
     
     ////////////////////
-    
-    echo "Hello";
+
 }
 
 /* ************************************************ Settings for Practice ************************************************* */

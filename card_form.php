@@ -30,10 +30,23 @@ require_once('locallib.php');
 
 class mod_cardbox_card_form extends moodleform {
 
-    function definition() {
+    /**
+     * This function is called by the constructor.
+     *
+     * @global type $CFG
+     * @global type $DB
+     * @global type $USER
+     * @global type $COURSE
+     * @param type $action
+     * @param array $preselected This param is saved by the constructor in $this->_customdata.
+     */
+    function definition($action = null, $preselected = null) {
+
         global $CFG, $DB, $USER, $COURSE;
 
         $mform = $this->_form;
+
+        $customdata = $this->_customdata;
 
         // Pass contextual parameters to the form (via set_data() in controller.php).
         $mform->addElement('hidden', 'id'); // Course module id.
@@ -41,18 +54,25 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('hidden', 'course'); // Course id.
         $mform->setType('course', PARAM_INT);
-        
+
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_INT);
-        
+
+        $mform->addElement('hidden', 'cardid');
+        $mform->setType('cardid', PARAM_INT);
+        $mform->setDefault('cardid', 0);
+
         // Get topics to choose from when creating a new card.
         $topiclist = cardbox_get_topics(true);
-        $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist, array('onchange' => 'javascript:myFunctionToDoSomething();'));
-        
+        $select = $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist, array('onchange' => 'javascript:myFunctionToDoSomething();'));
+        if (!empty($customdata['topic'])) {
+            $select->setSelected($customdata['topic']);
+        }
+
         // Text input field for creating a new topic.
         $mform->addElement('text', 'newtopic', ''); // $mform->addElement('text', 'newtopic', get_string('entertopic', 'cardbox'));
         $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
-        $mform->disabledIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to
+        $mform->disabledIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to.
 
         // Enter a prompt or question. // XXX Make width / number of columns dynamic
         $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
@@ -61,17 +81,21 @@ class mod_cardbox_card_form extends moodleform {
         $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
                           'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
-        
+
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
         $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
-        $initialrepeats = 1;
+        if (!empty($customdata)) {
+            $initialrepeats = $customdata['answercount'];
+        } else {
+            $initialrepeats = 1;
+        }
         $roptions = array();
         $repeathiddenname = 'answer_repeat';
         $addfieldsname = 'answer_add_fields';
-        $addfieldsno = 1;
+        $addfieldsno = 1; // How many fields to add at a time / at button click.
         $addstring = get_string('addanswer', 'cardbox');
-        $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
-        
+        $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
+
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
     }

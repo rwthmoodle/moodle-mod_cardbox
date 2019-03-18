@@ -164,7 +164,10 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
             })(templates, newdata);
         
         }
-        
+        /**
+         * 
+         * @returns {undefined}
+         */
         function openCardFormForEditing() {
             var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinreview;
             window.location.href = goTo;
