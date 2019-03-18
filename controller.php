@@ -38,6 +38,8 @@ if (!empty($question) && !empty($isedit)) { // XXX dirty solution. For some reas
 
 if ($action === 'addflashcard') {
 
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    
     global $USER, $DB;
 
     require_once('card_form.php');
@@ -136,13 +138,13 @@ if ($action === 'addflashcard') {
 /* ************************************************ Edit a flashcard ************************************************* */
 
 if ($action === 'editcard') {
+    
+    echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
 
     global $DB;
 
     require_once('card_form.php');
     $cardid = required_param('cardid', PARAM_INT);
-
-//TODO: mark Freigabe as the current tab.
 
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
     $actionurl = $returnurl; //new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => $action));
@@ -183,7 +185,7 @@ if ($action === 'editcard') {
     
     if ($mform->is_cancelled()) {
         
-        $action = 'review'; //        redirect($returnurl);
+        $action = 'review';
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
@@ -256,6 +258,8 @@ if ($action === 'editcard') {
 /* ************************************************ Settings for Practice ************************************************* */
 
 if ($action === 'choosesettings') {
+    
+    echo $myrenderer->cardbox_render_tabs($taburl, 'practice', $context);
 
     require_once('practicesettings_form.php');
 
@@ -298,6 +302,8 @@ if ($action === 'choosesettings') {
 /* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
+    
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
@@ -362,6 +368,8 @@ if ($action === 'practice') {
 /* **************************************************** Approve/edit cards **************************************************** */
 
 if ($action === 'review') {
+    
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.

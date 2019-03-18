@@ -52,7 +52,7 @@ $myrenderer = $PAGE->get_renderer('mod_cardbox');
 //pdfannotator_render_tabs(moodle_url $baseurl, $selected = null, $pdfannotatorname, $context, $inactive = null)
 //cardbox_create_tab(moodle_url $baseurl, $namekey = null, $action, $cardboxname = null, $nameargs = null)
 
-echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+//echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
 // The revision attribute's existance is demanded by moodle for versioning and could be saved in the pdfannotator table in the future.
 // Note, however, that we forbid file replacement in order to prevent a change of meaning in other people's comments.
