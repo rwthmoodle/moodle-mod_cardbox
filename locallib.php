@@ -110,6 +110,45 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name) {
     return $itemid;
 
 }
+
+function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
+    
+    global $DB;
+    
+    $existsalready = $DB->record_exists('cardbox_cardcontents', array('card' => $cardid, 'cardside' => $cardside, 'contenttype' => $contenttype));
+    
+    
+}
+
+
+/**
+ * Function updates a card that was edited via the card_form.
+ *
+ * @global obj $DB
+ * @param int $cardid
+ * @param int $topicid
+ * @return bool whether or not the update was successful
+ */
+function cardbox_edit_card($cardid, $topicid) {
+
+    global $DB;
+    
+    $record = new stdClass();
+    $record->id = $cardid;
+    $record->topic = $topicid;
+    $record->timemodified = time();
+
+    $success = $DB->update_record('cardbox_cards', $record);
+    
+    if (empty($success)) {
+        return false;
+    }
+    
+    $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
+    
+    return $success;
+
+}
 /**
  * Function selects a set of 21 flashcards for a practice session.
  *
