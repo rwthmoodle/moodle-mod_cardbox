@@ -347,6 +347,12 @@ if ($action === 'review') {
     $collection = new cardbox_cardcollection($cardbox->id);
     $list = $collection->cardbox_get_card_list();
     
+    if (empty($list)) {
+        $info = get_string('info:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+
     // 2.a) Include scripts to control the behaviour of the page.
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en');
