@@ -79,6 +79,7 @@ $string['notopicpreferred'] = 'no preference';
 $string['beginpractice'] = 'Start';
 
 // Practice mode: Buttons.
+$string['options'] = 'Options';
 $string['submitanswer'] = 'Check';
 $string['markascorrect'] = 'Correct';
 $string['markasincorrect'] = 'Incorrect';

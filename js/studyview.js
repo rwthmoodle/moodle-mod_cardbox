@@ -50,7 +50,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
 
         registerEventListeners();
         
-        
+
         function registerEventListeners() {
 
             document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
@@ -67,6 +67,18 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
                 e.preventDefault();
                 proceed(0);
             });
+
+            document.getElementById('cardbox-see-options').addEventListener('click', function(e) {
+                e.preventDefault();
+                seeOptions();
+            });
+
+        }
+        
+        function seeOptions() {
+            
+            
+            
         }
 
         function flipCard() {    

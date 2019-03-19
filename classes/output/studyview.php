@@ -29,6 +29,7 @@ class cardbox_studyview implements \renderable, \templatable {
     private $fronttexts;
     private $backimages;
     private $backtexts;
+    private $topics;
     
     /**
      * Function builds the view of a flashcard during practice.
@@ -57,6 +58,7 @@ class cardbox_studyview implements \renderable, \templatable {
         $this->fronttexts = array();
         $this->backimages = array();
         $this->backtexts = array();
+        $this->topics = array();
 
         $fs = get_file_storage();
         foreach ($contents as $content) {
@@ -80,17 +82,27 @@ class cardbox_studyview implements \renderable, \templatable {
 //        if (!empty($this->frontimages) && empty($this->backimages)) {
 //            $this->backimages[] = $this->frontimages[0];
 //        }
+        
+        $topiclist = cardbox_get_topics();
+        foreach ($topiclist as $key => $value) {
+            $this->topics[] = array('value' => $key, 'label' => $value);
+        }
 
     }
 
     public function export_for_template(\renderer_base $output) {
+        
+        global $OUTPUT;
         
         $data = array();
         $data['frontimages'] = $this->frontimages;
         $data['fronttexts'] = $this->fronttexts;
         $data['backimages'] = $this->backimages;
         $data['backtexts'] = $this->backtexts;
-        
+        $data['topics'] = $this->topics;
+        $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
+        $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
+
         return $data;
 
     }
