@@ -305,14 +305,15 @@ if ($action === 'practice') {
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardbox.class.php');
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
     // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php'); // XXX File entfernen.
 
     echo $OUTPUT->heading("$cardbox->name");
     
     $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
     $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
-
+    $case = optional_param('case', 1, PARAM_INT);
+    
     // 1. Create a virtual cardbox for this practice session. (model)
     $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
     $selection = $cardbox->cardbox_get_card_selection();
@@ -330,8 +331,41 @@ if ($action === 'practice') {
 
     // 3. Render the page.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($context, $cardbox, null, $correction); // (view controller)
-    echo $renderer->cardbox_render_studyview($studyview);
+    $practice = new cardbox_practice($case, $context, $cardbox, null, $correction); // (view controller)
+    echo $renderer->cardbox_render_practice($practice);
+    
+    // old code which works for the self checking mode (only):
+    // 
+//    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+//
+//    require_once('model/cardbox.class.php');
+//    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+//    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php'); // XXX File entfernen.
+//
+//    echo $OUTPUT->heading("$cardbox->name");
+//    
+//    $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
+//    $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
+//
+//    // 1. Create a virtual cardbox for this practice session. (model)
+//    $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
+//    $selection = $cardbox->cardbox_get_card_selection();
+//    $cardboxstatus = $cardbox->cardbox_get_status();
+//
+//    // 2. Give javascript access to the language string repository and add it to the page.
+//    $stringman = get_string_manager();
+//    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+//    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
+//
+//    $params = array($cmid, $selection, $cardboxstatus, $correction); // true means: the user checks their own results.
+//    $PAGE->requires->js_init_call('startPractice', $params, true);
+//
+//    // 3. Render the page.
+//    $renderer = $PAGE->get_renderer('mod_cardbox');
+//    $studyview = new cardbox_studyview($context, $cardbox, null, $correction); // (view controller)
+//    echo $renderer->cardbox_render_studyview($studyview);
 
 }
 

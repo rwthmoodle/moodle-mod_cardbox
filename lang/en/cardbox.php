@@ -82,9 +82,16 @@ $string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.
 $string['options'] = 'Options';
+$string['dontknow'] = "I don't know";
 $string['submitanswer'] = 'Check';
 $string['markascorrect'] = 'Correct';
 $string['markasincorrect'] = 'Incorrect';
+$string['override'] = 'Override';
+$string['proceed'] = 'Next';
+
+$string['solution'] = 'Solution';
+$string['yoursolution'] = 'Your solution';
+
 // Practice mode: Feedback
 $string['sessioncompleted'] = 'Finished! :-)';
 $string['titleprogresschart'] = 'Results';

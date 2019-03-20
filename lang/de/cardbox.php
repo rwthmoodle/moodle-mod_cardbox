@@ -83,8 +83,16 @@ $string['options'] = 'Optionen';
 //$string['options'] = 'Korrekturmodus';
 
 $string['submitanswer'] = 'Überprüfen';
+$string['dontknow'] = 'Weiß ich nicht';
+
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
+$string['override'] = 'Überstimmen';
+$string['proceed'] = 'Weiter';
+
+$string['solution'] = 'Lösung';
+$string['yoursolution'] = 'Ihre Lösung';
+
 // Practice mode: Feedback
 $string['sessioncompleted'] = 'Fertig! :-)';
 $string['titleprogresschart'] = 'Ergebnis';

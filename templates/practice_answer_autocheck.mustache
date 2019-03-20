@@ -1,0 +1,32 @@
+<div id="cardbox-practice-content" class="row">
+
+    <div class="col-sm-2"></div>
+    <div class="col-sm-4 cardbox-review-item">
+        {{#question}}
+            {{> mod_cardbox/cardside }}
+        {{/question}}
+    </div>
+    <div class="col-sm-4 cardbox-review-item">
+        <h6>{{# str }} solution, cardbox {{/ str }}</h6>
+        {{#answer}}
+            {{> mod_cardbox/cardside }}
+        {{/answer}}
+        <h6>{{# str }} yoursolution, cardbox {{/ str }}</h6>
+        <div class="cardbox-text text-center">
+            <h3 id="cardbox-user-solution">Flamingo</h3>
+        </div>
+    </div>
+    <div class="col-sm-2"></div>
+
+</div>
+
+<div id="cardbox-practice-user-interaction" class="row">
+
+    <div class="col-sm-2"></div>
+    <div class="col-sm-4" class="container-fluid">
+        <button id="cardbox-override" type="button" class="btn btn-primary">{{# str }} override, cardbox {{/ str }}</button>
+        <button id="cardbox-proceed" type="button" class="btn btn-primary">{{# str }} proceed, cardbox {{/ str }}</button>
+    </div>
+    <div class="col-sm-2"></div>
+
+</div>
