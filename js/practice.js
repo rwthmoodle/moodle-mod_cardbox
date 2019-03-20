@@ -1,7 +1,403 @@
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+/**
+ *
+ * @package   mod_cardbox
+ * @copyright 2019 RWTH Aachen (see README.md)
+ * @authors   Anna Heynkes
+ * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+/**
+ * This script controlls the behaviour of the page during practice.
+ *
+ * @param {type} Y required by moodle
+ * @param int __cmid course module id
+ * @param array __selection ids of those cards selected for practice
+ * @param int specifies whether the practice mode is auto- or selfcheck and whether a question or answer is shown.
+ * @returns {undefined}
+ */
+function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case, __data) { // Wrapper function that is called by controller.php
 
+    require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
+
+        console.log('__data: ', __data);
+        console.log('__case: ', __case);
+
+        /* 1. Variables and Calls */
+        
+        var cardcount = __selection.length; // to be used for statistics/progress bar.
+
+        // Information about the current flashcard.
+        var position = 0;
+        var cardId = __selection[0];
+        var isrepetition = 0;
+
+        // Statistical information that will be displayed to the user at the end of practice.
+        var countright = 0;
+        var countwrong = 0;
+
+        // Collection of cards that were answered wrongly. They will be repeated until answered correctly once.
+        // Their status in the DB won't change, however, i.e. they go back to the first box.
+        var toRepeat = [];
+
+        addQuestionEvents();
+        
+        document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
+                e.preventDefault();
+                applySettings();
+            });
+
+        /* 2. Definitions */
+
+        function addQuestionEvents() {
+            
+            if ( (__case % 2) == 0) { // automatic check.
+                
+                document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // 1. check answer
+                    // 2. render solution
+                    // 3. insert feedback and user's solution
+                });
+                
+                document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    // check answer
+                    // render solution
+                    // mark as incorrect --> eventlisteners for next step
+                });
+                
+            } else { // self-check.
+                
+                document.getElementById('cardbox-check-answer').addEventListener('click', function(e) {
+                    console.log('cardbox-check-answer geklickt');
+                    e.preventDefault();
+                    // render solution for self-check
+                    renderSolutionForSelfCheck();
+                });
+
+            }
+
+        }
+
+        function addAnswerEvents() {
+            
+            if ( (__case % 2) == 0) { // automatic check.
+                
+                document.getElementById('cardbox-override').addEventListener('click', function(e) {
+                    e.preventDefault();
+//                    proceed(1);
+                });
+                
+                document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
+                    e.preventDefault();
+//                    proceed(1);
+                });
+
+            } else { // self check.
+                
+                document.getElementById('cardbox-mark-as-correct').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    proceed(1);
+                });
+                
+                document.getElementById('cardbox-mark-as-incorrect').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    proceed(0);
+                });
+            }
+                
+        }
+
+            
+
+            
+
+        
+
+        function applySettings() {
+
+            var topic = document.getElementById('cardbox-topic').value;
+            var correctionmode;
+
+            var radios = document.getElementById('cardbox-form').elements['correctionmode'];
+
+            for (var i=0, len=radios.length; i<len; i++) {
+                if ( radios[i].checked ) {
+                    correctionmode = radios[i].value;
+                    break;
+                }
+            }
+
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&correction=' + correctionmode + '&topic=' + topic;
+            window.location.href = goTo;
+
+        }
+
+
+        /**
+         * Function initiates update of the progress status of the current card
+         * and then renders the next card or wraps up the practice session.
+         *
+         * @param {type} iscorrect
+         * @returns {undefined}
+         */
+        function proceed(iscorrect) { // XXX: Error notifications for error cases.
+
+        console.log('proceed aufgerufen mit iscorrect=', iscorrect);
+
+            var willBeRepetition = 0;
+            var next;
+            
+            // This was the last card of this practice session.
+            if (position == (cardcount-1) && toRepeat.length === 0) {
+                next = 0;
+
+            // There are only regular cards left.
+            } else if (position < (cardcount-1) && toRepeat.length === 0) {
+                next = __selection[position+1];
+            
+            // There are only cards left that are to be repeated.
+            } else if (position == (cardcount-1) && toRepeat.length !== 0) {
+                next = toRepeat.shift();
+                willBeRepetition = 1;
+                
+            // There are both regular cards and cards to be repeated left.
+            } else {
+                if (getRandomInt(3) < 2) {
+                    next = __selection[position+1];
+                } else {
+                    next = toRepeat.shift();
+                    willBeRepetition = 1;
+                }
+            }
+
+            $.ajax({
+                type: 'POST',
+                url: 'action.php',
+                data: {id: __cmid, action: 'updateandnext', cardid: __selection[position], iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
+                success: function(result){
+                    result = JSON.parse(result);
+
+                    /********* Deal with the current/old card. *********/
+                    
+                    // Regular cards:
+                    if (isrepetition == 0) {
+                        
+                        // Adjust the card counts of the boxes.
+                        var boxslot = result.lastposition;
+                    
+                        __boxcount[boxslot]--;
+
+                        if (iscorrect === 1) {
+                            countright++;
+                            boxslot++;
+                            __boxcount[boxslot]++;
+
+                        } else {
+                            countwrong++;
+                            __boxcount[1]++;
+                            // If a wrong answer was given, mark this card for repetition.
+                            //toRepeat.push(__selection[position]);
+                            toRepeat.push(cardId);
+                        }
+                    
+                    // Cards that are repeated because they were answered wrongly before:
+                    // If it was answered wrongly again:
+                    } else if (iscorrect == 0) {
+                        // Mark the card for repetition once more.
+                        toRepeat.push(cardId);
+                        
+                    }
+                    
+                    /********* Deal with the new card. *********/
+                    if (next == 0) {
+                        finishPractice();
+
+                    } else {
+
+                        isrepetition = willBeRepetition;
+                        renderNewCard(result.newdata, next);
+                        
+                    }
+
+                }
+            });
+
+        }
+
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * (max));
+        }
+
+        /**
+         * Function rerenders the template with the question data of a new flashcard.
+         *
+         * @param {type} newdata
+         * @returns {undefined}
+         */
+        function renderNewCard(newdata, next) {
+
+            if (isrepetition === 0) {
+                position = position + 1;
+                cardId = __selection[position];
+            } else {
+                cardId = next;
+            }
+
+            (function (templates, data) {
+                        templates.render('mod_cardbox/studyview', data)
+                                .then(function (html, js) {
+                                    templates.replaceNodeContents('#cardbox-studyview', html, js); // XXX partial.
+
+                                }).then(function () {
+                                        registerEventListeners();
+
+                                }); // Add a catch.
+            })(templates, newdata);
+
+        }
+
+        function renderSolutionForSelfCheck() {
+            
+            console.log('renderSolutionForSelfCheck aufgerufen mit data: ', __data);
+            
+            (function (templates, data) {
+                        templates.render('mod_cardbox/practice', data)
+                                .then(function (html, js) {
+                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
+
+                                }).then(function () {
+//                                        registerEventListeners();
+
+                                }); // Add a catch.
+            })(templates, __data);
+            
+            
+        }
+
+        /**
+         * Function tells the user that the session is finished.
+         *
+         * @returns {undefined}
+         */
+        function finishPractice() {
+            
+            // 1. Give the user feedback.
+//            notification.addNotification({
+//                message: M.util.get_string('sessioncompleted', 'cardbox'),
+//                type: "success"
+//            });
+
+            // 2. Hide the action buttons.
+            $('.cardbox-back').toggleClass('hidden');
+            $('#cardbox-mark-as-correct').toggleClass('hidden');
+            $('#cardbox-mark-as-incorrect').toggleClass('hidden');
+            //$('.btn btn-primary').toggleClass('hidden');
+            
+            // 3. Display progress as doughnut chart.
+            var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
+            
+            var chartdata = {
+                datasets: [{
+                    label: 'Progress',
+                    data: [countright, countwrong],
+                    backgroundColor: [
+                        '#00b33c',
+                        '#ff9900'
+                    ]
+                }],
+
+                // These labels appear in the legend and in the tooltips when hovering different arcs.
+                labels: [
+                    M.util.get_string('right', 'cardbox'),
+                    M.util.get_string('wrong', 'cardbox')
+                ]
+            };
+            
+            var myDoughnutChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: chartdata,
+                options: {
+                    title: {
+                        display: true,
+                        text: M.util.get_string('titleprogresschart', 'cardbox'),
+                        fontSize: 16,
+                        position: 'top'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    },
+                    rotation: 1 * Math.PI,
+                    circumference: 1 * Math.PI,
+                    cutoutPercentage: 60
+                }
+            });
+
+//            myDoughnutChart.classList.remove('chartjs-render-monitor');
+            
+            
+            var ctx2 = document.getElementById("cardbox-overall-status").getContext("2d");
+            
+            var boxlabel = M.util.get_string('box', 'cardbox');
+            
+            var cardboxdata = {
+                
+                // These labels appear in the legend and in the tooltips when hovering different arcs.
+                labels: [
+                    M.util.get_string('new', 'cardbox'),
+                    boxlabel + ' 1',
+                    boxlabel + ' 2',
+                    boxlabel + ' 3',
+                    boxlabel + ' 4',
+                    boxlabel + ' 5'
+                ],
+
+                datasets: [{
+                    label: M.util.get_string('flashcards', 'cardbox'),
+//                    data: [countnew, countboxone, countboxtwo, countboxthree, countboxfour, countboxfive],
+                    data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5]],
+                    backgroundColor: '#0066ff'
+                }]
+
+            };
+
+            var myBarChart = new Chart(ctx2, {
+                type: 'bar',
+                data: cardboxdata,
+                options: {
+                    title: {
+                        display: true,
+                        text: M.util.get_string('titleoverviewchart', 'cardbox'),
+                        fontSize: 16,
+                        position: 'top'
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }//,
+//                    barPercentage: 1,
+//                    categoryPercentage: 1
+                }
+            });
+            
+            
+        }
+
+
+
+    });
+}

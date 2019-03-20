@@ -1,20 +1,22 @@
 <div id="cardbox-practice" class="container-fluid cardbox-practice">
 
-    {{#case1}}
-        {{> mod_cardbox/practice_question_selfcheck }}
-    {{/case1}}
+    <div id="cardbox-practice-replacable">
+        {{#case1}}
+            {{> mod_cardbox/practice_question_selfcheck }}
+        {{/case1}}
 
-    {{#case2}}
-        {{> mod_cardbox/practice_question_autocheck }}
-    {{/case2}}
+        {{#case2}}
+            {{> mod_cardbox/practice_question_autocheck }}
+        {{/case2}}
 
-    {{#case3}}
-        {{> mod_cardbox/practice_answer_selfcheck }}
-    {{/case3}}
+        {{#case3}}
+            {{> mod_cardbox/practice_answer_selfcheck }}
+        {{/case3}}
 
-    {{#case4}}
-        {{> mod_cardbox/practice_answer_autocheck }}
-    {{/case4}}
+        {{#case4}}
+            {{> mod_cardbox/practice_answer_autocheck }}
+        {{/case4}}
+    </div>
 
     <div id="cardbox-practice-feedback-collection" class="row">
         <div class="col-sm-3"></div>

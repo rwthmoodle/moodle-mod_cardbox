@@ -60,19 +60,19 @@ function startPractice(Y, __cmid, __selection, __boxcount, __autochecking) { // 
                 e.preventDefault();
                 proceed(1);
             });
-            
+
             document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
                 e.preventDefault();
                 applySettings();
             });
 
             if (__autochecking == 0) {
-                
+
                 document.getElementById('cardbox-check-answer').addEventListener('click', function(e) {
                     e.preventDefault();
                     flipCard();
                 });
-                
+
                 var correct = document.getElementById('cardbox-mark-as-incorrect');
                 if (typeof correct != undefined && correct != null) {
                     correct.addEventListener('click', function(e) {
