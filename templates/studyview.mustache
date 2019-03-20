@@ -1,6 +1,6 @@
 <div id="cardbox-studyview" class="container-fluid cardbox-studyview">
 
-    <div class="row">
+    <div id="cardbox-practice-content" class="row">
         <div class="col-sm-3"></div>
         <div id="cardbox-cardcontainer" class="col-sm-6">
             {{> mod_cardbox/card }}
@@ -9,19 +9,21 @@
             <button id="cardbox-see-options" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cardboxPracticeSettings">{{# str }} options, cardbox {{/ str }}</button>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-2"></div>
-        <div class="col-sm-8">
-            <form id="cardbox-inputform">
-                <input id="cardbox-userinput{{answerno}}" type="text" name="answer" class="form-control">
-                <input id="cardbox-submit-answer" type="submit" value="{{# str }} submitanswer, cardbox {{/ str }}" class="btn btn-primary">
-            </form>
-            <button id="cardbox-mark-as-correct" type="button" class="btn btn-primary hidden">{{# str }} markascorrect, cardbox {{/ str }}</button>
-            <button id="cardbox-mark-as-incorrect" type="button" class="btn btn-primary hidden">{{# str }} markasincorrect, cardbox {{/ str }}</button>
+
+    <div id="cardbox-practice-user-interaction" class="row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-6">
+            {{#selfcheck}}
+                {{> mod_cardbox/selfcheck }}
+            {{/selfcheck}}
+            {{#autocheck}}
+                {{> mod_cardbox/autocheck }}
+            {{/autocheck}}
         </div>
-        <div class="col-sm-2"></div>
+        <div class="col-sm-3"></div>
     </div>
-    <div class="row">
+
+    <div id="cardbox-practice-feedback-collection" class="row">
         <div class="col-sm-3"></div>
         <div class="col-sm-3"><canvas id="cardbox-practice-feedback" width="100" height="100"></canvas></div>
         <div class="col-sm-3"><canvas id="cardbox-overall-status" width="100" height="100"></canvas></div>
@@ -29,41 +31,7 @@
     </div>
 
     <div class="modal" id="cardboxPracticeSettings">
-        <div class="modal-dialog">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                  <h4 class="modal-title">{{# str }} titleforchoosesettings, cardbox {{/ str }}</h4>
-                  <button type="button" class="close" data-dismiss="modal">&times;</button>
-                </div>
-
-                <div class="modal-body cardbox-options">
-                    
-                    <div class="item a goldenleft">{{# str }} choosecorrectionmode, cardbox {{/ str }}&nbsp;&nbsp;&nbsp;&nbsp; {{{helpbuttoncorrectionmode}}}</div>
-                    <div class="item b goldenrigth">
-                        <div class="felement">
-                            <input type="radio" name="correctionmode" value="0" class="form-check-input" checked>{{# str }} selfcorrection, cardbox {{/ str }}<br>
-                            <input type="radio" name="correctionmode" value="1" class="form-check-input"> {{# str }} autocorrection, cardbox {{/ str }}
-                        </div>
-                    </div>
-                    <div class="item c goldenleft">{{# str }} weightopic, cardbox {{/ str }}&nbsp; {{{helpbuttontopic}}}</div>
-                    <div class="item d goldenrigth">
-                        <select name="topic" class="custom-select">
-                            {{#topics}}
-                                <option value="{{value}}">{{label}}</option>
-                            {{/topics}}
-                        </select>
-                    </div>
-
-                </div>
-
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary">Save</button>
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                </div>
-
-            </div>
-        </div>
+        {{> mod_cardbox/options }}
     </div>
 
 </div>

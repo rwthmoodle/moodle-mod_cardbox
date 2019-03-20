@@ -76,7 +76,9 @@ $string['weightopic'] = 'Priority topic';
 $string['weightopic_help'] = 'Sie können die Kartenauswahl für diesen Übungsdurchlauf beeinflussen, indem Sie ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 //$string['weightopic_help'] = 'Angeklickte Themen werden bei der Kartenauswahl für diesen Übungsdurchlauf bevorzugt behandelt.';
 $string['notopicpreferred'] = 'no preference';
-$string['beginpractice'] = 'Start';
+$string['beginpractice'] = 'Start'; // XXX can perhaps be removed.
+$string['applysettings'] = 'Applay';
+$string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.
 $string['options'] = 'Options';

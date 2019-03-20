@@ -306,12 +306,15 @@ if ($action === 'practice') {
 
     require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
-    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
+    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php'); // XXX File entfernen.
 
     echo $OUTPUT->heading("$cardbox->name");
+    
+    $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
+    $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
 
-    // 1. Create a virtual cardbox for this practice session.
-    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+    // 1. Create a virtual cardbox for this practice session. (model)
+    $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
     $selection = $cardbox->cardbox_get_card_selection();
     $cardboxstatus = $cardbox->cardbox_get_status();
 
@@ -322,12 +325,12 @@ if ($action === 'practice') {
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
 
-    $params = array($cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
+    $params = array($cmid, $selection, $cardboxstatus, $correction); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
     // 3. Render the page.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($context, $cardbox);
+    $studyview = new cardbox_studyview($context, $cardbox, null, $correction); // (view controller)
     echo $renderer->cardbox_render_studyview($studyview);
 
 }

@@ -30,6 +30,8 @@ class cardbox_studyview implements \renderable, \templatable {
     private $backimages;
     private $backtexts;
     private $topics;
+    private $selfcheck;
+    private $autocheck;
     
     /**
      * Function builds the view of a flashcard during practice.
@@ -38,8 +40,18 @@ class cardbox_studyview implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($context, $cardbox = null, $cardid = null) {
+    public function __construct($context, $cardbox = null, $cardid = null, $correction = 0) {
 
+        $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
+        
+        $this->cardbox_prepare_topics_to_study();
+        
+        $this->cardbox_prepare_user_form($correction);
+
+    }
+    
+    public function cardbox_prepare_cardcontents($context, $cardbox, $cardid) {
+        
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         require_once('model/cardbox.class.php');
@@ -58,7 +70,6 @@ class cardbox_studyview implements \renderable, \templatable {
         $this->fronttexts = array();
         $this->backimages = array();
         $this->backtexts = array();
-        $this->topics = array();
 
         $fs = get_file_storage();
         foreach ($contents as $content) {
@@ -82,18 +93,50 @@ class cardbox_studyview implements \renderable, \templatable {
 //        if (!empty($this->frontimages) && empty($this->backimages)) {
 //            $this->backimages[] = $this->frontimages[0];
 //        }
+ 
+    }
+    /**
+     * Function includes the list of topics in the practice options modal.
+     * The user can then choose to prioritise one of the topics in the
+     * selection of cards for a practice session.
+     *
+     * @global type $CFG
+     */
+    public function cardbox_prepare_topics_to_study() {
         
+        global $CFG;
+        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
+
+        $this->topics = array();
+
         $topiclist = cardbox_get_topics();
+
         foreach ($topiclist as $key => $value) {
             $this->topics[] = array('value' => $key, 'label' => $value);
         }
-
+    }
+    /**
+     * Function determines which constellation of buttons and input fields
+     * (which partial template) to include. It depends on the user's choice
+     * of correction mode (selfcheck or automatic check).
+     *
+     * @param int $correction
+     */
+    public function cardbox_prepare_user_form($correction) {
+        
+        if ($correction == 0) {
+            $this->selfcheck = true;
+            $this->autocheck = false;
+        } else {
+            $this->selfcheck = false;
+            $this->autocheck = true;
+        }
     }
 
     public function export_for_template(\renderer_base $output) {
-        
+
         global $OUTPUT;
-        
+
         $data = array();
         $data['frontimages'] = $this->frontimages;
         $data['fronttexts'] = $this->fronttexts;
@@ -102,6 +145,8 @@ class cardbox_studyview implements \renderable, \templatable {
         $data['topics'] = $this->topics;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
+        $data['selfcheck'] = $this->selfcheck;
+        $data['autocheck'] = $this->autocheck;
 
         return $data;
 

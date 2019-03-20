@@ -34,7 +34,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxfive;
     private $selection;
 
-    public function __construct($cardboxid) {
+    public function __construct($cardboxid, $topic=null) {
 
         global $DB, $USER;
 
@@ -45,7 +45,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->cardbox_get_users_cards($cardboxid);
 
         // 3. Select 21 flashcards for a practice session.
-        $this->cardbox_select_cards_for_practice();
+        $this->cardbox_select_cards_for_practice($topic);
         
         // 4. Access and arrange the content of each selected card.
         
@@ -121,9 +121,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     }
     /**
      * Function contains algorithm for selecting 21 cards for a practice session.
+     * // TODO: Themengewichtung berücksichtigen.
      *
      */
-    public function cardbox_select_cards_for_practice() {
+    public function cardbox_select_cards_for_practice($topic = null) {
 
         $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 4, 4 => 3, 5 => 2);
         $selection = array();

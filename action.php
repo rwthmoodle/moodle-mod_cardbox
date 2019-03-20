@@ -86,7 +86,6 @@ if ($action === 'review') {
     
 }
 
-
 /* * ********************** move card to the next box and return next card *********************** */
 
 if ($action === 'updateandnext') {
