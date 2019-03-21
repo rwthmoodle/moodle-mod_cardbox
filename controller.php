@@ -331,7 +331,6 @@ if ($action === 'practice') {
     $practice = new cardbox_practice($case, $context, $cardbox, null, $correction); // (view controller)
     $data = $practice->export_for_template($renderer);
     
-    
     $params = array($cmid, $selection, $cardboxstatus, $correction, $case, $data); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 

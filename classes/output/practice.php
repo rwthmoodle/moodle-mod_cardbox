@@ -27,6 +27,7 @@ class cardbox_practice implements \renderable, \templatable {
 
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
+    private $case;
     private $case1 = false; // question_selfcheck.
     private $case2 = false; // question_autocheck.
     private $case3 = false; // answer_selfcheck.
@@ -45,15 +46,19 @@ class cardbox_practice implements \renderable, \templatable {
         switch ($case) {
             case 1:
                 $this->case1 = true;
+                $this->case = 1;
                 break;
             case 2:
                 $this->case2 = true;
+                $this->case = 2;
                 break;
             case 3:
                 $this->case3 = true;
+                $this->case = 3;
                 break;
             case 4:
                 $this->case4 = true;
+                $this->case = 4;
                 break;
             default:
                 // TODO Error handling.
@@ -63,7 +68,7 @@ class cardbox_practice implements \renderable, \templatable {
         
         $this->cardbox_prepare_topics_to_study();
         
-        $this->cardbox_prepare_user_form($correction);
+//        $this->cardbox_prepare_user_form($correction);
 
     }
     
@@ -134,16 +139,16 @@ class cardbox_practice implements \renderable, \templatable {
      *
      * @param int $correction
      */
-    public function cardbox_prepare_user_form($correction) {
-        
-        if ($correction == 0) {
-            $this->selfcheck = true;
-            $this->autocheck = false;
-        } else {
-            $this->selfcheck = false;
-            $this->autocheck = true;
-        }
-    }
+//    public function cardbox_prepare_user_form($correction) {
+//        
+//        if ($correction == 0) {
+//            $this->selfcheck = true;
+//            $this->autocheck = false;
+//        } else {
+//            $this->selfcheck = false;
+//            $this->autocheck = true;
+//        }
+//    }
 
     public function export_for_template(\renderer_base $output) {
 
@@ -159,8 +164,8 @@ class cardbox_practice implements \renderable, \templatable {
         $data['topics'] = $this->topics;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
-        $data['selfcheck'] = $this->selfcheck;
-        $data['autocheck'] = $this->autocheck;
+//        $data['selfcheck'] = $this->selfcheck;
+//        $data['autocheck'] = $this->autocheck;
 
         return $data;
 

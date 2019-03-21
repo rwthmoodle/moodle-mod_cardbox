@@ -90,12 +90,13 @@ if ($action === 'review') {
 
 if ($action === 'updateandnext') {
 
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
     $cardid = required_param('cardid', PARAM_INT);
     $iscorrect = required_param('iscorrect', PARAM_INT);
     $next = required_param('next', PARAM_INT);
     $isrepetition = required_param('isrepetition', PARAM_INT);
+    $case = optional_param('case', 1, PARAM_INT);
 
     $lastposition = -1;
     if ($isrepetition == 0) {
@@ -125,8 +126,9 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $studyview = new cardbox_studyview($context, null, $next);
-        $newdata = $studyview->export_for_template($renderer);
+        // $case, $context, $cardbox = null, $cardid = null, $correction = 0)
+        $practice = new cardbox_practice($case, $context, null, $next);
+        $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);
 

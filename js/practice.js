@@ -65,7 +65,11 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
         function addQuestionEvents() {
             
+            console.log('addQuestionEvents() aufgerufen mit __case = ', __case);
+            
             if ( (__case % 2) == 0) { // automatic check.
+                
+                console.log('automatic check');
                 
                 document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
                     e.preventDefault();
@@ -83,10 +87,10 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
             } else { // self-check.
                 
+                console.log('self check');
+                
                 document.getElementById('cardbox-check-answer').addEventListener('click', function(e) {
-                    console.log('cardbox-check-answer geklickt');
                     e.preventDefault();
-                    // render solution for self-check
                     renderSolutionForSelfCheck();
                 });
 
@@ -95,6 +99,8 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         }
 
         function addAnswerEvents() {
+            
+            console.log('addAnswerEvents() aufgerufen mit __case = ', __case);
             
             if ( (__case % 2) == 0) { // automatic check.
                 
@@ -123,11 +129,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
         }
 
-            
-
-            
-
-        
 
         function applySettings() {
 
@@ -157,8 +158,8 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          * @returns {undefined}
          */
         function proceed(iscorrect) { // XXX: Error notifications for error cases.
-
-        console.log('proceed aufgerufen mit iscorrect=', iscorrect);
+//
+        console.log('proceed aufgerufen mit iscorrect = ', iscorrect);
 
             var willBeRepetition = 0;
             var next;
@@ -185,11 +186,15 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     willBeRepetition = 1;
                 }
             }
+            
+            console.log('current card isrepetition?', next);
+            console.log('next card has id = ', next);
 
+//            __case += 2;
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: __cmid, action: 'updateandnext', cardid: __selection[position], iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
+                data: {id: __cmid, action: 'updateandnext', case: __case, cardid: __selection[position], iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
                 success: function(result){
                     result = JSON.parse(result);
 
@@ -231,6 +236,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     } else {
 
                         isrepetition = willBeRepetition;
+                        __data = result.newdata;
                         renderNewCard(result.newdata, next);
                         
                     }
@@ -252,6 +258,8 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          */
         function renderNewCard(newdata, next) {
 
+            console.log('renderNewCard aufgerufen mit newdata = ', newdata);
+
             if (isrepetition === 0) {
                 position = position + 1;
                 cardId = __selection[position];
@@ -260,12 +268,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             }
 
             (function (templates, data) {
-                        templates.render('mod_cardbox/studyview', data)
+                        templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-studyview', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
 
                                 }).then(function () {
-                                        registerEventListeners();
+                                        addQuestionEvents();
 
                                 }); // Add a catch.
             })(templates, newdata);
@@ -274,18 +282,22 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
         function renderSolutionForSelfCheck() {
             
-            console.log('renderSolutionForSelfCheck aufgerufen mit data: ', __data);
+            console.log('renderNewCard aufgerufen mit den vorhandenen __data = ', __data);
+
+            var newdata = __data;
+            newdata['case1'] = false;
+            newdata['case3'] = true;
             
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
 
                                 }).then(function () {
-//                                        registerEventListeners();
+                                        addAnswerEvents();
 
                                 }); // Add a catch.
-            })(templates, __data);
+            })(templates, newdata);
             
             
         }

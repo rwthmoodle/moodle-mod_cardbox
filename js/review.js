@@ -45,9 +45,9 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                 edit();
             });
 
-            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
-                reject();
-            });
+//            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
+//                reject();
+//            });
             
             document.getElementById('cardbox-skip').addEventListener('click', function(e) {
                 skip();
