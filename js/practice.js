@@ -45,6 +45,10 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var position = 0;
         var cardId = __selection[0];
         var isrepetition = 0;
+        
+        var userinput;
+        var answeriscorrect = 0;
+        var answeriscomplete = 0;
 
         // Statistical information that will be displayed to the user at the end of practice.
         var countright = 0;
@@ -73,15 +77,20 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
                 document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
                     e.preventDefault();
-                    // 1. check answer
+                    // 1. Check whether the answer is correct and complete and add it to the templatable data.
+                    checkAnswer();
                     // 2. render solution
-                    // 3. insert feedback and user's solution
+                    renderSolutionAutoCheck();
+                    // 3. Insert feedback (depending on 1.) and the user's solution.
+                    giveFeedback();
+                    
                 });
                 
                 document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
                     e.preventDefault();
                     // check answer
                     // render solution
+                    renderSolutionAutoCheck();
                     // mark as incorrect --> eventlisteners for next step
                 });
                 
@@ -98,35 +107,65 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
         }
 
+        /**
+         * This function adds event listeners to the buttons of the solution view.
+         *
+         * @returns {undefined}
+         */
         function addAnswerEvents() {
             
             console.log('addAnswerEvents() aufgerufen mit __case = ', __case);
             
             if ( (__case % 2) == 0) { // automatic check.
-                
+          
+                // Button overrides the result of the automatic check, tells the server and requests a new flashcard to render.
                 document.getElementById('cardbox-override').addEventListener('click', function(e) {
                     e.preventDefault();
-//                    proceed(1);
+                    if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                        proceed(0);
+                    } else {
+                        proceed(1);
+                    }
                 });
                 
+                // Button sends the result of the automatic check to the server and requests a new flashcard to render.
                 document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
                     e.preventDefault();
-//                    proceed(1);
+                    removeNotifications();
+                    if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                        proceed(1);
+                    } else {
+                        proceed(0);
+                    }
+                    
                 });
 
             } else { // self check.
                 
+                // Button tells the server that the current card was answered correctly and requests a new flashcard.
                 document.getElementById('cardbox-mark-as-correct').addEventListener('click', function(e) {
                     e.preventDefault();
                     proceed(1);
                 });
-                
+                // Button tells the server that the current card was answered incorrectly and requests a new flashcard.
                 document.getElementById('cardbox-mark-as-incorrect').addEventListener('click', function(e) {
                     e.preventDefault();
                     proceed(0);
                 });
             }
                 
+        }
+
+        /**
+         * Function removes any green/red feedback from the top of the page.
+         *
+         * @returns {undefined}
+         */
+        function removeNotifications() {
+            let notificationpanel = document.getElementById("user-notifications");
+                while (notificationpanel.hasChildNodes()) {  
+                    notificationpanel.removeChild(notificationpanel.firstChild);
+            } 
         }
 
 
@@ -148,7 +187,179 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             window.location.href = goTo;
 
         }
+        
+        function checkAnswer() {
+            
+//            userinput = [];document.getElementsByClassName('cardbox-userinput'); //.value;
+            
+            
+            
+            var solutions = __data.answer.texts;
+            var items = solutions.length;
+            var matches = [];
+            var answers = [];
+            
+            userinput = [];
+            
+            // 1. Collect the user's answers in an array.
+            var i;
+            for (i = 1; i <= solutions.length; i++) {
+                (function (innerI){
+                       userinput.push(document.getElementById('cardbox-userinput-' + innerI).value);
+                })(i);
+            }
+            console.log('typeof userinput', typeof userinput);
+            console.log('userinput: ', userinput);
+            
+            console.log('typeof solutions: ', typeof solutions);
+            console.log('solutions: ', solutions);
+            console.log('how many solutions? ', items);
+            
+//            userinput.forEach(check);
 
+            // 2. For each solution: Check whether it is among the user's answers and collect the matches.
+            solutions.forEach(check);
+            console.log('matches: ', matches);
+            
+            matches.forEach(collect);
+            
+            
+            /**
+             * This function takes each solution and checks whether it contains
+             * one of the user's answers or is contained in one of the user's
+             * answers.
+             * 
+             * @param {type} solutionitem
+             * @param {type} index
+             * @returns {undefined}
+             */
+            function check(solutionitem, index) {
+
+                solutionitem = solutionitem.text;
+                
+                var j;
+                var userinputitem;
+                for (j = 0; j < userinput.length; j++) {
+                    (function (innerI){
+                        
+                        userinputitem = userinput[innerI];
+                        if (compare(solutionitem, userinputitem)) {
+//                            if (!matches[innerI]) {
+
+                                if ( matches.indexOf(userinputitem) === -1 ) {
+                                    matches.push(userinputitem);
+                                }
+
+                                
+//                            }
+                        }
+
+                    })(j);
+                }
+                
+            }
+            /**
+             * Function returns true if one of the strings is contained within the other
+             * ('or' identical).
+             *
+             * @param string a
+             * @param string b
+             * @returns {Boolean}
+             */
+            function compare(a, b) {
+
+                a = a.toLowerCase();
+                b = b.toLowerCase();
+                
+                // TODO: Wörter getrennt betrachten, damit die Funktion 'Blauralle' nicht als richtig anerkennt,
+                // weil die richtige Lösung 'Blaufußtölpel' auch 'Blau' enthält.
+
+                if ( (a.includes(b)) || (b.includes(a)) ) {
+                    return true;
+                }
+                return false;
+                
+            }
+            
+//            function collect(itemnumber, index) {
+//               
+//                    var answer = {
+//                        userinput: userinput[itemnumber],
+//                        colorclass: 'cardbox-input-color-correct'
+//                    };
+////                    matches++;
+//
+////                } else {
+////
+////                    var answer = {
+////                        userinput: item,
+////                        colorclass: 'cardbox-input-color-correct'
+////                    };
+////                }
+//                answers.push(answer);
+//                
+//                
+//                
+//            }
+            
+            function collect(userinput, index) {
+               
+                    var answer = {
+                        userinput: userinput,
+                        colorclass: 'cardbox-input-color-correct'
+                    };
+//                    matches++;
+
+//                } else {
+//
+//                    var answer = {
+//                        userinput: item,
+//                        colorclass: 'cardbox-input-color-correct'
+//                    };
+//                }
+                answers.push(answer);
+                
+                
+                
+            }
+            
+            __data['userinputitems'] = answers;
+            
+            // TODO
+            answeriscorrect = 1;
+            answeriscomplete = 1;
+            
+            // if: correct und vollständig
+            
+        }
+        /**
+         * Function places a green or red feedback notification at the top of the page.
+         *
+         * @returns {undefined}
+         */
+        function giveFeedback() {
+
+            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                notification.addNotification({
+                    message: M.util.get_string('feedback:correctandcomplete', 'cardbox'),
+                    type: "success"
+                });
+                
+            } else if (answeriscorrect === 1) {
+                notification.addNotification({
+                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox'),
+                    type: "error"
+                });
+                
+            } else {
+                notification.addNotification({
+                    message: M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox'),
+                    type: "error"
+                });
+                
+            }
+
+        }
 
         /**
          * Function initiates update of the progress status of the current card
@@ -282,7 +493,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
         function renderSolutionForSelfCheck() {
             
-            console.log('renderNewCard aufgerufen mit den vorhandenen __data = ', __data);
+            console.log('renderSolutionForSelfCheck aufgerufen mit den vorhandenen __data = ', __data);
 
             var newdata = __data;
             newdata['case1'] = false;
@@ -300,6 +511,27 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             })(templates, newdata);
             
             
+        }
+
+        function renderSolutionAutoCheck() {
+
+            console.log('renderSolutionAutoCheck aufgerufen mit den vorhandenen __data = ', __data);
+
+            // Tell the templatable to display the solution view instead of the question view.
+            var newdata = __data;
+            newdata['case2'] = false;
+            newdata['case4'] = true;
+
+            (function (templates, data) {
+                        templates.render('mod_cardbox/practice', data)
+                                .then(function (html, js) {
+                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
+                                }).then(function () {
+                                        addAnswerEvents();
+
+                                }); // Add a catch.
+            })(templates, newdata);
+
         }
 
         /**

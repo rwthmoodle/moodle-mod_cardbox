@@ -31,15 +31,23 @@
     height: auto;
 }
 
-.path-mod-cardbox .form-inline {  
+.path-mod-cardbox .form-inline {
   /*display: flex;
   flex-flow: row wrap;
   align-items: center;*/
 }
 
-.path-mod-cardbox #cardbox-userinput {    
+.path-mod-cardbox #cardbox-userinput, .path-mod-cardbox .cardbox-userinput {
     margin-top: 30px;
     margin-bottom: 15px;
+}
+
+.path-mod-cardbox .cardbox-input-color-correct {
+    color: #00b33c;
+}
+
+.path-mod-cardbox .cardbox-input-color-incorrect {
+    color: #ff9900;
 }
 
 /*.path-mod-cardbox .form-control {

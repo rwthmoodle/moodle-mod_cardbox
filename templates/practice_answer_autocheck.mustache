@@ -13,7 +13,9 @@
         {{/answer}}
         <h6>{{# str }} yoursolution, cardbox {{/ str }}</h6>
         <div class="cardbox-text text-center">
-            <h3 id="cardbox-user-solution">Flamingo</h3>
+            {{#userinputitems}}
+                <h3 id="cardbox-user-solution" class="{{colorclass}}">{{userinput}}</h3>
+            {{/userinputitems}}
         </div>
     </div>
     <div class="col-sm-2"></div>

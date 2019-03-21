@@ -94,6 +94,11 @@ $string['solution'] = 'Lösung';
 $string['yoursolution'] = 'Ihre Lösung';
 
 // Practice mode: Feedback
+
+$string['feedback:correctandcomplete'] = 'Sehr gut!';
+$string['feedback:correctbutincomplete'] = 'Ihre Antwort ist leider unvollständig.';
+$string['feedback:incorrectandpossiblyincomplete'] = 'Das war leider nichts.'; // TODO
+
 $string['sessioncompleted'] = 'Fertig! :-)';
 $string['titleprogresschart'] = 'Ergebnis';
 $string['right'] = 'richtig';

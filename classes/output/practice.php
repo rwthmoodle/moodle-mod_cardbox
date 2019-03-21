@@ -33,6 +33,7 @@ class cardbox_practice implements \renderable, \templatable {
     private $case3 = false; // answer_selfcheck.
     private $case4 = false; // answer_autocheck.
     private $topics;
+    private $inputfields = array();
 
     /**
      * Function builds the view of a flashcard during practice.
@@ -89,6 +90,7 @@ class cardbox_practice implements \renderable, \templatable {
         $topic = $card->topicname;
 
         $fs = get_file_storage();
+        $solutioncount = 0;
         foreach ($contents as $content) {
 
             if ($content->contenttype == 1) { // XXX: make dynamic!
@@ -105,6 +107,8 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else {
                 $this->answer['texts'][] = array('text' => $content->content);
+                $solutioncount++;
+                $this->inputfields[] = array('number' => $solutioncount);
             }
         }
 //        if (!empty($this->frontimages) && empty($this->backimages)) {
@@ -162,6 +166,7 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case3'] = $this->case3;
         $data['case4'] = $this->case4;
         $data['topics'] = $this->topics;
+        $data['inputfields'] = $this->inputfields;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
 //        $data['selfcheck'] = $this->selfcheck;
