@@ -94,7 +94,8 @@ $string['yoursolution'] = 'Your solution';
 
 // Practice mode: Feedback
 $string['feedback:correctandcomplete'] = 'Well done.';
-$string['feedback:correctbutincomplete'] = 'Your answer is incomplete.';
+$string['feedback:incomplete'] = 'Answers missing.';
+$string['feedback:correctbutincomplete'] = 'There are {$a} answers missing.';
 $string['feedback:incorrectandpossiblyincomplete'] = 'Incorrect.';
 $string['sessioncompleted'] = 'Finished! :-)';
 $string['titleprogresschart'] = 'Results';

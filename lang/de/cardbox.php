@@ -95,8 +95,9 @@ $string['yoursolution'] = 'Ihre Lösung';
 
 // Practice mode: Feedback
 
-$string['feedback:correctandcomplete'] = 'Sehr gut!';
-$string['feedback:correctbutincomplete'] = 'Ihre Antwort ist leider unvollständig.';
+$string['feedback:correctandcomplete'] = 'Richtig!';
+$string['feedback:incomplete'] = 'Unvollständig.';
+$string['feedback:correctbutincomplete'] = 'Es fehlen {$a} Antworten.';
 $string['feedback:incorrectandpossiblyincomplete'] = 'Das war leider nichts.'; // TODO
 
 $string['sessioncompleted'] = 'Fertig! :-)';

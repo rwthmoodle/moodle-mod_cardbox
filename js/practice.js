@@ -34,10 +34,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
-        console.log('__data: ', __data);
-        console.log('__case: ', __case);
-
-        /* 1. Variables and Calls */
+        /*********** 1. Variables and Calls ***********/
         
         var cardcount = __selection.length; // to be used for statistics/progress bar.
 
@@ -46,12 +43,15 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var cardId = __selection[0];
         var isrepetition = 0;
         
+        // Information about the user's answer(s) for the currect flashcard.
         var userinput;
         var answeriscorrect = 0;
         var answeriscomplete = 0;
+        var numberofmistakes = 0; // for one card.
+        var missinganswers = 0;
 
         // Statistical information that will be displayed to the user at the end of practice.
-        var countright = 0;
+        var countright = 0; // for all cards of this session.
         var countwrong = 0;
 
         // Collection of cards that were answered wrongly. They will be repeated until answered correctly once.
@@ -61,31 +61,32 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         addQuestionEvents();
         
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
-                e.preventDefault();
-                applySettings();
-            });
+            e.preventDefault();
+            applySettings();
+        });
 
-        /* 2. Definitions */
+        /*********** 2. Definitions ***********/
 
         function addQuestionEvents() {
-            
-            console.log('addQuestionEvents() aufgerufen mit __case = ', __case);
-            
+
             if ( (__case % 2) == 0) { // automatic check.
-                
-                console.log('automatic check');
-                
+
                 document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
+
+                    // 0. Prevent page reload.
                     e.preventDefault();
+
                     // 1. Check whether the answer is correct and complete and add it to the templatable data.
                     checkAnswer();
+
                     // 2. render solution
                     renderSolutionAutoCheck();
+
                     // 3. Insert feedback (depending on 1.) and the user's solution.
                     giveFeedback();
-                    
+
                 });
-                
+
                 document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
                     e.preventDefault();
                     // check answer
@@ -93,11 +94,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     renderSolutionAutoCheck();
                     // mark as incorrect --> eventlisteners for next step
                 });
-                
+
             } else { // self-check.
-                
-                console.log('self check');
-                
+
                 document.getElementById('cardbox-check-answer').addEventListener('click', function(e) {
                     e.preventDefault();
                     renderSolutionForSelfCheck();
@@ -113,9 +112,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          * @returns {undefined}
          */
         function addAnswerEvents() {
-            
-            console.log('addAnswerEvents() aufgerufen mit __case = ', __case);
-            
+
             if ( (__case % 2) == 0) { // automatic check.
           
                 // Button overrides the result of the automatic check, tells the server and requests a new flashcard to render.
@@ -187,43 +184,51 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             window.location.href = goTo;
 
         }
-        
+        /**
+         * 
+         * @returns {undefined}
+         */
         function checkAnswer() {
-            
-//            userinput = [];document.getElementsByClassName('cardbox-userinput'); //.value;
-            
-            
-            
+
+            // Reset everything.
+            answeriscorrect = 1;
+            answeriscomplete = 0;
+            numberofmistakes = 0;
+            missinganswers = 0;
+
             var solutions = __data.answer.texts;
-            var items = solutions.length;
+            userinput = [];
             var matches = [];
             var answers = [];
-            
-            userinput = [];
-            
+
             // 1. Collect the user's answers in an array.
             var i;
             for (i = 1; i <= solutions.length; i++) {
                 (function (innerI){
-                       userinput.push(document.getElementById('cardbox-userinput-' + innerI).value);
+                    var ui = document.getElementById('cardbox-userinput-' + innerI).value;
+                    if (ui !== '') {
+                        userinput.push(ui);
+                    }
+
                 })(i);
             }
-            console.log('typeof userinput', typeof userinput);
-            console.log('userinput: ', userinput);
-            
-            console.log('typeof solutions: ', typeof solutions);
-            console.log('solutions: ', solutions);
-            console.log('how many solutions? ', items);
-            
-//            userinput.forEach(check);
 
             // 2. For each solution: Check whether it is among the user's answers and collect the matches.
             solutions.forEach(check);
-            console.log('matches: ', matches);
-            
-            matches.forEach(collect);
-            
-            
+
+            // 3. Collect matches and non-matches and transform them into a displayable form. Also determine whether there are incorrect answers.
+            userinput.forEach(collect);
+            __data['userinputitems'] = answers;
+
+            // 4. Check whether there are as many answers as solutions.
+            if (solutions.length > matches.length) {
+                answeriscomplete = 0;
+                missinganswers = solutions.length - matches.length;
+
+            } else {
+                answeriscomplete = 1;
+            }
+
             /**
              * This function takes each solution and checks whether it contains
              * one of the user's answers or is contained in one of the user's
@@ -244,19 +249,17 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                         
                         userinputitem = userinput[innerI];
                         if (compare(solutionitem, userinputitem)) {
-//                            if (!matches[innerI]) {
 
                                 if ( matches.indexOf(userinputitem) === -1 ) {
+                                    
                                     matches.push(userinputitem);
                                 }
 
-                                
-//                            }
                         }
 
                     })(j);
                 }
-                
+
             }
             /**
              * Function returns true if one of the strings is contained within the other
@@ -270,67 +273,41 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                 a = a.toLowerCase();
                 b = b.toLowerCase();
-                
-                // TODO: Wörter getrennt betrachten, damit die Funktion 'Blauralle' nicht als richtig anerkennt,
-                // weil die richtige Lösung 'Blaufußtölpel' auch 'Blau' enthält.
 
                 if ( (a.includes(b)) || (b.includes(a)) ) {
                     return true;
                 }
                 return false;
-                
+   
             }
-            
-//            function collect(itemnumber, index) {
-//               
-//                    var answer = {
-//                        userinput: userinput[itemnumber],
-//                        colorclass: 'cardbox-input-color-correct'
-//                    };
-////                    matches++;
-//
-////                } else {
-////
-////                    var answer = {
-////                        userinput: item,
-////                        colorclass: 'cardbox-input-color-correct'
-////                    };
-////                }
-//                answers.push(answer);
-//                
-//                
-//                
-//            }
-            
+            /**
+             * 
+             * @param {type} userinput
+             * @param {type} index
+             * @returns {undefined}
+             */
             function collect(userinput, index) {
-               
+
+                if ( matches.indexOf(userinput) != -1 ) {
+
                     var answer = {
                         userinput: userinput,
                         colorclass: 'cardbox-input-color-correct'
                     };
-//                    matches++;
 
-//                } else {
-//
-//                    var answer = {
-//                        userinput: item,
-//                        colorclass: 'cardbox-input-color-correct'
-//                    };
-//                }
+                } else {
+                    // Note that the user made at least one mistake.
+                    answeriscorrect = 0;
+                    numberofmistakes++;
+                    var answer = {
+                        userinput: userinput,
+                        colorclass: 'cardbox-input-color-incorrect'
+                    };
+                }
+
                 answers.push(answer);
-                
-                
-                
             }
-            
-            __data['userinputitems'] = answers;
-            
-            // TODO
-            answeriscorrect = 1;
-            answeriscomplete = 1;
-            
-            // if: correct und vollständig
-            
+
         }
         /**
          * Function places a green or red feedback notification at the top of the page.
@@ -340,17 +317,19 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         function giveFeedback() {
 
             if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                
                 notification.addNotification({
                     message: M.util.get_string('feedback:correctandcomplete', 'cardbox'),
                     type: "success"
                 });
-                
+
             } else if (answeriscorrect === 1) {
                 notification.addNotification({
-                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox'),
-                    type: "error"
+                    message: M.util.get_string('feedback:incomplete', 'cardbox'),
+//                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox', missinganswers),
+                    type: "warning"
                 });
-                
+
             } else {
                 notification.addNotification({
                     message: M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox'),
@@ -369,8 +348,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          * @returns {undefined}
          */
         function proceed(iscorrect) { // XXX: Error notifications for error cases.
-//
-        console.log('proceed aufgerufen mit iscorrect = ', iscorrect);
 
             var willBeRepetition = 0;
             var next;
@@ -397,11 +374,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     willBeRepetition = 1;
                 }
             }
-            
-            console.log('current card isrepetition?', next);
-            console.log('next card has id = ', next);
 
-//            __case += 2;
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
@@ -469,8 +442,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          */
         function renderNewCard(newdata, next) {
 
-            console.log('renderNewCard aufgerufen mit newdata = ', newdata);
-
             if (isrepetition === 0) {
                 position = position + 1;
                 cardId = __selection[position];
@@ -484,6 +455,11 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                                     templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
 
                                 }).then(function () {
+                                        // Reset parameters.
+//                                        answeriscorrect = 0;
+//                                        answeriscomplete = 0;
+//                                        numberofmistakes = 0;
+                                        // Add event listeners.
                                         addQuestionEvents();
 
                                 }); // Add a catch.
@@ -492,8 +468,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         }
 
         function renderSolutionForSelfCheck() {
-            
-            console.log('renderSolutionForSelfCheck aufgerufen mit den vorhandenen __data = ', __data);
 
             var newdata = __data;
             newdata['case1'] = false;
@@ -509,13 +483,14 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                                 }); // Add a catch.
             })(templates, newdata);
-            
-            
+
         }
-
+        /**
+         * This function 'flips' the card from question to solution in the self-check mode.
+         *
+         * @returns {undefined}
+         */
         function renderSolutionAutoCheck() {
-
-            console.log('renderSolutionAutoCheck aufgerufen mit den vorhandenen __data = ', __data);
 
             // Tell the templatable to display the solution view instead of the question view.
             var newdata = __data;
@@ -613,7 +588,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                 datasets: [{
                     label: M.util.get_string('flashcards', 'cardbox'),
-//                    data: [countnew, countboxone, countboxtwo, countboxthree, countboxfour, countboxfive],
                     data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5]],
                     backgroundColor: '#0066ff'
                 }]
