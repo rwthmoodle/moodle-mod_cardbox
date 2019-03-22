@@ -89,8 +89,8 @@ $string['dontknow'] = 'Weiß ich nicht';
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 $string['override'] = 'Überstimmen';
-$string['override_iscorrect'] = 'Überstimmen. Ich hatte Recht!';
-$string['override_isincorrect'] = 'Überstimmen. Ich habe die Lösung nicht gewusst.';
+$string['override_iscorrect'] = 'Doch, ich hatte Recht!';
+$string['override_isincorrect'] = 'Nein, ich wusste die Lösung nicht.';
 $string['proceed'] = 'Weiter';
 
 $string['solution'] = 'Lösung';

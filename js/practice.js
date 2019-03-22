@@ -34,6 +34,8 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
+        console.log('__selection: ', __selection);
+
         /*********** 1. Variables and Calls ***********/
         
         var cardcount = __selection.length; // to be used for statistics/progress bar.
@@ -44,13 +46,14 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var isrepetition = 0;
         var considercardcorrect = false;
         
+        console.log('considercardcorrect (beim 1. Seitenaufruf): ', considercardcorrect);
+        
         // Information about the user's answer(s) for the currect flashcard.
         var userinput;
         var answeriscorrect = 0;
         var answeriscomplete = 0;
-        var numberofmistakes = 0; // for one card. // XXX superfluous?
-        var missinganswers = 0; // XXX superfluous?
-        var dontknow = false;
+//        var numberofmistakes = 0; // for one card. // XXX superfluous?
+//        var missinganswers = 0; // XXX superfluous?
 
         // Statistical information that will be displayed to the user at the end of practice.
         var countright = 0; // for all cards of this session.
@@ -80,6 +83,8 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                     // 1. Check whether the answer is correct and complete and add it to the templatable data.
                     checkAnswer();
+                    
+                    console.log('considercardcorrect (nach Autocheck): ', considercardcorrect);
 
                     // 2. render solution
                     renderSolutionAutoCheck();
@@ -93,7 +98,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     e.preventDefault();
                     
                     // render solution
-                    dontknow = true;
+                    considercardcorrect = false;
+                    
+                    console.log('considercardcorrect (unmittelbar nach Klick auf Weiß nicht): ', considercardcorrect);
                     
                     notification.addNotification({
                         message: M.util.get_string('feedback:notknown', 'cardbox'),
@@ -127,8 +134,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
           
                 // Button overrides the result of the automatic check, tells the server and requests a new flashcard to render.
                 document.getElementById('cardbox-override').addEventListener('click', function(e) {
+                    
+                    console.log('considercardcorrect (beim Klick auf Überstimmen): ', considercardcorrect);
+                    
                     e.preventDefault();
-                    if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                    removeNotifications();
+                    if ( considercardcorrect ) { // (answeriscorrect === 1) && (answeriscomplete === 1)
                         proceed(0);
                     } else {
                         proceed(1);
@@ -137,9 +148,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
                 // Button sends the result of the automatic check to the server and requests a new flashcard to render.
                 document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
+                    
+                    console.log('considercardcorrect (beim Klick auf Weiter): ', considercardcorrect);
+                    
                     e.preventDefault();
                     removeNotifications();
-                    if ( (dontknow === false) && (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                    if ( considercardcorrect ) {
                         proceed(1);
                     } else {
                         proceed(0);
@@ -203,8 +217,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             // Reset everything.
             answeriscorrect = 1;
             answeriscomplete = 0;
-            numberofmistakes = 0;
-            missinganswers = 0;
+//            numberofmistakes = 0;
+//            missinganswers = 0;
+            considercardcorrect = false;
 
             var solutions = __data.answer.texts;
             userinput = [];
@@ -233,12 +248,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             // 4. Check whether there are as many answers as solutions.
             if (solutions.length > matches.length) {
                 answeriscomplete = 0;
-                missinganswers = solutions.length - matches.length;
+//                missinganswers = solutions.length - matches.length;
 
             } else {
                 answeriscomplete = 1;
             }
-
+            // 5. Determine whether the card should count as known or unknown.
             if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
                 considercardcorrect = true;
             }
@@ -312,7 +327,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 } else {
                     // Note that the user made at least one mistake.
                     answeriscorrect = 0;
-                    numberofmistakes++;
+//                    numberofmistakes++;
                     var answer = {
                         userinput: userinput,
                         colorclass: 'cardbox-input-color-incorrect'
@@ -388,11 +403,14 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     willBeRepetition = 1;
                 }
             }
+            
+            console.log('next: ', next);
+            console.log('next will be a repetition: ', willBeRepetition);
 
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: __cmid, action: 'updateandnext', case: __case, cardid: __selection[position], iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
+                data: {id: __cmid, action: 'updateandnext', case: __case, cardid: cardId, iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
                 success: function(result){
                     result = JSON.parse(result);
 
@@ -510,6 +528,11 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             var newdata = __data;
             newdata['case2'] = false;
             newdata['case4'] = true;
+            if (considercardcorrect) {
+                newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
+            } else {
+                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');;
+            }
 
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
