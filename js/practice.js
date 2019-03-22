@@ -42,13 +42,15 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var position = 0;
         var cardId = __selection[0];
         var isrepetition = 0;
+        var considercardcorrect = false;
         
         // Information about the user's answer(s) for the currect flashcard.
         var userinput;
         var answeriscorrect = 0;
         var answeriscomplete = 0;
-        var numberofmistakes = 0; // for one card.
-        var missinganswers = 0;
+        var numberofmistakes = 0; // for one card. // XXX superfluous?
+        var missinganswers = 0; // XXX superfluous?
+        var dontknow = false;
 
         // Statistical information that will be displayed to the user at the end of practice.
         var countright = 0; // for all cards of this session.
@@ -86,11 +88,19 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     giveFeedback();
 
                 });
-
+                // TODO
                 document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
                     e.preventDefault();
-                    // check answer
+                    
                     // render solution
+                    dontknow = true;
+                    
+                    notification.addNotification({
+                        message: M.util.get_string('feedback:notknown', 'cardbox'),
+                        type: "error"
+                    });
+                    
+                    
                     renderSolutionAutoCheck();
                     // mark as incorrect --> eventlisteners for next step
                 });
@@ -129,7 +139,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
                     e.preventDefault();
                     removeNotifications();
-                    if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                    if ( (dontknow === false) && (answeriscorrect === 1) && (answeriscomplete === 1) ) {
                         proceed(1);
                     } else {
                         proceed(0);
@@ -227,6 +237,10 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
             } else {
                 answeriscomplete = 1;
+            }
+
+            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+                considercardcorrect = true;
             }
 
             /**

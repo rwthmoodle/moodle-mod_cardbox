@@ -83,10 +83,13 @@ $string['cancel'] = 'Cancel';
 // Practice mode: Buttons.
 $string['options'] = 'Options';
 $string['dontknow'] = "I don't know";
-$string['submitanswer'] = 'Check';
+$string['checkanswer'] = 'Check';
+$string['submitanswer'] = 'Answer';
 $string['markascorrect'] = 'Correct';
 $string['markasincorrect'] = 'Incorrect';
 $string['override'] = 'Override';
+$string['override_iscorrect'] = 'No, I was right!';
+$string['override_isincorrect'] = 'No, I was wrong.';
 $string['proceed'] = 'Next';
 
 $string['solution'] = 'Solution';
@@ -97,6 +100,8 @@ $string['feedback:correctandcomplete'] = 'Well done.';
 $string['feedback:incomplete'] = 'Answers missing.';
 $string['feedback:correctbutincomplete'] = 'There are {$a} answers missing.';
 $string['feedback:incorrectandpossiblyincomplete'] = 'Incorrect.';
+$string['feedback:notknown'] = 'No answer given';
+
 $string['sessioncompleted'] = 'Finished! :-)';
 $string['titleprogresschart'] = 'Results';
 $string['right'] = 'right';

@@ -82,12 +82,15 @@ $string['cancel'] = 'Abbrechen';
 $string['options'] = 'Optionen';
 //$string['options'] = 'Korrekturmodus';
 
-$string['submitanswer'] = 'Überprüfen';
+$string['checkanswer'] = 'Überprüfen';
+$string['submitanswer'] = 'Antworten';
 $string['dontknow'] = 'Weiß ich nicht';
 
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 $string['override'] = 'Überstimmen';
+$string['override_iscorrect'] = 'Überstimmen. Ich hatte Recht!';
+$string['override_isincorrect'] = 'Überstimmen. Ich habe die Lösung nicht gewusst.';
 $string['proceed'] = 'Weiter';
 
 $string['solution'] = 'Lösung';
@@ -99,6 +102,7 @@ $string['feedback:correctandcomplete'] = 'Richtig!';
 $string['feedback:incomplete'] = 'Unvollständig.';
 $string['feedback:correctbutincomplete'] = 'Es fehlen {$a} Antworten.';
 $string['feedback:incorrectandpossiblyincomplete'] = 'Das war leider nichts.'; // TODO
+$string['feedback:notknown'] = 'Keine Antwort.';
 
 $string['sessioncompleted'] = 'Fertig! :-)';
 $string['titleprogresschart'] = 'Ergebnis';
