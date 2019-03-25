@@ -24,9 +24,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $question = optional_param('question', null, PARAM_ALPHANUM);
-$isedit = optional_param('isedit', null, PARAM_INT);
+$isedit = optional_param('isedit', 0, PARAM_INT);
 
-if (!empty($question) && !empty($isedit)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
+if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
     if ($isedit === 0) {
         $action = 'addflashcard';
     } else {
@@ -125,6 +125,7 @@ if ($action === 'addflashcard') {
         // TODO: check for errors, validate form
 
         // Give user feedback and go back to practice.
+        // 
         redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     
     } else {
