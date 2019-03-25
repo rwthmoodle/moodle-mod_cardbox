@@ -56,13 +56,14 @@ $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Fre
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = '.';
-$string['success:skip'] = '.';
+//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
+$string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 
 // Title and form elements for choosing the settings for a new practice session

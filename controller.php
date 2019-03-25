@@ -392,7 +392,7 @@ if ($action === 'review') {
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
     
-    echo $OUTPUT->heading(get_string('titleforreview', 'cardbox'));
+    echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id);

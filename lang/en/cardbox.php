@@ -56,15 +56,15 @@ $string['success:addnewcard'] = 'The flashcard was created and awaits approval.'
 $string['success:approve'] = 'The flashcard was approved and is now free to use.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
 $string['success:reject'] = '.';
-$string['success:skip'] = '.';
+//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
+$string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailable'] = 'There are no flashcards in your cardbox at present.';
-
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'What and how would you like to practice?';

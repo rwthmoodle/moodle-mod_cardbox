@@ -77,10 +77,16 @@ if ($action === 'review') {
         $review = new cardbox_review($context, null, $nextcard);
         $newdata = $review->export_for_template($renderer);
 
-        echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+        echo json_encode(['status' => 'success', 'finished' => 0, 'newdata' => $newdata]);
 
     } else {
-        echo json_encode(['status' => 'finished']);
+        
+//        if (empty($list)) {
+//            $info = get_string('info:nocardsavailableforreview', 'cardbox');
+//            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+//        }
+        
+        echo json_encode(['status' => 'success', 'finished' => 1]);
     }
     
     
