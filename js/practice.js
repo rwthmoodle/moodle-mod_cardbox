@@ -46,8 +46,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var isrepetition = 0;
         var considercardcorrect = false;
         
-        console.log('considercardcorrect (beim 1. Seitenaufruf): ', considercardcorrect);
-        
         // Information about the user's answer(s) for the currect flashcard.
         var userinput;
         var answeriscorrect = 0;
@@ -83,8 +81,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                     // 1. Check whether the answer is correct and complete and add it to the templatable data.
                     checkAnswer();
-                    
-                    console.log('considercardcorrect (nach Autocheck): ', considercardcorrect);
 
                     // 2. render solution
                     renderSolutionAutoCheck();
@@ -99,15 +95,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     
                     // render solution
                     considercardcorrect = false;
-                    
-                    console.log('considercardcorrect (unmittelbar nach Klick auf Weiß nicht): ', considercardcorrect);
-                    
+
                     notification.addNotification({
                         message: M.util.get_string('feedback:notknown', 'cardbox'),
                         type: "error"
                     });
-                    
-                    
+
                     renderSolutionAutoCheck();
                     // mark as incorrect --> eventlisteners for next step
                 });
@@ -134,9 +127,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
           
                 // Button overrides the result of the automatic check, tells the server and requests a new flashcard to render.
                 document.getElementById('cardbox-override').addEventListener('click', function(e) {
-                    
-                    console.log('considercardcorrect (beim Klick auf Überstimmen): ', considercardcorrect);
-                    
+
                     e.preventDefault();
                     removeNotifications();
                     if ( considercardcorrect ) { // (answeriscorrect === 1) && (answeriscomplete === 1)
@@ -148,9 +139,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
                 // Button sends the result of the automatic check to the server and requests a new flashcard to render.
                 document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
-                    
-                    console.log('considercardcorrect (beim Klick auf Weiter): ', considercardcorrect);
-                    
+
                     e.preventDefault();
                     removeNotifications();
                     if ( considercardcorrect ) {
@@ -403,9 +392,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     willBeRepetition = 1;
                 }
             }
-            
-            console.log('next: ', next);
-            console.log('next will be a repetition: ', willBeRepetition);
 
             $.ajax({
                 type: 'POST',

@@ -111,7 +111,11 @@ if ($action === 'updateandnext') {
 
         $dataobject->lastpracticed = time(); 
         if ($iscorrect == 1) {
-            $dataobject->cardposition++;
+            if ($dataobject->cardposition == 0) {
+                $dataobject->cardposition = 2;
+            } else {
+                $dataobject->cardposition++;
+            }
         } else {
             $dataobject->cardposition = 1;
         }
