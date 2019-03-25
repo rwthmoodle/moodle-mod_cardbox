@@ -165,7 +165,9 @@ if ($action === 'editcard') {
     $filearea = 'content';
 
     // Copy all the files from the 'real' area, into the draft area.
-    file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+    if (!empty($draftitemid)) {
+        file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+    }
 
     // Pass the data of this card to the card_form for editing.
     if (empty($entry)) {
