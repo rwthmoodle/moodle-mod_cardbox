@@ -470,7 +470,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
 
                                 }).then(function () {
                                         // Reset parameters.
@@ -494,7 +494,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
 
                                 }).then(function () {
                                         addAnswerEvents();
@@ -523,7 +523,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice-replacable', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
                                 }).then(function () {
                                         addAnswerEvents();
 
@@ -539,17 +539,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          */
         function finishPractice() {
             
-            // 1. Give the user feedback.
-//            notification.addNotification({
-//                message: M.util.get_string('sessioncompleted', 'cardbox'),
-//                type: "success"
-//            });
-
-            // 2. Hide the action buttons.
-            $('.cardbox-back').toggleClass('hidden');
-            $('#cardbox-mark-as-correct').toggleClass('hidden');
-            $('#cardbox-mark-as-incorrect').toggleClass('hidden');
-            //$('.btn btn-primary').toggleClass('hidden');
+            $('#cardbox-practice-replacable').toggleClass('hidden');
             
             // 3. Display progress as doughnut chart.
             var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
