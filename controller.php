@@ -317,6 +317,13 @@ if ($action === 'practice') {
     // 1. Create a virtual cardbox for this practice session. (model)
     $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
     $selection = $cardbox->cardbox_get_card_selection();
+    
+    if (empty($selection)) {
+        $info = get_string('info:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+    
     $cardboxstatus = $cardbox->cardbox_get_status();
 
     // 2. Give javascript access to the language string repository and add it to the page.
