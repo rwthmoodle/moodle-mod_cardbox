@@ -1,0 +1,35 @@
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title">{{# str }} titleforchoosesettings, cardbox {{/ str }}</h4>
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body cardbox-options">
+
+            <div class="item a goldenleft">{{# str }} choosecorrectionmode, cardbox {{/ str }}&nbsp;&nbsp;&nbsp;&nbsp; {{{helpbuttoncorrectionmode}}}</div>
+            <div class="item b goldenrigth">
+                <form id="cardbox-form" class="felement">
+                    <input type="radio" id="cardbox-selfcorrection" name="correctionmode" value="0" class="form-check-input" checked>{{# str }} selfcorrection, cardbox {{/ str }}<br>
+                    <input type="radio" id="cardbox-autocorrection" name="correctionmode" value="1" class="form-check-input"> {{# str }} autocorrection, cardbox {{/ str }}
+                </form>
+            </div>
+            <div class="item c goldenleft">{{# str }} weightopic, cardbox {{/ str }}&nbsp; {{{helpbuttontopic}}}</div>
+            <div class="item d goldenrigth">
+                <select id="cardbox-topic" name="topic" class="custom-select">
+                    {{#topics}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/topics}}
+                </select>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button id="cardbox-apply-settings" type="button" class="btn btn-primary">{{# str }} applysettings, cardbox {{/ str }}</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{# str }} cancel, cardbox {{/ str }}</button>
+        </div>
+
+    </div>
+</div>

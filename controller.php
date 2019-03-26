@@ -24,9 +24,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 $question = optional_param('question', null, PARAM_ALPHANUM);
-$isedit = optional_param('isedit', null, PARAM_INT);
+$isedit = optional_param('isedit', 0, PARAM_INT);
 
-if (!empty($question) && !empty($isedit)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
+if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
     if ($isedit === 0) {
         $action = 'addflashcard';
     } else {
@@ -108,9 +108,7 @@ if ($action === 'addflashcard') {
         if ($draftitemid != null) {
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);
-            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
-                echo 'Fehlerbehandlung!';
-            } else {
+            if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
                     $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
@@ -119,12 +117,12 @@ if ($action === 'addflashcard') {
                     break;
                 }
             }
-
         }
 
         // TODO: check for errors, validate form
 
         // Give user feedback and go back to practice.
+        // 
         redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     
     } else {
@@ -163,8 +161,12 @@ if ($action === 'editcard') {
     $component = 'mod_cardbox';
     $filearea = 'content';
 
-    // Copy all the files from the 'real' area, into the draft area.
-    file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+    // XXX Vielleicht einmal in der DB fragen, ob schon ein Bild für die Karte vorliegt und je nachdem unterschiedlich weiter?
+    
+    // Copy the file (if there is on) from the 'real' area into the draft area.
+    if (!empty($itemid)) {
+        file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+    }
 
     // Pass the data of this card to the card_form for editing.
     if (empty($entry)) {
@@ -177,6 +179,7 @@ if ($action === 'editcard') {
             $entry->answer[$i] = $answers[$i];
         }
         $entry->cardimage = $draftitemid;
+        $entry->isedit = 1;
         $entry->action = 'editcard';
     }
     $mform->set_data($entry);
@@ -305,14 +308,25 @@ if ($action === 'practice') {
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardbox.class.php');
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
-    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
+    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php'); // XXX File entfernen.
 
     echo $OUTPUT->heading("$cardbox->name");
-
-    // 1. Create a virtual cardbox for this practice session.
-    $cardbox = new cardbox_cardboxmodel($cardbox->id);
+    
+    $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
+    $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
+    $case = optional_param('case', 1, PARAM_INT);
+    
+    // 1. Create a virtual cardbox for this practice session. (model)
+    $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
     $selection = $cardbox->cardbox_get_card_selection();
+    
+    if (empty($selection)) {
+        $info = get_string('info:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+    
     $cardboxstatus = $cardbox->cardbox_get_status();
 
     // 2. Give javascript access to the language string repository and add it to the page.
@@ -320,15 +334,54 @@ if ($action === 'practice') {
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
 
-    $params = array($cmid, $selection, $cardboxstatus, true); // true means: the user checks their own results.
+    
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $practice = new cardbox_practice($case, $context, $cardbox, null, $correction); // (view controller)
+    $data = $practice->export_for_template($renderer);
+    
+    $params = array($cmid, $selection, $cardboxstatus, $correction, $case, $data); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
     // 3. Render the page.
-    $renderer = $PAGE->get_renderer('mod_cardbox');
-    $studyview = new cardbox_studyview($context, $cardbox);
-    echo $renderer->cardbox_render_studyview($studyview);
+    
+//    print_r($data);
+    
+    echo $renderer->cardbox_render_practice($practice);
+    
+    // old code which works for the self checking mode (only):
+    // 
+//    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+//
+//    require_once('model/cardbox.class.php');
+//    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+//    // require_once($CFG->dirroot . '/mod/cardbox/classes/output/card.php'); // XXX File entfernen.
+//
+//    echo $OUTPUT->heading("$cardbox->name");
+//    
+//    $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
+//    $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
+//
+//    // 1. Create a virtual cardbox for this practice session. (model)
+//    $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
+//    $selection = $cardbox->cardbox_get_card_selection();
+//    $cardboxstatus = $cardbox->cardbox_get_status();
+//
+//    // 2. Give javascript access to the language string repository and add it to the page.
+//    $stringman = get_string_manager();
+//    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+//    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/studyview.js"));
+//
+//    $params = array($cmid, $selection, $cardboxstatus, $correction); // true means: the user checks their own results.
+//    $PAGE->requires->js_init_call('startPractice', $params, true);
+//
+//    // 3. Render the page.
+//    $renderer = $PAGE->get_renderer('mod_cardbox');
+//    $studyview = new cardbox_studyview($context, $cardbox, null, $correction); // (view controller)
+//    echo $renderer->cardbox_render_studyview($studyview);
 
 }
 
@@ -341,7 +394,7 @@ if ($action === 'review') {
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
     
-    echo $OUTPUT->heading(get_string('titleforreview', 'cardbox'));
+    echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id);

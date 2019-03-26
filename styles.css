@@ -31,15 +31,23 @@
     height: auto;
 }
 
-.path-mod-cardbox .form-inline {  
+.path-mod-cardbox .form-inline {
   /*display: flex;
   flex-flow: row wrap;
   align-items: center;*/
 }
 
-.path-mod-cardbox #cardbox-userinput {    
+.path-mod-cardbox #cardbox-userinput, .path-mod-cardbox .cardbox-userinput {
     margin-top: 30px;
     margin-bottom: 15px;
+}
+
+.path-mod-cardbox .cardbox-input-color-correct {
+    color: #00b33c;
+}
+
+.path-mod-cardbox .cardbox-input-color-incorrect {
+    color: #ff9900;
 }
 
 /*.path-mod-cardbox .form-control {
@@ -65,13 +73,13 @@
     width: 100px !important;*/
 }
 
-.path-mod-cardbox .col-gold-lg {
+/*.path-mod-cardbox .col-gold-lg {
     background-color: green;
 }
 
 .path-mod-cardbox .col-gold-sm {
     background-color: gold;
-}
+}*/
 
 .path-mod-cardbox .reviewcontent {
     margin-top: 50px;
@@ -115,3 +123,41 @@
 .path-mod-cardbox #cardbox-skip {
     background-color: #00b33c;
 }*/
+
+.path-mod-cardbox .cardbox-options {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 61.8% 38.2%;
+    grid-template-rows: 61.8% 38.2%;
+    grid-template-areas: "A B" "C D";
+}
+
+/*.path-mod-cardbox .modal-body .cardbox-options .row {
+    margin-bottom: 1.5em;
+}*/
+
+.path-mod-cardbox .item {
+    display: flex;
+    justify-content: left;
+    align-items: left;
+    height: 100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+.path-mod-cardbox .item.a {
+    grid-area: A;
+}
+.path-mod-cardbox .item.b {
+    grid-area: B;
+}
+.path-mod-cardbox .item.c {
+    grid-area: C;
+}
+.path-mod-cardbox .item.d {
+    grid-area: D;
+}
+
+.path-mod-cardbox .goldenleft {
+    margin-bottom: 2em;
+}

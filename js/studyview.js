@@ -29,10 +29,12 @@
  * @param array __selection ids of those cards selected for practice
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // Wrapper function that is called by controller.php
+function startPractice(Y, __cmid, __selection, __boxcount, __autochecking) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
+        /* 1. Variables and Calls */
+        
         var cardcount = __selection.length; // to be used for statistics/progress bar.
 
         // Information about the current flashcard.
@@ -49,24 +51,65 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
         var toRepeat = [];
 
         registerEventListeners();
-        
-        
-        function registerEventListeners() {
 
-            document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
-                e.preventDefault();
-                flipCard();
-            });
+        /* 2. Definitions */
+
+        function registerEventListeners() {
 
             document.getElementById('cardbox-mark-as-correct').addEventListener('click', function(e) {
                 e.preventDefault();
                 proceed(1);
             });
 
-            document.getElementById('cardbox-mark-as-incorrect').addEventListener('click', function(e) {
+            document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
                 e.preventDefault();
-                proceed(0);
+                applySettings();
             });
+
+            if (__autochecking == 0) {
+
+                document.getElementById('cardbox-check-answer').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    flipCard();
+                });
+
+                var correct = document.getElementById('cardbox-mark-as-incorrect');
+                if (typeof correct != undefined && correct != null) {
+                    correct.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        proceed(0);
+                    });
+                }
+                
+                
+            } else {
+                
+                document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
+                    e.preventDefault();
+                    flipCard();
+                });
+
+            }
+
+        }
+
+        function applySettings() {
+
+            var topic = document.getElementById('cardbox-topic').value;
+            var correctionmode;
+
+            var radios = document.getElementById('cardbox-form').elements['correctionmode'];
+
+            for (var i=0, len=radios.length; i<len; i++) {
+                if ( radios[i].checked ) {
+                    correctionmode = radios[i].value;
+                    break;
+                }
+            }
+
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&correction=' + correctionmode + '&topic=' + topic;
+            window.location.href = goTo;
+
         }
 
         function flipCard() {    
@@ -75,10 +118,10 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
             $('.cardbox-image').toggleClass('hidden');
             $('.cardbox-text').toggleClass('hidden');
             $('#cardbox-userinput').toggleClass('hidden'); // TODO: In automatic check, the input should be displayed, albeit not in an input field.
-            $('#cardbox-submit-answer').toggleClass('hidden');
+            $('#cardbox-check-answer').toggleClass('hidden');
 
             // 2. Check answer or let user check their answer
-            if (__selfchecking) {
+            if (__autochecking == 0) {
                 selfCheck();
 
             } else {
@@ -208,7 +251,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __selfchecking) { // 
             (function (templates, data) {
                         templates.render('mod_cardbox/studyview', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-studyview', html, js);
+                                    templates.replaceNodeContents('#cardbox-studyview', html, js); // XXX partial.
 
                                 }).then(function () {
                                         registerEventListeners();

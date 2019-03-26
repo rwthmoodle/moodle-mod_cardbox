@@ -56,31 +56,55 @@ $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Fre
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = '.';
-$string['success:skip'] = '.';
+//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
+$string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
 $string['choosecorrectionmode'] = 'Korrekturmodus';
-$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. Auch bei der automatischen Kontrolle können Sie entscheiden, ob eine Antwort als richtig bewertet werden soll.';
+$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. In beiden Fällen können Sie entscheiden, dass eine Antwort als richtig gewertet werden soll.';
 $string['selfcorrection'] = 'Selbstkonstrolle';
 $string['autocorrection'] = 'Automatisierte Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 $string['notopicpreferred'] = 'keine Gewichtung';
 $string['beginpractice'] = 'Start';
+$string['applysettings'] = 'Anwenden';
+$string['cancel'] = 'Abbrechen';
 
 // Practice mode: Buttons.
-$string['submitanswer'] = 'Überprüfen';
+$string['options'] = 'Optionen';
+//$string['options'] = 'Korrekturmodus';
+
+$string['checkanswer'] = 'Überprüfen';
+$string['submitanswer'] = 'Antworten';
+$string['dontknow'] = 'Weiß ich nicht';
+
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
+$string['override'] = 'Überstimmen';
+$string['override_iscorrect'] = 'Doch, ich hatte Recht!';
+$string['override_isincorrect'] = 'Nein, ich wusste die Lösung nicht.';
+$string['proceed'] = 'Weiter';
+
+$string['solution'] = 'Lösung';
+$string['yoursolution'] = 'Ihre Lösung';
+
 // Practice mode: Feedback
+
+$string['feedback:correctandcomplete'] = 'Richtig!';
+$string['feedback:incomplete'] = 'Unvollständig.';
+$string['feedback:correctbutincomplete'] = 'Es fehlen {$a} Antworten.';
+$string['feedback:incorrectandpossiblyincomplete'] = 'Das war leider nichts.'; // TODO
+$string['feedback:notknown'] = 'Keine Antwort.';
+
 $string['sessioncompleted'] = 'Fertig! :-)';
 $string['titleprogresschart'] = 'Ergebnis';
 $string['right'] = 'richtig';

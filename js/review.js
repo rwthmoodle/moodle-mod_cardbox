@@ -45,9 +45,9 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
                 edit();
             });
 
-            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
-                reject();
-            });
+//            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
+//                reject();
+//            });
             
             document.getElementById('cardbox-skip').addEventListener('click', function(e) {
                 skip();
@@ -58,70 +58,69 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
          * @param {type} status
          * @returns {undefined}
          */
-        function controlUpdate(status) {
+        function controlUpdate(action) {
             
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: __cmid, action: 'review', cardid: cardinreview, status: status, nextcard: next, sesskey: M.cfg.sesskey},
+                data: {id: __cmid, action: 'review', cardid: cardinreview, status: action, nextcard: next, sesskey: M.cfg.sesskey},
                 success: function(result){
 
                     result = JSON.parse(result);
                     
-                    if (result.status === 'success') {
+                    if (result.status === 'error') {
                         
-                        if (status != 'skip') {
-                            notification.addNotification({
-                                message: M.util.get_string('success:'+status, 'cardbox'),
-                                type: "success"
-                            });
-                        }
-
-                        updateStatus();
-                        renderNewCard(result.newdata);
-
-                    } else if (result.status === 'finished') {
-                        
-                        notification.addNotification({
-                                message: M.util.get_string('success:'+status, 'cardbox'),
-                                type: "success"
-                        });
-
-                    } else {
                         notification.addNotification({
                                 message: result.reason,
                                 type: "error"
                         });
+                        return;
 
                     }
+
+                    // Notify the user that the card was successfully approved.
+                    if (action != 'skip' ) {
+                        
+                        notification.addNotification({
+                            message: M.util.get_string('success:'+action, 'cardbox'),
+                            type: "success"
+                        });
+                    } 
+                    // If there are more cards to review, proceed to the next one.
+                    if (result.finished == 0) {
+                        
+                        updateStatus();
+                        renderNewCard(result.newdata);
+                    
+                    // Else clean up.
+                    } else {
+
+                        var view = document.getElementById('cardbox-review');
+                        view.remove();
+
+                        var info = "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" + M.util.get_string('info:waslastcardforreview', 'cardbox') + "</div></span>";
+                        var headline = document.getElementById('cardbox-review-headline');
+                        headline.parentNode.insertAdjacentHTML('afterend', info);
+
+                    }
+
                     // Remove the notification box after 3 seconds.
                     setTimeout(function(){
                         let notificationpanel = document.getElementById("user-notifications");
                         while (notificationpanel.hasChildNodes()) {  
                             notificationpanel.removeChild(notificationpanel.firstChild);
                         } 
-                    }, 5000);
-                    
-                    // Clean up if this was the last card to be reviewed.
-                    if (result.status === 'finished') {
-                        
-                        var view = document.getElementById('cardbox-review');
-                        view.remove();
-                        
-                        notification.addNotification({
-                                message: M.util.get_string('nocardsavailableforreview', 'cardbox'),
-                                type: "info"
-                        });
-                        
-                        
-                    }
-                    
+                    }, 3000);
+
                 }
             });
             
         }
-        
-        
+        /**
+         * Function tracks the review process and selects the next card to be reviewed.
+         *
+         * @returns {undefined}
+         */
         function updateStatus() { // maybe use pop? or shift?
             position++;
             cardinreview = __cardlist[position];
@@ -143,9 +142,9 @@ function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called
             openCardFormForEditing();
         }
         
-        function reject() {
-            controlUpdate('reject');
-        }
+//        function reject() {
+//            controlUpdate('reject');
+//        }
         
         function skip() {
             controlUpdate('skip');

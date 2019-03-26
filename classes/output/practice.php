@@ -23,16 +23,18 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-class cardbox_studyview implements \renderable, \templatable {
+class cardbox_practice implements \renderable, \templatable {
 
-    private $frontimages;
-    private $fronttexts;
-    private $backimages;
-    private $backtexts;
+    private $question = array('images' => array(), 'texts' => array());
+    private $answer = array('images' => array(), 'texts' => array());
+    private $case;
+    private $case1 = false; // question_selfcheck.
+    private $case2 = false; // question_autocheck.
+    private $case3 = false; // answer_selfcheck.
+    private $case4 = false; // answer_autocheck.
     private $topics;
-    private $selfcheck;
-    private $autocheck;
-    
+    private $inputfields = array();
+
     /**
      * Function builds the view of a flashcard during practice.
      *
@@ -40,13 +42,34 @@ class cardbox_studyview implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($context, $cardbox = null, $cardid = null, $correction = 0) {
+    public function __construct($case, $context, $cardbox = null, $cardid = null, $correction = 0) {
 
+        switch ($case) {
+            case 1:
+                $this->case1 = true;
+                $this->case = 1;
+                break;
+            case 2:
+                $this->case2 = true;
+                $this->case = 2;
+                break;
+            case 3:
+                $this->case3 = true;
+                $this->case = 3;
+                break;
+            case 4:
+                $this->case4 = true;
+                $this->case = 4;
+                break;
+            default:
+                // TODO Error handling.
+        }
+        
         $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
         
         $this->cardbox_prepare_topics_to_study();
         
-        $this->cardbox_prepare_user_form($correction);
+//        $this->cardbox_prepare_user_form($correction);
 
     }
     
@@ -66,28 +89,26 @@ class cardbox_studyview implements \renderable, \templatable {
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($card->card);
         $topic = $card->topicname;
 
-        $this->frontimages = array();
-        $this->fronttexts = array();
-        $this->backimages = array();
-        $this->backtexts = array();
-
         $fs = get_file_storage();
+        $solutioncount = 0;
         foreach ($contents as $content) {
 
             if ($content->contenttype == 1) { // XXX: make dynamic!
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
-                    $this->frontimages[] = array("frontimagesrc" => $download_url);
+                    $this->question['images'][] = array('imagesrc' => $download_url);
                 } else {
-                    $this->backimages[] = array("backimagesrc" => $download_url);
+                    $this->answer['images'][] = array('imagesrc' => $download_url);
                 }
 
             } else if ($content->cardside == 0) {
-                $this->fronttexts[] = array("fronttext" => $content->content);
+                $this->question['texts'][] = array('text' => $content->content);
 
             } else {
-                $this->backtexts[] = array("backtext" => $content->content);
+                $this->answer['texts'][] = array('text' => $content->content);
+                $solutioncount++;
+                $this->inputfields[] = array('number' => $solutioncount);
             }
         }
 //        if (!empty($this->frontimages) && empty($this->backimages)) {
@@ -122,75 +143,37 @@ class cardbox_studyview implements \renderable, \templatable {
      *
      * @param int $correction
      */
-    public function cardbox_prepare_user_form($correction) {
-        
-        if ($correction == 0) {
-            $this->selfcheck = true;
-            $this->autocheck = false;
-        } else {
-            $this->selfcheck = false;
-            $this->autocheck = true;
-        }
-    }
+//    public function cardbox_prepare_user_form($correction) {
+//        
+//        if ($correction == 0) {
+//            $this->selfcheck = true;
+//            $this->autocheck = false;
+//        } else {
+//            $this->selfcheck = false;
+//            $this->autocheck = true;
+//        }
+//    }
 
     public function export_for_template(\renderer_base $output) {
 
         global $OUTPUT;
 
         $data = array();
-        $data['frontimages'] = $this->frontimages;
-        $data['fronttexts'] = $this->fronttexts;
-        $data['backimages'] = $this->backimages;
-        $data['backtexts'] = $this->backtexts;
+        $data['question'] = $this->question;
+        $data['answer'] = $this->answer;
+        $data['case1'] = $this->case1;
+        $data['case2'] = $this->case2;
+        $data['case3'] = $this->case3;
+        $data['case4'] = $this->case4;
         $data['topics'] = $this->topics;
+        $data['inputfields'] = $this->inputfields;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
-        $data['selfcheck'] = $this->selfcheck;
-        $data['autocheck'] = $this->autocheck;
+//        $data['selfcheck'] = $this->selfcheck;
+//        $data['autocheck'] = $this->autocheck;
 
         return $data;
 
     }
     
 }
-
-
-
-//class cardbox_studyview implements \renderable, \templatable {
-//
-//    private $frontimages;
-//    private $fronttexts;
-//    private $backimages;
-//    private $backimagesrc;
-//    private $backtexts;
-//    private $backtext;
-//    
-//    public function __construct($imgurls = null, $texts = null) {
-//        
-//        if (!empty($imgurls)) {
-//            $this->frontimages = array();
-//            foreach ($imgurls as $imgurl) {
-//                $this->frontimages[] = array("frontimagesrc" => $imgurl);
-//            }
-//        }
-//        if (!empty($texts)) {
-//            $this->fronttexts = array();
-//            foreach ($texts as $text) {
-//                $this->fronttexts[] = array("fronttext" => $text);
-//            }
-//        }
-//
-//    }
-//    
-//    public function export_for_template(\renderer_base $output) {
-//        
-//        $data = array();
-//        $data['frontimages'] = $this->frontimages;
-//        $data['fronttexts'] = $this->fronttexts;
-//        
-//        return $data;
-//        
-//        
-//    }
-//    
-//}

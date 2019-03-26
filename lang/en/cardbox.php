@@ -56,15 +56,15 @@ $string['success:addnewcard'] = 'The flashcard was created and awaits approval.'
 $string['success:approve'] = 'The flashcard was approved and is now free to use.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
 $string['success:reject'] = '.';
-$string['success:skip'] = '.';
+//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
+$string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailable'] = 'There are no flashcards in your cardbox at present.';
-
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'What and how would you like to practice?';
@@ -76,13 +76,32 @@ $string['weightopic'] = 'Priority topic';
 $string['weightopic_help'] = 'Sie können die Kartenauswahl für diesen Übungsdurchlauf beeinflussen, indem Sie ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 //$string['weightopic_help'] = 'Angeklickte Themen werden bei der Kartenauswahl für diesen Übungsdurchlauf bevorzugt behandelt.';
 $string['notopicpreferred'] = 'no preference';
-$string['beginpractice'] = 'Start';
+$string['beginpractice'] = 'Start'; // XXX can perhaps be removed.
+$string['applysettings'] = 'Applay';
+$string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.
-$string['submitanswer'] = 'Check';
+$string['options'] = 'Options';
+$string['dontknow'] = "I don't know";
+$string['checkanswer'] = 'Check';
+$string['submitanswer'] = 'Answer';
 $string['markascorrect'] = 'Correct';
 $string['markasincorrect'] = 'Incorrect';
+$string['override'] = 'Override';
+$string['override_iscorrect'] = 'No, I was right!';
+$string['override_isincorrect'] = 'No, I was wrong.';
+$string['proceed'] = 'Next';
+
+$string['solution'] = 'Solution';
+$string['yoursolution'] = 'Your solution';
+
 // Practice mode: Feedback
+$string['feedback:correctandcomplete'] = 'Well done.';
+$string['feedback:incomplete'] = 'Answers missing.';
+$string['feedback:correctbutincomplete'] = 'There are {$a} answers missing.';
+$string['feedback:incorrectandpossiblyincomplete'] = 'Incorrect.';
+$string['feedback:notknown'] = 'No answer given';
+
 $string['sessioncompleted'] = 'Finished! :-)';
 $string['titleprogresschart'] = 'Results';
 $string['right'] = 'right';

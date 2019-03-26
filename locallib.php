@@ -278,3 +278,17 @@ function cardbox_get_answers($cardid) {
     return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ?', array($cardid, 1, 2));
 
 }
+/**
+ * Function returns 0...1 image item ids belonging to the specified card.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return type
+ */
+function cardbox_get_image_itemid($cardid) {
+
+    global $DB;
+    $imageitemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => 1), IGNORE_MISSING);
+    return $imageitemid;
+
+}

@@ -1,0 +1,27 @@
+<div id="cardbox-practice-content" class="row">
+
+    <div class="col-sm-2"></div>
+    <div class="col-sm-4 cardbox-review-item">
+        {{#question}}
+            {{> mod_cardbox/cardside }}
+        {{/question}}
+    </div>
+    <div class="col-sm-4 cardbox-review-item">
+        {{#answer}}
+            {{> mod_cardbox/cardside }}
+        {{/answer}}
+    </div>
+    <div class="col-sm-2"></div>
+
+</div>
+
+<div id="cardbox-practice-user-interaction" class="row">
+
+    <div class="col-sm-7"></div>
+    <div class="col-sm-3" class="container-fluid">
+        <button id="cardbox-mark-as-correct" type="button" class="btn btn-primary">{{# str }} markascorrect, cardbox {{/ str }}</button>
+        <button id="cardbox-mark-as-incorrect" type="button" class="btn btn-primary">{{# str }} markasincorrect, cardbox {{/ str }}</button>
+    </div>
+    <div class="col-sm-2"></div>
+
+</div>

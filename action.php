@@ -77,26 +77,32 @@ if ($action === 'review') {
         $review = new cardbox_review($context, null, $nextcard);
         $newdata = $review->export_for_template($renderer);
 
-        echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+        echo json_encode(['status' => 'success', 'finished' => 0, 'newdata' => $newdata]);
 
     } else {
-        echo json_encode(['status' => 'finished']);
+        
+//        if (empty($list)) {
+//            $info = get_string('info:nocardsavailableforreview', 'cardbox');
+//            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+//        }
+        
+        echo json_encode(['status' => 'success', 'finished' => 1]);
     }
     
     
 }
 
-
 /* * ********************** move card to the next box and return next card *********************** */
 
 if ($action === 'updateandnext') {
 
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/studyview.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
     $cardid = required_param('cardid', PARAM_INT);
     $iscorrect = required_param('iscorrect', PARAM_INT);
     $next = required_param('next', PARAM_INT);
     $isrepetition = required_param('isrepetition', PARAM_INT);
+    $case = optional_param('case', 1, PARAM_INT);
 
     $lastposition = -1;
     if ($isrepetition == 0) {
@@ -111,7 +117,11 @@ if ($action === 'updateandnext') {
 
         $dataobject->lastpracticed = time(); 
         if ($iscorrect == 1) {
-            $dataobject->cardposition++;
+            if ($dataobject->cardposition == 0) {
+                $dataobject->cardposition = 2;
+            } else {
+                $dataobject->cardposition++;
+            }
         } else {
             $dataobject->cardposition = 1;
         }
@@ -126,8 +136,9 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $studyview = new cardbox_studyview($context, null, $next);
-        $newdata = $studyview->export_for_template($renderer);
+        // $case, $context, $cardbox = null, $cardid = null, $correction = 0)
+        $practice = new cardbox_practice($case, $context, null, $next);
+        $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);
 
