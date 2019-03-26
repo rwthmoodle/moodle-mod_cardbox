@@ -39,7 +39,7 @@ if (!empty($question) && !empty($isedit)) { // XXX dirty solution. For some reas
 if ($action === 'addflashcard') {
 
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    
+
     global $USER, $DB;
 
     require_once('card_form.php');
@@ -62,14 +62,14 @@ if ($action === 'addflashcard') {
 
     $mform = new mod_cardbox_card_form();
     $mform->set_data($entry);
-    
+
     if ($mform->is_cancelled()) {
 
         redirect($returnurl);
 
-    // If submitted: get files from filemanager
+    // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
-        
+
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -90,7 +90,7 @@ if ($action === 'addflashcard') {
         $cardid = cardbox_save_new_card($cardbox->id, $topicid);
 
         // Save the question text if there is any.
-        if (!empty($formdata->question)) {
+        if (!empty($formdata->question['text'])) {
             cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
         }
         // Save the text of the answer/s.

@@ -79,7 +79,10 @@ class mod_cardbox_card_form extends moodleform {
         $mform->disabledIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to.
 
         // Enter a prompt or question. // XXX Make width / number of columns dynamic
-        $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
+//        $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
+
+        $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'));
+        $mform->setType('question', PARAM_RAW);
 
         // Enter an image instead or as a supplement
         $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
