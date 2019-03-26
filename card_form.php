@@ -81,7 +81,7 @@ class mod_cardbox_card_form extends moodleform {
         // Enter a prompt or question. // XXX Make width / number of columns dynamic
 //        $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
 
-        $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'));
+        $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
         // Enter an image instead or as a supplement
@@ -90,7 +90,9 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
 
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
-        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
+//        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
+        $torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
+        $mform->setType('answer', PARAM_RAW);
         if (!empty($customdata)) {
             $initialrepeats = $customdata['answercount'];
         } else {

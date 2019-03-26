@@ -72,10 +72,10 @@ class cardbox_review implements \renderable, \templatable {
                 }
 
             } else if ($content->cardside == 0) {
-                $this->fronttexts[] = array("fronttext" => $content->content);
+                $this->fronttexts[] = array("fronttext" => format_text($content->content));
 
             } else {
-                $this->backtexts[] = array("backtext" => $content->content);
+                $this->backtexts[] = array("backtext" => format_text($content->content));
             }
         }
 

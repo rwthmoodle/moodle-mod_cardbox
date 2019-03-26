@@ -26,7 +26,7 @@ defined('MOODLE_INTERNAL') || die();
 $question = optional_param('question', null, PARAM_ALPHANUM);
 $isedit = optional_param('isedit', 0, PARAM_INT);
 
-if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers
+if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers.
     if ($isedit === 0) {
         $action = 'addflashcard';
     } else {
@@ -70,6 +70,9 @@ if ($action === 'addflashcard') {
     // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
 
+        var_dump($formdata);
+        
+        
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -91,11 +94,11 @@ if ($action === 'addflashcard') {
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
-            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
+            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question['text']);
         }
         // Save the text of the answer/s.
         foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
+            cardbox_save_new_cardcontent($cardid, 1, 2, $answer['text']);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -345,9 +348,7 @@ if ($action === 'practice') {
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
     // 3. Render the page.
-    
-//    print_r($data);
-    
+
     echo $renderer->cardbox_render_practice($practice);
     
     // old code which works for the self checking mode (only):
