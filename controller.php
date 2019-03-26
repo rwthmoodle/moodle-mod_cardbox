@@ -23,22 +23,11 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
-$question = optional_param('question', null, PARAM_ALPHANUM);
-$isedit = optional_param('isedit', 0, PARAM_INT);
-
-if (!empty($question)) { // XXX dirty solution. For some reason, the action parameter is lost when sending a form with multiple answers.
-    if ($isedit === 0) {
-        $action = 'addflashcard';
-    } else {
-        $action = 'editcard';
-    }
-}
-
 /* *********************************************** Add a new flashcard *********************************************** */
 
 if ($action === 'addflashcard') {
 
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+//    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     global $USER, $DB;
 
@@ -65,14 +54,12 @@ if ($action === 'addflashcard') {
 
     if ($mform->is_cancelled()) {
 
-        redirect($returnurl);
+        $action = 'practice';
+        //redirect($returnurl);
 
     // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
 
-        var_dump($formdata);
-        
-        
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -126,10 +113,13 @@ if ($action === 'addflashcard') {
 
         // Give user feedback and go back to practice.
         // 
-        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
+//        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
     
+        $action = 'practice';
+        
     } else {
 
+        echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
         echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
         $mform->display();
 
@@ -177,12 +167,13 @@ if ($action === 'editcard') {
         $entry->id = $cmid;
         $entry->course = $cm->course;
         $entry->cardid = $cardid;
-        $entry->question = cardbox_get_questiontext($cardid);
+        $entry->question['text'] = cardbox_get_questiontext($cardid);
+        $entry->question['format'] = '1';
         for ($i = 0; $i < $answercount; $i++) {
-            $entry->answer[$i] = $answers[$i];
+            $entry->answer[$i]['text'] = $answers[$i];
+            $entry->answer[$i]['format'] = '1';
         }
         $entry->cardimage = $draftitemid;
-        $entry->isedit = 1;
         $entry->action = 'editcard';
     }
     $mform->set_data($entry);
@@ -217,11 +208,11 @@ if ($action === 'editcard') {
         
         // Save the question text if there is any.
         if (!empty($formdata->question)) {
-            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question);
+            cardbox_save_new_cardcontent($cardid, 0, 2, $formdata->question['text']);
         }
         // Save the text of the answer/s.
         foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, 2, $answer);
+            cardbox_save_new_cardcontent($cardid, 1, 2, $answer['text']);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
