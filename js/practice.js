@@ -50,6 +50,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var userinput;
         var answeriscorrect = 0;
         var answeriscomplete = 0;
+        var answergiven = 1;
 //        var numberofmistakes = 0; // for one card. // XXX superfluous?
 //        var missinganswers = 0; // XXX superfluous?
 
@@ -206,6 +207,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             // Reset everything.
             answeriscorrect = 1;
             answeriscomplete = 0;
+            answergiven = 1;
 //            numberofmistakes = 0;
 //            missinganswers = 0;
             considercardcorrect = false;
@@ -220,7 +222,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             for (i = 1; i <= solutions.length; i++) {
                 (function (innerI){
                     var ui = document.getElementById('cardbox-userinput-' + innerI).value;
-                    if (ui !== '') {
+                    if (ui.trim() !== '') {
                         userinput.push(ui);
                     }
 
@@ -230,14 +232,18 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             // 2. For each solution: Check whether it is among the user's answers and collect the matches.
             solutions.forEach(check);
 
-            // 3. Collect matches and non-matches and transform them into a displayable form. Also determine whether there are incorrect answers.
+            // 3. Collect matches and non-matches and transform them into a displayable form.
+            //    Also determine whether there are incorrect answers.
             userinput.forEach(collect);
             __data['userinputitems'] = answers;
 
             // 4. Check whether there are as many answers as solutions.
-            if (solutions.length > matches.length) {
+            if (userinput.length < solutions.length) {
                 answeriscomplete = 0;
 //                missinganswers = solutions.length - matches.length;
+                if (userinput.length === 0) {
+                    answergiven = 0;
+                }
 
             } else {
                 answeriscomplete = 1;
@@ -341,14 +347,24 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     type: "success"
                 });
 
-            } else if (answeriscorrect === 1) {
+            } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
+
                 notification.addNotification({
                     message: M.util.get_string('feedback:incomplete', 'cardbox'),
 //                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox', missinganswers),
                     type: "warning"
                 });
 
-            } else {
+            } else if (answergiven === 0) {
+                
+                notification.addNotification({
+                    message: M.util.get_string('feedback:notknown', 'cardbox'),
+//                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox', missinganswers),
+                    type: "error"
+                });
+                
+            } 
+            else {
                 notification.addNotification({
                     message: M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox'),
                     type: "error"
