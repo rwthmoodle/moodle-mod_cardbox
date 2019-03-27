@@ -310,6 +310,14 @@ if ($action === 'practice') {
     $correction = optional_param('correction', 0, PARAM_INT); // Self check (default) or automatic check.
     $topic = optional_param('topic', null, PARAM_INT); // Self check or automatic check.
     $case = optional_param('case', 1, PARAM_INT);
+
+    if ($cardbox->autocorrection == 0) {
+        
+    } else {
+        
+    }
+    
+    
     
     // 1. Create a virtual cardbox for this practice session. (model)
     $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);

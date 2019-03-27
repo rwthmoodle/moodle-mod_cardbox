@@ -28,6 +28,9 @@ $string['pluginname'] = 'Card Box';
 $string['modulenameplural'] = 'Card Boxes';
 $string['cardboxname'] = 'Name of this Card Box';
 $string['pluginadministration'] = 'Card Box Administration';
+$string['setting_autocorrection'] = 'Activate auto correction';
+$string['setting_autocorrection_help'] = 'Auto correction does not work for latex content. If you plan to have formulae on some cards, you should deavtivate it.';
+$string['setting_autocorrection_label'] = 'Handle with care.';
 
 // Tab navigation
 $string['addflashcard'] = 'Add flashcard';

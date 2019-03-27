@@ -28,6 +28,9 @@ $string['pluginname'] = 'Karteikasten';
 $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
 $string['pluginadministration'] = 'Karteikasten Administration';
+$string['setting_autocorrection'] = 'Autokorrektur aktivieren';
+$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt kein Latex. Ihre Aktivierung wird nicht empfohlen, wenn Formeln abfragt werden.';
+$string['setting_autocorrection_label'] = 'Vorsicht bei Formeln!';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
@@ -91,7 +94,7 @@ $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 $string['override'] = 'Überstimmen';
 $string['override_iscorrect'] = 'Doch, ich hatte Recht!';
-$string['override_isincorrect'] = 'Nein, ich wusste die Lösung nicht.';
+$string['override_isincorrect'] = 'Als falsch werten';
 $string['proceed'] = 'Weiter';
 
 $string['solution'] = 'Lösung';

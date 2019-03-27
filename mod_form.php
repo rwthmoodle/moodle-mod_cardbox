@@ -61,11 +61,16 @@ class mod_cardbox_mod_form extends moodleform_mod {
 //        $mform->addElement('select', 'usecode', get_string('usecode', 'certificate'), $ynoptions);
 //        $mform->setDefault('usecode', 0);
 //        $mform->addHelpButton('usecode', 'usecode', 'certificate');
- 
+
+        $mform->addElement('advcheckbox', 'autocorrection', get_string('setting_autocorrection', 'cardbox'), get_string('setting_autocorrection_label', 'cardbox'), null, array(0, 1));
+        $mform->setType('autocorrection', PARAM_BOOL);
+        $mform->setDefault('autocorrection', 1);
+        $mform->addHelpButton('autocorrection', 'setting_autocorrection', 'cardbox');
+
         $this->standard_coursemodule_elements();
- 
+
         $this->add_action_buttons();
-        
+
         $mform->addElement('hidden', 'revision'); // Hard-coded as 1; should be changed if version becomes important.
         $mform->setType('revision', PARAM_INT);
         $mform->setDefault('revision', 1);

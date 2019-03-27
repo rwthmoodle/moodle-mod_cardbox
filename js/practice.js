@@ -531,9 +531,11 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             newdata['case2'] = false;
             newdata['case4'] = true;
             if (considercardcorrect) {
+//                newdata['overridestyle'] = ' btn-danger';
                 newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
             } else {
-                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');;
+//                newdata['overridestyle'] = ' btn-success';
+                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
             }
 
             (function (templates, data) {
@@ -547,7 +549,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             })(templates, newdata);
 
         }
-
         /**
          * Function tells the user that the session is finished.
          *
