@@ -17,7 +17,7 @@
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
- * @authors   Anna Heynkes
+ * @author   Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
