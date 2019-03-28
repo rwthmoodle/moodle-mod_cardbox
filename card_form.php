@@ -89,7 +89,7 @@ class mod_cardbox_card_form extends moodleform {
 //        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         $torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
         $mform->setType('answer', PARAM_RAW);
-        if (!empty($customdata)) {
+        if (!empty($customdata['answercount'])) {
             $initialrepeats = $customdata['answercount'];
         } else {
             $initialrepeats = 1;

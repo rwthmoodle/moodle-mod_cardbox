@@ -49,7 +49,8 @@ if ($action === 'addflashcard') {
     $component = 'mod_cardbox';
     $filearea = 'content';
 
-    $mform = new mod_cardbox_card_form();
+    $customdata = array('cardboxid' => $cardbox->id);
+    $mform = new mod_cardbox_card_form(null, $customdata);
     $mform->set_data($entry);
 
     if ($mform->is_cancelled()) {
