@@ -43,7 +43,6 @@ function cardbox_add_instance($data, $mform) {
 
     // We need to use context now, so we need to make sure all needed info is already in db.
     $DB->set_field('course_modules', 'instance', $data->id, array('id' => $cmid));
-//    pdfannotator_set_mainfile($data);
 
     $completiontimeexpected = !empty($data->completionexpected) ? $data->completionexpected : null;
     \core_completion\api::update_completion_date_event($cmid, 'cardbox', $data->id, $completiontimeexpected);
@@ -78,11 +77,64 @@ function cardbox_update_instance($cardbox) {
     
 }
 /**
- * The <modname>_delete_instance function is passed the id of your module which you can use to delete the records from any database tables associated with that id. For example, in the certificate module the id in the certificate table is passed, and then used to delete the certificate from the database, any issues of this certificate and any files associated with it on the filesystem.
- * @param type $cardbox
+ * The cardbox__delete_instance function is passed the id of your module which you can use
+ * to delete the records from any database tables associated with that id.
+ *
+ * @param int $cardboxinstanceid
  */
-function cardbox_delete_instance($cardbox) {
-    
+function cardbox_delete_instance($cardboxinstanceid) {
+
+    global $DB;
+   
+    if (!$cardbox = $DB->get_record('cardbox', array('id' => $cardboxinstanceid))) {
+        return false;
+    }
+    if (!$cm = get_coursemodule_from_instance('cardbox', $cardboxinstanceid)) {
+        return false;
+    }
+    if (!$course = $DB->get_record('course', array('id'=>$cm->course))) {
+        return false;
+    }
+
+//    $context = context_module::instance($cm->id);
+//
+//    // Is this really necessary for cardbox?
+//    $fs = get_file_storage();
+//    $fs->delete_area_files($context->id);    
+   
+    \core_completion\api::update_completion_date_event($cm->id, 'cardbox', $cardboxinstanceid, null);
+
+    // 1.1 Get all the cards of this cardbox.
+    $cards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxinstanceid]);
+
+    foreach ($cards as $card) {
+        // 1.2 Delete all their contents.
+        if (!$DB->delete_records('cardbox_cardcontents', ['card' => $card->id]) == 1) {
+            return false;
+        }
+        // 1.3 Delete their references in the students cardboxes.
+        if (!$DB->delete_records('cardbox_progress', ['card' => $card->id]) == 1) {
+            return false;
+        }
+    }
+
+    // 1.4 Delete the cards themselves.
+    if (!$DB->delete_records('cardbox_cards', ['cardbox' => $cardboxinstanceid]) == 1) {
+        return false;
+    }
+
+    // 2. Delete any topics affiliated with this cardbox.
+    if (!$DB->delete_records('cardbox_topics', ['cardboxid' => $cardboxinstanceid]) == 1) {
+        return false;
+    }
+
+    // 3. Delete the cardbox instance from the cardbox table of the plugin.
+    if (!$DB->delete_records('cardbox', ['id' => $cardboxinstanceid]) == 1) {
+        return false;
+    }
+
+    return true;
+
 }
 
 /**
