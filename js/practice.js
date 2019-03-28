@@ -34,8 +34,11 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
-        $('#cardboxPracticeSettings').modal('show');
-        console.log($('#cardboxPracticeSettings'));
+//        var optionsmodal = document.getElementById('cardboxPracticeSettings');
+//        optionsmodal.classList.add('show');
+//        $("#cardboxPracticeSettings").modal();
+//        $('#cardboxPracticeSettings').modal('show');
+//        console.log($('#cardboxPracticeSettings'));
 //        $(window).on('load',function(){
 //            console.log($('#cardboxPracticeSettings'));
 //            $('#cardboxPracticeSettings').modal('show');
@@ -187,7 +190,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         }
 
 
-        function applySettings() {
+        function applySettings() {// XXX maybe just add an action param to the form in the template.
 
             var topic = document.getElementById('cardbox-topic').value;
             var correctionmode;

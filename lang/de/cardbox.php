@@ -71,10 +71,10 @@ $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karte
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
-$string['choosecorrectionmode'] = 'Korrekturmodus';
-$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. In beiden Fällen können Sie entscheiden, dass eine Antwort als richtig gewertet werden soll.';
+$string['choosecorrectionmode'] = 'Übungsmodus';
+$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. In beiden Fällen können Sie entscheiden, ob eine Antwort als richtig oder falsch gewertet wird.';
 $string['selfcorrection'] = 'Selbstkonstrolle';
-$string['autocorrection'] = 'Automatisierte Kontrolle';
+$string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
 $string['notopicpreferred'] = 'keine Gewichtung';

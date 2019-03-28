@@ -81,17 +81,31 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         $data = $studyview->export_for_template($this);
         return $this->render_from_template('mod_cardbox/studyview', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
-
+    /**
+     * 
+     * @param \templatable $practice
+     * @return type
+     */
     public function cardbox_render_practice(\templatable $practice) {
         $data = $practice->export_for_template($this);
-        return $this->render_from_template('mod_cardbox/practice', $data); // 1. Param specifies the template, 2. param the data to pass into it.
+        return $this->render_from_template('mod_cardbox/practice', $data);
     }
-    
+    /**
+     * Function renders a modal dialogue which asks the user to choose a correction mode
+     * and/or topics to prefer in card selection.
+     *
+     * @param \templatable $practice
+     * @return type
+     */
     public function cardbox_render_practice_start(\templatable $practice) {
         $data = $practice->export_for_template($this);
-        return $this->render_from_template('mod_cardbox/options', $data); // 1. Param specifies the template, 2. param the data to pass into it.
+        return $this->render_from_template('mod_cardbox/practice_start', $data);
     }
-    
+    /**
+     * 
+     * @param \templatable $review
+     * @return type
+     */
     public function cardbox_render_review(\templatable $review) {
         $data = $review->export_for_template($this);
         return $this->render_from_template('mod_cardbox/review', $data); // 1. Param specifies the template, 2. param the data to pass into it.

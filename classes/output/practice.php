@@ -42,7 +42,7 @@ class cardbox_practice implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($case, $context, $cardbox = null, $cardid = null, $correction = 0) {
+    public function __construct($case, $context, $cardbox = null, $cardid = null) {
 
         switch ($case) {
             case 1:

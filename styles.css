@@ -5,6 +5,11 @@
 .path-mod-cardbox .cardbox-studyview {
 
 }
+
+/*.path-mod-cardbox #cardbox-see-options {
+    display: none;
+}*/
+
 .path-mod-cardbox .cardbox-cardcontainer {
     /*padding: 30px;*/
 }
