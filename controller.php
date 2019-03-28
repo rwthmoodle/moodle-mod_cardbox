@@ -285,7 +285,7 @@ if ($action === 'choosesettings') {
 
         // Give user feedback and go back to practice.
 //        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
-    
+
     } else {
 
         echo $OUTPUT->heading(get_string('titleforchoosesettings', 'cardbox'));
@@ -316,19 +316,17 @@ if ($action === 'practice') {
     } else {
         
     }
-    
-    
-    
+
     // 1. Create a virtual cardbox for this practice session. (model)
     $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
     $selection = $cardbox->cardbox_get_card_selection();
-    
+
     if (empty($selection)) {
         $info = get_string('info:nocardsavailable', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
     }
-    
+
     $cardboxstatus = $cardbox->cardbox_get_status();
 
     // 2. Give javascript access to the language string repository and add it to the page.
@@ -338,16 +336,16 @@ if ($action === 'practice') {
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
 
-    
     $renderer = $PAGE->get_renderer('mod_cardbox');
     $practice = new cardbox_practice($case, $context, $cardbox, null, $correction); // (view controller)
     $data = $practice->export_for_template($renderer);
-    
+
     $params = array($cmid, $selection, $cardboxstatus, $correction, $case, $data); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('startPractice', $params, true);
 
     // 3. Render the page.
 
+//    echo $renderer->cardbox_render_practice_start($practice);
     echo $renderer->cardbox_render_practice($practice);
     
     // old code which works for the self checking mode (only):

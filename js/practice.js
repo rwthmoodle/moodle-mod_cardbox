@@ -34,10 +34,17 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
+        $('#cardboxPracticeSettings').modal('show');
+        console.log($('#cardboxPracticeSettings'));
+//        $(window).on('load',function(){
+//            console.log($('#cardboxPracticeSettings'));
+//            $('#cardboxPracticeSettings').modal('show');
+//        });
+
         console.log('__selection: ', __selection);
 
         /*********** 1. Variables and Calls ***********/
-        
+
         var cardcount = __selection.length; // to be used for statistics/progress bar.
 
         // Information about the current flashcard.
@@ -45,7 +52,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var cardId = __selection[0];
         var isrepetition = 0;
         var considercardcorrect = false;
-        
+
         // Information about the user's answer(s) for the currect flashcard.
         var userinput;
         var answeriscorrect = 0;

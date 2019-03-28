@@ -28,59 +28,6 @@ require_once('../../config.php');
 class mod_cardbox_renderer extends plugin_renderer_base {
 
     /**
-     *
-     * @param type $index
-     * @return type
-     */
-//    public function render_index($index) {
-//        return $this->render_from_template('pdfannotator/index', $index->export_for_template($this));
-//    }
-    /**
-     *
-     * @param \templatable $statistic
-     * @return type
-     */
-//    public function render_statistic(\templatable $statistic) {
-//        $data = $statistic->export_for_template($this);
-//        return $this->render_from_template('mod_pdfannotator/statistic', $data);
-//    }
-    /**
-     * Render a table containing information about a comment the user wants to report
-     *
-     * @param pdfannotator_comment_info $info a renderable
-     * @return string
-     */
-//    public function render_pdfannotator_comment_info(pdfannotator_comment_info $info) {
-//        $o = '';
-//        $o .= $this->output->container_start('appointmentinfotable');
-//        $o .= $this->output->box_start('boxaligncenter appointmentinfotable');
-//
-//        $t = new html_table();
-//
-//        $row = new html_table_row();
-//        $cell1 = new html_table_cell(get_string('slotdatetimelabel', 'pdfannotator'));
-//        $cell2 = $info->datetime;
-//        $row->cells = array($cell1, $cell2);
-//        $t->data[] = $row;
-//
-//        $row = new html_table_row();
-//        $cell1 = new html_table_cell(get_string('author', 'pdfannotator'));
-//        $cell2 = new html_table_cell($info->author);
-//        $row->cells = array($cell1, $cell2);
-//        $t->data[] = $row;
-//
-//        $row = new html_table_row();
-//        $cell1 = new html_table_cell(get_string('comment', 'pdfannotator'));
-//        $cell2 = new html_table_cell($info->content);
-//        $row->cells = array($cell1, $cell2);
-//        $t->data[] = $row;
-//
-//        $o .= html_writer::table($t);
-//        $o .= $this->output->box_end();
-//        $o .= $this->output->container_end();
-//        return $o;
-//    }
-    /**
      * Construct a tab header.
      *
      * @param moodle_url $baseurl
@@ -138,6 +85,11 @@ class mod_cardbox_renderer extends plugin_renderer_base {
     public function cardbox_render_practice(\templatable $practice) {
         $data = $practice->export_for_template($this);
         return $this->render_from_template('mod_cardbox/practice', $data); // 1. Param specifies the template, 2. param the data to pass into it.
+    }
+    
+    public function cardbox_render_practice_start(\templatable $practice) {
+        $data = $practice->export_for_template($this);
+        return $this->render_from_template('mod_cardbox/options', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
     
     public function cardbox_render_review(\templatable $review) {
