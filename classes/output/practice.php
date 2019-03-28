@@ -67,7 +67,7 @@ class cardbox_practice implements \renderable, \templatable {
         
         $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
         
-        $this->cardbox_prepare_topics_to_study();
+//        $this->cardbox_prepare_topics_to_study($cardbox->id);
         
 //        $this->cardbox_prepare_user_form($correction);
 
@@ -119,20 +119,21 @@ class cardbox_practice implements \renderable, \templatable {
      * selection of cards for a practice session.
      *
      * @global type $CFG
+     * @param type $cardboxid
      */
-    public function cardbox_prepare_topics_to_study() {
-        
-        global $CFG;
-        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
-
-        $this->topics = array();
-
-        $topiclist = cardbox_get_topics();
-
-        foreach ($topiclist as $key => $value) {
-            $this->topics[] = array('value' => $key, 'label' => $value);
-        }
-    }
+//    public function cardbox_prepare_topics_to_study($cardboxid) {
+//        
+//        global $CFG;
+//        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
+//
+//        $this->topics = array();
+//
+//        $topiclist = cardbox_get_topics($cardboxid);
+//
+//        foreach ($topiclist as $key => $value) {
+//            $this->topics[] = array('value' => $key, 'label' => $value);
+//        }
+//    }
     /**
      * Function determines which constellation of buttons and input fields
      * (which partial template) to include. It depends on the user's choice
@@ -162,10 +163,10 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case2'] = $this->case2;
         $data['case3'] = $this->case3;
         $data['case4'] = $this->case4;
-        $data['topics'] = $this->topics;
+//        $data['topics'] = $this->topics;
         $data['inputfields'] = $this->inputfields;
-        $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
-        $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
+//        $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
+//        $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
 //        $data['selfcheck'] = $this->selfcheck;
 //        $data['autocheck'] = $this->autocheck;
 

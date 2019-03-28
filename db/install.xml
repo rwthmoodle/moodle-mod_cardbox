@@ -19,6 +19,16 @@
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for cardbox"/>
       </KEYS>
     </TABLE>
+    <TABLE NAME="cardbox_topics" COMMENT="Default comment for the table, please edit me">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="topicname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="cardboxid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+    </TABLE>
     <TABLE NAME="cardbox_cards" COMMENT="Save meta information about each flashcard">
         <FIELDS>
             <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>

@@ -32,9 +32,9 @@ class cardbox_start implements \renderable, \templatable {
     private $topics;
     private $autocorrectionoption = false;
     
-    public function __construct($autocorrection) {
+    public function __construct($autocorrection, $cardboxid) {
         
-        $this->cardbox_prepare_topics_to_study();
+        $this->cardbox_prepare_topics_to_study($cardboxid);
         
         if ($autocorrection == 1) {
             $this->autocorrectionoption = true;
@@ -49,14 +49,14 @@ class cardbox_start implements \renderable, \templatable {
      *
      * @global type $CFG
      */
-    public function cardbox_prepare_topics_to_study() {
+    public function cardbox_prepare_topics_to_study($cardboxid) {
         
         global $CFG;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
         $this->topics = array();
 
-        $topiclist = cardbox_get_topics();
+        $topiclist = cardbox_get_topics($cardboxid);
 
         foreach ($topiclist as $key => $value) {
             $this->topics[] = array('value' => $key, 'label' => $value);

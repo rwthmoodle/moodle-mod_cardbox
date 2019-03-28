@@ -25,20 +25,8 @@ function startOptions(Y, __cmid) {
     
     require(['jquery'], function ($) {
         
-        
-        
-//        $('#cardbox-see-options').click();
-//        
-//        $("#cardbox-see-options").trigger("click");
-        
         var optionsbutton = document.getElementById('cardbox-see-options');
-        
-//        optionsbutton.addEventListener('click', function(e) {
-//            
-//        });
-        console.log('optionsbutton: ', optionsbutton);
-        optionsbutton.click();
-        
+        optionsbutton.click(); // XXX not working.
         
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
             e.preventDefault();
@@ -46,8 +34,6 @@ function startOptions(Y, __cmid) {
         });
         
         function applySettings() {// XXX maybe just add an action param to the form in the template.
-            
-            console.log('applySettings() wurde aufgerufen');
 
             var topic = document.getElementById('cardbox-topic').value;
             var correctionmode;

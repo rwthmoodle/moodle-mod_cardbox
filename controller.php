@@ -67,7 +67,7 @@ if ($action === 'addflashcard') {
                 break;
             case 0: // Card belongs to a new topic that is to be created.
                 if (!empty($formdata->newtopic)) {
-                    $topicid = cardbox_save_new_topic($formdata->newtopic);
+                    $topicid = cardbox_save_new_topic($formdata->newtopic, $cardbox->id);
                 } else {
                     $topicid = null;
                 }
@@ -146,7 +146,7 @@ if ($action === 'editcard') {
     $answers = cardbox_get_answers($cardid);
     $answercount = count($answers);
 
-    $customdata = array('topic' => $topic, 'answercount' => $answercount);
+    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id);
     $mform = new mod_cardbox_card_form($actionurl, $customdata);
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
@@ -307,11 +307,6 @@ if ($action === 'practice') {
     $startnow = optional_param('start', false, PARAM_BOOL);
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
-    
-//    if ($cardbox->autocorrection == 0) {
-//        $correction = 1;
-//        $startnow = true;
-//    }
 
     if ($startnow) {
         
@@ -352,16 +347,16 @@ if ($action === 'practice') {
         echo $renderer->cardbox_render_practice($practice);
         
     } else { // Render a modal dialogue that asks the user to select their practice preferences.
-        
+
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/start.php');
-        
+
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js"));
         $PAGE->requires->js_init_call('startOptions', array($cmid), true);
-        
-        $start = new cardbox_start($cardbox->autocorrection);
+
+        $start = new cardbox_start($cardbox->autocorrection, $cardbox->id);
 
         echo $renderer->cardbox_render_practice_start($start);
-        
+
     }
 
 }

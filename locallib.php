@@ -30,11 +30,13 @@
  * @param string $topicname
  * @return int id of the new topic
  */
-function cardbox_save_new_topic($topicname) {
+function cardbox_save_new_topic($topicname, $cardboxid) {
 
     global $DB;
     $topic = new stdClass();
     $topic->topicname = $topicname;
+    $topic->cardboxid = $cardboxid;
+
     return $DB->insert_record('cardbox_topics', $topic, true);
 
 }
@@ -43,12 +45,14 @@ function cardbox_save_new_topic($topicname) {
  * in the card_form.
  *
  * @global obj $DB
+ * @param type $cardboxid
+ * @param type $extra
  * @return type
  */
-function cardbox_get_topics($extra = false) {
+function cardbox_get_topics($cardboxid, $extra = false) {
     
     global $DB;
-    $topics = $DB->get_records('cardbox_topics', array());
+    $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
     $options = array(-1 => get_string('notopic', 'cardbox'));
     if ($extra) {
         $options = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));

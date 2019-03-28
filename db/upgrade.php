@@ -185,4 +185,20 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2019032700, 'cardbox');
     }
 
+     if ($oldversion < 2019032800) {
+
+        // Define field cardboxid to be added to changeme.
+        $table = new xmldb_table('cardbox_topics');
+        $field = new xmldb_field('cardboxid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null, 'topicname');
+
+        // Conditionally launch add field cardboxid.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019032800, 'cardbox');
+    }
+
+    
 }
