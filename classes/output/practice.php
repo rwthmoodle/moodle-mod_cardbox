@@ -111,10 +111,7 @@ class cardbox_practice implements \renderable, \templatable {
                 $this->inputfields[] = array('number' => $solutioncount);
             }
         }
-//        if (!empty($this->frontimages) && empty($this->backimages)) {
-//            $this->backimages[] = $this->frontimages[0];
-//        }
- 
+
     }
     /**
      * Function includes the list of topics in the practice options modal.

@@ -308,14 +308,19 @@ if ($action === 'practice') {
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
     
+//    if ($cardbox->autocorrection == 0) {
+//        $correction = 1;
+//        $startnow = true;
+//    }
+
     if ($startnow) {
         
         require_once('model/cardbox.class.php');
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
         
         // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-        $cardbox = new cardbox_cardboxmodel($cardbox->id, $topic);
-        $selection = $cardbox->cardbox_get_card_selection();
+        $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+        $selection = $cardboxmodel->cardbox_get_card_selection();
 
         if (empty($selection)) {
             $info = get_string('info:nocardsavailable', 'cardbox');
@@ -323,7 +328,7 @@ if ($action === 'practice') {
             return;
         }
 
-        $cardboxstatus = $cardbox->cardbox_get_status();
+        $cardboxstatus = $cardboxmodel->cardbox_get_status();
         
         // 2. Create a view controller.
         if ($correction % 2 == 0) {
@@ -331,7 +336,7 @@ if ($action === 'practice') {
         } else {
             $case = 1;
         }
-        $practice = new cardbox_practice($case, $context, $cardbox, null);
+        $practice = new cardbox_practice($case, $context, $cardboxmodel, null);
         $data = $practice->export_for_template($renderer);
         
         // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
@@ -353,7 +358,7 @@ if ($action === 'practice') {
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js"));
         $PAGE->requires->js_init_call('startOptions', array($cmid), true);
         
-        $start = new cardbox_start();
+        $start = new cardbox_start($cardbox->autocorrection);
 
         echo $renderer->cardbox_render_practice_start($start);
         

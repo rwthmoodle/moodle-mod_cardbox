@@ -30,10 +30,16 @@ defined('MOODLE_INTERNAL') || die();
 class cardbox_start implements \renderable, \templatable {
 
     private $topics;
+    private $autocorrectionoption = false;
     
-    public function __construct() {
+    public function __construct($autocorrection) {
         
         $this->cardbox_prepare_topics_to_study();
+        
+        if ($autocorrection == 1) {
+            $this->autocorrectionoption = true;
+        }
+        
     }
     
     /**
@@ -69,6 +75,8 @@ class cardbox_start implements \renderable, \templatable {
         
         global $OUTPUT;
         
+        $data['autoenabled'] = $this->autocorrectionoption;
+        $data['autodisabled'] = !$this->autocorrectionoption;
         $data['topics'] = $this->topics;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
