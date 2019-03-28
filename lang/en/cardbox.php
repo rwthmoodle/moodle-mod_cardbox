@@ -45,6 +45,7 @@ $string['titleforcardedit'] = 'Edit flashcard';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';
+$string['reviewtopic'] = 'Topic: ';
 $string['notopic'] = 'not assigned';
 $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';

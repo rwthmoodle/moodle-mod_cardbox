@@ -27,8 +27,6 @@ defined('MOODLE_INTERNAL') || die();
 
 if ($action === 'addflashcard') {
 
-//    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-
     global $USER, $DB;
 
     require_once('card_form.php');

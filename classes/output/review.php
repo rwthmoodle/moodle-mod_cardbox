@@ -80,10 +80,18 @@ class cardbox_review implements \renderable, \templatable {
         }
 
     }
-
+    /**
+     * 
+     * @param \renderer_base $output
+     * @return boolean
+     */
     public function export_for_template(\renderer_base $output) {
         $data['cardid'] = $this->cardid;
-        $data['topic'] = $this->topic;
+        if (!empty($this->topic)) {
+            $data['topic'] = $this->topic;
+        } else {
+            $data['topic'] = get_string('notopic', 'cardbox');
+        }
         $data['frontimages'] = $this->frontimages;
         $data['fronttexts'] = $this->fronttexts;
         $data['backimages'] = $this->backimages;

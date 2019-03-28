@@ -45,6 +45,7 @@ $string['titleforcardedit'] = 'Karte bearbeiten';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';
+$string['reviewtopic'] = 'Thema: ';
 $string['notopic'] = 'nicht zugeordnet';
 $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
