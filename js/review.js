@@ -54,9 +54,9 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) { // Wrapper function 
             next = __cardlist[1];
         }
 
-        console.log('position: ', position);
-        console.log('cardinreview: ', cardinreview);
-        console.log('next: ', next);
+//        console.log('position: ', position);
+//        console.log('cardinreview: ', cardinreview);
+//        console.log('next: ', next);
 
         // var cardId = document.getElementById('cardbox-card-in-review').dataset.cardid; // XXX über die Liste abfragen?
 

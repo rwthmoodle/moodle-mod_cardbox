@@ -172,11 +172,12 @@ function cardbox_edit_card($cardid, $topicid) {
 //}
 
 /**
- * This function checks whether there are new flashcards available and if so,
- * adds up to three of the to the users virtual cardbox.
- *
+ * This function checks whether there are new cards available in the DB
+ * and if so, adds them to the users virtual cardbox.
+ * 
  * @global obj $DB
  * @global obj $USER
+ * @return type
  */
 function cardbox_add_new_cards() {
     
@@ -196,7 +197,6 @@ function cardbox_add_new_cards() {
     $sql2 = "SELECT c.id"
             . " FROM {cardbox_cards} c"
             . " WHERE c.id > ? AND approvedby IS NOT NULL";
-            //. " LIMIT 3"; // Give up limit?
     $newcards = $DB->get_fieldset_sql($sql2, array($lastnew));
     
     if (empty($newcards)) {
@@ -207,7 +207,8 @@ function cardbox_add_new_cards() {
     foreach ($newcards as $cardid) {
         $dataobjects[] = array('userid' => $USER->id, 'card' => $cardid, 'cardposition' => 0, 'lastpracticed' => null, 'repetitions' => 0);
     }
-    $DB->insert_records('cardbox_progress', $dataobjects);
+    $success = $DB->insert_records('cardbox_progress', $dataobjects);
+    return $success;
 
 }
 /**

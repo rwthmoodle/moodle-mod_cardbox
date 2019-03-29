@@ -33,6 +33,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxfour;
     private $countboxfive;
     private $selection;
+    private static $prioritytopic;
 
     public function __construct($cardboxid, $topic=null) {
 
@@ -124,6 +125,12 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_select_cards_for_practice($topic = null) {
 
+        global $DB;
+
+        if (!empty($topic)) {
+            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
+        }
+
         $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 4, 4 => 3, 5 => 2);
         $selection = array();
         $newvocab = array();
@@ -140,7 +147,11 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
             // 1. Prioritize the cards within the box.
             if (!empty($box)) {
-                usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
+                if (empty($topic)) {
+                    usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
+                } else {
+                    usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards_priority_topic'));
+                }
             }
 
             // 2. Select cards from the box.
@@ -170,12 +181,14 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
 
         $this->selection = $selection;
+        
+        self::$prioritytopic = null;
     }
 
     /**
-     * This function prioritises cards within a box according to
-     * the time they were last practised and the number of repetitions
-     * that the user needed so far for this card.
+     * This function prioritises cards within a box according to the time they
+     * were last practised and the number of repetitions that the user needed
+     * so far for this card.
      *
      * @param type $a
      * @param type $b
@@ -202,6 +215,31 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         // Cards that were last practiced longer ago get first priority.
         return ($a->lastpracticed < $b->lastpracticed) ? -1 : 1;
         
+    }
+    
+    /**
+     * This function sorts/prioritises cards within a box, favouring those that
+     * belong to the specified topic. If neither card or both cards belong to this
+     * topic, the usual selection criteria are applied, as specified by cardbox_compare_cards().
+     * 
+     * @param obj $a
+     * @param obj $b
+     * @return int -1 means, $a comes first, 1 means, $b comes first
+     */
+    static function cardbox_compare_cards_priority_topic($a, $b) {
+        
+        if ($a->topicname == $b->topicname) {
+            return self::cardbox_compare_cards($a, $b);
+        }
+        
+        if ( ($a->topicname != self::$prioritytopic) && ($b->topicname != self::$prioritytopic) ) {
+            return self::cardbox_compare_cards($a, $b);
+        }
+        
+        if ($a->topicname == self::$prioritytopic) {
+            return -1;
+        }
+        return 1;
     }
     
     
