@@ -224,9 +224,7 @@ if ($action === 'editcard') {
         if ($draftitemid != null) {
             $fs = get_file_storage();
             $usercontext = context_user::instance($USER->id);
-            if (!$files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
-                echo 'Fehlerbehandlung!';
-            } else {
+            if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
                     $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
