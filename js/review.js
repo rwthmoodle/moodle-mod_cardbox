@@ -24,15 +24,42 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function startReview(Y, __cmid, __cardlist) { // Wrapper function that is called by controller.php
+/**
+ * 
+ * @param {type} Y
+ * @param int __cmid
+ * @param int[] __cardlist
+ * @param int __cardid
+ * @returns {undefined}
+ */
+function startReview(Y, __cmid, __cardlist, __cardid = 0) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
-        
-        var position = 0;
-        var cardinreview = __cardlist[0];
-        var next = __cardlist[1];
-//        var cardId = document.getElementById('cardbox-card-in-review').dataset.cardid; // XXX über die Liste abfragen?
-        
+
+        console.log('__cardlist: ', __cardlist);
+
+        var position;
+        var cardinreview;
+        var next;
+
+        // Start with a particular card.
+        if (__cardid != 0) {
+            position = __cardlist.indexOf(''+__cardid);
+            cardinreview = __cardid;
+            next = __cardlist[position+1];
+
+        } else {
+            position = 0;
+            cardinreview = __cardlist[0];
+            next = __cardlist[1];
+        }
+
+        console.log('position: ', position);
+        console.log('cardinreview: ', cardinreview);
+        console.log('next: ', next);
+
+        // var cardId = document.getElementById('cardbox-card-in-review').dataset.cardid; // XXX über die Liste abfragen?
+
         registerEventListeners();
 
         function registerEventListeners() {

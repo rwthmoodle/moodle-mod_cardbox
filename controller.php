@@ -387,12 +387,19 @@ if ($action === 'review') {
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
 
     // 2.b) Call script wrapper function.
-    $params = array($cmid, $list);
+    if (empty($cardid)) {
+        $cardid = 0;
+    }
+    $params = array($cmid, $list, $cardid);
     $PAGE->requires->js_init_call('startReview', $params, true);
 
     // 3. Create the view controller.
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $review = new cardbox_review($context, $collection);
+    if (empty($cardid)) {
+        $review = new cardbox_review($context, $collection);
+    } else {
+        $review = new cardbox_review($context, null, $cardid);
+    }
 
     // 4. Render the view.
     echo $renderer->cardbox_render_review($review);
