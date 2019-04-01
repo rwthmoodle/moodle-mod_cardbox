@@ -21,6 +21,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+function cardbox_supports($feature) {
+    switch($feature) {
+        case FEATURE_MOD_INTRO:               return true;
+//        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
+        case FEATURE_BACKUP_MOODLE2:          return true;
+        case FEATURE_SHOW_DESCRIPTION:        return true;
+
+        default: return null;
+    }
+}
+
 /**
  * The cardbox_add_instance function is passed the variables from the mod_form.php file
  * as an object when you first create an activity and click submit. This is where you can

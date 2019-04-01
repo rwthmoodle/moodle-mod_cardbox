@@ -63,7 +63,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var toRepeat = [];
 
         addQuestionEvents();
-        
+
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
             e.preventDefault();
             applySettings();
