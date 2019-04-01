@@ -358,6 +358,38 @@ if ($action === 'practice') {
 
 }
 
+/* **************************************************** Practice cards **************************************************** */
+
+if ($action === 'statistics') {
+
+    require_once('model/cardbox.class.php');
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/statistics.php');
+
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $OUTPUT->heading("$cardbox->name"); // XXX
+
+    // 1. Create a virtual cardbox for this user, i.e. create the model.
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id);
+    $boxcount = $cardboxmodel->cardbox_get_status();
+    
+    // 2. Create a view controller.
+    $statistics = new cardbox_statistics();
+
+    // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js"));
+    $params = array($cmid, $boxcount); // true means: the user checks their own results.
+    $PAGE->requires->js_init_call('displayCharts', $params, true);
+        
+    // 4. Render the page.
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    echo $renderer->cardbox_render_statistics($statistics);
+
+}
+
 /* **************************************************** Approve/edit cards **************************************************** */
 
 if ($action === 'review') {

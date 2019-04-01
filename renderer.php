@@ -63,7 +63,8 @@ class mod_cardbox_renderer extends plugin_renderer_base {
 
         $level1 = array(
             $this->cardbox_create_tab($baseurl, 'addflashcard', 'addflashcard'),
-            $this->cardbox_create_tab($baseurl, 'practice', 'practice')
+            $this->cardbox_create_tab($baseurl, 'practice', 'practice'),
+            $this->cardbox_create_tab($baseurl, 'statistics', 'statistics')
         );
 
         if (has_capability('mod/cardbox:approvecard', $context)) {
@@ -100,6 +101,15 @@ class mod_cardbox_renderer extends plugin_renderer_base {
     public function cardbox_render_practice_start(\templatable $practice) {
         $data = $practice->export_for_template($this);
         return $this->render_from_template('mod_cardbox/practice_start', $data);
+    }
+    /**
+     * 
+     * @param \templatable $review
+     * @return type
+     */
+    public function cardbox_render_statistics(\templatable $statistics) {
+        $data = $statistics->export_for_template($this);
+        return $this->render_from_template('mod_cardbox/statistics', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
     /**
      * 

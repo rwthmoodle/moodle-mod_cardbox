@@ -35,6 +35,7 @@ $string['setting_autocorrection_label'] = 'Handle with care.';
 // Tab navigation
 $string['addflashcard'] = 'Add flashcard';
 $string['practice'] = 'Practice';
+$string['statistics'] = 'Progress';
 $string['review'] = 'Review';
 
 // Subpage titles
@@ -114,6 +115,9 @@ $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
 $string['flashcards'] = 'flashcards';
 $string['box'] = 'box';
+
+$string['titleperformancechart'] = 'Progress over time';
+$string['performance'] = '% correct';
 
 // Review.
 $string['approve'] = 'Approve';

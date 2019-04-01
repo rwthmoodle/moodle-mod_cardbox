@@ -35,6 +35,7 @@ $string['setting_autocorrection_label'] = 'Vorsicht bei Formeln!';
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
 $string['practice'] = 'Üben';
+$string['statistics'] = 'Fortschritt';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
@@ -118,6 +119,9 @@ $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['flashcards'] = 'Karten';
 $string['box'] = 'Kästchen';
+
+$string['titleperformancechart'] = 'Fortschritt';
+$string['performance'] = '% richtig';
 
 // Review.
 $string['approve'] = 'Freigeben';

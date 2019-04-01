@@ -105,10 +105,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
         
         $this->cardcount = count($flashcards);
-        
-        echo "<br>Anzahl: ";
-        print_r($this->cardcount);
-        
+
         foreach ($flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;
         }
@@ -119,19 +116,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->countboxthree = count($this->boxes[3]);
         $this->countboxfour = count($this->boxes[4]);
         $this->countboxfive = count($this->boxes[5]);
-        
-//        echo "<br><br>BOX 0:<br>";
-//        var_dump($this->boxes[0]);
-//        echo "<br><br>BOX 1:<br>";
-//        var_dump($this->boxes[1]);
-//        echo "<br><br>BOX 2:<br>";
-//        var_dump($this->boxes[2]);
-//        echo "<br><br>BOX 3:<br>";
-//        var_dump($this->boxes[3]);
-//        echo "<br><br>BOX 4:<br>";
-//        var_dump($this->boxes[4]);
-//        echo "<br><br>BOX 5:<br>";
-//        var_dump($this->boxes[5]);
 
     }
     /**
@@ -283,11 +267,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     public function cardbox_get_first_card() {
         return $this->selection[0];
     }
-    
-//    public function cardbox_get_card($number) {
-//        return $this->selection[$number];
-//    }
-    
+
     /**
      * 
      * @global obj $DB
