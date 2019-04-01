@@ -127,7 +127,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         global $DB;
 
-        if (!empty($topic)) {
+        if (!empty($topic) && $topic != -1) {
             self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
         }
 
@@ -147,7 +147,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
             // 1. Prioritize the cards within the box.
             if (!empty($box)) {
-                if (empty($topic)) {
+                if (empty($topic) || $topic == -1) {
                     usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
                 } else {
                     usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards_priority_topic'));

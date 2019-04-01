@@ -56,11 +56,6 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $attributes = $element->getAttributes();
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
-//        $ynoptions = array(0 => get_string('no'),
-//                           1 => get_string('yes'));
-//        $mform->addElement('select', 'usecode', get_string('usecode', 'certificate'), $ynoptions);
-//        $mform->setDefault('usecode', 0);
-//        $mform->addHelpButton('usecode', 'usecode', 'certificate');
 
         $mform->addElement('advcheckbox', 'autocorrection', get_string('setting_autocorrection', 'cardbox'), get_string('setting_autocorrection_label', 'cardbox'), null, array(0, 1));
         $mform->setType('autocorrection', PARAM_BOOL);
