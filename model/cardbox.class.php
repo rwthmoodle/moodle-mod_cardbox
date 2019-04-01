@@ -106,6 +106,9 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         
         $this->cardcount = count($flashcards);
         
+        echo "<br>Anzahl: ";
+        print_r($this->cardcount);
+        
         foreach ($flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;
         }
@@ -116,6 +119,19 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->countboxthree = count($this->boxes[3]);
         $this->countboxfour = count($this->boxes[4]);
         $this->countboxfive = count($this->boxes[5]);
+        
+//        echo "<br><br>BOX 0:<br>";
+//        var_dump($this->boxes[0]);
+//        echo "<br><br>BOX 1:<br>";
+//        var_dump($this->boxes[1]);
+//        echo "<br><br>BOX 2:<br>";
+//        var_dump($this->boxes[2]);
+//        echo "<br><br>BOX 3:<br>";
+//        var_dump($this->boxes[3]);
+//        echo "<br><br>BOX 4:<br>";
+//        var_dump($this->boxes[4]);
+//        echo "<br><br>BOX 5:<br>";
+//        var_dump($this->boxes[5]);
 
     }
     /**
@@ -133,19 +149,17 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 4, 4 => 3, 5 => 2);
         $selection = array();
-        $newvocab = array();
-        
-        // 0. If there are not enough cards in the last box, select the missing amount from the first box if possible.
-        $initialdiff = $cardsperbox[5] - count($this->boxes[5]);
-        $addextra = ($initialdiff <= 0) ? 0 : $initialdiff;
-        
-        for ($i = 0; $i < 6; $i++) {
+
+        $addextra = 0;
+
+        // 1. Account for the primacy effect by beginning with difficult cards (which are stored in box 1).
+        for ($i = 1; $i <= 5; $i++) {
 
             $select = $cardsperbox[$i] + $addextra;
 
             $box = $this->boxes[$i];
 
-            // 1. Prioritize the cards within the box.
+            // 1.1 Prioritize the cards within the box.
             if (!empty($box)) {
                 if (empty($topic) || $topic == -1) {
                     usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
@@ -154,30 +168,33 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 }
             }
 
-            // 2. Select cards from the box.
+            // 1.2 Select cards from the box.
             for ($j = 0; $j < $select; $j++) {
                 if (empty($box[$j])) {
                     break;
                 }
-                if ($i != 0) {
-                    $selection[] = $box[$j];
-                } else {
-                    $newvocab[] = $box[$j];
-                }
+                $selection[] = $box[$j];
             }
 
-            // 3. If there are not enough cards in the box, select the missing amount from the next box if possible.
+            // 1.3 If there are not enough cards in the box, select the missing amount from the next box if possible.
+            //     (Or from box 0 if this is box 5.)
             $diff = $select - count($box);
-            if ($diff > 0) {
-                $addextra = $diff;
-            } else {
-                $addextra = 0;
-            }
+            $addextra = ($diff > 0) ? $diff : 0;
 
         }
-        // 4. Account for the (primacy and) recency effect by (beginning with difficult terms and) ending with new ones.
-        foreach ($newvocab as $voc) {
-            $selection[] = $voc;
+        // 2. Account for the recency effect by ending with new cards (which are stored in box 0).
+        
+        // 2.1 New cards can only be prioritised according to topic, because none of them has been practiced before.
+        if ( (!empty($this->boxes[0])) && (!empty($topic)) && ($topic != -1) ) {
+            usort($this->boxes[0], array('cardbox_cardboxmodel', 'cardbox_compare_cards_topic'));
+        }
+        // 2.2 Select new cards from box 0.
+        $select = $cardsperbox[0] + $addextra;
+        for ($j = 0; $j < $select; $j++) {
+            if (empty($this->boxes[0][$j])) {
+                break;
+            }
+            $selection[] = $this->boxes[0][$j];
         }
 
         $this->selection = $selection;
@@ -236,6 +253,26 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             return self::cardbox_compare_cards($a, $b);
         }
         
+        if ($a->topicname == self::$prioritytopic) {
+            return -1;
+        }
+        return 1;
+    }
+    /**
+     * Function compares cards, considering only whether or not they are affiliated
+     * with the priority topic.
+     *
+     * @param type $a
+     * @param type $b
+     * @return int
+     */
+    static function cardbox_compare_cards_topic($a, $b) {
+        if ($a->topicname == $b->topicname) {
+            return 0;
+        }
+        if ( ($a->topicname != self::$prioritytopic) && ($b->topicname != self::$prioritytopic) ) {
+            return 0;
+        }
         if ($a->topicname == self::$prioritytopic) {
             return -1;
         }
