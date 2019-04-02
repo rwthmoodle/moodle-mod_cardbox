@@ -128,3 +128,6 @@ $string['approve'] = 'Freigeben';
 $string['reject'] = 'Ablehnen';
 $string['edit'] = 'Bearbeiten';
 $string['skip'] = 'Überspringen';
+
+$string['strftimedate'] = '%d. %B %Y';
+$string['strftimedatetime'] = '%d. %b %Y, %H:%M';

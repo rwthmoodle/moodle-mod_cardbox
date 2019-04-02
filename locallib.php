@@ -297,3 +297,27 @@ function cardbox_get_image_itemid($cardid) {
     return $imageitemid;
 
 }
+/**
+ * Function converts the timestamp into a human readable format (D. M Y),
+ * taking the user's timezone into account.
+ *
+ * @param type $timestamp
+ * @return type
+ */
+function cardbox_get_user_date($timestamp) {
+    return userdate($timestamp, get_string('strftimedate', 'cardbox'), $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+}
+
+//function cardbox_get_user_datetime($timestamp) {
+//    return userdate($timestamp, $format = '', $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+//}
+/**
+ *
+ * @param type $timestamp
+ * @return string
+ */
+//function cardbox_get_user_datetime_shortformat($timestamp) {
+//    $shortformat = get_string('strftimedatetime', 'cardbox'); // Format strings in moodle\lang\en\langconfig.php.
+//    $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+//    return $userdatetime;
+//}

@@ -21,7 +21,9 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function displayCharts(Y, __cmid, __boxcount) { // Wrapper function that is called by controller.php
+function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper function that is called by controller.php
+
+    console.log('__performance: ', __performance);
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
     
@@ -91,60 +93,11 @@ function displayCharts(Y, __cmid, __boxcount) { // Wrapper function that is call
        var userdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
-           labels: [
-               '1.1.2019',
-               '1.2.2019',
-               '1.3.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019',
-               '1.4.2019'
-           ],
+           labels: __performance.dates,
 
            datasets: [{
                 label: M.util.get_string('performance', 'cardbox'),
-                data: [35, 40, 45, 43, 55, 60, 62, 60, 65, 58, 70, 68, 60, 67, 70, 73, 76, 74, 78, 80, 77, 79, 42, 55, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80, 80],
+                data: __performance.performances,
                 backgroundColor: '#0066ff', // '#0066ff'
                 borderColor: '#0066ff', // specifies the line color
                 borderCapStyle: 'butt', // no change

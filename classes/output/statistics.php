@@ -32,10 +32,28 @@ class cardbox_statistics implements \renderable, \templatable {
     private $dates;
     private $performances;
     
-    public function __construct() {
+    public function __construct($cardboxid) {
         
-        global $DB;
+        global $DB, $USER, $CFG;
+        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         
+        $this->dates = array();//new stdClass();
+        $this->performances = array(); //new stdClass();
+        
+        $data = $DB->get_records('cardbox_statistics', array('userid' => $USER->id, 'cardboxid' => $cardboxid), '', 'timeofpractice, percentcorrect');
+        
+        foreach ($data as $record) {
+            $this->dates[] = cardbox_get_user_date($record->timeofpractice);
+            $this->performances[] = $record->percentcorrect;
+        }
+        
+//        var_dump($data);
+//        
+//        var_dump($this->dates);
+//        
+//        var_dump($this->performances);
+        
+//        $DB->get_fieldset_select(, $return, $select, array $params=null);
         
     }
     
