@@ -113,10 +113,11 @@ $string['right'] = 'right';
 $string['wrong'] = 'wrong';
 $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
+$string['known'] = 'learned';
 $string['flashcards'] = 'flashcards';
 $string['box'] = 'box';
 
-$string['titleperformancechart'] = 'Progress over time';
+$string['titleperformancechart'] = 'Past practice sessions';
 $string['performance'] = '% correct';
 
 // Review.
@@ -127,3 +128,7 @@ $string['skip'] = 'Skip';
 
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
+$string['barchartxaxislabel'] = 'Box';
+$string['barchartyaxislabel'] = 'Card count';
+$string['linegraphxaxislabel'] = 'Date';
+$string['linegraphyaxislabel'] = '% known';

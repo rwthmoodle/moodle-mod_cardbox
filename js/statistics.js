@@ -43,24 +43,33 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
 
        var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
 
-       var boxlabel = M.util.get_string('box', 'cardbox');
+//       var boxlabel = M.util.get_string('box', 'cardbox'); // delete lang string
 
-       var cardboxdata = {
+        var cardboxdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
-           labels: [
-               M.util.get_string('new', 'cardbox'),
-               boxlabel + ' 1',
-               boxlabel + ' 2',
-               boxlabel + ' 3',
-               boxlabel + ' 4',
-               boxlabel + ' 5'
-           ],
+            labels: [
+                M.util.get_string('new', 'cardbox'),
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                M.util.get_string('known', 'cardbox')
+            ],
 
            datasets: [{
                label: M.util.get_string('flashcards', 'cardbox'),
-               data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5]],
-               backgroundColor: '#0066ff'
+               data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5], __boxcount[6]],
+               backgroundColor: [
+                    '#0066ff',
+                    '#0066ff',
+                    '#0066ff',
+                    '#0066ff',
+                    '#0066ff',
+                    '#0066ff',
+                    '#00b33c'
+                ]
            }]
 
        };
@@ -76,8 +85,30 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                    position: 'top'
                },
                legend: {
-                   position: 'bottom'
-               }//,
+                   display: false
+//                   position: 'bottom'
+               },
+               ticks: {
+                   beginAtZero: true,
+                   min: 0
+               },
+               scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: M.util.get_string('barchartxaxislabel', 'cardbox'),
+                            fontSize: 16,
+                        }
+                    }],
+                    yAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: M.util.get_string('barchartyaxislabel', 'cardbox'),
+                            fontSize: 16
+                        }
+                    }]
+                }
+               //,
    //                    barPercentage: 1,
    //                    categoryPercentage: 1
            }
@@ -155,18 +186,39 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                    position: 'top'
                },
                legend: {
-                   position: 'bottom'
+                   display: false
                },
                lineTension: 0,
                elements: {
                    line: {
-                       tension: 0
+                       tension: 0 // dots are connected with straight lines instead of interpolation.
                    }
-               }
+               },
+               ticks: {
+                   beginAtZero: true,
+                   min: 0,
+                   max: 100 // no effect
+               },
+               scales: {
+                    xAxes: [{
+                        scaleLabel: {
+                            display: true,
+                            labelString: M.util.get_string('linegraphxaxislabel', 'cardbox'),
+                            fontSize: 16
+                        },
+                    }],
+                    yAxes: [{
+                        stacked: true,
+                        scaleLabel: {
+                            display: true,
+                            labelString: M.util.get_string('linegraphyaxislabel', 'cardbox'),
+                            fontSize: 16
+                        }
+                    }]
+                }
             }
         });
 
    }
-
 
 } // end of displayCharts()

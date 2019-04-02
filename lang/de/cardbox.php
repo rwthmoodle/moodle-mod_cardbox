@@ -117,11 +117,12 @@ $string['wrong'] = 'falsch';
 
 $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
+$string['known'] = 'gelernt';
 $string['flashcards'] = 'Karten';
 $string['box'] = 'Kästchen';
 
-$string['titleperformancechart'] = 'Fortschritt';
-$string['performance'] = '% richtig';
+$string['titleperformancechart'] = 'Vergangene Übungen';
+$string['performance'] = '% gewusst:';
 
 // Review.
 $string['approve'] = 'Freigeben';
@@ -131,3 +132,8 @@ $string['skip'] = 'Überspringen';
 
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
+
+$string['barchartxaxislabel'] = 'Kästchen';
+$string['barchartyaxislabel'] = 'Kartenzahl';
+$string['linegraphxaxislabel'] = 'Datum';
+$string['linegraphyaxislabel'] = '% gewusst';

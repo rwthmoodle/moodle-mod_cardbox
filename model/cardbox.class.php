@@ -25,8 +25,9 @@ defined('MOODLE_INTERNAL') || die();
 class cardbox_cardboxmodel { // use this class as a templatable as well?
 
     private $cardcount = 0;
-    private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array());
+    private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
     private $countnew;
+    private $countknown;
     private $countboxone;
     private $countboxtwo;
     private $countboxthree;
@@ -72,7 +73,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_get_status() {
         
-        return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive);
+        return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive, 6 => $this->countknown);
 
     }
     
@@ -116,6 +117,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->countboxthree = count($this->boxes[3]);
         $this->countboxfour = count($this->boxes[4]);
         $this->countboxfive = count($this->boxes[5]);
+        $this->countknown = count($this->boxes[6]);
 
     }
     /**

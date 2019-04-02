@@ -46,21 +46,14 @@ class cardbox_statistics implements \renderable, \templatable {
             $this->dates[] = cardbox_get_user_date($record->timeofpractice);
             $this->performances[] = $record->percentcorrect;
         }
-        
-//        var_dump($data);
-//        
-//        var_dump($this->dates);
-//        
-//        var_dump($this->performances);
-        
-//        $DB->get_fieldset_select(, $return, $select, array $params=null);
-        
     }
-    
+
     public function export_for_template(\renderer_base $output) {
+
         $data = array();
         $data['dates'] = $this->dates;
         $data['performances'] = $this->performances;
         return $data;
+
     }
 }
