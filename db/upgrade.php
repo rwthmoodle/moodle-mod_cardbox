@@ -200,5 +200,27 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2019032800, 'cardbox');
     }
 
-    
+    if ($oldversion < 2019040200) {
+
+        // Define table cardbox_statistics to be created.
+        $table = new xmldb_table('cardbox_statistics');
+
+        // Adding fields to table cardbox_statistics.
+        $table->add_field('id', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, XMLDB_SEQUENCE, null);
+        $table->add_field('userid', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('timeofpractice', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        $table->add_field('percentcorrect', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, null);
+
+        // Adding keys to table cardbox_statistics.
+        $table->add_key('primary', XMLDB_KEY_PRIMARY, ['id']);
+
+        // Conditionally launch create table for cardbox_statistics.
+        if (!$dbman->table_exists($table)) {
+            $dbman->create_table($table);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019040200, 'cardbox');
+    }
+  
 }

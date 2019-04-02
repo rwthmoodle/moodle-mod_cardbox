@@ -188,7 +188,7 @@ function displayCharts(Y, __cmid, __boxcount) { // Wrapper function that is call
 //                spanGaps: false,
 //            }
 //        ]
-//
+
         };
 
        var lineChart = new Chart(context, {

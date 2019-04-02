@@ -29,11 +29,20 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_statistics implements \renderable, \templatable {
     
+    private $dates;
+    private $performances;
+    
     public function __construct() {
+        
+        global $DB;
+        
         
     }
     
     public function export_for_template(\renderer_base $output) {
-        return array();
+        $data = array();
+        $data['dates'] = $this->dates;
+        $data['performances'] = $this->performances;
+        return $data;
     }
 }
