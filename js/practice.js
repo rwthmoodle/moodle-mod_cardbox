@@ -555,10 +555,22 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
          * @returns {undefined}
          */
         function finishPractice() {
-            
+
+            // 1. Hide the last card that was practiced.
             $('#cardbox-practice-replacable').toggleClass('hidden');
-            
-            // 3. Display progress as doughnut chart.
+
+            // 2. Save this session's performance in cardbox_statistics.
+            $.ajax({
+                type: 'POST',
+                url: 'action.php',
+                data: {id: __cmid, action: 'saveperformance', countright: countright, countwrong: countwrong, sesskey: M.cfg.sesskey},
+                success: function(result){
+                    result = JSON.parse(result);
+                    console.log('result: ', result);
+                }
+            });
+
+            // 3. Then display it as a doughnut chart.
             var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
             
             var chartdata = {
@@ -595,56 +607,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     circumference: 1 * Math.PI,
                     cutoutPercentage: 60
                 }
-            });
-
-//            myDoughnutChart.classList.remove('chartjs-render-monitor');
-            
-            
-            var ctx2 = document.getElementById("cardbox-overall-status").getContext("2d");
-            
-            var boxlabel = M.util.get_string('box', 'cardbox');
-            
-            var cardboxdata = {
-                
-                // These labels appear in the legend and in the tooltips when hovering different arcs.
-                labels: [
-                    M.util.get_string('new', 'cardbox'),
-                    boxlabel + ' 1',
-                    boxlabel + ' 2',
-                    boxlabel + ' 3',
-                    boxlabel + ' 4',
-                    boxlabel + ' 5'
-                ],
-
-                datasets: [{
-                    label: M.util.get_string('flashcards', 'cardbox'),
-                    data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5]],
-                    backgroundColor: '#0066ff'
-                }]
-
-            };
-
-            var myBarChart = new Chart(ctx2, {
-                type: 'bar',
-                data: cardboxdata,
-                options: {
-                    title: {
-                        display: true,
-                        text: M.util.get_string('titleoverviewchart', 'cardbox'),
-                        fontSize: 16,
-                        position: 'top'
-                    },
-                    legend: {
-                        position: 'bottom'
-                    }//,
-//                    barPercentage: 1,
-//                    categoryPercentage: 1
-                }
-            });
-            
+            }); 
             
         }
-
 
 
     });

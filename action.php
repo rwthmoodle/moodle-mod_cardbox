@@ -149,15 +149,27 @@ if ($action === 'updateandnext') {
 
 }
 
+/* * ********************** Save performance at the end of a practice session *********************** */
 
+if ($action === 'saveperformance') {
+    
+    global $DB, $USER;
+    
+    $countright = required_param('countright', PARAM_INT);
+    $countwrong = required_param('countwrong', PARAM_INT);
+    $percentcorrect = 100*$countright/($countright+$countwrong);
 
+    $data = new stdClass();
+    $data->userid = $USER->id;
+    $data->cardboxid = $cardbox->id;
+    $data->timeofpractice = time();
+    $data->percentcorrect = round($percentcorrect, 0, PHP_ROUND_HALF_UP);
+    $success = $DB->insert_record('cardbox_statistics', $data);
 
-//$cardboxinstanceid = required_param('instanceid', PARAM_PATH);
+    if (empty($success)) {
+        echo json_encode(['status' => 'error', 'reason' => 'failedtosaveperformance']);
+    } else {
+        echo json_encode(['status' => 'success']);
+    }
 
-
-//$pdfannotator = $DB->get_record('pdfannotator', array('id' => $documentid), '*', MUST_EXIST);
-//$cm = get_coursemodule_from_instance('pdfannotator', $documentid, $pdfannotator->course, false, MUST_EXIST);
-//$context = context_module::instance($cm->id);
-
-//require_course_login($pdfannotator->course, true, $cm);
-//require_capability('mod/pdfannotator:view', $context);
+}
