@@ -115,17 +115,18 @@ if ($action === 'updateandnext') {
         }
         $lastposition = $dataobject->cardposition;
 
-        $dataobject->lastpracticed = time(); 
         if ($iscorrect == 1) {
             if ($dataobject->cardposition == 0) {
                 $dataobject->cardposition = 2;
             } else {
-                $dataobject->cardposition++;
+                $dataobject->cardposition = $dataobject->cardposition + 1;
             }
         } else {
             $dataobject->cardposition = 1;
         }
-        $dataobject->repetitions++;
+        $dataobject->lastpracticed = time();
+        $dataobject->repetitions = $dataobject->repetitions + 1;
+
         $success = $DB->update_record('cardbox_progress', $dataobject, false);
 
         if (empty($success)) {
