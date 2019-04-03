@@ -222,7 +222,7 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019040200, 'cardbox');
     }
-    
+
     if ($oldversion < 2019040201) {
 
         // Define field cardboxid to be added to cardbox_statistics.
@@ -237,5 +237,7 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019040201, 'cardbox');
     }
+
+    return true;
 
 }
