@@ -33,7 +33,7 @@ class cardbox_cardcollection {
         global $DB;
         $this->cardbox = $cardboxid;
         $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approvedby IS NULL', array($cardboxid));
-        
+
     }
     
     /**
@@ -48,7 +48,7 @@ class cardbox_cardcollection {
     public function cardbox_get_first_cardid() {
         return $this->flashcards[0];
     }
-    
+
 //    public function cardbox_get_card_for_review($cardid) {
 //
 //        global $DB;
