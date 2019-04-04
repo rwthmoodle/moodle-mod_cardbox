@@ -24,25 +24,26 @@
 // Meta information
 $string['cardbox'] = 'Card Box';
 $string['modulename'] = 'Card Box';
+$string['modulename_help'] = '<p>This activity allows you to create flashcards for vocabulary, technical terms, formulae, etc. that you want to remember. You can study with the cards as you would do with a card box.</p><p>Cards can be created by every participant, but are only used for practice if a teacher has accepted them.</p>';
 $string['pluginname'] = 'Card Box';
 $string['modulenameplural'] = 'Card Boxes';
 $string['cardboxname'] = 'Name of this Card Box';
-$string['pluginadministration'] = 'Card Box Administration';
+$string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Activate auto correction';
 $string['setting_autocorrection_help'] = 'Auto correction does not work for latex content. If you plan to have formulae on some cards, you should deavtivate it.';
 $string['setting_autocorrection_label'] = 'Handle with care.';
 
 // Tab navigation
-$string['addflashcard'] = 'Add flashcard';
+$string['addflashcard'] = 'Add a card';
 $string['practice'] = 'Practice';
 $string['statistics'] = 'Progress';
 $string['review'] = 'Review';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Add flashcard';
+$string['titleforaddflashcard'] = 'New card';
 $string['titleforpractice'] = 'Practice';
-$string['titleforreview'] = 'Check flashcard';
-$string['titleforcardedit'] = 'Edit flashcard';
+$string['titleforreview'] = 'Check card';
+$string['titleforcardedit'] = 'Edit card';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';
@@ -50,15 +51,15 @@ $string['reviewtopic'] = 'Topic: ';
 $string['notopic'] = 'not assigned';
 $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
-$string['enterquestion'] = 'Enter a prompt or question';
-$string['image'] = 'Add an image';
-$string['enteranswer'] = 'Enter the solution';
+$string['enterquestion'] = 'Question or prompt';
+$string['image'] = 'Question image';
+$string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
 
 // Success notifications
-$string['success:addnewcard'] = 'The flashcard was created and awaits approval.';
-$string['success:approve'] = 'The flashcard was approved and is now free to use.';
+$string['success:addnewcard'] = 'The card was created and awaits approval.';
+$string['success:approve'] = 'The card was approved and is now free to use.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
 $string['success:reject'] = '.';
 //$string['success:skip'] = '.';
@@ -69,19 +70,18 @@ $string['error:updateafterreview'] = 'Update failed.';
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
-$string['info:nocardsavailable'] = 'There are no flashcards in your cardbox at present.';
+$string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
 
 // Title and form elements for choosing the settings for a new practice session
-$string['titleforchoosesettings'] = 'What and how would you like to practice?';
-$string['choosecorrectionmode'] = 'Correction mode';
-$string['choosecorrectionmode_help'] = 'Would you like to ...?';
-$string['selfcorrection'] = 'Self-check';
+$string['titleforchoosesettings'] = 'Practice options';
+$string['choosecorrectionmode'] = 'Practice mode';
+$string['choosecorrectionmode_help'] = 'You can type in your answer and have it checked. If you prefer oral answers or handwriting, please select "Check yourself".';
+$string['selfcorrection'] = 'Check yourself';
 $string['autocorrection'] = 'Automatic check';
 $string['weightopic'] = 'Priority topic';
-$string['weightopic_help'] = 'Sie können die Kartenauswahl für diesen Übungsdurchlauf beeinflussen, indem Sie ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
-//$string['weightopic_help'] = 'Angeklickte Themen werden bei der Kartenauswahl für diesen Übungsdurchlauf bevorzugt behandelt.';
+$string['weightopic_help'] = 'Cards belonging to the priority topic will be favoured in the selection of cards for practice. This does not mean, however, that only these cards or all of these cards will be selected.';
 $string['notopicpreferred'] = 'no preference';
-$string['beginpractice'] = 'Start'; // XXX can perhaps be removed.
+$string['beginpractice'] = 'Start practice';
 $string['applysettings'] = 'Applay';
 $string['cancel'] = 'Cancel';
 
@@ -113,8 +113,8 @@ $string['right'] = 'right';
 $string['wrong'] = 'wrong';
 $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
-$string['known'] = 'learned';
-$string['flashcards'] = 'flashcards';
+$string['known'] = 'mastered';
+$string['flashcards'] = 'cards';
 $string['box'] = 'box';
 
 $string['titleperformancechart'] = 'Past practice sessions';

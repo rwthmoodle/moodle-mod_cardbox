@@ -24,6 +24,7 @@
 // Meta information
 $string['cardbox'] = 'Karteikasten'; // superfluous?
 $string['modulename'] = 'Karteikasten';
+$string['modulename_help'] = '<p>Mit dieser Aktivität können Lernkarten erstellt und nach dem Karteikasten-Prinzip geübt werden. Besonders geeignet ist der Karteikasten für Vokabeln, Fachbegriffe und Formeln.</p><p>Alle Teilnehmer/innen können Lernkarten für den gesamten Kurs erstellen. Die Lernkarten werden jedoch erst übernommen, nachdem ein/e Dozent/in sie freigegeben hat.</p>';
 $string['pluginname'] = 'Karteikasten';
 $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
@@ -39,7 +40,7 @@ $string['statistics'] = 'Fortschritt';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Karte anlegen';
+$string['titleforaddflashcard'] = 'Neue Karte';
 $string['titleforpractice'] = 'Üben';
 $string['titleforreview'] = 'Karte überprüfen';
 $string['titleforcardedit'] = 'Karte bearbeiten';
@@ -50,9 +51,9 @@ $string['reviewtopic'] = 'Thema: ';
 $string['notopic'] = 'nicht zugeordnet';
 $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
-$string['enterquestion'] = 'Frage/Begriff eingeben';
-$string['image'] = 'Bild hinzufügen';
-$string['enteranswer'] = 'Lösung eingeben';
+$string['enterquestion'] = 'Frage';
+$string['image'] = 'Bild zur Frage';
+$string['enteranswer'] = 'Lösung';
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
 
@@ -72,20 +73,20 @@ $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Ka
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 
 // Title and form elements for choosing the settings for a new practice session
-$string['titleforchoosesettings'] = 'Wie und was möchten Sie üben?';
+$string['titleforchoosesettings'] = 'Übungseinstellungen';
 $string['choosecorrectionmode'] = 'Übungsmodus';
-$string['choosecorrectionmode_help'] = 'Sie können zwischen Selbstkontrolle und automatischer Kontrolle wählen. In beiden Fällen können Sie entscheiden, ob eine Antwort als richtig oder falsch gewertet wird.';
+$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren, so wählen Sie den Selbstkontrollmodus.';
 $string['selfcorrection'] = 'Selbstkontrolle';
 $string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
-$string['weightopic_help'] = 'Sie können ein Thema auswählen, das verstärkt geübt werden soll. Dies kann in Vorbereitung auf einen Test sinnvoll sein.';
+$string['weightopic_help'] = 'Wenn Sie ein Thema gewichten, wird dieses verstärkt geübt. Dies bedeutet jedoch nicht, dass alle oder ausschließlich Karten zu diesem Thema geübt werden.';
 $string['notopicpreferred'] = 'keine Gewichtung';
-$string['beginpractice'] = 'Start';
+$string['beginpractice'] = 'Jetzt üben';
 $string['applysettings'] = 'Anwenden';
 $string['cancel'] = 'Abbrechen';
 
 // Practice mode: Buttons.
-$string['options'] = 'Optionen';
+$string['options'] = 'Einstellungen';
 //$string['options'] = 'Korrekturmodus';
 
 $string['checkanswer'] = 'Überprüfen';
@@ -107,7 +108,7 @@ $string['yoursolution'] = 'Ihre Lösung';
 $string['feedback:correctandcomplete'] = 'Richtig!';
 $string['feedback:incomplete'] = 'Unvollständig.';
 $string['feedback:correctbutincomplete'] = 'Es fehlen {$a} Antworten.';
-$string['feedback:incorrectandpossiblyincomplete'] = 'Das war leider nichts.'; // TODO
+$string['feedback:incorrectandpossiblyincomplete'] = 'Falsche Antwort';
 $string['feedback:notknown'] = 'Keine Antwort.';
 
 $string['sessioncompleted'] = 'Fertig! :-)';

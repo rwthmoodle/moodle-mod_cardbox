@@ -90,7 +90,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     giveFeedback();
 
                 });
-                // TODO
+
                 document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
                     e.preventDefault();
                     
