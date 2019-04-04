@@ -43,7 +43,16 @@ $PAGE->set_title('Cardbox activity');
 $PAGE->set_heading($course->fullname); // Set course name for display.
 echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
 
-$action = optional_param('action', 'practice', PARAM_ALPHA); // The default action or view.
+// Go to (default) page.
+if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.
+    $action = optional_param('action', 'practice', PARAM_ALPHA);
+
+} else if (has_capability('mod/cardbox:approvecard', $context)) {
+    $action = optional_param('action', 'review', PARAM_ALPHA);
+
+} else { // for guests.
+    $action = optional_param('action', 'addflashcard', PARAM_ALPHA);
+}
 
 $taburl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid));
 
