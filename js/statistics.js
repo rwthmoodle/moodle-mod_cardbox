@@ -91,7 +91,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                ticks: {
                    beginAtZero: true,
                    min: 0
-               },
+               },               
                scales: {
                     xAxes: [{
                         scaleLabel: {
@@ -105,6 +105,10 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                             display: true,
                             labelString: M.util.get_string('barchartyaxislabel', 'cardbox'),
                             fontSize: 16
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0
                         }
                     }]
                 }
