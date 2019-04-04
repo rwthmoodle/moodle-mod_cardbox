@@ -128,7 +128,7 @@ $string['skip'] = 'Skip';
 
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
-$string['barchartxaxislabel'] = 'Box';
+$string['barchartxaxislabel'] = 'Deck';
 $string['barchartyaxislabel'] = 'Card count';
 $string['linegraphxaxislabel'] = 'Date';
 $string['linegraphyaxislabel'] = '% known';

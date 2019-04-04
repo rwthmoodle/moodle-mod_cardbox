@@ -233,11 +233,10 @@ if ($action === 'editcard') {
                     break;
                 }
             }
-
         }
 
         $action = 'review';
-    
+
     } else {
 
         echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
@@ -276,7 +275,6 @@ if ($action === 'choosesettings') {
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
-
 
         // TODO: check for errors, validate form
 

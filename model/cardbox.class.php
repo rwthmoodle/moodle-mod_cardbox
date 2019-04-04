@@ -122,7 +122,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     }
     /**
      * Function contains algorithm for selecting 21 cards for a practice session.
-     * // TODO: Themengewichtung berücksichtigen.
      *
      */
     public function cardbox_select_cards_for_practice($topic = null) {
