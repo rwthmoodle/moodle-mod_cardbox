@@ -35,7 +35,7 @@ if ($action === 'addflashcard') {
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
 
     $addonemore = false;
-    
+
     // Contextual data to pass on to the card form.
     if (empty($entry)) {
         $entry = new stdClass();
@@ -130,8 +130,8 @@ if ($action === 'addflashcard') {
 
     if ($addonemore) {
 
-        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
-//
+        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
+
 //        $info = get_string('success:addnewcard', 'cardbox');
 //        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
 //
@@ -148,9 +148,7 @@ if ($action === 'addflashcard') {
 //        $customdata = array('cardboxid' => $cardbox->id);
 //        $mform = new mod_cardbox_card_form(null, $customdata);
 //        $mform->set_data($entry);
-//        
-//        
-//        
+//               
 ////        $mform = new mod_cardbox_card_form(null, $customdata);
 ////        $mform->set_data($entry);
 //
