@@ -41,7 +41,6 @@ $context = context_module::instance($cm->id);
 $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id));
 $PAGE->set_title('Cardbox activity');
 $PAGE->set_heading($course->fullname); // Set course name for display.
-echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
 
 // Go to (default) page.
 if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.

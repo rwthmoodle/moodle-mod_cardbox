@@ -34,6 +34,8 @@ if ($action === 'addflashcard') {
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
 
+    $addonemore = false;
+    
     // Contextual data to pass on to the card form.
     if (empty($entry)) {
         $entry = new stdClass();
@@ -43,7 +45,7 @@ if ($action === 'addflashcard') {
     }
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
-                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> 1 | 2);
     $component = 'mod_cardbox';
     $filearea = 'content';
 
@@ -108,19 +110,53 @@ if ($action === 'addflashcard') {
             }
         }
 
+        $addonemore = true;
         // TODO: check for errors, validate form
 
         // Give user feedback and go back to practice.
-        // 
-//        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
-    
-        $action = 'practice';
+
+//        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
+
+//        $action = 'practice';
         
     } else {
 
+        echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
         echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
         echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
         $mform->display();
+
+    }
+
+    if ($addonemore) {
+
+        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
+//
+//        $info = get_string('success:addnewcard', 'cardbox');
+//        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+//
+//        $entry = new stdClass();
+//        $entry->id = $cmid;
+//        $entry->course = $cm->course;
+//        $entry->action = $action;
+//
+//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
+//                              'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+//        $component = 'mod_cardbox';
+//        $filearea = 'content';
+//
+//        $customdata = array('cardboxid' => $cardbox->id);
+//        $mform = new mod_cardbox_card_form(null, $customdata);
+//        $mform->set_data($entry);
+//        
+//        
+//        
+////        $mform = new mod_cardbox_card_form(null, $customdata);
+////        $mform->set_data($entry);
+//
+//        echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+//        echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
+//        $mform->display();
 
     }
 }
@@ -239,6 +275,7 @@ if ($action === 'editcard') {
 
     } else {
 
+        echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
         echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
         $mform->display();
@@ -251,6 +288,7 @@ if ($action === 'editcard') {
 
 if ($action === 'choosesettings') {
     
+    echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, 'practice', $context);
 
     require_once('practicesettings_form.php');
@@ -294,6 +332,7 @@ if ($action === 'choosesettings') {
 
 if ($action === 'practice') {
 
+    echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     echo $OUTPUT->heading("$cardbox->name");
 
@@ -363,6 +402,7 @@ if ($action === 'statistics') {
     require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/statistics.php');
 
+    echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     echo $OUTPUT->heading("$cardbox->name"); // XXX
 
@@ -394,6 +434,7 @@ if ($action === 'statistics') {
 
 if ($action === 'review') {
     
+    echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardcollection.class.php'); // model.
