@@ -34,8 +34,6 @@ if ($action === 'addflashcard') {
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
 
-    $addonemore = false;
-
     // Contextual data to pass on to the card form.
     if (empty($entry)) {
         $entry = new stdClass();
@@ -55,9 +53,16 @@ if ($action === 'addflashcard') {
 
     if ($mform->is_cancelled()) {
 
-        $action = 'practice';
-        //redirect($returnurl);
+        if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.
+            $action = 'practice';
 
+        } else if (has_capability('mod/cardbox:approvecard', $context)) {
+            $action = 'review';
+
+        } else { // for guests.
+            redirect($actionurl, '');
+        }
+        
     // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
 
@@ -110,14 +115,8 @@ if ($action === 'addflashcard') {
             }
         }
 
-        $addonemore = true;
+        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
         // TODO: check for errors, validate form
-
-        // Give user feedback and go back to practice.
-
-//        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
-
-//        $action = 'practice';
         
     } else {
 
@@ -128,35 +127,6 @@ if ($action === 'addflashcard') {
 
     }
 
-    if ($addonemore) {
-
-        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
-
-//        $info = get_string('success:addnewcard', 'cardbox');
-//        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-//
-//        $entry = new stdClass();
-//        $entry->id = $cmid;
-//        $entry->course = $cm->course;
-//        $entry->action = $action;
-//
-//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
-//                              'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-//        $component = 'mod_cardbox';
-//        $filearea = 'content';
-//
-//        $customdata = array('cardboxid' => $cardbox->id);
-//        $mform = new mod_cardbox_card_form(null, $customdata);
-//        $mform->set_data($entry);
-//               
-////        $mform = new mod_cardbox_card_form(null, $customdata);
-////        $mform->set_data($entry);
-//
-//        echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-//        echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
-//        $mform->display();
-
-    }
 }
 
 /* ************************************************ Edit a flashcard ************************************************* */
