@@ -138,6 +138,11 @@
     grid-template-areas: "A B" "C D";
 }
 
+.path-mod-cardbox .modal {
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(32, 32, 32, 0.75); /* Black w/ opacity */
+}
+
 /*.path-mod-cardbox .modal-body .cardbox-options .row {
     margin-bottom: 1.5em;
 }*/

@@ -22,17 +22,37 @@
  */
 
 function startOptions(Y, __cmid) {
-    
+
     require(['jquery'], function ($) {
-        
-        var optionsbutton = document.getElementById('cardbox-see-options');
-        optionsbutton.click(); // XXX not working.
-        
+
+        var modal = document.getElementById('cardboxPracticeSettings');
+        modal.classList.add('show');
+        modal.classList.add('modal-open');
+        modal.style.display = 'block';
+
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
             e.preventDefault();
             applySettings();
         });
+
+        document.getElementById('cardbox-cancel-settings').addEventListener('click', function(e) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        });
         
+        document.getElementById('cardbox-close-settings').addEventListener('click', function(e) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        });
+
+        // If the user clicks anywhere outside of the modal, close it.
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.classList.remove('show');
+                modal.style.display = "none";
+            }
+        }
+
         function applySettings() {// XXX maybe just add an action param to the form in the template.
 
             var topic = document.getElementById('cardbox-topic').value;
@@ -51,10 +71,7 @@ function startOptions(Y, __cmid) {
             window.location.href = goTo;
 
         }
-        
-        
+
     });
-    
-    
-    
+
 }
