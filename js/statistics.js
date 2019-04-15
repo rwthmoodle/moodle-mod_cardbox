@@ -29,8 +29,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
     
         displayCardboxStatus();
         displayUserPerformanceOverTime();
-    
-    
+
     });
 
     /**
@@ -41,9 +40,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
     */
    function displayCardboxStatus() {
 
-       var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
-
-//       var boxlabel = M.util.get_string('box', 'cardbox'); // delete lang string
+        var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
 
         var cardboxdata = {
 
@@ -86,7 +83,6 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                },
                legend: {
                    display: false
-//                   position: 'bottom'
                },
                ticks: {
                    beginAtZero: true,
@@ -108,102 +104,80 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                         },
                         ticks: {
                             beginAtZero: true,
-                            min: 0
+                            min: 0,
+                            stepSize: 1
                         }
                     }]
                 }
-               //,
-   //                    barPercentage: 1,
-   //                    categoryPercentage: 1
            }
        });
    }
 
-   function displayUserPerformanceOverTime() {
+    /**
+     * Function builds and displays a line graph that shows the user's
+     * past performances in practicing with the current cardbox.
+     * 
+     * @returns {undefined}
+     */
+    function displayUserPerformanceOverTime() {
        
-       var context = document.getElementById("cardbox-statistics-progress-over-time").getContext("2d");
+        var context = document.getElementById("cardbox-statistics-progress-over-time").getContext("2d");
 
-//       var boxlabel = M.util.get_string('box', 'cardbox');
-       
-       var userdata = {
+        var userdata = {
 
-           // These labels appear in the legend and in the tooltips when hovering different arcs.
-           labels: __performance.dates,
+            // These labels appear in the legend and in the tooltips when hovering different arcs.
+            labels: __performance.dates,
 
-           datasets: [{
-                label: M.util.get_string('performance', 'cardbox'),
-                data: __performance.performances,
-                backgroundColor: '#0066ff', // '#0066ff'
-                borderColor: '#0066ff', // specifies the line color
-                borderCapStyle: 'butt', // no change
-                borderDash: [], // no change
-                borderDashOffset: 0.0, // no change
-                borderJoinStyle: 'miter', // no change
-                pointBorderColor: "#0066ff",
-                pointBackgroundColor: "#0066ff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "#0066ff",
-                pointHoverBorderColor: "#0066ff",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
-                spanGaps: false,
-                fill: false,
-                lineTension: 0                
-           }]
-//            datasets: [
-//            {
-//                label: "My First dataset",
-//                fill: false,
-//                lineTension: 0,
-//                backgroundColor: "rgba(75,192,192,0.4)",
-//                borderColor: "rgba(75,192,192,1)",
-//                borderCapStyle: 'butt',
-//                borderDash: [],
-//                borderDashOffset: 0.0,
-//                borderJoinStyle: 'miter',
-//                pointBorderColor: "rgba(75,192,192,1)",
-//                pointBackgroundColor: "#fff",
-//                pointBorderWidth: 1,
-//                pointHoverRadius: 5,
-//                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-//                pointHoverBorderColor: "rgba(220,220,220,1)",
-//                pointHoverBorderWidth: 2,
-//                pointRadius: 1,
-//                pointHitRadius: 10,
-//                data: [65, 59, 80, 81, 56, 55, 40],
-//                spanGaps: false,
-//            }
-//        ]
+            datasets: [{
+                 label: M.util.get_string('performance', 'cardbox'),
+                 data: __performance.performances,
+                 backgroundColor: '#0066ff', // '#0066ff'
+                 borderColor: '#0066ff', // specifies the line color
+                 borderCapStyle: 'butt', // no change
+                 borderDash: [], // no change
+                 borderDashOffset: 0.0, // no change
+                 borderJoinStyle: 'miter', // no change
+                 pointBorderColor: "#0066ff",
+                 pointBackgroundColor: "#0066ff",
+                 pointBorderWidth: 1,
+                 pointHoverRadius: 5,
+                 pointHoverBackgroundColor: "#0066ff",
+                 pointHoverBorderColor: "#0066ff",
+                 pointHoverBorderWidth: 2,
+                 pointRadius: 1,
+                 pointHitRadius: 10,
+                 spanGaps: false,
+                 fill: false,
+                 lineTension: 0                
+            }]
 
         };
 
-       var lineChart = new Chart(context, {
-            type: 'line',
-            data: userdata,
-            options: {
-                title: {
-                   display: true,
-                   text: M.util.get_string('titleperformancechart', 'cardbox'),
-                   fontSize: 16,
-                   position: 'top'
-               },
-               legend: {
-                   display: false
-               },
-               lineTension: 0,
-               elements: {
-                   line: {
-                       tension: 0 // dots are connected with straight lines instead of interpolation.
-                   }
-               },
-               ticks: {
-                   beginAtZero: true,
-                   min: 0,
-                   max: 100 // no effect
-               },
-               scales: {
+        var lineChart = new Chart(context, {
+             type: 'line',
+             data: userdata,
+             options: {
+                 title: {
+                    display: true,
+                    text: M.util.get_string('titleperformancechart', 'cardbox'),
+                    fontSize: 16,
+                    position: 'top'
+                },
+                legend: {
+                    display: false
+                },
+                lineTension: 0,
+                elements: {
+                    line: {
+                        tension: 0 // dots are connected with straight lines instead of interpolation.
+                    }
+                },
+                ticks: {
+                    beginAtZero: true,
+                    min: 0,
+                    max: 100 // no effect
+                },
+                scales: {
                     xAxes: [{
                         scaleLabel: {
                             display: true,

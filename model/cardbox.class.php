@@ -72,7 +72,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @return array
      */
     public function cardbox_get_status() {
-        
+
         return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive, 6 => $this->countknown);
 
     }

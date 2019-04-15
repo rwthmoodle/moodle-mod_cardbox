@@ -195,7 +195,7 @@ if ($action === 'editcard') {
                 break;
             case 0: // Card belongs to a new topic that is to be created.
                 if (!empty($formdata->newtopic)) {
-                    $topicid = cardbox_save_new_topic($formdata->newtopic);
+                    $topicid = cardbox_save_new_topic($formdata->newtopic, $cardbox->id);
                 } else {
                     $topicid = null;
                 }
@@ -252,53 +252,11 @@ if ($action === 'editcard') {
 
 }
 
-/* ************************************************ Settings for Practice ************************************************* */
-
-if ($action === 'choosesettings') {
-    
-    echo $OUTPUT->header();
-    echo $myrenderer->cardbox_render_tabs($taburl, 'practice', $context);
-
-    require_once('practicesettings_form.php');
-
-    $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
-    $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
-
-    // Contextual data to pass on to the card form.
-    if (empty($entry)) {
-        $entry = new stdClass();
-        $entry->id = $cmid;
-        $entry->course = $cm->course;
-        $entry->action = 'practice';
-    }
-
-    $mform = new mod_cardbox_practicesettings_form();
-    $mform->set_data($entry);
-    
-    if ($mform->is_cancelled()) {
-
-        redirect($returnurl);
-
-    // If submitted: get files from filemanager
-    } else if ($formdata = $mform->get_data()) {
-
-        // TODO: check for errors, validate form
-
-        // Give user feedback and go back to practice.
-//        redirect($returnurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_SUCCESS);
-
-    } else {
-
-        echo $OUTPUT->heading(get_string('titleforchoosesettings', 'cardbox'));
-        $mform->display();
-
-    }
-
-}
-
 /* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
+    
+    require_once('model/cardbox.class.php');
 
     echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
@@ -310,20 +268,19 @@ if ($action === 'practice') {
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
 
-    if ($startnow) {
-        
-        require_once('model/cardbox.class.php');
-        require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
-        
-        // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-        $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
-        $selection = $cardboxmodel->cardbox_get_card_selection();
+    // 1. Create a virtual cardbox for this practice session, i.e. create the model.
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+    $selection = $cardboxmodel->cardbox_get_card_selection();
 
-        if (empty($selection)) {
-            $info = get_string('info:nocardsavailable', 'cardbox');
-            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-            return;
-        }
+    if (empty($selection)) {
+        $info = get_string('info:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+    
+    if ($startnow) {
+
+        require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
         $cardboxstatus = $cardboxmodel->cardbox_get_status();
         
@@ -342,7 +299,7 @@ if ($action === 'practice') {
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
-        $params = array($cmid, $selection, $cardboxstatus, $correction, $case, $data); // true means: the user checks their own results.
+        $params = array($cmid, $selection, $cardboxstatus, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
         
         // 3. Render the page.

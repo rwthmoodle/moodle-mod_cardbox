@@ -30,11 +30,9 @@
  * @param int specifies whether the practice mode is auto- or selfcheck and whether a question or answer is shown.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case, __data) { // Wrapper function that is called by controller.php
+function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
-
-        console.log('__selection: ', __selection);
 
         /*********** 1. Variables and Calls ***********/
 
@@ -46,20 +44,18 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
         var isrepetition = 0;
         var considercardcorrect = false;
 
-        // Information about the user's answer(s) for the currect flashcard.
+        // Information about the user's answer(s) to the currect flashcard.
         var userinput;
         var answeriscorrect = 0;
         var answeriscomplete = 0;
         var answergiven = 1;
-//        var numberofmistakes = 0; // for one card. // XXX superfluous?
-//        var missinganswers = 0; // XXX superfluous?
 
         // Statistical information that will be displayed to the user at the end of practice.
         var countright = 0; // for all cards of this session.
         var countwrong = 0;
 
         // Collection of cards that were answered wrongly. They will be repeated until answered correctly once.
-        // Their status in the DB won't change, however, i.e. they go back to the first box.
+        // Their status in the database won't change, however, i.e. they go back to the first box.
         var toRepeat = [];
 
         addQuestionEvents();
@@ -69,7 +65,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             applySettings();
         });
 
-        /*********** 2. Definitions ***********/
+        /*********** 2. Function definitions ***********/
 
         function addQuestionEvents() {
 
@@ -83,7 +79,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     // 1. Check whether the answer is correct and complete and add it to the templatable data.
                     checkAnswer();
 
-                    // 2. render solution
+                    // 2. Render solution.
                     renderSolutionAutoCheck();
 
                     // 3. Insert feedback (depending on 1.) and the user's solution.
@@ -94,7 +90,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 document.getElementById('cardbox-do-not-know').addEventListener('click', function(e) {
                     e.preventDefault();
                     
-                    // render solution
+                    // Render solution
                     considercardcorrect = false;
 
                     notification.addNotification({
@@ -103,7 +99,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     });
 
                     renderSolutionAutoCheck();
-                    // mark as incorrect --> eventlisteners for next step
+
                 });
 
             } else { // self-check.
@@ -131,7 +127,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                     e.preventDefault();
                     removeNotifications();
-                    if ( considercardcorrect ) { // (answeriscorrect === 1) && (answeriscomplete === 1)
+                    if ( considercardcorrect ) {
                         proceed(0);
                     } else {
                         proceed(1);
@@ -179,8 +175,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             } 
         }
 
-
-        function applySettings() {// XXX maybe just add an action param to the form in the template.
+        function applySettings() {
 
             var topic = document.getElementById('cardbox-topic').value;
             var correctionmode;
@@ -208,8 +203,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             answeriscorrect = 1;
             answeriscomplete = 0;
             answergiven = 1;
-//            numberofmistakes = 0;
-//            missinganswers = 0;
             considercardcorrect = false;
 
             var solutions = __data.answer.texts;
@@ -240,7 +233,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             // 4. Check whether there are as many answers as solutions.
             if (userinput.length < solutions.length) {
                 answeriscomplete = 0;
-//                missinganswers = solutions.length - matches.length;
                 if (userinput.length === 0) {
                     answergiven = 0;
                 }
@@ -255,8 +247,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
             /**
              * This function takes each solution and checks whether it contains
-             * one of the user's answers or is contained in one of the user's
-             * answers.
+             * one of the user's answers or is contained in one of the user's answers.
              * 
              * @param {type} solutionitem
              * @param {type} index
@@ -286,8 +277,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
             }
             /**
-             * Function returns true if one of the strings is contained within the other
-             * ('or' identical).
+             * Function returns true if one of the strings is contained within the other ('or' identical).
              *
              * @param string a
              * @param string b
@@ -322,7 +312,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 } else {
                     // Note that the user made at least one mistake.
                     answeriscorrect = 0;
-//                    numberofmistakes++;
                     var answer = {
                         userinput: userinput,
                         colorclass: 'cardbox-input-color-incorrect'
@@ -351,7 +340,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
 
                 notification.addNotification({
                     message: M.util.get_string('feedback:incomplete', 'cardbox'),
-//                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox', missinganswers),
                     type: "warning"
                 });
 
@@ -359,7 +347,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                 
                 notification.addNotification({
                     message: M.util.get_string('feedback:notknown', 'cardbox'),
-//                    message: M.util.get_string('feedback:correctbutincomplete', 'cardbox', missinganswers),
                     type: "error"
                 });
                 
@@ -435,7 +422,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                             countwrong++;
                             __boxcount[1]++;
                             // If a wrong answer was given, mark this card for repetition.
-                            //toRepeat.push(__selection[position]);
                             toRepeat.push(cardId);
                         }
                     
@@ -486,14 +472,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js);
 
                                 }).then(function () {
-                                        // Reset parameters.
-//                                        answeriscorrect = 0;
-//                                        answeriscomplete = 0;
-//                                        numberofmistakes = 0;
-                                        // Add event listeners.
                                         addQuestionEvents();
 
                                 }); // Add a catch.
@@ -510,7 +491,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js);
 
                                 }).then(function () {
                                         addAnswerEvents();
@@ -541,7 +522,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
             (function (templates, data) {
                         templates.render('mod_cardbox/practice', data)
                                 .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js); // XXX partial.
+                                    templates.replaceNodeContents('#cardbox-practice', html, js);
                                 }).then(function () {
                                         addAnswerEvents();
 
@@ -588,7 +569,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case,
                     M.util.get_string('wrong', 'cardbox')
                 ]
             };
-            
+
             var myDoughnutChart = new Chart(ctx, {
                 type: 'doughnut',
                 data: chartdata,
