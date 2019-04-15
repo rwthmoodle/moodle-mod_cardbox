@@ -195,7 +195,7 @@ if ($action === 'editcard') {
                 break;
             case 0: // Card belongs to a new topic that is to be created.
                 if (!empty($formdata->newtopic)) {
-                    $topicid = cardbox_save_new_topic($formdata->newtopic);
+                    $topicid = cardbox_save_new_topic($formdata->newtopic, $cardbox->id);
                 } else {
                     $topicid = null;
                 }
@@ -299,6 +299,8 @@ if ($action === 'choosesettings') {
 /* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
+    
+    require_once('model/cardbox.class.php');
 
     echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
@@ -310,20 +312,19 @@ if ($action === 'practice') {
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
 
-    if ($startnow) {
-        
-        require_once('model/cardbox.class.php');
-        require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
-        
-        // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-        $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
-        $selection = $cardboxmodel->cardbox_get_card_selection();
+    // 1. Create a virtual cardbox for this practice session, i.e. create the model.
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+    $selection = $cardboxmodel->cardbox_get_card_selection();
 
-        if (empty($selection)) {
-            $info = get_string('info:nocardsavailable', 'cardbox');
-            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-            return;
-        }
+    if (empty($selection)) {
+        $info = get_string('info:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+    
+    if ($startnow) {
+
+        require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
         $cardboxstatus = $cardboxmodel->cardbox_get_status();
         
