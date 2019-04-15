@@ -32,7 +32,7 @@
  * @param int __cardid
  * @returns {undefined}
  */
-function startReview(Y, __cmid, __cardlist, __cardid = 0) { // Wrapper function that is called by controller.php
+function startReview(Y, __cmid, __cardlist, __cardid = 0) {
 
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
 
@@ -53,12 +53,6 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) { // Wrapper function 
             cardinreview = __cardlist[0];
             next = __cardlist[1];
         }
-
-//        console.log('position: ', position);
-//        console.log('cardinreview: ', cardinreview);
-//        console.log('next: ', next);
-
-        // var cardId = document.getElementById('cardbox-card-in-review').dataset.cardid; // XXX über die Liste abfragen?
 
         registerEventListeners();
 
@@ -148,12 +142,11 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) { // Wrapper function 
          *
          * @returns {undefined}
          */
-        function updateStatus() { // maybe use pop? or shift?
+        function updateStatus() {
             position++;
             cardinreview = __cardlist[position];
             next = __cardlist[position+1];
         }
-        
         /**
          * Function initiates an update of the status of the current card to approved
          * and renders the next card to be reviewed.

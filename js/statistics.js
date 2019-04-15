@@ -29,8 +29,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
     
         displayCardboxStatus();
         displayUserPerformanceOverTime();
-    
-    
+
     });
 
     /**

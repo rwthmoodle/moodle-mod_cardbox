@@ -53,7 +53,7 @@ function startOptions(Y, __cmid) {
             }
         }
 
-        function applySettings() {// XXX maybe just add an action param to the form in the template.
+        function applySettings() {
 
             var topic = document.getElementById('cardbox-topic').value;
             var correctionmode;
