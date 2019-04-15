@@ -26,62 +26,34 @@ function startOptions(Y, __cmid) {
     require(['jquery'], function ($) {
 
         var modal = document.getElementById('cardboxPracticeSettings');
+        modal.classList.add('show');
+        modal.classList.add('modal-open');
+        modal.style.display = 'block';
 
-        openModal(); // Open settings modal per default.
-        registerEventListeners();
-        
-        /**
-         * Register event listeners for the modal and its background.
-         *
-         * @returns {undefined}
-         */
-        function registerEventListeners() {
+        document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
+            e.preventDefault();
+            applySettings();
+        });
 
-            document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
-                e.preventDefault();
-                applySettings();
-            });
-
-            document.getElementById('cardbox-cancel-settings').addEventListener('click', function(e) {
-                closeModal();
-            });
-
-            document.getElementById('cardbox-close-settings').addEventListener('click', function(e) {
-                closeModal();
-            });
-
-            // If the user clicks anywhere outside of the modal, close it.
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    closeModal();
-                }
-            }
-        }
-        /**
-         * Open settings modal.
-         *
-         * @returns {undefined}
-         */
-        function openModal() {
-            modal.classList.add('show');
-            modal.classList.add('modal-open');
-            modal.style.display = 'block';
-        }
-        /**
-         * Close settings modal
-         *
-         * @returns {undefined}
-         */
-        function closeModal() {
+        document.getElementById('cardbox-cancel-settings').addEventListener('click', function(e) {
             modal.classList.remove('show');
             modal.style.display = 'none';
+        });
+        
+        document.getElementById('cardbox-close-settings').addEventListener('click', function(e) {
+            modal.classList.remove('show');
+            modal.style.display = 'none';
+        });
+
+        // If the user clicks anywhere outside of the modal, close it.
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.classList.remove('show');
+                modal.style.display = "none";
+            }
         }
-        /**
-         * Start a new practice session with the settings chosen.
-         *
-         * @returns {undefined}
-         */
-        function applySettings() {
+
+        function applySettings() {// XXX maybe just add an action param to the form in the template.
 
             var topic = document.getElementById('cardbox-topic').value;
             var correctionmode;
