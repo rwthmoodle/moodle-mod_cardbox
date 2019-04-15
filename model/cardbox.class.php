@@ -137,6 +137,11 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         $addextra = 0;
 
+//        $ref = $this->cardbox_count_cards_in_progress();
+//        
+//        if ($ref < )
+        
+
         // 1. Account for the primacy effect by beginning with difficult cards (which are stored in box 1).
         for ($i = 1; $i <= 5; $i++) {
 
@@ -182,11 +187,26 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             $selection[] = $this->boxes[0][$j];
         }
 
+//        $cardcount = count($selection);
+//        $missing = 21 - $cardcount;
+//        if ($cardcount < 21) {
+//            for ($k = 0; $k < $missing; $k++) {
+//                if (empty($this->boxes[1][$k])) {
+//                    break;
+//                }
+//                $selection[] = $this->boxes[1][$k];
+//            }
+//        }
+        
         $this->selection = $selection;
         
         self::$prioritytopic = null;
     }
 
+    public function cardbox_count_cards_in_progress() {
+        return $this->countboxone + $this->countboxtwo + $this->countboxthree + $this->countboxfour + $this->countboxfive;
+    }
+    
     /**
      * This function prioritises cards within a box according to the time they
      * were last practised and the number of repetitions that the user needed
