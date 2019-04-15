@@ -30,7 +30,7 @@
  * @param int specifies whether the practice mode is auto- or selfcheck and whether a question or answer is shown.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __boxcount, __correction, __case, __data) { // Wrapper function that is called by controller.php
+function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
