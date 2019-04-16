@@ -34,7 +34,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxfour;
     private $countboxfive;
     private $selection;
-    private static $prioritytopic;
+    private static $prioritytopic; // used by the sorting/comparison functions.
 
     public function __construct($cardboxid, $topic=null) {
 
@@ -42,16 +42,21 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
         cardbox_add_new_cards();
-        
+
         // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
         $this->cardbox_get_users_cards($cardboxid);
 
         // 3. Select 21 flashcards for a practice session.
         $this->cardbox_select_cards_for_practice($topic);
-        
-        // 4. Access and arrange the content of each selected card.
-        
-        
+
+    }
+    /**
+     * Function returns the number of cards in the user's cardbox.
+     *
+     * @return int
+     */
+    public function cardbox_get_card_count() {
+        return $this->cardcount;
     }
     /**
      * Function returns the ids of those cards selected for practice.
@@ -80,7 +85,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
-     * 2. are registered for the current user in the progress table which is the virtual cardbox
+     * 2. are registered for the current user in the progress table which is the virtual representation of a cardbox system
      *
      * Each card is filed into one of the 5 cardboxes.
      *
@@ -123,6 +128,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     /**
      * Function contains algorithm for selecting 21 cards for a practice session.
      *
+     * @global obj $DB
+     * @param type $topic
      */
     public function cardbox_select_cards_for_practice($topic = null) {
 
@@ -132,7 +139,9 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
         }
 
-        $cardsperbox = array(0 => 3, 1 => 4, 2 => 5, 3 => 4, 4 => 3, 5 => 2);
+        $yesterday = strtotime('-24 hours', time());
+        
+        $cardsperbox = array(0 => 3, 1 => 7, 2 => 5, 3 => 3, 4 => 2, 5 => 1);
         $selection = array();
 
         $addextra = 0;
@@ -143,6 +152,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             $select = $cardsperbox[$i] + $addextra;
 
             $box = $this->boxes[$i];
+            $numberOfCardsInThisBox = count($box);
 
             // 1.1 Prioritize the cards within the box.
             if (!empty($box)) {
@@ -158,12 +168,17 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 if (empty($box[$j])) {
                     break;
                 }
-                $selection[] = $box[$j];
+                // Ignore cards that have already been practiced within the last 24 hours.
+                if ( empty($box[$j]->lastpracticed) || empty($yesterday) || ($box[$j]->lastpracticed < $yesterday) ) {
+                    $selection[] = $box[$j];
+                } else {
+                    $numberOfCardsInThisBox--;
+                }
             }
 
             // 1.3 If there are not enough cards in the box, select the missing amount from the next box if possible.
             //     (Or from box 0 if this is box 5.)
-            $diff = $select - count($box);
+            $diff = $select - $numberOfCardsInThisBox;
             $addextra = ($diff > 0) ? $diff : 0;
 
         }
