@@ -71,6 +71,9 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
+$string['info:nocardsavailableforpractice'] = 'Derzeit liegen keine Karten zur Übung bereit.';
+$string['help:nocardsavailableforpractice'] = 'Keine Karten';
+$string['help:nocardsavailableforpractice_help'] = 'Mögliche Gründe:<ul><li>Eine Karte kann frühestens nach 24 Stunden erneut geübt werden.</li><li>Karten, die 5x richtig beantwortet wurden, gelten als gelernt und werden nicht mehr wiederholt.</li></ul>';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Übungseinstellungen';
@@ -120,7 +123,7 @@ $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['known'] = 'gelernt';
 $string['flashcards'] = 'Karten';
-$string['box'] = 'Kästchen';
+$string['box'] = 'Fach';
 
 $string['titleperformancechart'] = 'Vergangene Übungen';
 $string['performance'] = '% gewusst:';
@@ -134,7 +137,7 @@ $string['skip'] = 'Überspringen';
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
 
-$string['barchartxaxislabel'] = 'Kästchen';
+$string['barchartxaxislabel'] = 'Fach';
 $string['barchartyaxislabel'] = 'Kartenzahl';
 $string['linegraphxaxislabel'] = 'Datum';
 $string['linegraphyaxislabel'] = '% gewusst';

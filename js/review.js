@@ -36,8 +36,6 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
 
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
 
-        console.log('__cardlist: ', __cardlist);
-
         var position;
         var cardinreview;
         var next;

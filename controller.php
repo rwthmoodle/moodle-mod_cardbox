@@ -270,14 +270,23 @@ if ($action === 'practice') {
 
     // 1. Create a virtual cardbox for this practice session, i.e. create the model.
     $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+    $cardcount = $cardboxmodel->cardbox_get_card_count();
     $selection = $cardboxmodel->cardbox_get_card_selection();
 
-    if (empty($selection)) {
+    // Inform the user if their cardbox is empty.
+    if (empty($cardcount)) {
         $info = get_string('info:nocardsavailable', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
     }
-    
+    // Inform the user if there are no cards available for practice.
+    if (empty($selection)) {
+        $info = get_string('info:nocardsavailableforpractice', 'cardbox');
+        $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . ' ' . $help . "</div></span>";
+        return;
+    }
+
     if ($startnow) {
 
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');

@@ -153,27 +153,10 @@ function cardbox_edit_card($cardid, $topicid) {
     return $success;
 
 }
-/**
- * Function selects a set of 21 flashcards for a practice session.
- *
- * @global obj $DB
- */
-//function cardbox_select_cards_for_practice() { // XXX ggf. besser 1x alles holen und dann objektorientiert vorgehen.
-
-    // 1. Add up to 3 new cards to the student's cardbox system (progress table).
-    //cardbox_add_new_cards();
-
-    // 2. Access the student's cardbox system.
-    
-    
-    // 3. Select 21 flashcards from the student's cardbox system.
-    
-    
-//}
 
 /**
  * This function checks whether there are new cards available in the DB
- * and if so, adds them to the users virtual cardbox.
+ * and if so, adds them to the users virtual cardbox system.
  * 
  * @global obj $DB
  * @global obj $USER
@@ -183,22 +166,21 @@ function cardbox_add_new_cards() {
     
     global $DB, $USER;
 
-    // 1. Move three new terms (if there are) to the progress table.
     $sql1 = "SELECT MAX(card)"
             . " FROM {cardbox_progress} p"
-            . " WHERE p.userid = ?"; // AND p.lastpracticed IS NOT NULL";
+            . " WHERE p.userid = ?";
 
     $lastnew = $DB->get_field_sql($sql1, array($USER->id)); // can return null.
 
     if (empty($lastnew)) {
         $lastnew = 0;
     }
-    
+
     $sql2 = "SELECT c.id"
             . " FROM {cardbox_cards} c"
             . " WHERE c.id > ? AND approvedby IS NOT NULL";
     $newcards = $DB->get_fieldset_sql($sql2, array($lastnew));
-    
+
     if (empty($newcards)) {
         return;
     }
@@ -316,8 +298,8 @@ function cardbox_get_user_date($timestamp) {
  * @param type $timestamp
  * @return string
  */
-//function cardbox_get_user_datetime_shortformat($timestamp) {
-//    $shortformat = get_string('strftimedatetime', 'cardbox'); // Format strings in moodle\lang\en\langconfig.php.
-//    $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
-//    return $userdatetime;
-//}
+function cardbox_get_user_datetime_shortformat($timestamp) {
+    $shortformat = get_string('strftimedatetime', 'cardbox'); // Format strings in moodle\lang\en\langconfig.php.
+    $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+    return $userdatetime;
+}

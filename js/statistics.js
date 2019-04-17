@@ -23,8 +23,6 @@
 
 function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper function that is called by controller.php
 
-    console.log('__performance: ', __performance);
-
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
     
         displayCardboxStatus();

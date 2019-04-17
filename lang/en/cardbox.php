@@ -71,6 +71,9 @@ $string['error:updateafterreview'] = 'Update failed.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
+$string['info:nocardsavailableforpractice'] = 'There are no cards ready for practice.';
+$string['help:nocardsavailableforpractice'] = 'No cards';
+$string['help:nocardsavailableforpractice_help'] = 'Possible reasons:<ul><li>Individual cards cannot be practiced more often than once every 24 hours.</li><li>Once a card has been answered correctly for the 5th time, it is considered "mastered" and no longer repeated.</li></ul>';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Practice options';
