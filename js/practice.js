@@ -372,10 +372,18 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
             var willBeRepetition = 0;
             var next;
+            var islastcard = false;
             
             // This was the last card of this practice session.
             if (position == (cardcount-1) && toRepeat.length === 0) {
-                next = 0;
+                
+                if (iscorrect == 1) {
+                    next = 0;
+                } else {
+                    islastcard = true;
+                    next = cardId;
+                    willBeRepetition = 1;
+                }
 
             // There are only regular cards left.
             } else if (position < (cardcount-1) && toRepeat.length === 0) {
@@ -404,13 +412,13 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     result = JSON.parse(result);
 
                     /********* Deal with the current/old card. *********/
-                    
+
                     // Regular cards:
                     if (isrepetition == 0) {
-                        
+
                         // Adjust the card counts of the boxes.
                         var boxslot = result.lastposition;
-                    
+
                         __boxcount[boxslot]--;
 
                         if (iscorrect === 1) {
@@ -422,15 +430,21 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                             countwrong++;
                             __boxcount[1]++;
                             // If a wrong answer was given, mark this card for repetition.
-                            toRepeat.push(cardId);
+                            // Unless this was the last card and the next card is going to be this card once more, anyway.
+                            if (!islastcard) {
+                                toRepeat.push(cardId);
+                            }
+                            
                         }
-                    
+
                     // Cards that are repeated because they were answered wrongly before:
                     // If it was answered wrongly again:
                     } else if (iscorrect == 0) {
                         // Mark the card for repetition once more.
-                        toRepeat.push(cardId);
-                        
+                        // Unless this was the last card and the next card is going to be this card once more, anyway.
+                        if (!islastcard) {
+                            toRepeat.push(cardId);
+                        }
                     }
                     
                     /********* Deal with the new card. *********/
