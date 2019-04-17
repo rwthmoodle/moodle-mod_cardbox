@@ -30,8 +30,8 @@ $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
 $string['pluginadministration'] = 'Karteikasten Administration';
 $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
-$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt kein Latex. Ihre Aktivierung wird nicht empfohlen, wenn Formeln abfragt werden.';
-$string['setting_autocorrection_label'] = 'Vorsicht bei Formeln!';
+$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
+$string['setting_autocorrection_label'] = 'Vorsicht geboten!';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
