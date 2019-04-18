@@ -30,8 +30,8 @@ $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
 $string['pluginadministration'] = 'Karteikasten Administration';
 $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
-$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt kein Latex. Ihre Aktivierung wird nicht empfohlen, wenn Formeln abfragt werden.';
-$string['setting_autocorrection_label'] = 'Vorsicht bei Formeln!';
+$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
+$string['setting_autocorrection_label'] = 'Vorsicht geboten!';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
@@ -71,6 +71,8 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
+$string['help:nocardsavailable'] = 'Karteikasten leer';
+$string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'Derzeit liegen keine Karten zur Übung bereit.';
 $string['help:nocardsavailableforpractice'] = 'Keine Karten';
 $string['help:nocardsavailableforpractice_help'] = 'Mögliche Gründe:<ul><li>Eine Karte kann frühestens nach 24 Stunden erneut geübt werden.</li><li>Karten, die 5x richtig beantwortet wurden, gelten als gelernt und werden nicht mehr wiederholt.</li></ul>';

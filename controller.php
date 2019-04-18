@@ -276,14 +276,15 @@ if ($action === 'practice') {
     // Inform the user if their cardbox is empty.
     if (empty($cardcount)) {
         $info = get_string('info:nocardsavailable', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        $help = $OUTPUT->help_icon('help:nocardsavailable', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
     }
     // Inform the user if there are no cards available for practice.
     if (empty($selection)) {
         $info = get_string('info:nocardsavailableforpractice', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . ' ' . $help . "</div></span>";
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
     }
 

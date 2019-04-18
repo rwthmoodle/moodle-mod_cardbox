@@ -29,9 +29,9 @@ $string['pluginname'] = 'Card Box';
 $string['modulenameplural'] = 'Card Boxes';
 $string['cardboxname'] = 'Name of this Card Box';
 $string['pluginadministration'] = 'Flashcards Administration';
-$string['setting_autocorrection'] = 'Activate auto correction';
-$string['setting_autocorrection_help'] = 'Auto correction does not work for latex content. If you plan to have formulae on some cards, you should deavtivate it.';
-$string['setting_autocorrection_label'] = 'Handle with care.';
+$string['setting_autocorrection'] = 'Activate autocorrection';
+$string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
+$string['setting_autocorrection_label'] = 'Activate with care.';
 
 // Tab navigation
 $string['addflashcard'] = 'Add a card';
@@ -71,6 +71,8 @@ $string['error:updateafterreview'] = 'Update failed.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
+$string['help:nocardsavailable'] = 'Empty Cardbox';
+$string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'There are no cards ready for practice.';
 $string['help:nocardsavailableforpractice'] = 'No cards';
 $string['help:nocardsavailableforpractice_help'] = 'Possible reasons:<ul><li>Individual cards cannot be practiced more often than once every 24 hours.</li><li>Once a card has been answered correctly for the 5th time, it is considered "mastered" and no longer repeated.</li></ul>';
