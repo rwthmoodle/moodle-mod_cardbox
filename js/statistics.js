@@ -151,7 +151,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
 
         };
 
-        var lineChart = new Chart(context, {
+        var lineGraph = new Chart(context, {
              type: 'line',
              data: userdata,
              options: {
@@ -189,6 +189,12 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                             display: true,
                             labelString: M.util.get_string('linegraphyaxislabel', 'cardbox'),
                             fontSize: 16
+                        },
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 100,
+                            stepSize: 10
                         }
                     }]
                 }
