@@ -100,7 +100,7 @@ class mod_cardbox_card_form extends moodleform {
         $addfieldsno = 1; // How many fields to add at a time / at button click.
         $addstring = get_string('addanswer', 'cardbox');
         $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
-
+        
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
     }
