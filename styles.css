@@ -100,8 +100,8 @@
 
 .path-mod-cardbox .cardbox-review-button {
     border-radius: 0px;
-    margin-left: 2m;
-    margin-left: 2m;
+    margin-left: 2em;
+    margin-left: 2em;
 }
 /*.path-mod-cardbox .cardbox-review-button {
     border-radius: 70%;
@@ -174,4 +174,43 @@
 
 .path-mod-cardbox .cardbox-statistics {
     margin-top: 3em;
+}
+
+.path-mod-cardbox #cardbox-feedback {
+    font-size: 16px;
+    padding-top: 0.2em;
+}
+
+.path-mod-cardbox .cardbox-feedback {
+    border: 1px;
+    margin-left: 1em;
+    margin-right: 1em;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
+    padding-left: 2em;
+    padding-right: 2em;
+}
+
+.path-mod-cardbox #cardbox-proceed-buttons {
+    /*padding-left: 2em;*/
+}
+
+.path-mod-cardbox #cardbox-proceed {
+    margin-right: 0.5em;
+}
+
+.path-mod-cardbox .cardbox-success {
+    background-color: #8dc060;
+    border-color: #8dc060;
+}
+
+.path-mod-cardbox .cardbox-warning {
+    background-color: #fff059;
+    border-color: #fff059;
+}
+
+.path-mod-cardbox .cardbox-error {
+    background-color: #cc071e;
+    border-color: #cc071e;
+    color: white;
 }
