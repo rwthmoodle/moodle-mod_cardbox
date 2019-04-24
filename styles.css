@@ -106,28 +106,29 @@
 /*.path-mod-cardbox .cardbox-review-button {
     border-radius: 70%;
     margin-bottom: 3em;
-}
+}*/
 
 .path-mod-cardbox #cardbox-approve {
-    background-color: #00b33c;
-    margin-right: 1em;
+    padding-left: 1.3em;
+/*    background-color: #00b33c;
+    margin-right: 1em;*/
 }
 
-.path-mod-cardbox #cardbox-edit {
+/*.path-mod-cardbox #cardbox-edit {
     background-color: #ff9900;
     margin-right: 1em;
-}
+}*/
 
-.path-mod-cardbox #cardbox-reject {
+/*.path-mod-cardbox #cardbox-reject {
     background-color: #ff3300;
     margin-right: 1em;
 }*/
 
 /*
 
-.path-mod-cardbox #cardbox-skip {
-    background-color: #00b33c;
-}*/
+*/.path-mod-cardbox #cardbox-skip {
+    /*background-color: #00b33c;*/
+}
 
 .path-mod-cardbox .cardbox-options {
     width: 100%;
