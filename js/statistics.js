@@ -103,7 +103,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            stepSize: 1
+                            stepSize: 10
                         }
                     }]
                 }
