@@ -120,6 +120,7 @@ if ($action === 'addflashcard') {
         
     } else {
 
+        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'addflashcard'));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
         echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
         echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
@@ -243,6 +244,7 @@ if ($action === 'editcard') {
 
     } else {
 
+        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard'));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
         echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
@@ -258,6 +260,7 @@ if ($action === 'practice') {
     
     require_once('model/cardbox.class.php');
 
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     echo $OUTPUT->heading("$cardbox->name");
@@ -337,6 +340,7 @@ if ($action === 'statistics') {
     require_once('model/cardbox.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/statistics.php');
 
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'statistics'));
     echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     echo $OUTPUT->heading("$cardbox->name"); // XXX
@@ -369,6 +373,7 @@ if ($action === 'statistics') {
 
 if ($action === 'review') {
     
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
     echo $OUTPUT->header();
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
