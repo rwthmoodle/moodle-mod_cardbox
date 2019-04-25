@@ -92,6 +92,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     
                     // Render solution
                     considercardcorrect = false;
+                    answergiven = 0;
+                    answeriscorrect = 0;
+                    answeriscomplete = 0;
 
                     renderSolutionAutoCheck();
 
@@ -326,7 +329,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
             var wrapper = document.getElementById("cardbox-feedback-wrapper");
             var feedbackbox = document.getElementById("cardbox-feedback");
-            
+
             if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
 
                 wrapper.classList.add('cardbox-success');
