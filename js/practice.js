@@ -60,10 +60,10 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
         addQuestionEvents();
 
-        document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
-            e.preventDefault();
-            applySettings();
-        });
+//        document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
+//            e.preventDefault();
+//            applySettings();
+//        });
 
         /*********** 2. Function definitions ***********/
 
@@ -83,7 +83,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     renderSolutionAutoCheck();
 
                     // 3. Insert feedback (depending on 1.) and the user's solution.
-                    giveFeedback();
+//                    giveFeedback();
 
                 });
 
@@ -329,34 +329,29 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
          */
         function giveFeedback() {
 
+            var wrapper = document.getElementById("cardbox-feedback-wrapper");
+            var feedbackbox = document.getElementById("cardbox-feedback");
+            
             if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
-                
-                notification.addNotification({
-                    message: M.util.get_string('feedback:correctandcomplete', 'cardbox'),
-                    type: "success"
-                });
+
+                wrapper.classList.add('cardbox-success');
+                feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
 
             } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
 
-                notification.addNotification({
-                    message: M.util.get_string('feedback:incomplete', 'cardbox'),
-                    type: "warning"
-                });
+                wrapper.classList.add('cardbox-warning');
+                feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
 
             } else if (answergiven === 0) {
-                
-                notification.addNotification({
-                    message: M.util.get_string('feedback:notknown', 'cardbox'),
-                    type: "error"
-                });
+
+                wrapper.classList.add('cardbox-error');
+                feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
                 
             } 
             else {
-                notification.addNotification({
-                    message: M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox'),
-                    type: "error"
-                });
-                
+
+                wrapper.classList.add('cardbox-error');
+                feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
             }
 
         }
@@ -539,7 +534,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                                     templates.replaceNodeContents('#cardbox-practice', html, js);
                                 }).then(function () {
                                         addAnswerEvents();
-
+                                        giveFeedback();
                                 }); // Add a catch.
             })(templates, newdata);
 

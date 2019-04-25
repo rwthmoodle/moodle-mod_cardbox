@@ -38,7 +38,6 @@ require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
-$PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id));
 $PAGE->set_title('Cardbox activity');
 $PAGE->set_heading($course->fullname); // Set course name for display.
 

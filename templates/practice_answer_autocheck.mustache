@@ -25,9 +25,14 @@
 <div id="cardbox-practice-user-interaction" class="row">
 
     <div class="col-sm-2"></div>
-    <div class="col-sm-4" class="container-fluid">
-        <button id="cardbox-proceed" type="button" class="btn btn-primary">{{# str }} proceed, cardbox {{/ str }}</button>
-        <button id="cardbox-override" type="button" class="btn btn-secondary">{{overridelabel}}</button>
+    <div id="cardbox-feedback-wrapper" class="col-sm-8 cardbox-feedback">
+        <div class="row">
+            <span id="cardbox-feedback" class="col-sm-6"></span>
+            <span id="cardbox-proceed-buttons" class="col-sm-6">
+                <button id="cardbox-override" type="button" class="btn btn-secondary pull-right">{{overridelabel}}</button>
+                <button id="cardbox-proceed" type="button" class="btn btn-primary pull-right">{{# str }} proceed, cardbox {{/ str }}</button>
+            </span>
+        </div>
     </div>
     <div class="col-sm-2"></div>
 

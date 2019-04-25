@@ -101,7 +101,7 @@ $string['dontknow'] = 'Weiß ich nicht';
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 $string['override'] = 'Überstimmen';
-$string['override_iscorrect'] = 'Doch, ich hatte Recht!';
+$string['override_iscorrect'] = 'Als richtig werten';
 $string['override_isincorrect'] = 'Als falsch werten';
 $string['proceed'] = 'Weiter';
 
