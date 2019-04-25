@@ -93,11 +93,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     // Render solution
                     considercardcorrect = false;
 
-                    notification.addNotification({
-                        message: M.util.get_string('feedback:notknown', 'cardbox'),
-                        type: "error"
-                    });
-
                     renderSolutionAutoCheck();
 
                 });
