@@ -1,21 +1,25 @@
 <div id="cardbox-practice-content" class="row">
 
     <div class="col-sm-2"></div>
-    <div class="col-sm-4 cardbox-review-item">
-        {{#question}}
-            {{> mod_cardbox/cardside }}
-        {{/question}}
+    <div class="col-sm-4 cardbox-column">
+        <div class="cardbox-autocheck-card-left-side">
+            {{#question}}
+                {{> mod_cardbox/cardside }}
+            {{/question}}
+        </div>
     </div>
-    <div class="col-sm-4 cardbox-review-item">
-        <h6>{{# str }} solution, cardbox {{/ str }}</h6>
-        {{#answer}}
-            {{> mod_cardbox/cardside }}
-        {{/answer}}
-        <h6>{{# str }} yoursolution, cardbox {{/ str }}</h6>
-        <div class="cardbox-text text-center">
-            {{#userinputitems}}
-                <h3 id="cardbox-user-solution" class="{{colorclass}}">{{userinput}}</h3>
-            {{/userinputitems}}
+    <div class="col-sm-4 cardbox-column">
+        <div class="cardbox-autocheck-card-right-side">
+            <h6>{{# str }} solution, cardbox {{/ str }}</h6>
+            {{#answer}}
+                {{> mod_cardbox/cardside }}
+            {{/answer}}
+            <h6>{{# str }} yoursolution, cardbox {{/ str }}</h6>
+            <div class="cardbox-text text-center">
+                {{#userinputitems}}
+                    <h3 id="cardbox-user-solution" class="{{colorclass}}">{{userinput}}</h3>
+                {{/userinputitems}}
+            </div>
         </div>
     </div>
     <div class="col-sm-2"></div>
