@@ -15,6 +15,8 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 defined('MOODLE_INTERNAL') || die();
+
+//require_once('cardselectionalgorithm.php');
 /**
  *
  * @package   mod_cardbox
@@ -24,6 +26,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_cardboxmodel { // use this class as a templatable as well?
 
+    private $flashcards;
     private $cardcount = 0;
     private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
     private $countnew;
@@ -35,11 +38,14 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxfive;
     private $selection;
     private static $prioritytopic; // used by the sorting/comparison functions.
+    private $algorithm;
 
-    public function __construct($cardboxid, $topic=null) {
+    public function __construct($cardboxid, $topic=null, cardbox_cardselectionalgorithm $algorithm = null) {
 
         global $DB, $USER;
 
+        $this->algorithm = $algorithm;
+        
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
         cardbox_add_new_cards();
 
@@ -48,6 +54,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         // 3. Select 21 flashcards for a practice session.
         $this->cardbox_select_cards_for_practice($topic);
+
+        $this->cardbox_select_cards_for_practice_neu($topic);
 
     }
     /**
@@ -109,7 +117,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         if (empty($flashcards)) {
             return;
         }
-        
+
+        $this->flashcards = $flashcards;
         $this->cardcount = count($flashcards);
 
         foreach ($flashcards as $card) {
@@ -125,6 +134,19 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->countknown = count($this->boxes[6]);
 
     }
+    /**
+     * Function contains algorithm for selecting 21 cards for a practice session.
+     *
+     * @global obj $DB
+     * @param type $topic
+     */
+    public function cardbox_select_cards_for_practice_neu($topic = null) {
+
+        // Delegate card selection to the algorithm instance.
+        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards);
+
+    }
+    
     /**
      * Function contains algorithm for selecting 21 cards for a practice session.
      *

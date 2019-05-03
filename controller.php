@@ -259,6 +259,7 @@ if ($action === 'editcard') {
 if ($action === 'practice') {
     
     require_once('model/cardbox.class.php');
+    require_once('model/algorithm.php');
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
@@ -272,7 +273,8 @@ if ($action === 'practice') {
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
 
     // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+    $algorithm = new cardbox_algorithm();
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic, $algorithm);
     $cardcount = $cardboxmodel->cardbox_get_card_count();
     $selection = $cardboxmodel->cardbox_get_card_selection();
 
