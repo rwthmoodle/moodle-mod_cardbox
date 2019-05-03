@@ -130,6 +130,12 @@
     /*background-color: #00b33c;*/
 }
 
+.path-mod-cardbox .cardbox-statistics {
+    margin-top: 3em;
+}
+
+/************************** Practice: modal with practice options *****************************************************/
+
 .path-mod-cardbox .cardbox-options {
     width: 100%;
     height: 100%;
@@ -173,8 +179,27 @@
     margin-bottom: 2em;
 }
 
-.path-mod-cardbox .cardbox-statistics {
-    margin-top: 3em;
+/************************** Practice: autocorrection mode, solution display *****************************************************/
+
+.path-mod-cardbox .cardbox-column {
+    padding-left: 0em !important;
+    padding-right: 0em !important;
+}
+
+.path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-autocheck-card-right-side {
+    border: 1px solid #e6e6e6;
+    border-radius: 3px;
+    margin-bottom: 2em;
+    padding: 2em;
+    height: 94%;
+}
+
+.path-mod-cardbox .cardbox-autocheck-card-left-side {
+    margin-right: 1em;
+}
+
+.path-mod-cardbox .cardbox-autocheck-card-right-side {
+    margin-left: 1em;
 }
 
 .path-mod-cardbox #cardbox-feedback {
@@ -184,8 +209,6 @@
 
 .path-mod-cardbox .cardbox-feedback {
     border: 1px;
-    margin-left: 1em;
-    margin-right: 1em;
     padding-top: 0.5em;
     padding-bottom: 0.5em;
     padding-left: 2em;
