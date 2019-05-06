@@ -87,10 +87,12 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
      */
     static function cardbox_compare_cards_1st_level($a, $b) {
 
+        $timespan = 6;
+        $ignore = new DateInterval('PT'.$timespan.'H');
         // Differences in due datetime that are only up to a quarter of a day (i.e. 6 hours)
         // are ignored in favour of second level priorities.
-        if ($a->duedatetime->diff($b->duedatetime) <= 0.25 ) {
-            return cardbox_compare_cards_2nd_level($a, $b);
+        if ($a->duedatetime->diff($b->duedatetime) <= $ignore ) {
+            return cardbox_algorithm::cardbox_compare_cards_2nd_level($a, $b);
         }
         
         // Cards that are dues sooner get priority over cards that are due at a later time (whether in the past or future).
@@ -119,7 +121,7 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
             return 1;
         }
 
-        return cardbox_compare_cards_3rd_level($a, $b);
+        return cardbox_algorithm::cardbox_compare_cards_3rd_level($a, $b);
 
     }
     /**
@@ -133,7 +135,7 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
     static function cardbox_compare_cards_3rd_level($a, $b) {
     
         if ($a->repetitions == $b->repetitions) {
-            return cardbox_compare_cards_4th_level($a, $b);
+            return cardbox_algorithm::cardbox_compare_cards_4th_level($a, $b);
         }
         // Cards that were difficult for this user in the past get third priority.
         return ($a->repetitions > $b->repetitions) ? -1 : 1;
