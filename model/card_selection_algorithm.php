@@ -25,52 +25,110 @@
  *
  * @author Anna Heynkes
  */
-require_once('cardselectionalgorithm.php');
-require_once('cardselectionalgorithm.php');
+require_once('card_selection_interface.php');
 
-class cardbox_algorithm implements cardbox_cardselectionalgorithm {
+class cardbox_card_selection_algorithm implements cardbox_card_selection_interface {
 
     private static $now;
     private $spacing;
     private $availableBeforeDue;
+    private static $priorityTopic;
         
     public function __construct() {
 
-//        $this->now = new DateTime('now');
-
         $this->spacing = array();
-        $this->spacing[0] = new DateInterval('P0D');
         $this->spacing[1] = new DateInterval('P1D');
         $this->spacing[2] = new DateInterval('P3D');
         $this->spacing[3] = new DateInterval('P7D');
         $this->spacing[4] = new DateInterval('P16D');
         $this->spacing[5] = new DateInterval('P34D');
+        
+        $this->availableBeforeDue = 0;
     }
-
-    public function cardbox_select_cards_for_practice($cards) {
+    /**
+     * This function creates a priority queue from the user's cards
+     * and then selects the first 21 items of the queue for practice.
+     * 
+     * @global type $CFG
+     * @param type $cards
+     * @return type
+     */
+    public function cardbox_select_cards_for_practice($cards, $topic = null) {
 
         global $CFG;
-//        require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         
-        // 1. For each card: Calculate how much time has elapsed since or will elapse until the perfect time of repetition.
+        $priorityqueue = [];
+        $selection = [];
+        
+        if (!empty($topic) && $topic != -1) {
+            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
+        }
         
         // 1. Calculate the ideal date and time of repetition for each card.
         foreach($cards as $card) {
-            $last = new DateTime("@$card->lastpracticed");
-            $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
-//            $card->timesinceoptimum = $this->now->diff($card->duedatetime); // negative time diff means the card isn't due for repetion yet.
+            
+            if ($card->cardposition > 5) {
+                continue;
+            }
+            
+            if ($card->cardposition == 0) {
+                $card->duedatetime = new DateTime("now");
+
+            } else {
+                $last = new DateTime("@$card->lastpracticed");
+                $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
+            }
+            $priorityqueue[] = $card;
+
         }
         
         // 2. Sort the cards according to their ideal repetition date times, deck, number of repetitions and time of last practice.
-        usort($cards, array('cardbox_algorithm', 'cardbox_compare_cards_1st_level'));
+        //    There is an option to prioritise cards by topic first.
+        if (!empty($topic) && $topic != -1) {
+            usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_priority_topic'));
+        } else {
+            usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_1st_level'));
+        }
         
         // 3. Pick the first 21 cards from the queue.
+        $now = new DateTime("now");
+        for ($i = 0; ( ($i < count($priorityqueue)) && ($i < 21)); $i++) {
+            $card = $priorityqueue[$i];
+             // Also determine whether there are cards that are not due yet.
+            if ($card->duedatetime > $now) {
+                $card->notdueyet = true;
+                $this->availableBeforeDue++;
+            }
+            $selection[] = $card;
+        }
         
-        // Determine whether there are cards that are not due yet?
+        return $selection;
+    }
+
+    /**
+     * This function sorts/prioritises cards within a box, favouring those that
+     * belong to the specified topic. If neither card or both cards belong to this
+     * topic, the usual selection criteria are applied, as specified by
+     * cardbox_compare_cards_1st_level().
+     * 
+     * @param obj $a
+     * @param obj $b
+     * @return int -1 means, $a comes first, 1 means, $b comes first
+     */
+    static function cardbox_compare_cards_priority_topic($a, $b) {
         
+        if ($a->topicname == $b->topicname) {
+            return self::cardbox_compare_cards_1st_level($a, $b);
+        }
         
-        // 4. (vllt. als Extrafunktion) Sortiere die Karten nach Primacy-/Recency-Effekt
-   
+        if ( ($a->topicname != self::$prioritytopic) && ($b->topicname != self::$prioritytopic) ) {
+            return self::cardbox_compare_cards_1st_level($a, $b);
+        }
+        
+        if ($a->topicname == self::$prioritytopic) {
+            return -1;
+        }
+        return 1;
     }
 
     /**
@@ -86,13 +144,13 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
      * @return int
      */
     static function cardbox_compare_cards_1st_level($a, $b) {
-
-        $timespan = 6;
-        $ignore = new DateInterval('PT'.$timespan.'H');
-        // Differences in due datetime that are only up to a quarter of a day (i.e. 6 hours)
+        
+        // Differences in due datetime that are only up to 3 hours
         // are ignored in favour of second level priorities.
+        $timespan = 3;
+        $ignore = new DateInterval('PT'.$timespan.'H');
         if ($a->duedatetime->diff($b->duedatetime) <= $ignore ) {
-            return cardbox_algorithm::cardbox_compare_cards_2nd_level($a, $b);
+            return self::cardbox_compare_cards_2nd_level($a, $b);
         }
         
         // Cards that are dues sooner get priority over cards that are due at a later time (whether in the past or future).
@@ -121,7 +179,7 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
             return 1;
         }
 
-        return cardbox_algorithm::cardbox_compare_cards_3rd_level($a, $b);
+        return self::cardbox_compare_cards_3rd_level($a, $b);
 
     }
     /**
@@ -135,7 +193,7 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
     static function cardbox_compare_cards_3rd_level($a, $b) {
     
         if ($a->repetitions == $b->repetitions) {
-            return cardbox_algorithm::cardbox_compare_cards_4th_level($a, $b);
+            return self::cardbox_compare_cards_4th_level($a, $b);
         }
         // Cards that were difficult for this user in the past get third priority.
         return ($a->repetitions > $b->repetitions) ? -1 : 1;
@@ -160,5 +218,5 @@ class cardbox_algorithm implements cardbox_cardselectionalgorithm {
         return ($a->lastpracticed < $b->lastpracticed) ? -1 : 1;
 
     }
-    
+
 }

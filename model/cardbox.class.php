@@ -16,9 +16,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-//require_once('cardselectionalgorithm.php');
 /**
- *
+ * 
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
@@ -37,14 +36,12 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxfour;
     private $countboxfive;
     private $selection;
-    private static $prioritytopic; // used by the sorting/comparison functions.
     private $algorithm;
+    private $sortingalgorithm;
 
-    public function __construct($cardboxid, $topic=null, cardbox_cardselectionalgorithm $algorithm = null) {
+    public function __construct($cardboxid, $topic = null, cardbox_card_selection_interface $algorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null) {
 
         global $DB, $USER;
-
-        $this->algorithm = $algorithm;
         
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
         cardbox_add_new_cards();
@@ -53,9 +50,16 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->cardbox_get_users_cards($cardboxid);
 
         // 3. Select 21 flashcards for a practice session.
-        $this->cardbox_select_cards_for_practice($topic);
-
-        $this->cardbox_select_cards_for_practice_neu($topic);
+        if (!empty($algorithm)) {
+            $this->algorithm = $algorithm;
+            $this->cardbox_select_cards_for_practice($topic);
+        }
+        
+        // 4. Sort the selected cards.
+        if (!empty($sortingalgorithm)) {
+            $this->sortingalgorithm = $sortingalgorithm;
+            $this->cardbox_sort_cards();
+        }
 
     }
     /**
@@ -140,167 +144,21 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $DB
      * @param type $topic
      */
-    public function cardbox_select_cards_for_practice_neu($topic = null) {
-
-        // Delegate card selection to the algorithm instance.
-        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards);
-
-    }
-    
-    /**
-     * Function contains algorithm for selecting 21 cards for a practice session.
-     *
-     * @global obj $DB
-     * @param type $topic
-     */
     public function cardbox_select_cards_for_practice($topic = null) {
 
-        global $DB;
+        // Delegate card selection to the selection algorithm instance.
+        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards, $topic);
 
-        if (!empty($topic) && $topic != -1) {
-            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
-        }
-
-        $yesterday = strtotime('-24 hours', time());
-        
-        $cardsperbox = array(0 => 3, 1 => 7, 2 => 5, 3 => 3, 4 => 2, 5 => 1);
-        $selection = array();
-
-        $addextra = 0;
-
-        // 1. Account for the primacy effect by beginning with difficult cards (which are stored in box 1).
-        for ($i = 1; $i <= 5; $i++) {
-
-            $select = $cardsperbox[$i] + $addextra;
-
-            $box = $this->boxes[$i];
-            $numberOfCardsInThisBox = count($box);
-
-            // 1.1 Prioritize the cards within the box.
-            if (!empty($box)) {
-                if (empty($topic) || $topic == -1) {
-                    usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards'));
-                } else {
-                    usort($box, array('cardbox_cardboxmodel', 'cardbox_compare_cards_priority_topic'));
-                }
-            }
-
-            // 1.2 Select cards from the box.
-            for ($j = 0; $j < $select; $j++) {
-                if (empty($box[$j])) {
-                    break;
-                }
-                // Ignore cards that have already been practiced within the last 24 hours.
-                if ( empty($box[$j]->lastpracticed) || empty($yesterday) || ($box[$j]->lastpracticed < $yesterday) ) {
-                    $selection[] = $box[$j];
-                } else {
-                    $numberOfCardsInThisBox--;
-                }
-            }
-
-            // 1.3 If there are not enough cards in the box, select the missing amount from the next box if possible.
-            //     (Or from box 0 if this is box 5.)
-            $diff = $select - $numberOfCardsInThisBox;
-            $addextra = ($diff > 0) ? $diff : 0;
-
-        }
-        // 2. Account for the recency effect by ending with new cards (which are stored in box 0).
-        
-        // 2.1 New cards can only be prioritised according to topic, because none of them has been practiced before.
-        if ( (!empty($this->boxes[0])) && (!empty($topic)) && ($topic != -1) ) {
-            usort($this->boxes[0], array('cardbox_cardboxmodel', 'cardbox_compare_cards_topic'));
-        }
-        // 2.2 Select new cards from box 0.
-        $select = $cardsperbox[0] + $addextra;
-        for ($j = 0; $j < $select; $j++) {
-            if (empty($this->boxes[0][$j])) {
-                break;
-            }
-            $selection[] = $this->boxes[0][$j];
-        }
-
-        $this->selection = $selection;
-        
-        self::$prioritytopic = null;
-    }
-
-    /**
-     * This function prioritises cards within a box according to the time they
-     * were last practised and the number of repetitions that the user needed
-     * so far for this card.
-     *
-     * @param type $a
-     * @param type $b
-     * @return int
-     */
-    static function cardbox_compare_cards($a, $b) {
-        
-        if ($a->lastpracticed == null) {
-            return -1;
-        }
-        if ($b->lastpracticed == null) {
-            return 1;
-        }
-
-        if ($a->lastpracticed == $b->lastpracticed) {
-            
-            if ($a->repetitions == $b->repetitions) {
-                return 0;
-            }
-            // Cards that were difficult for this user in the past get second priority.
-            return ($a->repetitions > $b->repetitions) ? -1 : 1;
-            
-        }
-        // Cards that were last practiced longer ago get first priority.
-        return ($a->lastpracticed < $b->lastpracticed) ? -1 : 1;
-        
-    }
-    
-    /**
-     * This function sorts/prioritises cards within a box, favouring those that
-     * belong to the specified topic. If neither card or both cards belong to this
-     * topic, the usual selection criteria are applied, as specified by cardbox_compare_cards().
-     * 
-     * @param obj $a
-     * @param obj $b
-     * @return int -1 means, $a comes first, 1 means, $b comes first
-     */
-    static function cardbox_compare_cards_priority_topic($a, $b) {
-        
-        if ($a->topicname == $b->topicname) {
-            return self::cardbox_compare_cards($a, $b);
-        }
-        
-        if ( ($a->topicname != self::$prioritytopic) && ($b->topicname != self::$prioritytopic) ) {
-            return self::cardbox_compare_cards($a, $b);
-        }
-        
-        if ($a->topicname == self::$prioritytopic) {
-            return -1;
-        }
-        return 1;
     }
     /**
-     * Function compares cards, considering only whether or not they are affiliated
-     * with the priority topic.
-     *
-     * @param type $a
-     * @param type $b
-     * @return int
+     * Function contains algorithm for sorting the selected cards into a reasonable order.
      */
-    static function cardbox_compare_cards_topic($a, $b) {
-        if ($a->topicname == $b->topicname) {
-            return 0;
-        }
-        if ( ($a->topicname != self::$prioritytopic) && ($b->topicname != self::$prioritytopic) ) {
-            return 0;
-        }
-        if ($a->topicname == self::$prioritytopic) {
-            return -1;
-        }
-        return 1;
+    public function cardbox_sort_cards() {
+        
+        // Delegate card sorting to the sorting algorithm instance.
+        $sortedselection = $this->sortingalgorithm->cardbox_sort_cards_for_practice($this->selection);
+        $this->selection = $sortedselection;
     }
-    
     
     public function cardbox_get_first_card() {
         return $this->selection[0];
