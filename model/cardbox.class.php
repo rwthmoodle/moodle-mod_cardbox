@@ -50,13 +50,13 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->cardbox_get_users_cards($cardboxid);
 
         // 3. Select 21 flashcards for a practice session.
-        if (!empty($algorithm)) {
+        if (!empty($this->flashcards) && !empty($algorithm)) {
             $this->algorithm = $algorithm;
             $this->cardbox_select_cards_for_practice($topic);
         }
         
         // 4. Sort the selected cards.
-        if (!empty($sortingalgorithm)) {
+        if (!empty($this->selection) && !empty($sortingalgorithm)) {
             $this->sortingalgorithm = $sortingalgorithm;
             $this->cardbox_sort_cards();
         }
@@ -76,6 +76,9 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @return array of ints
      */
     public function cardbox_get_card_selection() {
+        if (empty($this->selection)) {
+            return null;
+        }
         $selection = array();
         foreach ($this->selection as $card) {
             $selection[] = $card->card;

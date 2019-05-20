@@ -303,3 +303,67 @@ function cardbox_get_user_datetime_shortformat($timestamp) {
     $userdatetime = userdate($timestamp, $shortformat, $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
     return $userdatetime;
 }
+/**
+ * 
+ * @param type $carddata
+ * @return boolean
+ */
+function cardbox_is_card_due($carddata) {
+    
+    if ($carddata->cardposition == 0) {
+        return true;
+    }
+    
+    $now = new DateTime("now");
+    
+    $spacing = array();
+    $spacing[1] = new DateInterval('P1D');
+    $spacing[2] = new DateInterval('P3D');
+    $spacing[3] = new DateInterval('P7D');
+    $spacing[4] = new DateInterval('P16D');
+    $spacing[5] = new DateInterval('P34D');  
+        
+    $last = new DateTime("@$carddata->lastpracticed");
+    $due = $last->add($spacing[$carddata->cardposition]);
+
+    if ($due > $now) {
+        return false;
+        
+    } else {
+        return true;
+    }
+}
+/**
+ * 
+ * @param type $dataobject
+ * @param type $iscorrect
+ * @return type
+ */
+function cardbox_update_card_progress($dataobject, $iscorrect) {
+
+    global $DB;
+    
+    // Cards that were answered correctly proceed.
+    if ($iscorrect == 1) {
+        
+        // New cards proceed straight to box two.
+        if ($dataobject->cardposition == 0) {
+            $dataobject->cardposition = 2;
+
+        // Other cards proceed to the next box.
+        } else {
+            $dataobject->cardposition = $dataobject->cardposition + 1;
+        }
+    
+    // Cards that were not answered correctly go back to box one or stay there.
+    } else {
+        $dataobject->cardposition = 1;
+    }
+    
+    $dataobject->lastpracticed = time();
+    $dataobject->repetitions = $dataobject->repetitions + 1;
+
+    $success = $DB->update_record('cardbox_progress', $dataobject, false);
+    
+    return $success;
+}

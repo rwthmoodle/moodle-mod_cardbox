@@ -36,6 +36,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
         /*********** 1. Variables and Calls ***********/
 
+        console.log('selection: ', __selection);
+        console.log('data: ', __data);
+
         var cardcount = __selection.length; // to be used for statistics/progress bar.
 
         // Information about the current flashcard.

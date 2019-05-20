@@ -53,9 +53,11 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @param type $cards
      * @return type
      */
-    public function cardbox_select_cards_for_practice($cards, $topic = null) {
+    public function cardbox_select_cards_for_practice($cards = null, $topic = null) {
 
-        global $CFG;
+        if (empty($cards)) {
+            return null;
+        }
         
         $priorityqueue = [];
         $selection = [];
@@ -98,6 +100,8 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
             if ($card->duedatetime > $now) {
                 $card->notdueyet = true;
                 $this->availableBeforeDue++;
+            } else {
+                $card->notdueyet = false;
             }
             $selection[] = $card;
         }

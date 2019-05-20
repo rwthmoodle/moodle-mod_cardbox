@@ -126,7 +126,7 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case3'] = $this->case3;
         $data['case4'] = $this->case4;
         $data['inputfields'] = $this->inputfields;
-
+        
         return $data;
 
     }
