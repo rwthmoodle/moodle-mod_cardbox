@@ -15,6 +15,7 @@
                     <input type="radio" id="cardbox-selfcorrection" name="correctionmode" value="1" class="form-check-input" {{#autodisabled}}checked{{/autodisabled}}>{{# str }} selfcorrection, cardbox {{/ str }}
                 </form>
             </div>
+
             <div class="item c goldenleft">{{# str }} weightopic, cardbox {{/ str }}&nbsp; {{{helpbuttontopic}}}</div>
             <div class="item d goldenrigth">
                 <select id="cardbox-topic" name="topic" class="custom-select">
@@ -22,6 +23,11 @@
                         <option value="{{value}}">{{label}}</option>
                     {{/topics}}
                 </select>
+            </div>
+
+            <div class="item e goldenleft">{{# str }} practiceall, cardbox {{/ str }}&nbsp; {{{helpbuttonpracticeall}}}</div>
+            <div class="item f goldenrigth">
+                <input type="checkbox" id="cardbox-practiceall" name="practiceall" unchecked>
             </div>
 
         </div>

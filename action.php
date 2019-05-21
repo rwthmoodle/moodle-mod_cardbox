@@ -69,9 +69,6 @@ if ($action === 'review') {
         echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // TODO: check double string entries.
     }
     
-//    $success = $DB->update_record('cardbox_cards', $dataobject, false);
-    
-    
     if ($nextcard != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
         $review = new cardbox_review($context, null, $nextcard);
