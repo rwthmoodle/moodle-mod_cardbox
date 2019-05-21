@@ -32,6 +32,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
     private static $now;
     private $spacing;
     private $availableBeforeDue;
+    private $availableAndDue;
     private static $priorityTopic;
         
     public function __construct() {
@@ -44,6 +45,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         $this->spacing[5] = new DateInterval('P34D');
         
         $this->availableBeforeDue = 0;
+        $this->availableAndDue = 0;
     }
     /**
      * This function creates a priority queue from the user's cards
@@ -53,11 +55,13 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @param type $cards
      * @return type
      */
-    public function cardbox_select_cards_for_practice($cards = null, $topic = null) {
+    public function cardbox_select_cards_for_practice($cards = null, $topic = null, $practiceall = true) {
 
         if (empty($cards)) {
             return null;
         }
+        
+        $now = new DateTime("now");
         
         $priorityqueue = [];
         $selection = [];
@@ -80,7 +84,10 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
                 $last = new DateTime("@$card->lastpracticed");
                 $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
             }
-            $priorityqueue[] = $card;
+            
+            if ( ($card->duedatetime <= $now) || $practiceall ) {
+                $priorityqueue[] = $card;
+            }
 
         }
         
@@ -93,15 +100,15 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         }
         
         // 3. Pick the first 21 cards from the queue.
-        $now = new DateTime("now");
         for ($i = 0; ( ($i < count($priorityqueue)) && ($i < 21)); $i++) {
             $card = $priorityqueue[$i];
              // Also determine whether there are cards that are not due yet.
             if ($card->duedatetime > $now) {
-                $card->notdueyet = true;
-                $this->availableBeforeDue++;
+                $card->isdue = false;
+                //$this->availableBeforeDue++;
             } else {
-                $card->notdueyet = false;
+                $card->isdue = true;
+                //$this->availableAndDue++;
             }
             $selection[] = $card;
         }

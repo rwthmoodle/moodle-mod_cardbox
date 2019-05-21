@@ -27,6 +27,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
     private $flashcards;
     private $cardcount = 0;
+    private $duecardcount = 0;
     private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
     private $countnew;
     private $countknown;
@@ -38,8 +39,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $selection;
     private $algorithm;
     private $sortingalgorithm;
-
-    public function __construct($cardboxid, $topic = null, cardbox_card_selection_interface $algorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null) {
+    
+    public function __construct($cardboxid, $topic = null, cardbox_card_selection_interface $algorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null, $practiceall = true) {
 
         global $DB, $USER;
         
@@ -52,7 +53,8 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         // 3. Select 21 flashcards for a practice session.
         if (!empty($this->flashcards) && !empty($algorithm)) {
             $this->algorithm = $algorithm;
-            $this->cardbox_select_cards_for_practice($topic);
+            $this->cardbox_select_cards_for_practice($topic, $practiceall);
+            
         }
         
         // 4. Sort the selected cards.
@@ -69,6 +71,14 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_get_card_count() {
         return $this->cardcount;
+    }
+    
+    public function cardbox_count_due_cards() {
+        return $this->duecardcount;
+    }
+    
+    public function cardbox_count_known_cards() {
+        return $this->countknown;
     }
     /**
      * Function returns the ids of those cards selected for practice.
@@ -110,7 +120,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_get_users_cards($cardboxid) {
 
-        global $DB, $USER;
+        global $DB, $USER, $CFG;        
+        //require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
+        
+        $now = new DateTime("now");
 
         $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
                 . "FROM {cardbox_progress} p "
@@ -122,6 +135,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $flashcards =  $DB->get_records_sql($sql, array($USER->id, $cardboxid));
 
         if (empty($flashcards)) {
+            $this->cardcount = 0;
             return;
         }
 
@@ -130,6 +144,9 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         foreach ($flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;
+            if (cardbox_is_card_due($card)) {
+                $this->duecardcount++;
+            }
         }
         
         $this->countnew = count($this->boxes[0]);
@@ -147,10 +164,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $DB
      * @param type $topic
      */
-    public function cardbox_select_cards_for_practice($topic = null) {
+    public function cardbox_select_cards_for_practice($topic = null, $practiceall) {
 
         // Delegate card selection to the selection algorithm instance.
-        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards, $topic);
+        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards, $topic, $practiceall);
 
     }
     /**

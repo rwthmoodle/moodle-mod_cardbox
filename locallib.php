@@ -309,9 +309,11 @@ function cardbox_get_user_datetime_shortformat($timestamp) {
  * @return boolean
  */
 function cardbox_is_card_due($carddata) {
-    
+
     if ($carddata->cardposition == 0) {
         return true;
+    } else if ($carddata->cardposition > 5) {
+        return false;
     }
     
     $now = new DateTime("now");
@@ -324,8 +326,9 @@ function cardbox_is_card_due($carddata) {
     $spacing[5] = new DateInterval('P34D');  
         
     $last = new DateTime("@$carddata->lastpracticed");
-    $due = $last->add($spacing[$carddata->cardposition]);
-
+    $interval = $spacing[$carddata->cardposition];
+    $due = $last->add($interval);
+    
     if ($due > $now) {
         return false;
         

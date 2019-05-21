@@ -75,7 +75,11 @@ $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'There are no cards ready for practice.';
 $string['help:nocardsavailableforpractice'] = 'No cards';
-$string['help:nocardsavailableforpractice_help'] = 'Possible reasons:<ul><li>Individual cards cannot be practiced more often than once every 24 hours.</li><li>Once a card has been answered correctly for the 5th time, it is considered "mastered" and no longer repeated.</li></ul>';
+$string['help:nocardsavailableforpractice_help'] = 'You have correctly answered every card that is currently available 5 times over a period of at least two months. These cards are regarded as mastered and no longer repeated.</ul>';
+$string['info:nocardsdueforpractice'] = 'None of your cards are due for repetition yet.';
+$string['help:nocardsdueforpractice'] = 'No cards due';
+$string['help:nocardsdueforpractice_help'] = 'New cards are due immediately. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
+$string['help:practiceanyway'] = 'If you would like to practice, nevertheless, please click on <em>Options</em> and select <em>Practice cards before they are due</em>.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Practice options';

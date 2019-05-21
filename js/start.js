@@ -21,14 +21,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function startOptions(Y, __cmid) {
+function startOptions(Y, __cmid, __openmodal) {
 
     require(['jquery'], function ($) {
 
         var modal = document.getElementById('cardboxPracticeSettings');
-        modal.classList.add('show');
-        modal.classList.add('modal-open');
-        modal.style.display = 'block';
+        
+        if (__openmodal) {
+            modal.classList.add('show');
+            modal.classList.add('modal-open');
+            modal.style.display = 'block';
+        }
 
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
             e.preventDefault();
@@ -54,8 +57,9 @@ function startOptions(Y, __cmid) {
         }
 
         function applySettings() {
-
+            
             var topic = document.getElementById('cardbox-topic').value;
+            var practiceall = document.getElementById('cardbox-practiceall').checked;
             var correctionmode;
 
             var radios = document.getElementById('cardbox-form').elements['correctionmode'];
@@ -67,7 +71,7 @@ function startOptions(Y, __cmid) {
                 }
             }
 
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic;
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic +'&practiceall=' + practiceall;
             window.location.href = goTo;
 
         }
