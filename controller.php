@@ -291,7 +291,7 @@ if ($action === 'practice') {
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
     
-    // Inform the user that all of their cards have the status 'known' and are no longer repeated.
+    // Inform the user that all of their cards have the status 'mastered' and are no longer repeated.
     } else if ($cardcount == $cardboxmodel->cardbox_count_known_cards()) {
         
         $info = get_string('info:nocardsavailableforpractice', 'cardbox');
@@ -308,15 +308,7 @@ if ($action === 'practice') {
         $help = $OUTPUT->help_icon('help:nocardsdueforpractice', 'cardbox');
         echo "<span id='nocardsduenotification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info_part1 . " " . $help . "<br>" . $info_part2 . "</div></span>";
         $openmodal = false;
-    } 
-    /*// Inform the user if there are no cards available for practice.
-    if (empty($selection)) {
-        $info = get_string('info:nocardsavailableforpractice', 'cardbox');
-        $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
-        return;
-    }*/
-    
+    }
 
     if ($startnow && !( empty($duecardcount) &&  $practiceall == false)) {
 
