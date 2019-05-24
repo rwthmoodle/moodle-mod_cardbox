@@ -236,11 +236,16 @@
         font-size: 1.2rem !important;
     }
     
-    .path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox cardbox-selfcheck-card-left-side {
+    .path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-left-side {
         margin-right: 1em;
         padding: 2em;
     }
 
+    .path-mod-cardbox .cardbox-autocheck-card-right-side, .path-mod-cardbox .cardbox-selfcheck-card-right-side {
+        margin-left: 1em;
+        padding: 2em;
+    }
+    
     .path-mod-cardbox .cardbox-feedback {
         padding-left: 0 !important;
         padding-right: 0 !important;
@@ -260,10 +265,7 @@
         padding-right: 2em;
     }
     
-    .path-mod-cardbox .cardbox-autocheck-card-right-side, .path-mod-cardbox cardbox-selfcheck-card-right-side {
-        margin-left: 1em;
-        padding: 2em;
-    }
+    
 }
 
 /* lg Large devices (laptops/desktops, 992px and up) */

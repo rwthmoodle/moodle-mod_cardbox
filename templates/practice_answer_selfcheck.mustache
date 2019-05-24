@@ -1,15 +1,19 @@
 <div id="cardbox-practice-content" class="row">
 
     <div class="hidden-xs col-lg-1 col-xl-2"></div>
-    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column cardbox-selfcheck-card-left-side">
-        {{#question}}
-            {{> mod_cardbox/cardside }}
-        {{/question}}
+    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+        <div class="cardbox-selfcheck-card-left-side">
+            {{#question}}
+                {{> mod_cardbox/cardside }}
+            {{/question}}
+        </div>
     </div>
-    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column cardbox-selfcheck-card-right-side">
-        {{#answer}}
-            {{> mod_cardbox/cardside }}
-        {{/answer}}
+    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+        <div class="cardbox-selfcheck-card-right-side">
+            {{#answer}}
+                {{> mod_cardbox/cardside }}
+            {{/answer}}
+        </div>
     </div>
     <div class="hidden-xs col-lg-1 col-xl-2"></div>
 
