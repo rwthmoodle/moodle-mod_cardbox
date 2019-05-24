@@ -259,6 +259,8 @@ if ($action === 'editcard') {
 if ($action === 'practice') {
     
     require_once('model/cardbox.class.php');
+    require_once('model/card_selection_algorithm.php');
+    require_once('model/card_sorting_algorithm.php');
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
@@ -270,28 +272,45 @@ if ($action === 'practice') {
     $startnow = optional_param('start', false, PARAM_BOOL);
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
+    $practiceall = optional_param('practiceall', true, PARAM_BOOL);
+    $openmodal = true;
 
     // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic);
+    $algorithm = new cardbox_card_selection_algorithm();
+    $sortingalgorithm = new cardbox_card_sorting_algorithm();
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic, $algorithm, $sortingalgorithm, $practiceall);
     $cardcount = $cardboxmodel->cardbox_get_card_count();
+    $duecardcount = $cardboxmodel->cardbox_count_due_cards();
     $selection = $cardboxmodel->cardbox_get_card_selection();
 
-    // Inform the user if their cardbox is empty.
+    // Inform the user that their cardbox is empty.
     if (empty($cardcount)) {
+        
         $info = get_string('info:nocardsavailable', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailable', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
-    }
-    // Inform the user if there are no cards available for practice.
-    if (empty($selection)) {
+    
+    // Inform the user that all of their cards have the status 'mastered' and are no longer repeated.
+    } else if ($cardcount == $cardboxmodel->cardbox_count_known_cards()) {
+        
         $info = get_string('info:nocardsavailableforpractice', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
+        
+    
+    // Inform the user that none of their cards are due for practice right now.
+    } else if (empty($duecardcount)) {
+        
+        $info_part1 = get_string('info:nocardsdueforpractice', 'cardbox');
+        $info_part2 = get_string('help:practiceanyway', 'cardbox');
+        $help = $OUTPUT->help_icon('help:nocardsdueforpractice', 'cardbox');
+        echo "<span id='nocardsduenotification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info_part1 . " " . $help . "<br>" . $info_part2 . "</div></span>";
+        $openmodal = false;
     }
 
-    if ($startnow) {
+    if ($startnow && !( empty($duecardcount) &&  $practiceall == false)) {
 
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
@@ -323,7 +342,7 @@ if ($action === 'practice') {
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/start.php');
 
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js"));
-        $PAGE->requires->js_init_call('startOptions', array($cmid), true);
+        $PAGE->requires->js_init_call('startOptions', array($cmid, $openmodal), true);
 
         $start = new cardbox_start($cardbox->autocorrection, $cardbox->id);
 
@@ -333,7 +352,7 @@ if ($action === 'practice') {
 
 }
 
-/* **************************************************** Practice cards **************************************************** */
+/* **************************************************** View progress **************************************************** */
 
 if ($action === 'statistics') {
 

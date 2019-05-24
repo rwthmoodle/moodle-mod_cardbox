@@ -69,9 +69,6 @@ if ($action === 'review') {
         echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // TODO: check double string entries.
     }
     
-//    $success = $DB->update_record('cardbox_cards', $dataobject, false);
-    
-    
     if ($nextcard != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
         $review = new cardbox_review($context, null, $nextcard);
@@ -96,6 +93,7 @@ if ($action === 'review') {
 
 if ($action === 'updateandnext') {
 
+    require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
     $cardid = required_param('cardid', PARAM_INT);
@@ -104,40 +102,30 @@ if ($action === 'updateandnext') {
     $isrepetition = required_param('isrepetition', PARAM_INT);
     $case = optional_param('case', 1, PARAM_INT);
 
-    $lastposition = -1;
-    if ($isrepetition == 0) {
-
-        // 1. Update card entry. XXX in class card auslagern?
-        $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
-
-        if (empty($dataobject)) {
-            echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
-        }
-        $lastposition = $dataobject->cardposition;
-
-        if ($iscorrect == 1) {
-            if ($dataobject->cardposition == 0) {
-                $dataobject->cardposition = 2;
-            } else {
-                $dataobject->cardposition = $dataobject->cardposition + 1;
-            }
-        } else {
-            $dataobject->cardposition = 1;
-        }
-        $dataobject->lastpracticed = time();
-        $dataobject->repetitions = $dataobject->repetitions + 1;
-
-        $success = $DB->update_record('cardbox_progress', $dataobject, false);
-
+    $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
+    if (empty($dataobject)) {
+        echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
+    }
+    $lastposition = $dataobject->cardposition;
+    
+    $cardisdue = cardbox_is_card_due($dataobject);
+    
+    // 1. Update the card entry in the DB if
+    //    a) this is the first time the card was answered in this session and
+    //    b) the card is (over)due and/or was answered incorrectly.
+    if ($isrepetition == 0 && ($cardisdue == true || $iscorrect == 0) ) {
+            
+        $success = cardbox_update_card_progress($dataobject, $iscorrect);
+        
         if (empty($success)) {
             echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
         }
+        
     }
 
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        // $case, $context, $cardbox = null, $cardid = null, $correction = 0)
         $practice = new cardbox_practice($case, $context, null, $next);
         $newdata = $practice->export_for_template($renderer);
 

@@ -136,15 +136,6 @@
 
 /************************** Practice: modal with practice options *****************************************************/
 
-.path-mod-cardbox .cardbox-options {
-    width: 100%;
-    height: 100%;
-    display: grid;
-    grid-template-columns: 61.8% 38.2%;
-    grid-template-rows: 61.8% 38.2%;
-    grid-template-areas: "A B" "C D";
-}
-
 .path-mod-cardbox .modal {
     background-color: rgb(0,0,0); /* Fallback color */
     background-color: rgba(32, 32, 32, 0.75); /* Black w/ opacity */
@@ -153,6 +144,19 @@
 /*.path-mod-cardbox .modal-body .cardbox-options .row {
     margin-bottom: 1.5em;
 }*/
+
+.path-mod-cardbox .cardbox-options {
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: 61.8% 38.2%;
+    /*grid-template-rows: 33% 33% 34%;/*61.8% 38.2%;*/
+    grid-template-areas: "A B" "C D" "E F";
+}
+
+.path-mod-cardbox .goldenleft {
+    margin-bottom: 2em;
+}
 
 .path-mod-cardbox .item {
     display: flex;
@@ -175,8 +179,17 @@
     grid-area: D;
 }
 
-.path-mod-cardbox .goldenleft {
-    margin-bottom: 2em;
+.path-mod-cardbox .item.e {
+    grid-area: E;
+    margin-bottom: 0rem !important;
+}
+
+.path-mod-cardbox .item.f {
+    grid-area: F;
+}
+
+.path-mod-cardbox #cardbox-topic {
+    height: 75%;
 }
 
 /************************** Practice: autocorrection mode, solution display *****************************************************/

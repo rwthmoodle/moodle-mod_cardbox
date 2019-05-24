@@ -75,7 +75,11 @@ $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'Derzeit liegen keine Karten zur Übung bereit.';
 $string['help:nocardsavailableforpractice'] = 'Keine Karten';
-$string['help:nocardsavailableforpractice_help'] = 'Mögliche Gründe:<ul><li>Eine Karte kann frühestens nach 24 Stunden erneut geübt werden.</li><li>Karten, die 5x richtig beantwortet wurden, gelten als gelernt und werden nicht mehr wiederholt.</li></ul>';
+$string['help:nocardsavailableforpractice_help'] = 'Sie haben alle zurzeit verfügbaren Karten 5x richtig beantwortet. Damit gelten sie als gelernt und werden nicht mehr wiederholt.</ul>';
+$string['info:nocardsdueforpractice'] = "Derzeit sind keine Karten zur Wiederholung fällig.";
+$string['help:nocardsdueforpractice'] = 'Keine Karten fällig';
+$string['help:nocardsdueforpractice_help'] = 'Neue Karten sind sofort fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
+$string['help:practiceanyway'] = 'Möchten Sie dennoch üben, so klicken Sie bitte auf <em>Einstellungen</em> und wählen Sie die Option <em>Auch nicht-fällige Karten üben</em> aus.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Übungseinstellungen';
@@ -86,6 +90,8 @@ $string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Wenn Sie ein Thema gewichten, wird dieses verstärkt geübt. Dies bedeutet jedoch nicht, dass alle oder ausschließlich Karten zu diesem Thema geübt werden.';
 $string['notopicpreferred'] = 'keine Gewichtung';
+$string['practiceall'] = 'Auch nicht-fällige Karten üben';
+$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
 $string['beginpractice'] = 'Jetzt üben';
 $string['applysettings'] = 'Anwenden';
 $string['cancel'] = 'Abbrechen';

@@ -80,6 +80,7 @@ class cardbox_start implements \renderable, \templatable {
         $data['topics'] = $this->topics;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
+        $data['helpbuttonpracticeall'] = $OUTPUT->help_icon('practiceall', 'cardbox');
 
         return $data;
 

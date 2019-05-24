@@ -13,8 +13,8 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-
 /**
+ *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
@@ -23,9 +23,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2019050200; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+interface cardbox_card_selection_interface {
+    
+    public function cardbox_select_cards_for_practice($cards = null, $topic = null, $practiceall = null);
+    
+}
