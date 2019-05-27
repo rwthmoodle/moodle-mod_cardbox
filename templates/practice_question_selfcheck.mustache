@@ -1,12 +1,12 @@
 <div id="cardbox-practice-content" class="row">
 
-    <div class="col-sm-3"></div>
-    <div id="cardbox-cardcontainer" class="col-sm-6">
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
         {{#question}}
             {{> mod_cardbox/cardside }}
         {{/question}}
     </div>
-    <div class="col-sm-3">
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3">
     <!--<button id="cardbox-see-options" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cardboxPracticeSettings">{{# str }} options, cardbox {{/ str }}</button>-->
     </div>
 
@@ -14,12 +14,12 @@
 
 <div id="cardbox-practice-user-interaction" class="row">
 
-    <div class="col-sm-3"></div>
-    <div class="col-sm-6">
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
         <form id="cardbox-inputform">
             <input id="cardbox-check-answer" type="submit" value="{{# str }} checkanswer, cardbox {{/ str }}" class="btn btn-primary">
         </form>
     </div>
-    <div class="col-sm-3"></div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
 
 </div>

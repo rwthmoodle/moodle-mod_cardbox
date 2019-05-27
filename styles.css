@@ -225,17 +225,16 @@
     /*.path-mod-cardbox #cardbox-override, .path-mod-cardbox #cardbox-proceed {
         flex-grow: 1;
     }*/
-    
+
 }
 
-
-/* sm Small devices (landscape phones, 576px and up) */
+/* col-sm Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-    
+
     .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
         font-size: 1.2rem !important;
     }
-    
+
     .path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-left-side {
         margin-right: 1em;
         padding: 2em;
@@ -245,19 +244,19 @@
         margin-left: 1em;
         padding: 2em;
     }
-    
+
     .path-mod-cardbox .cardbox-feedback {
         padding-left: 0 !important;
         padding-right: 0 !important;
     }
-    
+
     .path-mod-cardbox #cardbox-override, .path-mod-cardbox #cardbox-proceed {
         float: right !important;
     }
-    
+
 }
 
-/* md Medium devices (landscape tablets, 768px and up) */
+/* col-md Medium devices (landscape tablets, 768px and up) */
 @media (min-width: 768px) {
     
     .path-mod-cardbox .cardbox-feedback {
@@ -268,12 +267,12 @@
     
 }
 
-/* lg Large devices (laptops/desktops, 992px and up) */
+/* col-lg Large devices (laptops/desktops, 992px and up) */
 @media (min-width: 992px) {
 
 }
 
-/* xl Extra large devices (large laptops and desktops, 1200px and up) */
+/* col-xl Extra large devices (large laptops and desktops, 1200px and up) */
 @media (min-width: 1200px) {
 
 }
