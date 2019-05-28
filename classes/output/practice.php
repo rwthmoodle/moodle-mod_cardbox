@@ -103,15 +103,29 @@ class cardbox_practice implements \renderable, \templatable {
                 }
 
             } else if ($content->cardside == 0) {
-                $this->question['texts'][] = array('text' => format_text($content->content));
+                
+                $content->content = $this->cardbox_format_string($content->content);
+                
+                $this->question['texts'][] = array('text' => $content->content);
 
             } else {
-                $this->answer['texts'][] = array('text' => format_text($content->content));
+                
+                $content->content = $this->cardbox_format_string($content->content);
+                
+                $this->answer['texts'][] = array('text' => $content->content);
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
             }
         }
 
+    }
+    
+    public function cardbox_format_string($input) {
+
+        $string = ltrim($input, '<p>');
+        $string = rtrim($string, '</p>');
+        return format_text($string);
+        
     }
 
     public function export_for_template(\renderer_base $output) {
