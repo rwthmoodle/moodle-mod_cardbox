@@ -33,7 +33,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
     private $spacing;
     private $availableBeforeDue;
     private $availableAndDue;
-    private static $priorityTopic;
+    private static $prioritytopic;
         
     public function __construct() {
 
@@ -57,6 +57,8 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      */
     public function cardbox_select_cards_for_practice($cards = null, $topic = null, $practiceall = true) {
 
+        global $DB;
+        
         if (empty($cards)) {
             return null;
         }

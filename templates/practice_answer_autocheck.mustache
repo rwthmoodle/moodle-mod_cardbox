@@ -10,16 +10,20 @@
     </div>
     <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
         <div class="cardbox-autocheck-card-right-side">
-            <div class="cardbox-text"><b>{{# str }} solution, cardbox {{/ str }}</b></div>
-            {{#answer}}
-                {{> mod_cardbox/cardside }}
-            {{/answer}}
-            <div class="cardbox-text"><b>{{# str }} yoursolution, cardbox {{/ str }}</b></div>
-            <div class="cardbox-text text-center">
-                {{#userinputitems}}
-                    <div id="cardbox-user-solution" class="{{colorclass}}">{{userinput}}</div>
-                {{/userinputitems}}
-            </div>
+            <p>
+                <div class="cardbox-card-text"><b>{{# str }} solution, cardbox {{/ str }}</b></div>
+                {{#answer}}
+                    {{> mod_cardbox/cardside }}
+                {{/answer}}
+            </p>
+            <p>
+                <div class="cardbox-card-text"><b>{{# str }} yoursolution, cardbox {{/ str }}</b></div>
+                <div class="cardbox-text">
+                    {{#userinputitems}}
+                        <div id="cardbox-user-solution" class="{{colorclass}} cardbox-card-text">{{userinput}}</div>
+                    {{/userinputitems}}
+                </div>
+            </p>
         </div>
     </div>
     <div class="hidden-xs col-lg-1 col-xl-2"></div>
