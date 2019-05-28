@@ -209,13 +209,12 @@
     flex-wrap: wrap;
     
 }*/
-
-.path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-text {
-    font-size: 16px !important;
-    /*font-size: calc(16px + (25px - 16px) * ((100vw - 300px) / (1600 - 300))) !important;*/
-    /*font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));*/
-}
-
+  
+    .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-text {
+        text-align: left;
+        /*font-size: calc([minimum size] + ([maximum size] - [minimum size]) * ((100vw - [minimum viewport width]) / ([maximum viewport width] - [minimum viewport width])));*/
+    }
+    
 
 @media (max-width: 323px) {
     
@@ -232,7 +231,7 @@
 @media (min-width: 576px) {
 
     .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
-        font-size: 1.2rem !important;
+        /*font-size: 1.2rem !important;*/
     }
 
     .path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-left-side {
@@ -264,7 +263,6 @@
         padding-right: 2em;
     }
     
-    
 }
 
 /* col-lg Large devices (laptops/desktops, 992px and up) */
@@ -294,12 +292,12 @@
 
 @media only screen and (min-width: 1062px) {
     .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
-        font-size: 1.4rem !important;
+        /*font-size: 1.4rem !important;*/
     }
 }
 
 .path-mod-cardbox #cardbox-feedback {
-    font-size: 16px;
+    /*font-size: 16px;*/
     padding-top: 0.2em;
 }
 
