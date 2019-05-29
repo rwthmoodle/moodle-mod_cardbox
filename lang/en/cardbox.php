@@ -109,7 +109,7 @@ $string['override_isincorrect'] = 'No, I was wrong.';
 $string['proceed'] = 'Next';
 
 $string['solution'] = 'Solution';
-$string['yoursolution'] = 'Your solution';
+$string['yoursolution'] = 'Your answer';
 
 // Practice mode: Feedback
 $string['feedback:correctandcomplete'] = 'Well done.';

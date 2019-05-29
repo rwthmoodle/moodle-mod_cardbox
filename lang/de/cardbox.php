@@ -112,7 +112,7 @@ $string['override_isincorrect'] = 'Als falsch werten';
 $string['proceed'] = 'Weiter';
 
 $string['solution'] = 'Lösung';
-$string['yoursolution'] = 'Ihre Lösung';
+$string['yoursolution'] = 'Ihre Antwort';
 
 // Practice mode: Feedback
 
