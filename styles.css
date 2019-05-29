@@ -82,24 +82,13 @@
     width: 100px !important;*/
 }
 
-/*.path-mod-cardbox .col-gold-lg {
-    background-color: green;
+.path-mod-cardbox #review-button-wrapper {
+    text-align: center;
 }
-
-.path-mod-cardbox .col-gold-sm {
-    background-color: gold;
-}*/
 
 .path-mod-cardbox .reviewcontent {
     margin-top: 50px;
     margin-bottom: 30px;
-}
-
-.path-mod-cardbox .cardbox-review-item {
-    border: 1px solid #e6e6e6;
-    border-radius: 3px;
-    margin: 1em;
-    padding: 2em;
 }
 
 .path-mod-cardbox .cardbox-review-button {
@@ -128,9 +117,7 @@
     margin-right: 1em;
 }*/
 
-/*
-
-*/.path-mod-cardbox #cardbox-skip {
+.path-mod-cardbox #cardbox-skip {
     /*background-color: #00b33c;*/
 }
 
@@ -204,11 +191,6 @@
 /* Extra small devices (portrait phones, less than 576px)
  No media query for `xs` since this is the default in Bootstrap*/
 
-.path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-left-side,
-.path-mod-cardbox .cardbox-autocheck-card-right-side, .path-mod-cardbox .cardbox-selfcheck-card-right-side { 
-    padding: 1em;
-}
-
 .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-text {
     font-size: 16px !important;
 }
@@ -222,18 +204,16 @@
     padding-right: 0em !important;
 }
 
-.path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-autocheck-card-right-side,
-.path-mod-cardbox .cardbox-selfcheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-right-side {
+.path-mod-cardbox .cardbox-card-left-side, .path-mod-cardbox .cardbox-card-right-side {
     border: 1px solid #e6e6e6;
     border-radius: 3px;
     margin-bottom: 2em;
-    /*padding: 2em;*/
+    padding: 1em;
     height: 94%;
 }
 
-
 @media (max-width: 323px) {
-    
+
     .path-mod-cardbox #cardbox-feedback-wrapper, .path-mod-cardbox #cardbox-feedback, .path-mod-cardbox #cardbox-proceed-buttons {
         padding: 0em !important;
     }
@@ -247,12 +227,12 @@
         font-size: 1.2rem !important;
     }
 
-    .path-mod-cardbox .cardbox-autocheck-card-left-side, .path-mod-cardbox .cardbox-selfcheck-card-left-side {
+    .path-mod-cardbox .cardbox-card-left-side {
         margin-right: 1em;
         padding: 2em;
     }
     
-    .path-mod-cardbox .cardbox-autocheck-card-right-side, .path-mod-cardbox .cardbox-selfcheck-card-right-side {
+    .path-mod-cardbox .cardbox-card-right-side {
         margin-left: 1em;
         padding: 2em;
     }

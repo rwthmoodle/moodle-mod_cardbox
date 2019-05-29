@@ -25,10 +25,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_review implements \renderable, \templatable {
     
-    private $frontimages;
-    private $fronttexts;
-    private $backimages;
-    private $backtexts;
+    private $question = array('images' => array(), 'texts' => array());
+    private $answer = array('images' => array(), 'texts' => array());
     private $cardid;
     
     /**
@@ -40,7 +38,8 @@ class cardbox_review implements \renderable, \templatable {
     public function __construct($context, $collection = null, $cardid = null) {
         
         require_once('model/cardcollection.class.php');
-        
+        require_once('locallib.php');
+
         if (!empty($collection)) {
             $contents = $collection->cardbox_get_cardcontents_initial();
             $this->cardid = $collection->cardbox_get_first_cardid();
@@ -54,11 +53,6 @@ class cardbox_review implements \renderable, \templatable {
         }
         $this->topic = cardbox_cardcollection::cardbox_get_topic($this->cardid);
 
-        $this->frontimages = array();
-        $this->fronttexts = array();
-        $this->backimages = array();
-        $this->backtexts = array();
-
         $fs = get_file_storage();
         foreach ($contents as $content) {
 
@@ -66,16 +60,20 @@ class cardbox_review implements \renderable, \templatable {
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
-                    $this->frontimages[] = array("frontimagesrc" => $download_url);
+                    $this->question['images'][] = array('imagesrc' => $download_url);
                 } else {
-                    $this->backimages[] = array("backimagesrc" => $download_url);
+                    $this->answer['images'][] = array('imagesrc' => $download_url);
                 }
 
             } else if ($content->cardside == 0) {
-                $this->fronttexts[] = array("fronttext" => format_text($content->content));
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->question['texts'][] = array('text' => $content->content);
 
             } else {
-                $this->backtexts[] = array("backtext" => format_text($content->content));
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->answer['texts'][] = array('text' => $content->content);
             }
         }
 
@@ -92,10 +90,8 @@ class cardbox_review implements \renderable, \templatable {
         } else {
             $data['topic'] = get_string('notopic', 'cardbox');
         }
-        $data['frontimages'] = $this->frontimages;
-        $data['fronttexts'] = $this->fronttexts;
-        $data['backimages'] = $this->backimages;
-        $data['backtexts'] = $this->backtexts;
+        $data['question'] = $this->question;
+        $data['answer'] = $this->answer;
         $data['cards'] = true;
         return $data;
     }
