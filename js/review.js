@@ -74,7 +74,7 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
         }
         /**
          * 
-         * @param {type} status
+         * @param string action
          * @returns {undefined}
          */
         function controlUpdate(action) {
