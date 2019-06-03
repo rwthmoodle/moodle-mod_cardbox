@@ -137,6 +137,7 @@ $string['reject'] = 'Reject';
 $string['edit'] = 'Edit';
 $string['skip'] = 'Skip';
 
+// Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
 $string['barchartxaxislabel'] = 'Deck';

@@ -142,9 +142,9 @@ $string['reject'] = 'Ablehnen';
 $string['edit'] = 'Bearbeiten';
 $string['skip'] = 'Überspringen';
 
+// Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
-
 $string['barchartxaxislabel'] = 'Fach';
 $string['barchartyaxislabel'] = 'Kartenzahl';
 $string['linegraphxaxislabel'] = 'Datum';

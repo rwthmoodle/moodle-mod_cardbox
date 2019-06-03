@@ -30,10 +30,10 @@ require_once('card_selection_interface.php');
 class cardbox_card_selection_algorithm implements cardbox_card_selection_interface {
 
     private static $now;
+    private static $prioritytopic;
     private $spacing;
     private $availableBeforeDue;
     private $availableAndDue;
-    private static $prioritytopic;
         
     public function __construct() {
 
@@ -214,7 +214,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
     }
     /**
      * This function sorts cards according to the time they were last practiced.
-     * If both cards are due within a time interval of 6 hours, they are on the
+     * If both cards are due within a time interval of 3 hours, they are on the
      * same deck and were repeated the same amount of times, then this is the
      * last sorting criterion.
      * 
