@@ -34,8 +34,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
-        console.log('__selection: ', __selection);
-
         /*********** 1. Variables and Calls ***********/
 
         var cardcount = __selection.length; // to be used for statistics/progress bar.
@@ -210,7 +208,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
             answergiven = 1;
             considercardcorrect = false;
 
-            var solutions = __data.answer.texts;
+            var solutions = __data.answer.texts;            
             userinput = [];
             var matches = [];
             var answers = [];
@@ -260,7 +258,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
              */
             function check(solutionitem, index) {
 
-                solutionitem = solutionitem.text;
+                solutionitem = solutionitem.puretext;
                 
                 var j;
                 var userinputitem;
