@@ -25,11 +25,73 @@ require_once('card_sorting_interface.php');
 
 class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
 
+    /**
+     * This function sorts a selection of cards for practice.
+     * 1. Cards are shuffled by topic to make them more memorable.
+     * 2. New and difficult material is positioned at the beginning and end.
+     * 
+     * @global type $DB
+     * @param type $cardselection
+     * @return type
+     */
     public function cardbox_sort_cards_for_practice($cardselection) {
-
-        usort($cardselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_for_sorting'));        
-        return $cardselection;
         
+        global $DB;
+        
+        $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardselection[0]->card), $strictness=MUST_EXIST);
+        $topics = $DB->get_fieldset_select('cardbox_topics', 'topicname', 'cardboxid = ?', array($cardboxid));
+        
+        if (empty($topics)) {
+            
+            // 0. Move new and difficult material to the beginning and end of the practice session.
+            usort($cardselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_for_sorting'));
+            
+            return $cardselection;
+            
+        }
+
+        // 1. Shuffle the topics.
+                
+        $coll = new stdClass();
+        $coll->notopic = [];
+        foreach ($topics as $topic) {
+            $coll->$topic = [];
+            
+        }
+        // 1.2 Sort cards by topic.
+        foreach ($cardselection as $card) {    
+            if (!empty($card->topicname)) {
+                $topicname = $card->topicname;
+                $coll->$topicname[] = $card;
+            } else {
+                $coll->notopic[] = $card;
+            }   
+        }
+        
+        // 1.3 Mix topics.
+        
+        $newselection = array();
+        
+        $remaining = count($cardselection);
+        
+        for ($i = 0; $remaining > 0; $i++) {
+            
+            foreach ($coll as $topic) {
+                
+                if (!empty($topic[$i]) && ($remaining > 0) )  {
+                    
+                    $newselection[] = $topic[$i];
+                    $remaining--;
+                }
+            }
+
+        }
+        
+        // 2. Move new and difficult material to the beginning and end of the practice session.
+        usort($newselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_for_sorting'));
+
+        return $newselection;
+
     }
 
     /**
