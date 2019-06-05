@@ -78,12 +78,7 @@ if ($action === 'review') {
         echo json_encode(['status' => 'success', 'finished' => 0, 'newdata' => $newdata]);
 
     } else {
-        
-//        if (empty($list)) {
-//            $info = get_string('info:nocardsavailableforreview', 'cardbox');
-//            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-//        }
-        
+
         echo json_encode(['status' => 'success', 'finished' => 1]);
     }
 
