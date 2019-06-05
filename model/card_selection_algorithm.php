@@ -74,11 +74,11 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         
         // 1. Calculate the ideal date and time of repetition for each card.
         foreach($cards as $card) {
-            
+
             if ($card->cardposition > 5) {
                 continue;
             }
-            
+
             if ($card->cardposition == 0) {
                 $card->duedatetime = new DateTime("now");
 
@@ -86,7 +86,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
                 $last = new DateTime("@$card->lastpracticed");
                 $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
             }
-            
+
             if ( ($card->duedatetime <= $now) || $practiceall ) {
                 $priorityqueue[] = $card;
             }
@@ -100,7 +100,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         } else {
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_1st_level'));
         }
-        
+
         // 3. Pick the first 21 cards from the queue.
         for ($i = 0; ( ($i < count($priorityqueue)) && ($i < 21)); $i++) {
             $card = $priorityqueue[$i];
