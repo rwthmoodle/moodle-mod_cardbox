@@ -85,8 +85,7 @@ if ($action === 'review') {
         
         echo json_encode(['status' => 'success', 'finished' => 1]);
     }
-    
-    
+
 }
 
 /* * ********************** move card to the next box and return next card *********************** */

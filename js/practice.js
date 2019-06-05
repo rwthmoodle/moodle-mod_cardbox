@@ -208,7 +208,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
             answergiven = 1;
             considercardcorrect = false;
 
-            var solutions = __data.answer.texts;
+            var solutions = __data.answer.texts;            
             userinput = [];
             var matches = [];
             var answers = [];
@@ -258,7 +258,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
              */
             function check(solutionitem, index) {
 
-                solutionitem = solutionitem.text;
+                solutionitem = solutionitem.puretext;
                 
                 var j;
                 var userinputitem;

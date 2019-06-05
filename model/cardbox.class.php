@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_cardboxmodel { // use this class as a templatable as well?
 
+    private $id;
     private $flashcards;
     private $cardcount = 0;
     private $duecardcount = 0;
@@ -44,17 +45,18 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         global $DB, $USER;
         
+        $this->id = $cardboxid;
+        
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
         cardbox_add_new_cards();
 
         // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
-        $this->cardbox_get_users_cards($cardboxid);
+        $this->cardbox_get_users_cards();
 
         // 3. Select 21 flashcards for a practice session.
         if (!empty($this->flashcards) && !empty($algorithm)) {
             $this->algorithm = $algorithm;
-            $this->cardbox_select_cards_for_practice($topic, $practiceall);
-            
+            $this->cardbox_select_cards_for_practice($topic, $practiceall);    
         }
         
         // 4. Sort the selected cards.
@@ -118,12 +120,9 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $USER
      * @return array of objects or null
      */
-    public function cardbox_get_users_cards($cardboxid) {
+    public function cardbox_get_users_cards() {
 
-        global $DB, $USER, $CFG;        
-        //require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
-        
-        $now = new DateTime("now");
+        global $DB, $USER;
 
         $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
                 . "FROM {cardbox_progress} p "
@@ -132,7 +131,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 . "WHERE p.userid = ? AND c.cardbox = ? "
                 . "ORDER BY p.cardposition";
 
-        $flashcards =  $DB->get_records_sql($sql, array($USER->id, $cardboxid));
+        $flashcards =  $DB->get_records_sql($sql, array($USER->id, $this->id));
 
         if (empty($flashcards)) {
             $this->cardcount = 0;
