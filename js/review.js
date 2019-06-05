@@ -64,9 +64,9 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
                 edit();
             });
 
-//            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
-//                reject();
-//            });
+            document.getElementById('cardbox-reject').addEventListener('click', function(e) {
+                reject();
+            });
             
             document.getElementById('cardbox-skip').addEventListener('click', function(e) {
                 skip();
@@ -160,9 +160,9 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
             openCardFormForEditing();
         }
         
-//        function reject() {
-//            controlUpdate('reject');
-//        }
+        function reject() {
+            controlUpdate('reject');
+        }
         
         function skip() {
             controlUpdate('skip');

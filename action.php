@@ -57,6 +57,7 @@ if ($action === 'review') {
             break;
         
         case 'reject':
+            $success = cardbox_delete_card($cardid);
             break;
         
         case 'skip':
