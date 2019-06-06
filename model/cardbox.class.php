@@ -180,7 +180,11 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     }
     
     public function cardbox_get_first_card() {
-        return $this->selection[0];
+        if (isset($this->selection[0])) {
+            return $this->selection[0];
+        } else {
+            return null;
+        }
     }
 
     /**
