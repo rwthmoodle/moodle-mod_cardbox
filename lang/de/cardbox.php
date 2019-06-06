@@ -61,7 +61,7 @@ $string['savecard'] = 'Speichern';
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
-$string['success:reject'] = '.';
+$string['success:reject'] = 'Die Karte wurde gelöscht.';
 //$string['success:skip'] = '.';
 
 // Error notifications

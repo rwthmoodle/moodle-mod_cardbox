@@ -153,6 +153,43 @@ function cardbox_edit_card($cardid, $topicid) {
     return $success;
 
 }
+/**
+ * Function deletes a card, its contents and topic.
+ * 
+ * @global obj $DB
+ * @param int $cardid
+ * @return boolean
+ */
+function cardbox_delete_card($cardid) {
+    
+    global $DB;
+    
+    // Check whether the card exists.
+    $card = $DB->get_record('cardbox_cards', array('id' => $cardid), '*', MUST_EXIST);
+    
+    if (empty($card)) {
+        return false;
+    }
+    
+    // Delete its contents.
+    $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
+    
+    if (empty($success)) {
+        return false;
+    }
+    
+    // Delete its topic if no other card uses it.
+    if (!empty($card->topic)) {
+        $count = $DB->count_records('cardbox_cards', array('topic' => $card->topic));
+        if ($count == 1) {
+            $DB->delete_records('cardbox_topics', array('id' => $card->topic));
+        }
+    }
+
+    // Delete the card itself.
+    return $DB->delete_records('cardbox_cards', array('id' => $cardid));
+    
+}
 
 /**
  * This function checks whether there are new cards available in the DB

@@ -60,8 +60,8 @@ $string['savecard'] = 'Save';
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
 $string['success:approve'] = 'The card was approved and is now free to use.';
-$string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet und zum Lernen freigegeben.';
-$string['success:reject'] = '.';
+$string['success:edit'] = 'The card was edited.';
+$string['success:reject'] = 'The card was deleted.';
 //$string['success:skip'] = '.';
 
 // Error notifications

@@ -44,14 +44,14 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
         if (empty($topics)) {
             
             // 0. Move new and difficult material to the beginning and end of the practice session.
-            usort($cardselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_for_sorting'));
-            
+            usort($cardselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_primacy_recency'));
+
             return $cardselection;
-            
+
         }
 
         // 1. Shuffle the topics.
-                
+
         $coll = new stdClass();
         $coll->notopic = [];
         foreach ($topics as $topic) {
@@ -69,11 +69,11 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
         }
         
         // 1.3 Mix topics.
-        
+
         $newselection = array();
-        
+
         $remaining = count($cardselection);
-        
+
         for ($i = 0; $remaining > 0; $i++) {
             
             foreach ($coll as $topic) {
@@ -86,9 +86,9 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
             }
 
         }
-        
+
         // 2. Move new and difficult material to the beginning and end of the practice session.
-        usort($newselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_for_sorting'));
+        usort($newselection, array('cardbox_card_sorting_algorithm', 'cardbox_compare_cards_primacy_recency'));
 
         return $newselection;
 
@@ -103,7 +103,7 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
      * @param stdClass object representing a card $a
      * @param stdClass object representing a card $b
      */
-    static function cardbox_compare_cards_for_sorting($a, $b) {
+    static function cardbox_compare_cards_primacy_recency($a, $b) {
 
         if ($a->cardposition == $b->cardposition) {
             return 0;
