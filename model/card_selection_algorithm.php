@@ -43,7 +43,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         $this->spacing[3] = new DateInterval('P7D');
         $this->spacing[4] = new DateInterval('P16D');
         $this->spacing[5] = new DateInterval('P34D');
-        
+
         $this->availableBeforeDue = 0;
         $this->availableAndDue = 0;
     }
@@ -55,24 +55,20 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @param type $cards
      * @return type
      */
-    public function cardbox_select_cards_for_practice($cards = null, $topic = null, $practiceall = true) {
+    public function cardbox_select_cards_for_practice($cards = null, $topicid = null, $practiceall = true) {
 
         global $DB;
-        
+
         if (empty($cards)) {
             return null;
         }
-        
+
         $now = new DateTime("now");
-        
+
         $priorityqueue = [];
         $selection = [];
-        
-        if (!empty($topic) && $topic != -1) {
-            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic), $strictness=MUST_EXIST);
-        }
-        
-        // 1. Calculate the ideal date and time of repetition for each card.
+
+        // 1. Calculate the ideal date and time of repetition for each card and add due cards to the queue.
         foreach($cards as $card) {
 
             if ($card->cardposition > 5) {
@@ -95,7 +91,8 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         
         // 2. Sort the cards according to their ideal repetition date times, deck, number of repetitions and time of last practice.
         //    There is an option to prioritise cards by topic first.
-        if (!empty($topic) && $topic != -1) {
+        if (!empty($topicid) && $topicid != -1) {
+            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topicid), $strictness=MUST_EXIST);
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_priority_topic'));
         } else {
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_1st_level'));
@@ -183,16 +180,13 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @return int
      */
     static function cardbox_compare_cards_2nd_level($a, $b) {
-        
-        // Prioritise cards from lower decks over those from higher decks.
-        if ($a->cardposition < $b->cardposition) {
-            return -1;
-        }
-        if ($a->cardposition > $b->cardposition) {
-            return 1;
+
+        if ($a->cardposition == $b->cardposition) {
+            return self::cardbox_compare_cards_3rd_level($a, $b);
         }
 
-        return self::cardbox_compare_cards_3rd_level($a, $b);
+        // Prioritise cards from lower decks over those from higher decks.
+        return ($a->cardposition < $b->cardposition) ? -1 : 1;
 
     }
     /**
