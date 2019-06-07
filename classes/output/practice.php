@@ -64,15 +64,7 @@ class cardbox_practice implements \renderable, \templatable {
             default:
                 // TODO Error handling.
         }
-        
-        echo "<br>Der Konstruktor des practice-templatables erhält als cardbox:";
-        
-        print_r($cardbox);
-        
-        echo "<br>und als cardid: ";
-        
-        print_r($cardid);
-        
+
         $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
         
 //        $this->cardbox_prepare_topics_to_study($cardbox->id);
@@ -89,13 +81,9 @@ class cardbox_practice implements \renderable, \templatable {
 
         if (!empty($cardbox)) {
             $card = $cardbox->cardbox_get_first_card();
-            echo "<br>cardbox_get_first_card() liefert: ";
-            var_dump($card);
             
         } else {
             $card = cardbox_cardboxmodel::cardbox_get_card($cardid);
-            echo "<br>cardbox_cardboxmodel::cardbox_get_card(cardid) liefert: ";
-            var_dump($card);
 
         }
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($card->card);
