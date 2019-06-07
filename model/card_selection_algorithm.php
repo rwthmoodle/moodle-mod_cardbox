@@ -76,7 +76,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
             }
 
             if ($card->cardposition == 0) {
-                $card->duedatetime = new DateTime("now");
+                $card->duedatetime = $now; //new DateTime("now");
 
             } else {
                 $last = new DateTime("@$card->lastpracticed");
