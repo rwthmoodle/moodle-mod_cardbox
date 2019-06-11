@@ -102,13 +102,13 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         for ($i = 0; ( ($i < count($priorityqueue)) && ($i < 21)); $i++) {
             $card = $priorityqueue[$i];
              // Also determine whether there are cards that are not due yet.
-            if ($card->duedatetime > $now) {
-                $card->isdue = false;
-                //$this->availableBeforeDue++;
-            } else {
-                $card->isdue = true;
-                //$this->availableAndDue++;
-            }
+//            if ($card->duedatetime > $now) {
+//                $card->isdue = false;
+//                //$this->availableBeforeDue++;
+//            } else {
+//                $card->isdue = true;
+//                //$this->availableAndDue++;
+//            }
             $selection[] = $card;
         }
         
