@@ -21,11 +21,14 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2019061100; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+$tasks = [
+    [
+        'classname' => 'mod_cardbox\task\cardbox_remind',
+        'blocking' => 0, // does not prevent other scheduled tasks from running at the same time.
+        'minute' => '00',
+        'hour' => '15',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '0', // 0 and 7 are Sunday.
+    ],
+];

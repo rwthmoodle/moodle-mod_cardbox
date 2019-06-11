@@ -32,6 +32,8 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Activate autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = 'Activate with care.';
+$string['send_practice_reminders'] = 'Send e-mail reminders to the course participants';
+$string['messageprovider:memo'] = 'Reminders to practice with cardbox';
 
 // Tab navigation
 $string['addflashcard'] = 'Add a card';

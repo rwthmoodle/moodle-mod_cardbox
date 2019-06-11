@@ -32,6 +32,8 @@ $string['pluginadministration'] = 'Karteikasten Administration';
 $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
 $string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
 $string['setting_autocorrection_label'] = 'Vorsicht geboten!';
+$string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/innen versenden';
+$string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';

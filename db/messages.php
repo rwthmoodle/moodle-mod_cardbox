@@ -15,6 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * The cardbox plugin is registered as a message provider and the messages
+ * produced are defined.
+ *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
@@ -23,9 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2019061100; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+$messageproviders = array (
+    
+    'memo' => array (
+        'capability'  => 'mod/cardbox:practice',
+        'defaults' => array(
+            'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+        )
+    )
+);
