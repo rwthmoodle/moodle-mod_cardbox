@@ -32,8 +32,14 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Activate autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = 'Activate with care.';
+
+// Reminders
 $string['send_practice_reminders'] = 'Send e-mail reminders to the course participants';
 $string['messageprovider:memo'] = 'Reminders to practice with cardbox';
+$string['remindersubject'] = 'Practice reminder';
+$string['remindergreeting'] = 'Hello {$a}, ';
+$string['remindermessagebody'] = 'please remember to study with your cardbox on a regular basis.';
+$string['reminderfooting'] = 'This reminder was sent automatically by your cardbox {$a->cardboxname} in the course {$a->coursename}.';
 
 // Tab navigation
 $string['addflashcard'] = 'Add a card';

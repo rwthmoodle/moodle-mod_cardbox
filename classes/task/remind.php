@@ -21,26 +21,34 @@
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_cardbox\tasks;
+namespace mod_cardbox\task;
+
+use core_user;
 
 class remind extends \core\task\scheduled_task {
     
     public function execute() {
         
-        global $DB, $USER;
+        global $DB;
         
-        $sql = "SELECT co.id AS courseid, cm.id AS coursemoduleid, ca.name AS cardboxname, co.fullname AS coursename "
+        // Testen über URL https://d-mo04.devlef.campus.rwth-aachen.de/moodle/admin/tool/task/schedule_task.php?task=\mod_cardbox\task\remind
+
+        $sql = "SELECT cm.id, cm.course AS courseid, cm.id AS coursemoduleid, ca.name AS cardboxname, co.fullname AS coursename "
                 . "FROM {course_modules} cm "
-                . "JOIN {modules} m ON cm.module = m.id "
+                . "LEFT JOIN {modules} m ON cm.module = m.id "
                 . "JOIN {cardbox} ca ON cm.instance = ca.id "
-                . "JOIN {course} co ON cm.course = co.id "
+                . "LEFT JOIN {course} co ON cm.course = co.id "
                 . "WHERE m.name = ?";
 
         $cardboxes =  $DB->get_records_sql($sql, array('cardbox'));
-
+        
         foreach ($cardboxes as $cardbox) {
 
-            $cardbox->context = context_module::instance($cardbox->coursemoduleid);
+            $info = new \stdClass();
+            $info->cardboxname = $cardbox->cardboxname;
+            $info->coursename = $cardbox->coursename;
+            
+            $cardbox->context = \context_module::instance($cardbox->coursemoduleid);
 
             $recipients = get_enrolled_users($cardbox->context, 'mod/cardbox:practice');
 
@@ -48,21 +56,20 @@ class remind extends \core\task\scheduled_task {
                 $message = new \core\message\message();
                 $message->component = 'mod_cardbox';
                 $message->name = 'memo';
-                $message->userfrom = $USER; // TODO replace
+                $message->userfrom = core_user::get_noreply_user();
                 $message->userto = $recipient;
-                $message->subject = 'practice memo'; // XXX Durch get_string() ersetzen
-                $message->fullmessage = 'message body';
+                $message->subject = get_string('remindersubject', 'cardbox');
+                $message->fullmessage = get_string('remindergreeting', 'cardbox', $recipient->username). ' ' . get_string('remindermessagebody', 'cardbox') . ' ' . get_string('reminderfooting', 'cardbox', $info);
                 $message->fullmessageformat = FORMAT_MARKDOWN;
-                $message->fullmessagehtml = '<p>message body</p>';
+                $message->fullmessagehtml = '<p>' . get_string('remindergreeting', 'cardbox', $recipient->username) . '<br>' . get_string('remindermessagebody', 'cardbox') . '</p><p>' . get_string('reminderfooting', 'cardbox', $info) . '</p>';
                 $message->smallmessage = 'small message';
                 $message->notification = 1; // For personal messages '0'. Important: the 1 without '' and 0 with ''.
-                $message->contexturl = 'http://GalaxyFarFarAway.com';
-                $message->contexturlname = 'Context name';
+                //$message->contexturl = 'http://GalaxyFarFarAway.com';
+                //$message->contexturlname = 'Context name';
     //            $message->replyto = "random@example.com";
                 $content = array('*' => array('header' => ' test ', 'footer' => ' test ')); // Extra content for specific processor
     //            $message->set_additional_content('email', $content);
                 $message->courseid = $cardbox->courseid;
-
 
                 $messageid = message_send($message);
 

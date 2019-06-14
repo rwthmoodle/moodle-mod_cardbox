@@ -32,8 +32,14 @@ $string['pluginadministration'] = 'Karteikasten Administration';
 $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
 $string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
 $string['setting_autocorrection_label'] = 'Vorsicht geboten!';
-$string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/innen versenden';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
+
+// Reminders
+$string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/innen versenden';
+$string['remindersubject'] = 'Übungserinnerung';
+$string['remindergreeting'] = 'Hallo {$a}, ';
+$string['remindermessagebody'] = "bitte denken Sie daran, regelmäßig mit Ihrem Karteikasten zu lernen.";
+$string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karteikasten {$a->cardboxname} im Kurs {$a->coursename} versendet.';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';
