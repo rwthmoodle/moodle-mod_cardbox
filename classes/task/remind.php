@@ -21,9 +21,9 @@
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-namespace mod_cardbox\taks;
+namespace mod_cardbox\tasks;
 
-class cardbox_remind extends \core\task\scheduled_task {
+class remind extends \core\task\scheduled_task {
     
     public function execute() {
         

@@ -23,7 +23,7 @@
 
 $tasks = [
     [
-        'classname' => 'mod_cardbox\task\cardbox_remind',
+        'classname' => 'mod_cardbox\task\remind',
         'blocking' => 0, // does not prevent other scheduled tasks from running at the same time.
         'minute' => '00',
         'hour' => '15',
