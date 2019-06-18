@@ -53,18 +53,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         $this->selectionalgorithm = $selectionalgorithm;
         $this->sortingalgorithm = $sortingalgorithm;
-        
-//        // 3. Select 21 flashcards for a practice session.
-//        if (!empty($this->flashcards) && !empty($selectionalgorithm)) {
-//            $this->selectionalgorithm = $selectionalgorithm;
-//            $this->cardbox_select_cards_for_practice();    
-//        }
-//        
-//        // 4. Sort the selected cards.
-//        if (!empty($this->selection) && !empty($sortingalgorithm)) {
-//            $this->sortingalgorithm = $sortingalgorithm;
-//            $this->cardbox_sort_cards();
-//        }
 
     }
     /**
