@@ -15,6 +15,9 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
+ * This file sets the default schedule for system notifications (practice reminders).
+ * Managers can change the timing via site administration -> server -> scheduled tasks.
+ * 
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes

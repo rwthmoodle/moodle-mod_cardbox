@@ -42,8 +42,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $sortingalgorithm;
     
     public function __construct($cardboxid, $topic = null, cardbox_card_selection_interface $algorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null, $practiceall = true) {
-
-        global $DB, $USER;
         
         $this->id = $cardboxid;
         
@@ -246,41 +244,4 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         return ($a->cardside < $b->cardside) ? -1 : 1;
         
     }
-    
-    
-    /**
-     * Function returns the topic a card belongs to (if any).
-     *
-     * @global obj $DB
-     * @param type $cardid
-     * @return string or null
-     */
-//    public function cardbox_get_card_topic($cardid) {
-//        
-//        global $DB;
-//        
-//        $sql = "SELECT t.topicname "
-//                . "FROM {cardbox_cards} c JOIN {cardbox_topics} t ON c.topic = t.id "
-//                . "WHERE c.id = ?";
-//
-//        return $DB->get_record_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
-//
-//    }
-
 }
-
-
-
-
-        // This gets all card contents with the card info duplicated. // working :)
-//        $sql = "SELECT cont.id as contentid, p.card, cont.cardside, cont.content, "
-//                . "p.cardposition, p.lastpracticed, p.repetitions, "
-//                . "top.topicname "
-//                . "FROM {cardbox_progress} p "
-//                . "JOIN {cardbox_cardcontents} cont ON cont.card = p.card "
-//                . "LEFT JOIN {cardbox_cards} c ON c.id = cont.card "
-//                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
-//                . "WHERE p.userid = ? AND c.cardbox = ? "
-//                . "ORDER BY p.card, cont.cardside";
-//
-//        $flashcards = $DB->get_records_sql($sql, array($USER->id, $cardboxid));

@@ -39,7 +39,7 @@ $string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/
 $string['remindersubject'] = 'Übungserinnerung';
 $string['remindergreeting'] = 'Hallo {$a}, ';
 $string['remindermessagebody'] = "bitte denken Sie daran, regelmäßig mit Ihrem Karteikasten zu lernen.";
-$string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karteikasten {$a->cardboxname} im Kurs {$a->coursename} versendet.';
+$string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karteikasten "{$a->cardboxname}" im Kurs "{$a->coursename}" versendet.';
 
 // Tab navigation
 $string['addflashcard'] = 'Karte anlegen';

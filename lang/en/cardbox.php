@@ -39,7 +39,7 @@ $string['messageprovider:memo'] = 'Reminders to practice with cardbox';
 $string['remindersubject'] = 'Practice reminder';
 $string['remindergreeting'] = 'Hello {$a}, ';
 $string['remindermessagebody'] = 'please remember to study with your cardbox on a regular basis.';
-$string['reminderfooting'] = 'This reminder was sent automatically by your cardbox {$a->cardboxname} in the course {$a->coursename}.';
+$string['reminderfooting'] = 'This reminder was sent automatically by your cardbox "{$a->cardboxname}" in the course "{$a->coursename}".';
 
 // Tab navigation
 $string['addflashcard'] = 'Add a card';
