@@ -37,11 +37,11 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $countboxthree;
     private $countboxfour;
     private $countboxfive;
-    private $selection;
-    private $algorithm;
+    private $selection = null;
+    private $selectionalgorithm;
     private $sortingalgorithm;
     
-    public function __construct($cardboxid, $topic = null, cardbox_card_selection_interface $algorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null, $practiceall = true) {
+    public function __construct($cardboxid, cardbox_card_selection_interface $selectionalgorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null) {
         
         $this->id = $cardboxid;
         
@@ -51,17 +51,20 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
         $this->cardbox_get_users_cards();
 
-        // 3. Select 21 flashcards for a practice session.
-        if (!empty($this->flashcards) && !empty($algorithm)) {
-            $this->algorithm = $algorithm;
-            $this->cardbox_select_cards_for_practice($topic, $practiceall);    
-        }
+        $this->selectionalgorithm = $selectionalgorithm;
+        $this->sortingalgorithm = $sortingalgorithm;
         
-        // 4. Sort the selected cards.
-        if (!empty($this->selection) && !empty($sortingalgorithm)) {
-            $this->sortingalgorithm = $sortingalgorithm;
-            $this->cardbox_sort_cards();
-        }
+//        // 3. Select 21 flashcards for a practice session.
+//        if (!empty($this->flashcards) && !empty($selectionalgorithm)) {
+//            $this->selectionalgorithm = $selectionalgorithm;
+//            $this->cardbox_select_cards_for_practice();    
+//        }
+//        
+//        // 4. Sort the selected cards.
+//        if (!empty($this->selection) && !empty($sortingalgorithm)) {
+//            $this->sortingalgorithm = $sortingalgorithm;
+//            $this->cardbox_sort_cards();
+//        }
 
     }
     /**
@@ -86,10 +89,22 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @return array of ints
      */
     public function cardbox_get_card_selection() {
-        if (empty($this->selection)) {
+        
+        $selection = array();
+        
+        // Select 21 flashcards for a practice session.
+        if (!empty($this->flashcards) && !empty($this->selectionalgorithm)) {
+            $this->cardbox_select_cards_for_practice();    
+        } else {
             return null;
         }
-        $selection = array();
+        
+        // Sort the selected cards.
+        if (!empty($this->selection) && !empty($this->sortingalgorithm)) {
+            $this->cardbox_sort_cards();
+        }
+        
+        // Return the ids of the cards.
         foreach ($this->selection as $card) {
             $selection[] = $card->card;
         }
@@ -161,10 +176,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $DB
      * @param type $topic
      */
-    public function cardbox_select_cards_for_practice($topic = null, $practiceall) {
+    public function cardbox_select_cards_for_practice() {
 
         // Delegate card selection to the selection algorithm instance.
-        $this->selection = $this->algorithm->cardbox_select_cards_for_practice($this->flashcards, $topic, $practiceall);
+        $this->selection = $this->selectionalgorithm->cardbox_select_cards_for_practice($this->flashcards);
 
     }
     /**

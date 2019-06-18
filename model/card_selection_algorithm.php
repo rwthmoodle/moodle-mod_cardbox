@@ -34,8 +34,10 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
     private $spacing;
     private $availableBeforeDue;
     private $availableAndDue;
+    private $topicid;
+    private $practiceall;
         
-    public function __construct() {
+    public function __construct($topicid = null, $practiceall = true) {
 
         $this->spacing = array();
         $this->spacing[1] = new DateInterval('P1D');
@@ -46,6 +48,9 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
 
         $this->availableBeforeDue = 0;
         $this->availableAndDue = 0;
+        
+        $this->topicid = $topicid;
+        $this->practiceall = $practiceall;
     }
     /**
      * This function creates a priority queue from the user's cards
@@ -55,7 +60,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @param type $cards
      * @return type
      */
-    public function cardbox_select_cards_for_practice($cards = null, $topicid = null, $practiceall = true) {
+    public function cardbox_select_cards_for_practice($cards = null) {
 
         global $DB;
 
@@ -83,7 +88,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
                 $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
             }
 
-            if ( ($card->duedatetime <= $now) || $practiceall ) {
+            if ( ($card->duedatetime <= $now) || $this->practiceall ) {
                 $priorityqueue[] = $card;
             }
 
@@ -91,8 +96,8 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         
         // 2. Sort the cards according to their ideal repetition date times, deck, number of repetitions and time of last practice.
         //    There is an option to prioritise cards by topic first.
-        if (!empty($topicid) && $topicid != -1) {
-            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topicid), $strictness=MUST_EXIST);
+        if (!empty($this->topicid) && $this->topicid != -1) {
+            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $this->topicid), $strictness=MUST_EXIST);
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_priority_topic'));
         } else {
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_1st_level'));

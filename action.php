@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** 
- * In this file, incoming AJAX request practice.js are handled.
+ * In this file, incoming AJAX request from  practice.js are handled.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)

@@ -276,9 +276,9 @@ if ($action === 'practice') {
     $openmodal = true;
 
     // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-    $algorithm = new cardbox_card_selection_algorithm();
-    $sortingalgorithm = new cardbox_card_sorting_algorithm();
-    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $topic, $algorithm, $sortingalgorithm, $practiceall);
+    $select = new cardbox_card_selection_algorithm($topic, $practiceall);
+    $sort = new cardbox_card_sorting_algorithm();
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort);
     $cardcount = $cardboxmodel->cardbox_get_card_count();
     $duecardcount = $cardboxmodel->cardbox_count_due_cards();
     $selection = $cardboxmodel->cardbox_get_card_selection();
