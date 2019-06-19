@@ -64,7 +64,7 @@ class cardbox_practice implements \renderable, \templatable {
             default:
                 // TODO Error handling.
         }
-        
+
         $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
         
 //        $this->cardbox_prepare_topics_to_study($cardbox->id);

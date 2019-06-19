@@ -13,18 +13,25 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
- *
+ * This file sets the default schedule for system notifications (practice reminders).
+ * Managers can change the timing via site administration -> server -> scheduled tasks.
+ * 
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
-
-interface cardbox_card_selection_interface {
-    
-    public function cardbox_select_cards_for_practice($cards = null);
-    
-}
+$tasks = [
+    [
+        'classname' => 'mod_cardbox\task\remind',
+        'blocking' => 0, // does not prevent other scheduled tasks from running at the same time.
+        'minute' => '00',
+        'hour' => '15',
+        'day' => '*',
+        'month' => '*',
+        'dayofweek' => '0', // 0 and 7 are Sunday.
+    ],
+];

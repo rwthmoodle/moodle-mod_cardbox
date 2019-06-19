@@ -13,7 +13,10 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
 /**
+ * The cardbox plugin is registered as a message provider and the messages
+ * produced are defined.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
@@ -23,8 +26,13 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-interface cardbox_card_selection_interface {
+$messageproviders = array (
     
-    public function cardbox_select_cards_for_practice($cards = null);
-    
-}
+    'memo' => array (
+        'capability'  => 'mod/cardbox:practice',
+        'defaults' => array(
+            'popup' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+            'email' => MESSAGE_PERMITTED + MESSAGE_DEFAULT_LOGGEDIN + MESSAGE_DEFAULT_LOGGEDOFF,
+        )
+    )
+);
