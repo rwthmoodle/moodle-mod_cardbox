@@ -29,7 +29,6 @@ require_once('card_selection_interface.php');
 
 class cardbox_card_selection_algorithm implements cardbox_card_selection_interface {
 
-    private static $now;
     private static $prioritytopic;
     private $spacing;
     private $availableBeforeDue;
@@ -61,7 +60,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @return type
      */
     public function cardbox_select_cards_for_practice($cards = null) {
-
+        
         global $DB;
 
         if (empty($cards)) {

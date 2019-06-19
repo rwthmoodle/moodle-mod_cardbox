@@ -50,7 +50,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         // TODO: Check the references/ids
         
         // 1. To know if we are including userinfo.
-        $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0.
+        $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0. :(
         
         // 2. Define each element separately.
         $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'autocorrection', 'timecreated', 'timemodified'));
@@ -64,28 +64,34 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $topics = new backup_nested_element('topics');
         $topic = new backup_nested_element('topic', array('id'), array('topicname', 'cardboxid'));
         
-        // TODO: Maybe this doesn't need to be migrated
-        $progress = new backup_nested_element('progress');
-        $singleprogress = new backup_nested_element('singleprogress', array('id'), array('userid', 'card', 'cardposition', 'lastpracticed', 'repetitions'));
-        
-        $statistics = new backup_nested_element('statistics');
-        $statistic = new backup_nested_element('statistic', array('id'), array('userid', 'cardboxid', 'timeofpractice', 'percentcorrect'));
+        if ($userinfo != 0) {
+            
+            $progress = new backup_nested_element('progress');
+            $singleprogress = new backup_nested_element('singleprogress', array('id'), array('userid', 'card', 'cardposition', 'lastpracticed', 'repetitions'));
+
+            $statistics = new backup_nested_element('statistics');
+            $statistic = new backup_nested_element('statistic', array('id'), array('userid', 'cardboxid', 'timeofpractice', 'percentcorrect'));
+        }
         
         // 3. Build the tree (mind the right order!)       
         $cardbox->add_child($topics);
         $topics->add_child($topic);
         
-        $cardbox->add_child($statistics);
-        $statistics->add_child($statistic);
-
         $cardbox->add_child($cards);
         $cards->add_child($card);
         
         $cards->add_child($cardcontents);
         $cardcontents->add_child($cardcontent);
 
-        $cards->add_child($progress);
-        $singleprogress->add_child($singleprogress);
+        if ($userinfo != 0) {
+            
+            $cardbox->add_child($statistics);
+            $statistics->add_child($statistic);
+            
+            $cards->add_child($progress);
+            $progress->add_child($singleprogress);
+            
+        }
         
         // 4. Define db sources
         $cardbox->set_source_table('cardbox', array('id' => backup::VAR_ACTIVITYID)); // Pass the course module id.
@@ -96,21 +102,32 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         // 4.2 Add any topics that were created in this cardbox instance.
         $topic->set_source_table('cardbox_topics', array('cardboxid' => backup::VAR_PARENTID));
         
-        // 4.3 Add the statistics of this cardbox instance.
-        $statistic->set_source_table('cardbox_statistics', array('cardboxid' => backup::VAR_PARENTID));
-
-        // 4.4 Add the contents such as images and questions to the cards in this cardbox.
+        // 4.3 Add the contents such as images and questions to the cards in this cardbox.
         $cardcontent->set_source_table('cardbox_cardcontents', array('card' => backup::VAR_PARENTID));
         
-        // 4.5 Add the information on user progresses in this cardbox.
-        $singleprogress->set_source_table('cardbox_progress', array('card' => backup::VAR_PARENTID));
+        if ($userinfo != 0) {
+        
+            // 4.4 Add the statistics of this cardbox instance.
+            $statistic->set_source_table('cardbox_statistics', array('cardboxid' => backup::VAR_PARENTID));
+            
+            // 4.5 Add the information on user progresses in this cardbox.
+            $singleprogress->set_source_table('cardbox_progress', array('card' => backup::VAR_PARENTID));
 
+        }
+        
         // 5. Define id annotations (some attributes are foreign keys).
         $card->annotate_ids('topic', 'topic');
         $card->annotate_ids('user', 'approvedby');
-        $statistic->annotate_ids('user', 'userid');
+        
         $cardcontent->annotate_ids('contenttype', 'contenttype');
         $singleprogress->annotate_ids('user', 'userid');
+        
+        if ($userinfo != 0) {
+
+            $statistic->annotate_ids('user', 'userid');
+            $singleprogress->annotate_ids('user', 'userid');
+
+        }
         
         // 6. Define file annotations (vgl. resource activity).
 //        $pdfannotator->annotate_files('mod_pdfannotator', 'intro', null); // This file area does not have an itemid.

@@ -118,7 +118,16 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_get_status() {
 
-        return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive, 6 => $this->countknown);
+        $cardsperbox = [];
+        $cardsperbox[] = count($this->boxes[0]);
+        $cardsperbox[] = count($this->boxes[1]);
+        $cardsperbox[] = count($this->boxes[2]);
+        $cardsperbox[] = count($this->boxes[3]);
+        $cardsperbox[] = count($this->boxes[4]);
+        $cardsperbox[] = count($this->boxes[5]);
+        $cardsperbox[] = count($this->boxes[6]);
+        return $cardsperbox;
+//        return array(0 => , 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive, 6 => $this->countknown);
 
     }
     
@@ -161,13 +170,13 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             }
         }
         
-        $this->countnew = count($this->boxes[0]);
-        $this->countboxone = count($this->boxes[1]);
-        $this->countboxtwo = count($this->boxes[2]);
-        $this->countboxthree = count($this->boxes[3]);
-        $this->countboxfour = count($this->boxes[4]);
-        $this->countboxfive = count($this->boxes[5]);
-        $this->countknown = count($this->boxes[6]);
+//        $this->countnew = count($this->boxes[0]);
+//        $this->countboxone = count($this->boxes[1]);
+//        $this->countboxtwo = count($this->boxes[2]);
+//        $this->countboxthree = count($this->boxes[3]);
+//        $this->countboxfour = count($this->boxes[4]);
+//        $this->countboxfive = count($this->boxes[5]);
+//        $this->countknown = count($this->boxes[6]);
 
     }
     /**
