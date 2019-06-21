@@ -80,7 +80,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $cardbox->add_child($cards);
         $cards->add_child($card);
         
-        $cards->add_child($cardcontents);
+        $card->add_child($cardcontents);
         $cardcontents->add_child($cardcontent);
 
         if ($userinfo != 0) {
@@ -88,7 +88,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
             $cardbox->add_child($statistics);
             $statistics->add_child($statistic);
             
-            $cards->add_child($progress);
+            $card->add_child($progress);
             $progress->add_child($singleprogress);
             
         }
@@ -117,10 +117,10 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         
         // 5. Define id annotations (some attributes are foreign keys).
         $card->annotate_ids('topic', 'topic');
+        $card->annotate_ids('user', 'author');
         $card->annotate_ids('user', 'approvedby');
         
         $cardcontent->annotate_ids('contenttype', 'contenttype');
-        $singleprogress->annotate_ids('user', 'userid');
         
         if ($userinfo != 0) {
 
@@ -129,9 +129,10 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
 
         }
         
-        // 6. Define file annotations (vgl. resource activity).
-//        $pdfannotator->annotate_files('mod_pdfannotator', 'intro', null); // This file area does not have an itemid.
-//        $pdfannotator->annotate_files('mod_pdfannotator', 'content', null); // See above.
+        // 6. Define file area annotations (vgl. resource activity).
+        $cardbox->annotate_files('mod_cardbox', 'intro', null); // This file area does not have an itemid.
+        $cardcontent->annotate_files('mod_cardbox', 'cardimage', 'id'); // By content->id
+        //$cardbox->annotate_files('mod_cardbox', 'content', null); // See above.
 
         // 7. Return the root element (pdfannotator), wrapped into standard activity structure.
         return $this->prepare_activity_structure($cardbox);

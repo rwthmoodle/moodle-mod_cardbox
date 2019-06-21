@@ -32,7 +32,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * Define all the restore steps that will be used by the restore_pdfannotator_activity_task
+ * Define all the restore steps that will be used by the restore_cardbox_activity_task
  */
 
 /**
@@ -47,14 +47,13 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $userinfo = $this->get_setting_value('userinfo'); // Is 0 //TODO is not used.
 
         $paths[] = new restore_path_element('cardbox', '/activity/cardbox');
-
-        $paths[] = new restore_path_element('cardbox_cardcontents', '/activity/cardbox/cardcontents/cardcontent');
         $paths[] = new restore_path_element('cardbox_cards', '/activity/cardbox/cards/card');
+        $paths[] = new restore_path_element('cardbox_cardcontents', '/activity/cardbox/cards/card/cardcontents/cardcontent');
         $paths[] = new restore_path_element('cardbox_topics', '/activity/cardbox/topics/topic');
         if ($userinfo != 0) {
             $paths[] = new restore_path_element('cardbox_statistics', '/activity/cardbox/statistics/statistic');
+            $paths[] = new restore_path_element('cardbox_progress', '/activity/cardbox/cards/card/progress/singleprogress');
         }
-        $paths[] = new restore_path_element('cardbox_progress', '/activity/cardbox/cards/card/progress/singleprogress');
         
 //        $paths[] = new restore_path_element('cardbox_contenttype', '/activity/cardbox/annotations/annotation/commentsarchive/commentarchive');
 
@@ -72,115 +71,105 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
-        $newitemid = $DB->insert_record('pdfannotator', $data); // Insert the pdfannotator record.
+        $newitemid = $DB->insert_record('cardbox', $data); // Insert the cardbox record.
 
         $this->apply_activity_instance($newitemid); // Immediately after inserting "activity" record, call this.
     }
+    
+    protected function process_cardbox_topics($data) {
+        global $DB;
 
-    protected function process_pdfannotator_annotation($data) {
+        $data = (object)$data;
+        $oldid = $data->id;
+
+        $data->cardboxid = $this->get_new_parentid('cardbox');
+
+        $newitemid = $DB->insert_record('cardbox_topics', $data);
+        $this->set_mapping('cardbox_topics', $oldid, $newitemid);
+    }
+
+    protected function process_cardbox_cards($data) {
 
         global $DB;
 
         $data = (object)$data;
         $oldid = $data->id;
 
-        $data->pdfannotatorid = $this->get_new_parentid('pdfannotator');
-        $data->userid = $this->get_mappingid('user', $data->userid);
+        $data->cardbox = $this->get_new_parentid('cardbox');
+        $data->topic = $this->get_mappingid('topic', $data->topic);
+        $data->author = $this->get_mappingid('user', $data->author);
+        $data->approvedby = $this->get_mappingid('user', $data->approvedby); // ???
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
         $data->timemodified = $this->apply_date_offset($data->timemodified);
 
-        $newitemid = $DB->insert_record('pdfannotator_annotations', $data);
-        $this->set_mapping('pdfannotator_annotation', $oldid, $newitemid);
+        $newitemid = $DB->insert_record('cardbox_cards', $data);
+        $this->set_mapping('cardbox_card', $oldid, $newitemid, true);
 
     }
 
-    protected function process_pdfannotator_subscription($data) {
+    protected function process_cardbox_cardcontents($data) {
 
         global $DB;
 
         $data = (object)$data;
         $oldid = $data->id;
 
-        $data->annotationid = $this->get_new_parentid('pdfannotator_annotation');
-        $data->userid = $this->get_mappingid('user', $data->userid);
+        $data->card = $this->get_new_parentid('cardbox_card');
+        //$data->fieldid = $this->get_mappingid('data_field', $data->fieldid);
 
-        $newitemid = $DB->insert_record('pdfannotator_subscriptions', $data);
-        $this->set_mapping('pdfannotator_subscription', $oldid, $newitemid);
+        $newitemid = $DB->insert_record('cardbox_cardcontents', $data);
+        $this->set_mapping('cardbox_cardcontents', $oldid, $newitemid, true);
 
     }
 
-    protected function process_pdfannotator_commentarchive($data) {
+    protected function process_cardbox_statistics($data) {
         global $DB;
 
         $data = (object)$data;
         $oldid = $data->id;
 
-        $data->annotationid = $this->get_new_parentid('pdfannotator_annotation');
         $data->userid = $this->get_mappingid('user', $data->userid);
+        $data->cardboxid = $this->get_new_parentid('cardbox');
+        $data->timeofpractice = $this->apply_date_offset($data->timeofpractice);
 
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
-
-        $data->pdfannotatorid = $this->get_mappingid('pdfannotator', $data->pdfannotatorid);
-
-        $newitemid = $DB->insert_record('pdfannotator_commentsarchive', $data);
-        $this->set_mapping('pdfannotator_commentarchive', $oldid, $newitemid);
+        $newitemid = $DB->insert_record('cardbox_statistics', $data);
+        $this->set_mapping('cardbox_statistics', $oldid, $newitemid);
     }
 
-
-    protected function process_pdfannotator_comment($data) {
+    protected function process_cardbox_progress($data) {
         global $DB;
 
         $data = (object)$data;
         $oldid = $data->id;
 
-        $data->annotationid = $this->get_new_parentid('pdfannotator_annotation');
         $data->userid = $this->get_mappingid('user', $data->userid);
+        $data->card = $this->get_new_parentid('cardbox_card');
+        $data->lastpracticed = $this->apply_date_offset($data->lastpracticed);
 
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
-
-        $data->pdfannotatorid = $this->get_mappingid('pdfannotator', $data->pdfannotatorid);
-
-        $newitemid = $DB->insert_record('pdfannotator_comments', $data);
-        $this->set_mapping('pdfannotator_comment', $oldid, $newitemid);
-    }
-
-    protected function process_pdfannotator_vote($data) {
-        global $DB;
-
-        $data = (object)$data;
-        $oldid = $data->id;
-
-        $data->commentid = $this->get_new_parentid('pdfannotator_comment');
-        $data->userid = $this->get_mappingid('user', $data->userid);
-
-        $newitemid = $DB->insert_record('pdfannotator_votes', $data);
-        $this->set_mapping('pdfannotator_vote', $oldid, $newitemid);
-    }
-
-    protected function process_pdfannotator_report($data) {
-        global $DB;
-
-        $data = (object)$data;
-        $oldid = $data->id;
-
-        $data->courseid = $this->get_courseid();
-
-        $data->commentid = $this->get_new_parentid('pdfannotator_comment');
-        $data->userid = $this->get_mappingid('user', $data->userid);
-
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->pdfannotatorid = $this->get_mappingid('pdfannotator', $data->pdfannotatorid); // Params: 1. Object class as defined in structure, 2. attribute&/column name.
-
-        $newitemid = $DB->insert_record('pdfannotator_reports', $data);
-        $this->set_mapping('pdfannotator_report', $oldid, $newitemid);
+        $newitemid = $DB->insert_record('cardbox_progress', $data);
+        $this->set_mapping('cardbox_progress', $oldid, $newitemid);
     }
 
     protected function after_execute() {
         // Add pdfannotator related files, no need to match by itemname (just internally handled context).
-        $this->add_related_files('mod_pdfannotator', 'intro', null);
-        $this->add_related_files('mod_pdfannotator', 'content', null);
+        $this->add_related_files('mod_cardbox', 'intro', null);
+//        $this->add_related_files('mod_pdfannotator', 'content', null);
+//        
+//        
+//        global $DB;
+//        // Add data related files, no need to match by itemname (just internally handled context)
+//        $this->add_related_files('mod_data', 'intro', null);
+//        // Add content related files, matching by itemname (data_content)
+//        $this->add_related_files('mod_data', 'content', 'data_content');
+//        // Adjust the data->defaultsort field
+//        if ($defaultsort = $DB->get_field('data', 'defaultsort', array('id' => $this->get_new_parentid('data')))) {
+//            if ($defaultsort = $this->get_mappingid('data_field', $defaultsort)) {
+//                $DB->set_field('data', 'defaultsort', $defaultsort, array('id' => $this->get_new_parentid('data')));
+//            }
+//        }
+        
+        
+        
     }
 }
