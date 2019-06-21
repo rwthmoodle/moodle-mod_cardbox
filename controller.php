@@ -279,7 +279,7 @@ if ($action === 'practice') {
     $select = new cardbox_card_selection_algorithm($topic, $practiceall);
     $sort = new cardbox_card_sorting_algorithm();
     $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort);
-    $cardcount = $cardboxmodel->cardbox_get_card_count();
+    $cardcount = $cardboxmodel->cardbox_count_cards();
     $duecardcount = $cardboxmodel->cardbox_count_due_cards();
     $selection = $cardboxmodel->cardbox_get_card_selection();
 
@@ -292,13 +292,12 @@ if ($action === 'practice') {
         return;
     
     // Inform the user that all of their cards have the status 'mastered' and are no longer repeated.
-    } else if ($cardcount == $cardboxmodel->cardbox_count_known_cards()) {
+    } else if ($cardcount == $cardboxmodel->cardbox_count_mastered_cards()) {
         
         $info = get_string('info:nocardsavailableforpractice', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
         return;
-        
     
     // Inform the user that none of their cards are due for practice right now.
     } else if (empty($duecardcount)) {
@@ -322,7 +321,7 @@ if ($action === 'practice') {
         } else {
             $case = 1;
         }
-        $practice = new cardbox_practice($case, $context, $cardboxmodel, null);
+        $practice = new cardbox_practice($case, $context, $selection[0]);
         $data = $practice->export_for_template($renderer);
         
         // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.

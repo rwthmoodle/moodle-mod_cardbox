@@ -32,7 +32,6 @@ class cardbox_practice implements \renderable, \templatable {
     private $case2 = false; // question_autocheck.
     private $case3 = false; // answer_selfcheck.
     private $case4 = false; // answer_autocheck.
-    private $topics;
     private $inputfields = array();
 
     /**
@@ -42,7 +41,7 @@ class cardbox_practice implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($case, $context, $cardbox = null, $cardid = null) {
+    public function __construct($case, $context, $cardid) {
 
         switch ($case) {
             case 1:
@@ -65,29 +64,17 @@ class cardbox_practice implements \renderable, \templatable {
                 // TODO Error handling.
         }
 
-        $this->cardbox_prepare_cardcontents($context, $cardbox, $cardid);
-        
-//        $this->cardbox_prepare_topics_to_study($cardbox->id);
-        
-//        $this->cardbox_prepare_user_form($correction);
+        $this->cardbox_prepare_cardcontents($context, $cardid);
 
     }
     
-    public function cardbox_prepare_cardcontents($context, $cardbox, $cardid) {
+    public function cardbox_prepare_cardcontents($context, $cardid) {
         
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         require_once('model/cardbox.class.php');
 
-        if (!empty($cardbox)) {
-            $card = $cardbox->cardbox_get_first_card();
-            
-        } else {
-            $card = cardbox_cardboxmodel::cardbox_get_card($cardid);
-
-        }
-        $contents = cardbox_cardboxmodel::cardbox_get_card_contents($card->card);
-        $topic = $card->topicname;
+        $contents = cardbox_cardboxmodel::cardbox_get_card_contents($cardid);
 
         $fs = get_file_storage();
         $solutioncount = 0;
