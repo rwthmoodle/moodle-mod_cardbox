@@ -121,7 +121,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         return $cardsperbox;
 
     }
-
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
@@ -165,7 +164,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         usort($contents, array('cardbox_cardboxmodel', 'cardbox_compare_cardcontenttypes'));
         return $contents;
     }
-    
     /**
      * This function orders the content elements of a card, e.g. groups question and answer elements.  XXX move to locallib or card class!
      *
@@ -174,18 +172,18 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @return int
      */
     static function cardbox_compare_cardcontenttypes($a, $b) {
-        
+
         if ($a->cardside == $b->cardside) {
-            
+
             if ($a->contenttype == $b->contenttype) {
                 return 0;
             }
             // Pictures precede text.
             return ($a->contenttype < $b->contenttype) ? -1 : 1;
-            
+
         }
         // Questions precede answers.
         return ($a->cardside < $b->cardside) ? -1 : 1;
-        
+
     }
 }
