@@ -47,8 +47,6 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
      */
     protected function define_structure(): \backup_nested_element {
 
-        // TODO: Check the references/ids
-
         // 1. To know if we are including userinfo.
         $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0. :(
 
@@ -118,7 +116,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $card->annotate_ids('user', 'approvedby');
 
         $cardcontent->annotate_ids('card', 'card');
-        $cardcontent->annotate_ids('contenttype', 'contenttype');
+        //$cardcontent->annotate_ids('contenttype', 'contenttype');
 
         if ($userinfo != 0) {
 
@@ -129,8 +127,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
 
         // 6. Define file area annotations (vgl. resource activity).
         $cardbox->annotate_files('mod_cardbox', 'intro', null); // This file area does not have an itemid.
-        $cardcontent->annotate_files('mod_cardbox', 'cardimage', 'id'); // By content->id
-        // $cardbox->annotate_files('mod_cardbox', 'content', null); // See above.
+        $cardcontent->annotate_files('mod_cardbox', 'content', null); // By content->id
 
         // 7. Return the root element (pdfannotator), wrapped into standard activity structure.
         return $this->prepare_activity_structure($cardbox);

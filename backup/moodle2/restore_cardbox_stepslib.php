@@ -116,8 +116,7 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->card = $this->get_new_parentid('cardbox_cards');
-        $data->contenttype = $this->get_mappingid('contenttype', $data->contenttype);
-        //$data->fieldid = $this->get_mappingid('data_field', $data->fieldid);
+        //$data->contenttype = $this->get_mappingid('contenttype', $data->contenttype);
 
         $newitemid = $DB->insert_record('cardbox_cardcontents', $data);
         $this->set_mapping('cardbox_cardcontents', $oldid, $newitemid, true);
@@ -153,22 +152,9 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
     }
 
     protected function after_execute() {
-        // Add pdfannotator related files, no need to match by itemname (just internally handled context).
+        // Add cardbox related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_cardbox', 'intro', null);
-//        $this->add_related_files('mod_pdfannotator', 'content', null);
-//  
-//        global $DB;
-//        // Add data related files, no need to match by itemname (just internally handled context)
-//        $this->add_related_files('mod_data', 'intro', null);
-//        // Add content related files, matching by itemname (data_content)
-//        $this->add_related_files('mod_data', 'content', 'data_content');
-//        // Adjust the data->defaultsort field
-//        if ($defaultsort = $DB->get_field('data', 'defaultsort', array('id' => $this->get_new_parentid('data')))) {
-//            if ($defaultsort = $this->get_mappingid('data_field', $defaultsort)) {
-//                $DB->set_field('data', 'defaultsort', $defaultsort, array('id' => $this->get_new_parentid('data')));
-//            }
-//        }
-
+        $this->add_related_files('mod_cardbox', 'content', 'cardbox_cardcontents'); // cardimage or content?
         
     }
 }

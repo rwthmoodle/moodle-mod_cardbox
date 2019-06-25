@@ -82,14 +82,13 @@ class backup_cardbox_activity_task extends backup_activity_task {
 
         $base = preg_quote($CFG->wwwroot, "/");
 
-        // Link to the list of pdfannotators.
+        // Link to the list of cardboxex.
         $search = "/(".$base."\/mod\/cardbox\/index.php\?id\=)([0-9]+)/";
         $content = preg_replace($search, '$@CARDBOXINDEX*$2@$', $content);
 
         // Link to cardbox view by moduleid.
         $search = "/(".$base."\/mod\/cardbox\/view.php\?id\=)([0-9]+)/";
-        // Link to cardbox view by recordid.
-        $search2 = "/(".$base."\/mod\/cardbox\/view.php\?r\=)([0-9]+)/";
+        $content = preg_replace($search, '$@CARDBOXINDEX*$2@$', $content);
 
         return $content;
     }
