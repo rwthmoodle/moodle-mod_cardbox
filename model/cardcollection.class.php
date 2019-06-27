@@ -29,10 +29,10 @@ class cardbox_cardcollection {
     private $flashcards; // new/unapproved flashcards.
     
     public function __construct($cardboxid, $getall = false) {
-        
+
         global $DB;
         $this->cardbox = $cardboxid;
-        $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approvedby IS NULL', array($cardboxid));
+        $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '0'));
 
     }
     
@@ -85,7 +85,5 @@ class cardbox_cardcollection {
                 . "WHERE c.id = ?";
         return $DB->get_field_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
     }
-    
-    
-    
+  
 }

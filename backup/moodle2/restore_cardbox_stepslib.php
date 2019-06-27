@@ -44,7 +44,7 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
 
         $paths = array();
 
-        $userinfo = $this->get_setting_value('userinfo'); // Is 0 //TODO is not used.
+        $userinfo = $this->get_setting_value('userinfo');
 
         $paths[] = new restore_path_element('cardbox', '/activity/cardbox');
         $paths[] = new restore_path_element('cardbox_topics', '/activity/cardbox/topics/topic');
@@ -144,7 +144,7 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->userid = $this->get_mappingid('user', $data->userid);
-        $data->card = $this->get_new_parentid('cardbox_card');
+        $data->card = $this->get_new_parentid('cardbox_cards');
         $data->lastpracticed = $this->apply_date_offset($data->lastpracticed);
 
         $newitemid = $DB->insert_record('cardbox_progress', $data);

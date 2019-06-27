@@ -237,6 +237,21 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019040201, 'cardbox');
     }
+    
+    if ($oldversion < 2019062700) {
+
+        // Define field approved to be added to cardbox_cards.
+        $table = new xmldb_table('cardbox_cards');
+        $field = new xmldb_field('approved', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'timemodified');
+
+        // Conditionally launch add field approved.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019062700, 'cardbox');
+    }
 
     return true;
 

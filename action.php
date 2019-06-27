@@ -52,6 +52,7 @@ if ($action === 'review') {
     switch($newstatus) {
         
         case 'approve':
+            $dataobject->approved = '1';
             $dataobject->approvedby = $USER->id;
             $success = $DB->update_record('cardbox_cards', $dataobject, false);
             break;
