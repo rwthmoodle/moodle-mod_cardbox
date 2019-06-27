@@ -15,7 +15,7 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /** 
- * In this file, incoming AJAX request practice.js are handled.
+ * In this file, incoming AJAX request from  practice.js are handled.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
@@ -52,6 +52,7 @@ if ($action === 'review') {
     switch($newstatus) {
         
         case 'approve':
+            $dataobject->approved = '1';
             $dataobject->approvedby = $USER->id;
             $success = $DB->update_record('cardbox_cards', $dataobject, false);
             break;
@@ -121,7 +122,7 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $practice = new cardbox_practice($case, $context, null, $next);
+        $practice = new cardbox_practice($case, $context, $next);
         $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);

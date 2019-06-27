@@ -84,6 +84,7 @@ function cardbox_save_new_card($cardboxid, $topicid = null) {
     $cardrecord->author = $USER->id;
     $cardrecord->timecreated = time();
     $cardrecord->timemodified = null;
+    $cardrecord->approved = 0;
     $cardrecord->approvedby = null;
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
@@ -215,8 +216,8 @@ function cardbox_add_new_cards() {
 
     $sql2 = "SELECT c.id"
             . " FROM {cardbox_cards} c"
-            . " WHERE c.id > ? AND approvedby IS NOT NULL";
-    $newcards = $DB->get_fieldset_sql($sql2, array($lastnew));
+            . " WHERE c.id > ? AND approved = ?";
+    $newcards = $DB->get_fieldset_sql($sql2, array($lastnew, '1'));
 
     if (empty($newcards)) {
         return;
