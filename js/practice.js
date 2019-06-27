@@ -64,7 +64,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
         if (bluebox !== null) {
             bluebox.parentNode.removeChild(bluebox);
         }
-        
+
 //        document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
 //            e.preventDefault();
 //            applySettings();

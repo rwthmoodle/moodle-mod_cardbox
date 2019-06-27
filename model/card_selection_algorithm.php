@@ -29,15 +29,13 @@ require_once('card_selection_interface.php');
 
 class cardbox_card_selection_algorithm implements cardbox_card_selection_interface {
 
-    private static $now;
     private static $prioritytopic;
     private $spacing;
-    private $availableBeforeDue;
-    private $availableAndDue;
-    private $topicid;
     private $practiceall;
         
     public function __construct($topicid = null, $practiceall = true) {
+
+        global $DB;
 
         $this->spacing = array();
         $this->spacing[1] = new DateInterval('P1D');
@@ -46,11 +44,12 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         $this->spacing[4] = new DateInterval('P16D');
         $this->spacing[5] = new DateInterval('P34D');
 
-        $this->availableBeforeDue = 0;
-        $this->availableAndDue = 0;
-        
-        $this->topicid = $topicid;
         $this->practiceall = $practiceall;
+        
+        if (!empty($topicid) && $topicid != -1) {
+            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topicid), $strictness=MUST_EXIST);
+        }
+        
     }
     /**
      * This function creates a priority queue from the user's cards
@@ -61,8 +60,6 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
      * @return type
      */
     public function cardbox_select_cards_for_practice($cards = null) {
-
-        global $DB;
 
         if (empty($cards)) {
             return null;
@@ -78,9 +75,8 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
 
             if ($card->cardposition > 5) {
                 continue;
-            }
 
-            if ($card->cardposition == 0) {
+            } else if ($card->cardposition == 0) {
                 $card->duedatetime = $now;
 
             } else {
@@ -96,8 +92,7 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         
         // 2. Sort the cards according to their ideal repetition date times, deck, number of repetitions and time of last practice.
         //    There is an option to prioritise cards by topic first.
-        if (!empty($this->topicid) && $this->topicid != -1) {
-            self::$prioritytopic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $this->topicid), $strictness=MUST_EXIST);
+        if (!empty(self::$prioritytopic)) {
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_priority_topic'));
         } else {
             usort($priorityqueue, array('cardbox_card_selection_algorithm', 'cardbox_compare_cards_1st_level'));
@@ -106,14 +101,6 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         // 3. Pick the first 21 cards from the queue.
         for ($i = 0; ( ($i < count($priorityqueue)) && ($i < 21)); $i++) {
             $card = $priorityqueue[$i];
-             // Also determine whether there are cards that are not due yet.
-//            if ($card->duedatetime > $now) {
-//                $card->isdue = false;
-//                //$this->availableBeforeDue++;
-//            } else {
-//                $card->isdue = true;
-//                //$this->availableAndDue++;
-//            }
             $selection[] = $card;
         }
         

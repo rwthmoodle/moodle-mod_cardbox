@@ -27,17 +27,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
     private $id;
     private $flashcards;
-    private $cardcount = 0;
-    private $duecardcount = 0;
     private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
-    private $countnew;
-    private $countknown;
-    private $countboxone;
-    private $countboxtwo;
-    private $countboxthree;
-    private $countboxfour;
-    private $countboxfive;
-    private $selection = null;
     private $selectionalgorithm;
     private $sortingalgorithm;
     
@@ -60,16 +50,26 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      *
      * @return int
      */
-    public function cardbox_get_card_count() {
-        return $this->cardcount;
+    public function cardbox_count_cards() {
+        if (empty($this->flashcards)) {
+            return 0;
+        } else {
+            return count($this->flashcards);
+        }
     }
     
     public function cardbox_count_due_cards() {
-        return $this->duecardcount;
+        $due = 0;
+        foreach ($this->flashcards as $card) {
+            if (cardbox_is_card_due($card)) {
+                $due++;
+            }
+        }
+        return $due;
     }
     
-    public function cardbox_count_known_cards() {
-        return $this->countknown;
+    public function cardbox_count_mastered_cards() {
+        return count($this->boxes[6]);
     }
     /**
      * Function returns the ids of those cards selected for practice.
@@ -82,18 +82,22 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         
         // Select 21 flashcards for a practice session.
         if (!empty($this->flashcards) && !empty($this->selectionalgorithm)) {
-            $this->cardbox_select_cards_for_practice();    
+            
+            // Delegate card selection to the selection algorithm instance.
+            $cards = $this->selectionalgorithm->cardbox_select_cards_for_practice($this->flashcards);
+            
         } else {
             return null;
         }
         
         // Sort the selected cards.
-        if (!empty($this->selection) && !empty($this->sortingalgorithm)) {
-            $this->cardbox_sort_cards();
+        if (!empty($cards) && !empty($this->sortingalgorithm)) {
+            // Delegate card sorting to the sorting algorithm instance.
+            $cards = $this->sortingalgorithm->cardbox_sort_cards_for_practice($cards);
         }
         
         // Return the ids of the cards.
-        foreach ($this->selection as $card) {
+        foreach ($cards as $card) {
             $selection[] = $card->card;
         }
         return $selection;
@@ -106,10 +110,17 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      */
     public function cardbox_get_status() {
 
-        return array(0 => $this->countnew, 1 => $this->countboxone, 2 => $this->countboxtwo, 3 => $this->countboxthree, 4 => $this->countboxfour, 5 => $this->countboxfive, 6 => $this->countknown);
+        $cardsperbox = [];
+        $cardsperbox[] = count($this->boxes[0]);
+        $cardsperbox[] = count($this->boxes[1]);
+        $cardsperbox[] = count($this->boxes[2]);
+        $cardsperbox[] = count($this->boxes[3]);
+        $cardsperbox[] = count($this->boxes[4]);
+        $cardsperbox[] = count($this->boxes[5]);
+        $cardsperbox[] = count($this->boxes[6]);
+        return $cardsperbox;
 
     }
-    
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
@@ -121,7 +132,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $USER
      * @return array of objects or null
      */
-    public function cardbox_get_users_cards() {
+    private function cardbox_get_users_cards() {
 
         global $DB, $USER;
 
@@ -132,86 +143,15 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 . "WHERE p.userid = ? AND c.cardbox = ? "
                 . "ORDER BY p.cardposition";
 
-        $flashcards =  $DB->get_records_sql($sql, array($USER->id, $this->id));
+        $this->flashcards = $DB->get_records_sql($sql, array($USER->id, $this->id));
 
-        if (empty($flashcards)) {
-            $this->cardcount = 0;
-            return;
-        }
-
-        $this->flashcards = $flashcards;
-        $this->cardcount = count($flashcards);
-
-        foreach ($flashcards as $card) {
+        foreach ($this->flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;
-            if (cardbox_is_card_due($card)) {
-                $this->duecardcount++;
-            }
         }
-        
-        $this->countnew = count($this->boxes[0]);
-        $this->countboxone = count($this->boxes[1]);
-        $this->countboxtwo = count($this->boxes[2]);
-        $this->countboxthree = count($this->boxes[3]);
-        $this->countboxfour = count($this->boxes[4]);
-        $this->countboxfive = count($this->boxes[5]);
-        $this->countknown = count($this->boxes[6]);
 
     }
     /**
-     * Function contains algorithm for selecting 21 cards for a practice session.
-     *
-     * @global obj $DB
-     * @param type $topic
-     */
-    public function cardbox_select_cards_for_practice() {
-
-        // Delegate card selection to the selection algorithm instance.
-        $this->selection = $this->selectionalgorithm->cardbox_select_cards_for_practice($this->flashcards);
-
-    }
-    /**
-     * Function contains algorithm for sorting the selected cards into a reasonable order.
-     */
-    public function cardbox_sort_cards() {
-        
-        // Delegate card sorting to the sorting algorithm instance.
-        $sortedselection = $this->sortingalgorithm->cardbox_sort_cards_for_practice($this->selection);
-        $this->selection = $sortedselection;
-    }
-    
-    public function cardbox_get_first_card() {
-        if (isset($this->selection[0])) {
-            return $this->selection[0];
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * 
-     * @global obj $DB
-     * @global obj $USER
-     * @param type $cardid
-     * @return type
-     */
-    static function cardbox_get_card($cardid) {
-
-        global $DB, $USER;        
-        
-        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
-                . "FROM {cardbox_progress} p "
-                . "LEFT JOIN {cardbox_cards} c ON c.id = p.card "
-                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
-                . "WHERE p.userid = ? AND c.id = ? "
-                . "ORDER BY p.cardposition";
-
-        return $DB->get_record_sql($sql, array($USER->id, $cardid), MUST_EXIST);
-
-    }
-    
-    /**
-     * Function returns all content items belonging to this card.
+     * Function returns all content items belonging to this card. XXX move to locallib or card class!
      *
      * @global obj $DB
      * @param type $cardid
@@ -221,30 +161,29 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         global $DB;
         $contents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
-        usort($contents, array('cardbox_cardboxmodel', 'cardbox_compare_cardcontents'));
+        usort($contents, array('cardbox_cardboxmodel', 'cardbox_compare_cardcontenttypes'));
         return $contents;
     }
-    
     /**
-     * This function orders the content elements of a card, e.g. groups question and answer elements.
+     * This function orders the content elements of a card, e.g. groups question and answer elements.  XXX move to locallib or card class!
      *
      * @param type $a
      * @param type $b
      * @return int
      */
-    static function cardbox_compare_cardcontents($a, $b) {
-        
+    static function cardbox_compare_cardcontenttypes($a, $b) {
+
         if ($a->cardside == $b->cardside) {
-            
+
             if ($a->contenttype == $b->contenttype) {
                 return 0;
             }
             // Pictures precede text.
             return ($a->contenttype < $b->contenttype) ? -1 : 1;
-            
+
         }
         // Questions precede answers.
         return ($a->cardside < $b->cardside) ? -1 : 1;
-        
+
     }
 }
