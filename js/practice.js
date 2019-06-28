@@ -36,6 +36,9 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
         /*********** 1. Variables and Calls ***********/
 
+        var vc = new Viewcontroller(__case, templates, __data);
+
+
         var cardcount = __selection.length; // to be used for statistics/progress bar.
 
         // Information about the current flashcard.
@@ -178,24 +181,24 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
             } 
         }
 
-        function applySettings() {
-
-            var topic = document.getElementById('cardbox-topic').value;
-            var correctionmode;
-
-            var radios = document.getElementById('cardbox-form').elements['correctionmode'];
-
-            for (var i=0, len=radios.length; i<len; i++) {
-                if ( radios[i].checked ) {
-                    correctionmode = radios[i].value;
-                    break;
-                }
-            }
-
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&correction=' + correctionmode + '&topic=' + topic;
-            window.location.href = goTo;
-
-        }
+//        function applySettings() {
+//
+//            var topic = document.getElementById('cardbox-topic').value;
+//            var correctionmode;
+//
+//            var radios = document.getElementById('cardbox-form').elements['correctionmode'];
+//
+//            for (var i=0, len=radios.length; i<len; i++) {
+//                if ( radios[i].checked ) {
+//                    correctionmode = radios[i].value;
+//                    break;
+//                }
+//            }
+//
+//            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&correction=' + correctionmode + '&topic=' + topic;
+//            window.location.href = goTo;
+//
+//        }
         /**
          * 
          * @returns {undefined}
@@ -325,39 +328,39 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
             }
 
         }
-        /**
-         * Function places a green or red feedback notification at the top of the page.
-         *
-         * @returns {undefined}
-         */
-        function giveFeedback() {
-
-            var wrapper = document.getElementById("cardbox-feedback-wrapper");
-            var feedbackbox = document.getElementById("cardbox-feedback");
-
-            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
-
-                wrapper.classList.add('cardbox-success');
-                feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
-
-            } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
-
-                wrapper.classList.add('cardbox-warning');
-                feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
-
-            } else if (answergiven === 0) {
-
-                wrapper.classList.add('cardbox-error');
-                feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
-                
-            } 
-            else {
-
-                wrapper.classList.add('cardbox-error');
-                feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
-            }
-
-        }
+//        /**
+//         * Function places a green or red feedback notification at the top of the page.
+//         *
+//         * @returns {undefined}
+//         */
+//        function giveFeedback() {
+//
+//            var wrapper = document.getElementById("cardbox-feedback-wrapper");
+//            var feedbackbox = document.getElementById("cardbox-feedback");
+//
+//            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+//
+//                wrapper.classList.add('cardbox-success');
+//                feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
+//
+//            } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
+//
+//                wrapper.classList.add('cardbox-warning');
+//                feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
+//
+//            } else if (answergiven === 0) {
+//
+//                wrapper.classList.add('cardbox-error');
+//                feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
+//                
+//            } 
+//            else {
+//
+//                wrapper.classList.add('cardbox-error');
+//                feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
+//            }
+//
+//        }
 
         /**
          * Function initiates update of the progress status of the current card
@@ -466,82 +469,82 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
             return Math.floor(Math.random() * (max));
         }
 
-        /**
-         * Function rerenders the template with the question data of a new flashcard.
-         *
-         * @param {type} newdata
-         * @returns {undefined}
-         */
-        function renderNewCard(newdata, next) {
-
-            if (isrepetition === 0) {
-                position = position + 1;
-                cardId = __selection[position];
-            } else {
-                cardId = next;
-            }
-
-            (function (templates, data) {
-                        templates.render('mod_cardbox/practice', data)
-                                .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-
-                                }).then(function () {
-                                        addQuestionEvents();
-
-                                }); // Add a catch.
-            })(templates, newdata);
-
-        }
-
-        function renderSolutionForSelfCheck() {
-
-            var newdata = __data;
-            newdata['case1'] = false;
-            newdata['case3'] = true;
-            
-            (function (templates, data) {
-                        templates.render('mod_cardbox/practice', data)
-                                .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-
-                                }).then(function () {
-                                        addAnswerEvents();
-
-                                }); // Add a catch.
-            })(templates, newdata);
-
-        }
-        /**
-         * This function 'flips' the card from question to solution in the self-check mode.
-         *
-         * @returns {undefined}
-         */
-        function renderSolutionAutoCheck() {
-
-            // Tell the templatable to display the solution view instead of the question view.
-            var newdata = __data;
-            newdata['case2'] = false;
-            newdata['case4'] = true;
-            if (considercardcorrect) {
-//                newdata['overridestyle'] = ' btn-danger';
-                newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
-            } else {
-//                newdata['overridestyle'] = ' btn-success';
-                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
-            }
-
-            (function (templates, data) {
-                        templates.render('mod_cardbox/practice', data)
-                                .then(function (html, js) {
-                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-                                }).then(function () {
-                                        addAnswerEvents();
-                                        giveFeedback();
-                                }); // Add a catch.
-            })(templates, newdata);
-
-        }
+//        /**
+//         * Function rerenders the template with the question data of a new flashcard.
+//         *
+//         * @param {type} newdata
+//         * @returns {undefined}
+//         */
+//        function renderNewCard(newdata, next) {
+//
+//            if (isrepetition === 0) {
+//                position = position + 1;
+//                cardId = __selection[position];
+//            } else {
+//                cardId = next;
+//            }
+//
+//            (function (templates, data) {
+//                        templates.render('mod_cardbox/practice', data)
+//                                .then(function (html, js) {
+//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
+//
+//                                }).then(function () {
+//                                        addQuestionEvents();
+//
+//                                }); // Add a catch.
+//            })(templates, newdata);
+//
+//        }
+//
+//        function renderSolutionForSelfCheck() {
+//
+//            var newdata = __data;
+//            newdata['case1'] = false;
+//            newdata['case3'] = true;
+//            
+//            (function (templates, data) {
+//                        templates.render('mod_cardbox/practice', data)
+//                                .then(function (html, js) {
+//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
+//
+//                                }).then(function () {
+//                                        addAnswerEvents();
+//
+//                                }); // Add a catch.
+//            })(templates, newdata);
+//
+//        }
+//        /**
+//         * This function 'flips' the card from question to solution in the self-check mode.
+//         *
+//         * @returns {undefined}
+//         */
+//        function renderSolutionAutoCheck() {
+//
+//            // Tell the templatable to display the solution view instead of the question view.
+//            var newdata = __data;
+//            newdata['case2'] = false;
+//            newdata['case4'] = true;
+//            if (considercardcorrect) {
+////                newdata['overridestyle'] = ' btn-danger';
+//                newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
+//            } else {
+////                newdata['overridestyle'] = ' btn-success';
+//                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
+//            }
+//
+//            (function (templates, data) {
+//                        templates.render('mod_cardbox/practice', data)
+//                                .then(function (html, js) {
+//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
+//                                }).then(function () {
+//                                        addAnswerEvents();
+//                                        giveFeedback();
+//                                }); // Add a catch.
+//            })(templates, newdata);
+//
+//        }
         /**
          * Function tells the user that the session is finished.
          *
@@ -606,3 +609,191 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
     });
 }
+
+class Viewcontroller {
+    
+    constructor(casex, templates, data) {
+        this.case = casex;
+        this.templates = templates;
+        this.data = data;
+    }
+    
+    renderNewQuestion(newdata) { // renderNewQuestion(newdata, next) {
+        
+//        if (isrepetition === 0) {
+//            position = position + 1;
+//            cardId = __selection[position];
+//        } else {
+//            cardId = next;
+//        }
+
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+
+                            }).then(function () {
+                                    //addQuestionEvents(); TODO: move
+
+                            }); // Add a catch.
+        })(this.templates, newdata);
+        
+    }
+    
+    renderAnswer(considercardcorrect = true) {
+        
+        var newdata = __data;
+        
+        if (this.case % 2 == 0) { // If the user is in auto-check mode.
+            
+            newdata['case2'] = false;
+            newdata['case4'] = true;
+            
+            if (considercardcorrect) {
+                newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
+            } else {
+                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
+            }
+            
+            
+        } else { // If the user checks their own answers.
+         
+            newdata['case1'] = false;
+            newdata['case3'] = true;
+            
+        }
+        
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+                            }).then(function () {
+                                    addAnswerEvents();
+                                    if (this.case % 2 == 0) {
+                                        giveFeedback();
+                                    }
+                            }); // Add a catch.
+        })(templates, newdata);
+        
+        /**
+         * Function places a green or red feedback notification at the top of the page.
+         *
+         * @returns {undefined}
+         */
+        function giveFeedback() {
+
+            var wrapper = document.getElementById("cardbox-feedback-wrapper");
+            var feedbackbox = document.getElementById("cardbox-feedback");
+
+            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
+
+                wrapper.classList.add('cardbox-success');
+                feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
+
+            } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
+
+                wrapper.classList.add('cardbox-warning');
+                feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
+
+            } else if (answergiven === 0) {
+
+                wrapper.classList.add('cardbox-error');
+                feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
+                
+            } 
+            else {
+
+                wrapper.classList.add('cardbox-error');
+                feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
+            }
+
+        }
+    }
+    
+    
+    /**
+     * Function rerenders the template with the question data of a new flashcard.
+     *
+     * @param {type} newdata
+     * @returns {undefined}
+     */
+    renderNewCard(newdata, next) {
+
+        if (isrepetition === 0) {
+            position = position + 1;
+            cardId = __selection[position];
+        } else {
+            cardId = next;
+        }
+
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+
+                            }).then(function () {
+                                    addQuestionEvents();
+
+                            }); // Add a catch.
+        })(templates, newdata);
+
+    }
+
+    renderSolutionForSelfCheck() {
+
+        var newdata = __data;
+        newdata['case1'] = false;
+        newdata['case3'] = true;
+
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+
+                            }).then(function () {
+                                    addAnswerEvents();
+
+                            }); // Add a catch.
+        })(templates, newdata);
+
+    }
+    /**
+     * This function 'flips' the card from question to solution in the self-check mode.
+     *
+     * @returns {undefined}
+     */
+    renderSolutionAutoCheck() {
+
+        // Tell the templatable to display the solution view instead of the question view.
+        var newdata = __data;
+        newdata['case2'] = false;
+        newdata['case4'] = true;
+        if (considercardcorrect) {
+//                newdata['overridestyle'] = ' btn-danger';
+            newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
+        } else {
+//                newdata['overridestyle'] = ' btn-success';
+            newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
+        }
+
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+                            }).then(function () {
+                                    addAnswerEvents();
+                                    giveFeedback();
+                            }); // Add a catch.
+        })(templates, newdata);
+
+    }
+}
+
+class Statistics {
+    
+    
+    
+}
+
+
+class 
