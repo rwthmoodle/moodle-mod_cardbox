@@ -252,6 +252,18 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019062700, 'cardbox');
     }
+    
+    if ($oldversion < 2019070101) {
+
+        global $DB;
+        
+        $sql = "UPDATE {cardbox_cards} SET approved = 1 WHERE approvedby IS NOT NULL";
+        $DB->execute($sql);
+        
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019070101, 'cardbox');
+    }
+
 
     return true;
 
