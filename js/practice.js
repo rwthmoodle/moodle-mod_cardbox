@@ -27,7 +27,9 @@
  * @param {type} Y required by moodle
  * @param int __cmid course module id
  * @param array __selection ids of those cards selected for practice
- * @param int specifies whether the practice mode is auto- or selfcheck and whether a question or answer is shown.
+ * @param {type} __boxcount
+ * @param int __case specifies whether the practice mode is auto- or selfcheck and whether a question or answer is shown.
+ * @param {type} __data
  * @returns {undefined}
  */
 function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php
@@ -35,6 +37,12 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
         /*********** 1. Variables and Calls ***********/
+
+        console.log('__selection: ', __selection);
+        console.log('__boxcount: ', __boxcount);
+        console.log('__case: ', __case);
+        console.log('__data: ', __data);
+
 
         var vc = new Viewcontroller(__case, templates, __data);
 
