@@ -216,6 +216,13 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 //        
 //        
 
+    class EventHandling {
+        
+        
+        
+        
+    }
+
 
     class Coordinate {
 
@@ -252,7 +259,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
          * @param {type} iscorrect
          * @returns {undefined}
          */
-        proceed() { // XXX: Error notifications for error cases.
+        proceed(iscorrect) { // XXX: Error notifications for error cases.
 
 
             //iscorrect wurde übergeben
@@ -365,10 +372,13 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     e.preventDefault();
 
                     // 1. Check whether the answer is correct and complete and add it to the templatable data.
-                    checkAnswer();
+                    this.evaluate.checkAnswer();
+                    this.considercardcorrect = this.evaluate.considerCardCorrect();
+                    //checkAnswer();
 
                     // 2. Render solution.
-                    renderSolutionAutoCheck();
+                    this.output.renderAnswer(this.evaluate.getEvaluation(), this.evaluate.getDataToDisplay());
+                    //renderSolutionAutoCheck();
 
                     // 3. Insert feedback (depending on 1.) and the user's solution.
 //                    giveFeedback();
@@ -379,7 +389,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
                     e.preventDefault();
                     
                     // Render solution
-                    considercardcorrect = false;
+                    this.considercardcorrect = false;
                     answergiven = 0;
                     answeriscorrect = 0;
                     answeriscomplete = 0;
@@ -450,422 +460,6 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
         }
 
     }
-
-
-
-
-
-
-
-
-
-//        /**
-//         * 
-//         * @returns {undefined}
-//         */
-//        function checkAnswer() {
-//
-//            // Reset everything.
-//            answeriscorrect = 1;
-//            answeriscomplete = 0;
-//            answergiven = 1;
-//            considercardcorrect = false;
-//
-//            var solutions = __data.answer.texts;            
-//            userinput = [];
-//            var matches = [];
-//            var answers = [];
-//
-//            // 1. Collect the user's answers in an array.
-//            var i;
-//            for (i = 1; i <= solutions.length; i++) {
-//                (function (innerI){
-//                    var ui = document.getElementById('cardbox-userinput-' + innerI).value;
-//                    if (ui.trim() !== '') {
-//                        userinput.push(ui);
-//                    }
-//
-//                })(i);
-//            }
-//
-//            // 2. For each solution: Check whether it is among the user's answers and collect the matches.
-//            solutions.forEach(check);
-//
-//            // 3. Collect matches and non-matches and transform them into a displayable form.
-//            //    Also determine whether there are incorrect answers.
-//            userinput.forEach(collect);
-//            __data['userinputitems'] = answers;
-//
-//            // 4. Check whether there are as many answers as solutions.
-//            if (userinput.length < solutions.length) {
-//                answeriscomplete = 0;
-//                if (userinput.length === 0) {
-//                    answergiven = 0;
-//                }
-//
-//            } else {
-//                answeriscomplete = 1;
-//            }
-//            // 5. Determine whether the card should count as known or unknown.
-//            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
-//                considercardcorrect = true;
-//            }
-//
-//            /**
-//             * This function takes each solution and checks whether it contains
-//             * one of the user's answers or is contained in one of the user's answers.
-//             * 
-//             * @param {type} solutionitem
-//             * @param {type} index
-//             * @returns {undefined}
-//             */
-//            function check(solutionitem, index) {
-//
-//                solutionitem = solutionitem.puretext;
-//                
-//                var j;
-//                var userinputitem;
-//                for (j = 0; j < userinput.length; j++) {
-//                    (function (innerI){
-//                        
-//                        userinputitem = userinput[innerI];
-//                        if (compare(solutionitem, userinputitem)) {
-//
-//                                if ( matches.indexOf(userinputitem) === -1 ) {
-//                                    
-//                                    matches.push(userinputitem);
-//                                }
-//
-//                        }
-//
-//                    })(j);
-//                }
-//
-//            }
-//            /**
-//             * Function returns true if one of the strings is contained within the other ('or' identical).
-//             *
-//             * @param string a
-//             * @param string b
-//             * @returns {Boolean}
-//             */
-//            function compare(a, b) {
-//
-//                a = a.toLowerCase();
-//                b = b.toLowerCase();
-//
-//                if ( (a.includes(b)) || (b.includes(a)) ) {
-//                    return true;
-//                }
-//                return false;
-//   
-//            }
-//            /**
-//             * 
-//             * @param {type} userinput
-//             * @param {type} index
-//             * @returns {undefined}
-//             */
-//            function collect(userinput, index) {
-//
-//                if ( matches.indexOf(userinput) != -1 ) {
-//
-//                    var answer = {
-//                        userinput: userinput,
-//                        colorclass: 'cardbox-input-color-correct'
-//                    };
-//
-//                } else {
-//                    // Note that the user made at least one mistake.
-//                    answeriscorrect = 0;
-//                    var answer = {
-//                        userinput: userinput,
-//                        colorclass: 'cardbox-input-color-incorrect'
-//                    };
-//                }
-//
-//                answers.push(answer);
-//            }
-
-//        }
-//        /**
-//         * Function places a green or red feedback notification at the top of the page.
-//         *
-//         * @returns {undefined}
-//         */
-//        function giveFeedback() {
-//
-//            var wrapper = document.getElementById("cardbox-feedback-wrapper");
-//            var feedbackbox = document.getElementById("cardbox-feedback");
-//
-//            if ( (answeriscorrect === 1) && (answeriscomplete === 1) ) {
-//
-//                wrapper.classList.add('cardbox-success');
-//                feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
-//
-//            } else if ( (answergiven === 1) && (answeriscorrect === 1) ) {
-//
-//                wrapper.classList.add('cardbox-warning');
-//                feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
-//
-//            } else if (answergiven === 0) {
-//
-//                wrapper.classList.add('cardbox-error');
-//                feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
-//                
-//            } 
-//            else {
-//
-//                wrapper.classList.add('cardbox-error');
-//                feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
-//            }
-//
-//        }
-
-//        /**
-//         * Function initiates update of the progress status of the current card
-//         * and then renders the next card or wraps up the practice session.
-//         *
-//         * @param {type} iscorrect
-//         * @returns {undefined}
-//         */
-//        function proceed(iscorrect) { // XXX: Error notifications for error cases.
-//
-//            var willBeRepetition = 0;
-//            var next;
-//            var islastcard = false;
-//            
-//            // This was the last card of this practice session.
-//            if (position == (cardcount-1) && toRepeat.length === 0) {
-//                
-//                if (iscorrect == 1) {
-//                    next = 0;
-//                } else {
-//                    islastcard = true;
-//                    next = cardId;
-//                    willBeRepetition = 1;
-//                }
-//
-//            // There are only regular cards left.
-//            } else if (position < (cardcount-1) && toRepeat.length === 0) {
-//                next = __selection[position+1];
-//            
-//            // There are only cards left that are to be repeated.
-//            } else if (position == (cardcount-1) && toRepeat.length !== 0) {
-//                next = toRepeat.shift();
-//                willBeRepetition = 1;
-//                
-//            // There are both regular cards and cards to be repeated left.
-//            } else {
-//                if (getRandomInt(3) < 2) {
-//                    next = __selection[position+1];
-//                } else {
-//                    next = toRepeat.shift();
-//                    willBeRepetition = 1;
-//                }
-//            }
-//
-//            $.ajax({
-//                type: 'POST',
-//                url: 'action.php',
-//                data: {id: __cmid, action: 'updateandnext', case: __case, cardid: cardId, iscorrect: iscorrect, next: next, isrepetition: isrepetition, sesskey: M.cfg.sesskey},
-//                success: function(result){
-//                    result = JSON.parse(result);
-//
-//                    /********* Deal with the current/old card. *********/
-//
-//                    // Regular cards:
-//                    if (isrepetition == 0) {
-//
-//                        // Adjust the card counts of the boxes.
-//                        var boxslot = result.lastposition;
-//
-//                        __boxcount[boxslot]--;
-//
-//                        if (iscorrect === 1) {
-//                            countright++;
-//                            boxslot++;
-//                            __boxcount[boxslot]++;
-//
-//                        } else {
-//                            countwrong++;
-//                            __boxcount[1]++;
-//                            // If a wrong answer was given, mark this card for repetition.
-//                            // Unless this was the last card and the next card is going to be this card once more, anyway.
-//                            if (!islastcard) {
-//                                toRepeat.push(cardId);
-//                            }
-//                            
-//                        }
-//
-//                    // Cards that are repeated because they were answered wrongly before:
-//                    // If it was answered wrongly again:
-//                    } else if (iscorrect == 0) {
-//                        // Mark the card for repetition once more.
-//                        // Unless this was the last card and the next card is going to be this card once more, anyway.
-//                        if (!islastcard) {
-//                            toRepeat.push(cardId);
-//                        }
-//                    }
-//                    
-//                    /********* Deal with the new card. *********/
-//                    if (next == 0) {
-//                        finishPractice();
-//
-//                    } else {
-//
-//                        isrepetition = willBeRepetition;
-//                        __data = result.newdata;
-//                        renderNewCard(result.newdata, next);
-//                        
-//                    }
-//
-//                }
-//            });
-//
-//        }
-//
-//        function getRandomInt(max) {
-//            return Math.floor(Math.random() * (max));
-//        }
-
-//        /**
-//         * Function rerenders the template with the question data of a new flashcard.
-//         *
-//         * @param {type} newdata
-//         * @returns {undefined}
-//         */
-//        function renderNewCard(newdata, next) {
-//
-//            if (isrepetition === 0) {
-//                position = position + 1;
-//                cardId = __selection[position];
-//            } else {
-//                cardId = next;
-//            }
-//
-//            (function (templates, data) {
-//                        templates.render('mod_cardbox/practice', data)
-//                                .then(function (html, js) {
-//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-//
-//                                }).then(function () {
-//                                        addQuestionEvents();
-//
-//                                }); // Add a catch.
-//            })(templates, newdata);
-//
-//        }
-//
-//        function renderSolutionForSelfCheck() {
-//
-//            var newdata = __data;
-//            newdata['case1'] = false;
-//            newdata['case3'] = true;
-//            
-//            (function (templates, data) {
-//                        templates.render('mod_cardbox/practice', data)
-//                                .then(function (html, js) {
-//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-//
-//                                }).then(function () {
-//                                        addAnswerEvents();
-//
-//                                }); // Add a catch.
-//            })(templates, newdata);
-//
-//        }
-//        /**
-//         * This function 'flips' the card from question to solution in the self-check mode.
-//         *
-//         * @returns {undefined}
-//         */
-//        function renderSolutionAutoCheck() {
-//
-//            // Tell the templatable to display the solution view instead of the question view.
-//            var newdata = __data;
-//            newdata['case2'] = false;
-//            newdata['case4'] = true;
-//            if (considercardcorrect) {
-////                newdata['overridestyle'] = ' btn-danger';
-//                newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
-//            } else {
-////                newdata['overridestyle'] = ' btn-success';
-//                newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
-//            }
-//
-//            (function (templates, data) {
-//                        templates.render('mod_cardbox/practice', data)
-//                                .then(function (html, js) {
-//                                    templates.replaceNodeContents('#cardbox-practice', html, js);
-//                                }).then(function () {
-//                                        addAnswerEvents();
-//                                        giveFeedback();
-//                                }); // Add a catch.
-//            })(templates, newdata);
-//
-//        }
-//        /**
-//         * Function tells the user that the session is finished.
-//         *
-//         * @returns {undefined}
-//         */
-//        function finishPractice() {
-//
-//            // 1. Hide the last card that was practiced.
-//            $('#cardbox-practice-replacable').toggleClass('hidden');
-//
-//            // 2. Save this session's performance in cardbox_statistics.
-//            $.ajax({
-//                type: 'POST',
-//                url: 'action.php',
-//                data: {id: __cmid, action: 'saveperformance', countright: countright, countwrong: countwrong, sesskey: M.cfg.sesskey},
-//                success: function(result){
-//                    result = JSON.parse(result);
-//                }
-//            });
-//
-//            // 3. Then display it as a doughnut chart.
-//            var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
-//            
-//            var chartdata = {
-//                datasets: [{
-//                    label: 'Progress',
-//                    data: [countright, countwrong],
-//                    backgroundColor: [
-//                        '#00b33c',
-//                        '#ff9900'
-//                    ]
-//                }],
-//
-//                // These labels appear in the legend and in the tooltips when hovering different arcs.
-//                labels: [
-//                    M.util.get_string('right', 'cardbox'),
-//                    M.util.get_string('wrong', 'cardbox')
-//                ]
-//            };
-//
-//            var myDoughnutChart = new Chart(ctx, {
-//                type: 'doughnut',
-//                data: chartdata,
-//                options: {
-//                    title: {
-//                        display: true,
-//                        text: M.util.get_string('titleprogresschart', 'cardbox'),
-//                        fontSize: 16,
-//                        position: 'top'
-//                    },
-//                    legend: {
-//                        position: 'bottom'
-//                    },
-//                    rotation: 1 * Math.PI,
-//                    circumference: 1 * Math.PI,
-//                    cutoutPercentage: 60
-//                }
-//            }); 
-//            
-//        }
-
 
     });
 }
@@ -1012,7 +606,7 @@ class Evaluate {
         }
     }
     
-    getEvaluatedUserInput() {
+    getDataToDisplay() {
         return this.data;
     }
     
@@ -1031,6 +625,13 @@ class Evaluate {
             return 'incorrectandpossiblyincomplete';
         }
         
+    }
+    
+    considerCardCorrect() {
+        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) ) {
+            return true;
+        }
+        return false;
     }
 
 }
@@ -1074,7 +675,7 @@ class Output {
      * @param string evaluation
      * @returns {undefined}
      */
-    renderAnswer(considercardcorrect = true, evaluation, newdata) {
+    renderAnswer(evaluation, newdata) {
 
         //var newdata = __data;
         
@@ -1083,7 +684,7 @@ class Output {
             newdata['case2'] = false;
             newdata['case4'] = true;
             
-            if (considercardcorrect) {
+            if (this.considercardcorrect) {
                 newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
             } else {
                 newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');

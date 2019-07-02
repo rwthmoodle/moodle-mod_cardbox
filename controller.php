@@ -279,9 +279,9 @@ if ($action === 'practice') {
     $select = new cardbox_card_selection_algorithm($topic, $practiceall);
     $sort = new cardbox_card_sorting_algorithm();
     $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort);
+    
     $cardcount = $cardboxmodel->cardbox_count_cards();
     $duecardcount = $cardboxmodel->cardbox_count_due_cards();
-    $selection = $cardboxmodel->cardbox_get_card_selection();
 
     // Inform the user that their cardbox is empty.
     if (empty($cardcount)) {
@@ -313,8 +313,9 @@ if ($action === 'practice') {
 
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
+        $selection = $cardboxmodel->cardbox_get_card_selection();
         $cardboxstatus = $cardboxmodel->cardbox_get_status();
-        
+
         // 2. Create a view controller.
         if ($correction % 2 == 0) {
             $case = 2;
@@ -323,7 +324,7 @@ if ($action === 'practice') {
         }
         $practice = new cardbox_practice($case, $context, $selection[0]);
         $data = $practice->export_for_template($renderer);
-        
+
         // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
         $stringman = get_string_manager();
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
@@ -332,7 +333,7 @@ if ($action === 'practice') {
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
         $params = array($cmid, $selection, $cardboxstatus, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
-        
+
         // 3. Render the page.
         echo $renderer->cardbox_render_practice($practice);
         
