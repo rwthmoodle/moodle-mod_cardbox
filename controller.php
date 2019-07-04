@@ -314,7 +314,7 @@ if ($action === 'practice') {
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
         $selection = $cardboxmodel->cardbox_get_card_selection();
-        $cardboxstatus = $cardboxmodel->cardbox_get_status();
+        //$cardboxstatus = $cardboxmodel->cardbox_get_status();
 
         // 2. Create a view controller.
         if ($correction % 2 == 0) {
@@ -331,7 +331,7 @@ if ($action === 'practice') {
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
-        $params = array($cmid, $selection, $cardboxstatus, $case, $data); // true means: the user checks their own results.
+        $params = array($cmid, $selection, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 
         // 3. Render the page.

@@ -32,7 +32,7 @@
  * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php.
+function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper function that is called by controller.php.
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
 
@@ -257,17 +257,16 @@ class Coordinate {
                 
                 case 'mark-as-correct':
 
-                    proceed(1);
+                    this.proceed(1);
                     break;
-                    
+   
                 case 'mark-as-incorrect':
 
-                    proceed(0);
+                    this.proceed(0);
                     break;
-                    
+
                 case 'proceed':
-                    
-                    //removeNotifications();
+
                     if (this.evaluate.isCardCorrect()) {
                         this.proceed(1);
                     } else {
@@ -276,8 +275,7 @@ class Coordinate {
                     break;
                     
                 case 'override':
-                    
-                    //removeNotifications();
+
                     this.evaluate.overrideJudgement();
                     if (this.evaluate.isCardCorrect()) {
                         this.proceed(1);
@@ -405,7 +403,7 @@ class Coordinate {
                 
             // There are both regular cards and cards to be repeated left.
             } else {
-                if (getRandomInt(3) < 2) {
+                if (this.getRandomInt(3) < 2) {
                     this.next = this.selection[this.position+1];
                 } else {
                     this.next = this.toRepeat.shift();
