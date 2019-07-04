@@ -32,7 +32,7 @@
  * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php
+function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // Wrapper function that is called by controller.php.
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
 
@@ -42,18 +42,18 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
         var evaluate = new Evaluate();
         var output = new Output(__case, templates);
-        var statistics = new Statistics();
-        
-        var coordinate = new Coordinate(evaluate, output, statistics, __selection, __data, __case);
+        var statistics = new Statistics(chart);
+
+        var coordinate = new Coordinate(__cmid, $, evaluate, output, statistics, __selection, __data, __case);
         var eventhandling = new EventHandling(coordinate);
         coordinate.addEventHandler(eventhandling);
-        
-        if (__case  % 2 == 0) {
+
+        if (__case % 2 == 0) {
             eventhandling.registerEventsForQuestionAutoCheck();
         } else {
             eventhandling.registerEventsForQuestionSelfCheck();
         }
-        
+
         var bluebox = document.getElementById('nocardsduenotification');
         if (bluebox !== null) {
             bluebox.parentNode.removeChild(bluebox);
@@ -74,6 +74,7 @@ function startPractice(Y, __cmid, __selection, __boxcount, __case, __data) { // 
 
     });
 }
+
 
 class EventHandling {
         
@@ -189,7 +190,7 @@ class EventHandling {
 
 class Coordinate {
 
-        constructor(cmid, evaluate, output, statistics, selection, data, mode) {
+        constructor(cmid, $, evaluate, output, statistics, selection, data, mode) {
 
             this.cmid = cmid;
             this.selection = selection;
@@ -266,22 +267,22 @@ class Coordinate {
                     
                 case 'proceed':
                     
-                    removeNotifications();
+                    //removeNotifications();
                     if (this.evaluate.isCardCorrect()) {
-                        proceed(1);
+                        this.proceed(1);
                     } else {
-                        proceed(0);
+                        this.proceed(0);
                     }
                     break;
                     
                 case 'override':
                     
-                    removeNotifications();
+                    //removeNotifications();
                     this.evaluate.overrideJudgement();
                     if (this.evaluate.isCardCorrect()) {
-                        proceed(1);
+                        this.proceed(1);
                     } else {
-                        proceed(0);
+                        this.proceed(0);
                     }
                     break;
                 
@@ -298,31 +299,29 @@ class Coordinate {
         proceed(iscorrect) {
 
             // 1. Determine which (if any) card is next to come.
-            determineNextCard(iscorrect);
+            this.determineNextCard(iscorrect);
 
             // 2. Update the status of the current card and request the next card (if there is one).
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey},
-                success: function(result){
-                    result = JSON.parse(result);
+                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey}
+            }).then(function(data) {
+                var result = JSON.parse(data);
+                
+                // 3. Adjust the statistics etc..
+                this.registerProgress(iscorrect);
 
-                    // 3. Adjust the statistics etc..
-                    registerProgress(iscorrect);
+                // 4. Show the next card or finish the practice session with a doughnut progress chart.
+                this.registerAndRenderNextCard(result.newdata);
 
-                    // 4. Show the next card or finish the practice session with a doughnut progress chart.
-                    registerAndRenderNextCard(result.newdata);
-
-                }
-            });
-
+            }.bind(this));
         }
 
         getRandomInt(max) {
             return Math.floor(Math.random() * (max));
         }
-        
+
         registerProgress(iscorrect) {
             // Regular cards, i.e. cards that still count for the statistics:
             if (this.isrepetition == 0) {
@@ -337,9 +336,8 @@ class Coordinate {
                      * be this card once more, anyway.
                      */
                     if (!this.islastcard) {
-                        this.toRepeat.push(cardId);
+                        this.toRepeat.push(this.cardId);
                     }
-
                 }
 
             // Cards that are repeated because they were answered wrongly before:
@@ -347,28 +345,28 @@ class Coordinate {
             } else if (iscorrect == 0) {
                 // Mark the card for repetition once more.
                 // Unless this was the last card and the next card is going to be this card once more, anyway.
-                if (!islastcard) {
+                if (!this.islastcard) {
                     this.toRepeat.push(cardId);
                 }
             }
         }
-        
+
         registerAndRenderNextCard(newdata) {
-            
+
             if (this.next == 0) {
-                this.statistics.finishPractice();
+                this.statistics.finishPractice(this.cmid);
 
             } else {
                 this.data = newdata;
                 this.isrepetition = this.willBeRepetition;
                 if (this.isrepetition === 0) {
                     this.position = this.position + 1;
-                    this.cardId = this.selection[position];
+                    this.cardId = this.selection[this.position];
                 } else {
                     this.cardId = this.next;
                 }
-                renderNewQuestion(this.eventhandling).bind(this);
-
+                //this.output.renderNewQuestion(this.eventhandling).bind(this);
+                this.output.renderNewQuestion(this.eventhandling, newdata);
             }
         }
         /**
@@ -398,7 +396,7 @@ class Coordinate {
 
             // There are only regular cards left.
             } else if (this.position < (this.cardcount-1) && this.toRepeat.length === 0) {
-                this.next = this.selection[position+1];
+                this.next = this.selection[this.position+1];
             
             // There are only cards left that are to be repeated.
             } else if (this.position == (this.cardcount-1) && this.toRepeat.length !== 0) {
@@ -418,6 +416,7 @@ class Coordinate {
         }
 
 } // Coordinate
+
 
 /**
  * This class checks a user's answer for existance, correctness and completeness.
@@ -481,17 +480,13 @@ class Evaluate {
         // 4. Check whether there are as many answers as solutions.
         if (userinput.length < solutions.length) {
             this.answeriscomplete = 0;
-            if (this.userinput.length === 0) {
+            if (userinput.length === 0) {
                 answergiven = 0;
             }
 
         } else {
             this.answeriscomplete = 1;
         }
-        // 5. Determine whether the card should count as known or unknown.
-//        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) ) {
-//            this.considercardcorrect = true;
-//        }
 
         /**
          * This function takes each solution and checks whether it contains
@@ -621,13 +616,12 @@ class Output {
      * @param {type} newdata
      * @returns {undefined}
      */
-    renderNewQuestion(eventhandling) {
+    renderNewQuestion(eventhandling, data) {
 
         (function (templates, data, mode) {
                     templates.render('mod_cardbox/practice', data)
                             .then(function (html, js) {
                                 templates.replaceNodeContents('#cardbox-practice', html, js);
-
                             }).then(function () {
                                     // Register event listeners for the newly rendered partial.
                                     if (mode % 2 == 0) {    
@@ -635,10 +629,9 @@ class Output {
                                     } else {
                                         eventhandling.registerEventsForQuestionSelfCheck();
                                     }
-
                             }); // Add a catch.
-        })(this.templates, this.data, this.case);
-        
+        })(this.templates, data, this.case);
+
     }
     /**
      * 
@@ -731,10 +724,11 @@ class Output {
 
 class Statistics {
     
-    constructor() {
+    constructor(chart) {
         // Statistical information that will be displayed to the user at the end of practice.
         this.countright = 0;
         this.countwrong = 0;
+        this.chart = chart;
     }
     
     incrementCountRight() {
