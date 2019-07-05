@@ -23,9 +23,23 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2019070502; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+/**
+ * Description of overview
+ *
+ * @author ah105090
+ */
+class cardbox_overview implements \renderable, \templatable {
+    
+    private $cards = array();
+    
+    public function __construct() {
+        
+        
+        
+    }
+
+    public function export_for_template(\renderer_base $output) {
+        
+    }
+    
+}

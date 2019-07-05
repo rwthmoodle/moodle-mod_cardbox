@@ -27,22 +27,33 @@ class cardbox_cardcollection {
 
     private $cardbox;
     private $flashcards; // new/unapproved flashcards.
-    
+
     public function __construct($cardboxid, $getall = false) {
 
         global $DB;
         $this->cardbox = $cardboxid;
-        $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '0'));
+
+        if ($getall) {
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ?', array($cardboxid));
+        } else {
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '0'));
+        }
 
     }
-    
+
     /**
      * Function returns all flashcards that have yet to be approved.
      *
      * @return array card ids
      */
-    public function cardbox_get_card_list() {
-        return $this->flashcards;
+    public function cardbox_get_card_list($offset = null) {
+
+        if (!empty($offset)) {
+            
+        } else {
+            return $this->flashcards;
+        }
+        
     }
     
     public function cardbox_get_first_cardid() {
@@ -60,13 +71,12 @@ class cardbox_cardcollection {
 //
 //        return $DB->get_record_sql($sql, array($this->cardbox, $cardid), MUST_EXIST);
 //    }
-    
+
     public function cardbox_get_cardcontents_initial() {
         return self::cardbox_get_cardcontents($this->flashcards[0]);
     }
     
     static function cardbox_get_cardcontents($cardid) {
-
         global $DB;
         return $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
 

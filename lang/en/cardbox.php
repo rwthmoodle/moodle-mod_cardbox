@@ -45,6 +45,7 @@ $string['reminderfooting'] = 'This reminder was sent automatically by your cardb
 $string['addflashcard'] = 'Add a card';
 $string['practice'] = 'Practice';
 $string['statistics'] = 'Progress';
+$string['overview'] = 'Overview';
 $string['review'] = 'Review';
 
 // Subpage titles
@@ -78,6 +79,7 @@ $string['error:updateafterreview'] = 'Update failed.';
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
+$string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
 $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';

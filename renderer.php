@@ -71,6 +71,8 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         if (has_capability('mod/cardbox:approvecard', $context)) {
             $level1[] = $this->cardbox_create_tab($baseurl, 'review', 'review');
         }
+        
+        $level1[] = $this->cardbox_create_tab($baseurl, 'overview', 'overview');
 
         return $this->tabtree($level1, $selected, $inactive);
     }
@@ -120,5 +122,14 @@ class mod_cardbox_renderer extends plugin_renderer_base {
     public function cardbox_render_review(\templatable $review) {
         $data = $review->export_for_template($this);
         return $this->render_from_template('mod_cardbox/review', $data); // 1. Param specifies the template, 2. param the data to pass into it.
+    }
+    /**
+     * 
+     * @param \templatable $review
+     * @return type
+     */
+    public function cardbox_render_overview(\templatable $review) {
+        $data = $review->export_for_template($this);
+        return $this->render_from_template('mod_cardbox/overview', $data);
     }
 }

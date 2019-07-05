@@ -25,26 +25,59 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_card implements \renderable, \templatable {
 
-    private $frontimages;
-    private $frontimagesrc;
-    private $fronttexts;
-    private $fronttext;
-    private $backimages;
-    private $backimagesrc;
-    private $backtexts;
-    private $backtext;
+    private $cardid;
+    private $topic;
+    private $question = array('images' => array(), 'texts' => array());
+    private $answer = array('images' => array(), 'texts' => array());
 
     public function __construct($cardid) {
         
+        require_once('model/cardcollection.class.php');
+        require_once('locallib.php');
         
+        $this->cardid = $cardid;
+        $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
+        $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
         
+        $fs = get_file_storage();
+        foreach ($contents as $content) {
+
+            if ($content->contenttype == 1) { // XXX: make dynamic!
+
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                if ($content->cardside == 0) {
+                    $this->question['images'][] = array('imagesrc' => $download_url);
+                } else {
+                    $this->answer['images'][] = array('imagesrc' => $download_url);
+                }
+
+            } else if ($content->cardside == 0) {
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->question['texts'][] = array('text' => $content->content);
+
+            } else {
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->answer['texts'][] = array('text' => $content->content);
+            }
+        }
         
     }
     
     public function export_for_template(\renderer_base $output) {
         
         $data = array();
-        
+        $data['cardid'] = $this->cardid;
+        if (!empty($this->topic)) {
+            $data['topic'] = $this->topic;
+        } else {
+            $data['topic'] = get_string('notopic', 'cardbox');
+        }
+        $data['question'] = $this->question;
+        $data['answer'] = $this->answer;
+        $data['cards'] = true;
+        return $data;
         
     }
 }

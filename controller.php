@@ -436,3 +436,51 @@ if ($action === 'review') {
     echo $renderer->cardbox_render_review($review);
 
 }
+
+/* **************************************************** Overview of all cards **************************************************** */
+
+if ($action === 'overview') {
+
+    $offset = optional_param('offset', 0, PARAM_INT);
+    
+    require_once('model/cardcollection.class.php'); // model.
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
+    
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
+    echo $OUTPUT->header();
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $OUTPUT->heading("$cardbox->name"); // XXX
+    
+    // 1. Create the model.
+    $collection = new cardbox_cardcollection($cardbox->id, true);
+    $list = $collection->cardbox_get_card_list($offset);
+    
+    if (empty($list)) {
+        $info = get_string('info:nocardsavailableforoverview', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    }
+
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+
+    // 1. Create a virtual cardbox for this user, i.e. create the model.
+    //$cardboxmodel = new cardbox_cardboxmodel($cardbox->id);
+//    $boxcount = $cardboxmodel->cardbox_get_status();
+//    
+//    // 2. Create a view controller.
+    $overview = new cardbox_overview($cardbox->id); // XXX auch hier das cardboxmodel nutzen.
+//    $performance = $statistics->export_for_template($renderer);
+//    
+//    // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
+//    $stringman = get_string_manager();
+//    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+//    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
+//    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js"));
+//    $params = array($cmid, $boxcount, $performance); // true means: the user checks their own results.
+//    $PAGE->requires->js_init_call('displayCharts', $params, true);
+        
+    // 4. Render the page.
+    echo $renderer->cardbox_render_overview($overview);
+
+}

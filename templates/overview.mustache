@@ -1,0 +1,39 @@
+<div id="cardbox-overview">
+
+    {{#cards}}
+        <div class="container-fluid cardbox-studyview">
+
+            <h5>{{# str }} reviewtopic, cardbox {{/ str }}<em>{{topic}}</em></h5>
+            <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+                <div class="hidden-xs col-lg-1 col-xl-2"></div>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div class="cardbox-card-left-side">
+                        {{#question}}
+                            {{> mod_cardbox/cardside }}
+                        {{/question}}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div class="cardbox-card-right-side">
+                        {{#answer}}
+                            {{> mod_cardbox/cardside }}
+                        {{/answer}}
+                    </div>
+                </div>
+                <div class="hidden-xs col-lg-1 col-xl-2"></div>
+            </div>
+
+        </div>
+    {{/cards}}
+    <!--<div class="row">
+        <div id="review-button-wrapper" class="col-xs-12 container-fluid">
+            <div class="btn-group" role="group" aria-label="review-actions">
+                <button id="cardbox-approve" type="button" class="btn btn-primary cardbox-review-button" title="{{# str }} approve, cardbox {{/ str }}"><i class='icon fa fa-check fa-fw'></i></button>
+                <button id="cardbox-edit" type="button" class="btn btn-primary cardbox-review-button" title="{{# str }} edit, cardbox {{/ str }}"><i class='icon fa fa-pencil fa-fw'></i></button>
+                <button id="cardbox-reject" type="button" class="btn btn-primary cardbox-review-button" title="{{# str }} reject, cardbox {{/ str }}"><i class='icon fa fa-times fa-fw'></i></button>
+                <button id="cardbox-skip" type="button" class="btn btn-primary cardbox-review-button" title="{{# str }} skip, cardbox {{/ str }}"><i class='icon fa fa-step-forward fa-fw'></i></button>
+            </div>
+        </div>
+    </div>-->
+
+</div>

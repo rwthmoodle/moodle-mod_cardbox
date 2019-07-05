@@ -45,6 +45,7 @@ $string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karte
 $string['addflashcard'] = 'Karte anlegen';
 $string['practice'] = 'Üben';
 $string['statistics'] = 'Fortschritt';
+$string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
@@ -78,6 +79,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
+$string['info:nocardsavailableforoverview'] = 'Der Karteikasten ist leer.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
