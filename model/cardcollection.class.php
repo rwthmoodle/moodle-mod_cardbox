@@ -34,7 +34,7 @@ class cardbox_cardcollection {
         $this->cardbox = $cardboxid;
 
         if ($getall) {
-            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ?', array($cardboxid));
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '1'));
         } else {
             $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '0'));
         }

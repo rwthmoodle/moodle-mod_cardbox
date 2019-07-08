@@ -30,14 +30,19 @@ class cardbox_card implements \renderable, \templatable {
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
 
-    public function __construct($cardid) {
+    public function __construct($cardid, $context) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
         
         $this->cardid = $cardid;
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
+
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
+        
+        if (empty($this->topic)) {
+            $this->topic = get_string('notopic', 'cardbox');
+        }
         
         $fs = get_file_storage();
         foreach ($contents as $content) {
@@ -69,14 +74,10 @@ class cardbox_card implements \renderable, \templatable {
         
         $data = array();
         $data['cardid'] = $this->cardid;
-        if (!empty($this->topic)) {
-            $data['topic'] = $this->topic;
-        } else {
-            $data['topic'] = get_string('notopic', 'cardbox');
-        }
+        $data['topic'] = $this->topic;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
-        $data['cards'] = true;
+        //$data['cards'] = true;
         return $data;
         
     }
