@@ -124,9 +124,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     /**
      * Function retrieves all flashcards that
      * 1. belong to the current cardbox plugin instance
-     * 2. are registered for the current user in the progress table which is the virtual representation of a cardbox system
+     * 2. are registered for the current user in the progress table
+     *    which is the virtual representation of a cardbox system
      *
-     * Each card is filed into one of the 5 cardboxes.
+     * Each card is filed into one of the 'boxes' or 'decks'.
      *
      * @global obj $DB
      * @global obj $USER
@@ -136,10 +137,10 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
 
         global $DB, $USER;
 
-        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, top.topicname "
+        $sql = "SELECT p.card, p.cardposition, p.lastpracticed, p.repetitions, t.topicname "
                 . "FROM {cardbox_progress} p "
                 . "LEFT JOIN {cardbox_cards} c ON c.id = p.card "
-                . "LEFT JOIN {cardbox_topics} top ON c.topic = top.id "
+                . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
                 . "WHERE p.userid = ? AND c.cardbox = ? "
                 . "ORDER BY p.cardposition";
 
