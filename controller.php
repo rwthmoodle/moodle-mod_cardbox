@@ -134,6 +134,8 @@ if ($action === 'addflashcard') {
 
 if ($action === 'editcard') {
 
+    require_capability('mod/cardbox:approvecard', $context);
+
     global $DB;
 
     require_once('card_form.php');
@@ -247,6 +249,10 @@ if ($action === 'editcard') {
             }
         }
 
+        if ($from === 'overview') { // i.e. if the card had already been approved and has possibly been practiced.
+            cardbox_send_change_notification($cmid, $cardbox, $cardid);
+        }
+        
         $action = $from; //'review';
 
     } else {

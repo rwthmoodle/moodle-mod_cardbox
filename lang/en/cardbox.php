@@ -32,6 +32,9 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Activate autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = 'Activate with care.';
+$string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
+$string['changenotification:subject'] = 'Change notification';
+$string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';
 
 // Reminders
 $string['send_practice_reminders'] = 'Send e-mail reminders to the course participants';

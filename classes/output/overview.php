@@ -32,7 +32,7 @@ class cardbox_overview implements \renderable, \templatable {
     
     private $cards = array();
     
-    public function __construct($list, $offset, $context, $cmid) {
+    public function __construct($list, $offset, $context, $cmid, $usedforemail = false) {
         
         require_once('card.php');
 
@@ -41,7 +41,7 @@ class cardbox_overview implements \renderable, \templatable {
         $perpage = 10;
         $renderer = $PAGE->get_renderer('mod_cardbox');
         
-        if (has_capability('mod/cardbox:approvecard', $context)) {
+        if (has_capability('mod/cardbox:approvecard', $context) && !$usedforemail) {
             $allowedtoedit = true;
         } else {
             $allowedtoedit = false;

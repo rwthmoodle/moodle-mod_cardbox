@@ -416,3 +416,50 @@ function cardbox_format_string($input) {
     return format_text($string);
         
 }
+
+/**
+ * This function sends system and/or email notifications to
+ * inform students that an already approved card was edited.
+ * 
+ * @param type $cardbox
+ */
+function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
+
+    global $CFG, $PAGE;
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
+
+    $context = context_module::instance($cmid);
+
+    $sm = get_string_manager();
+
+    //new cardbox_card($cardid, $cardbox->context, $cmid, false);
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $overview = new cardbox_overview(array($cardid), 0, $context, $cmid, true);
+
+    $recipients = get_enrolled_users($context, 'mod/cardbox:practice');
+
+    foreach ($recipients as $recipient) {
+        $message = new \core\message\message();
+        $message->component = 'mod_cardbox';
+        $message->name = 'changenotification';
+        $message->userfrom = core_user::get_noreply_user();
+        $message->userto = $recipient;
+        $message->subject = $sm->get_string('changenotification:subject', 'cardbox', null, $recipient->lang);
+        $message->fullmessage = $sm->get_string('changenotification:message', 'cardbox', null, $recipient->lang) . '<br>' . $renderer->cardbox_render_overview($overview);
+        $message->fullmessageformat = FORMAT_MARKDOWN;
+        $message->fullmessagehtml = $sm->get_string('changenotification:message', 'cardbox', null, $recipient->lang) . '<br>' . $renderer->cardbox_render_overview($overview); //'<p>' . $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang) . '</p><p>' . $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . '</p><p><em>' . $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
+        $message->smallmessage = 'small message';
+        $message->notification = 1; // For personal messages '0'. Important: the 1 without '' and 0 with ''.
+        //$message->contexturl = 'http://GalaxyFarFarAway.com';
+        //$message->contexturlname = 'Context name';
+//            $message->replyto = "random@example.com";
+//                $content = array('*' => array('header' => ' test ', 'footer' => ' test ')); // Extra content for specific processor
+//            $message->set_additional_content('email', $content);
+        $message->courseid = $cardbox->course;
+
+        message_send($message);
+
+    }
+    
+    
+}
