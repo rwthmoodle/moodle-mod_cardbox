@@ -41,8 +41,14 @@ class cardbox_overview implements \renderable, \templatable {
         $perpage = 10;
         $renderer = $PAGE->get_renderer('mod_cardbox');
         
+        if (has_capability('mod/cardbox:approvecard', $context)) {
+            $allowedtoedit = true;
+        } else {
+            $allowedtoedit = false;
+        }
+        
         for ($i = $offset; ($i < count($list) && $i < $offset+$perpage); $i++) {
-            $card = new cardbox_card($list[$i], $context, $cmid);
+            $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit);
             $this->cards[] = $card->export_for_template($renderer);
         }
 

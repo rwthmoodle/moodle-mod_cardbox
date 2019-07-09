@@ -30,14 +30,20 @@ class cardbox_card implements \renderable, \templatable {
     private $topic;
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
+    private $allowedtoedit = false;
 
-    public function __construct($cardid, $context, $cmid) {
+    public function __construct($cardid, $context, $cmid, $allowedtoedit) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
         
         $this->cmid = $cmid;
         $this->cardid = $cardid;
+        
+        if ($allowedtoedit) {
+            $this->allowedtoedit = true;
+        }
+        
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
 
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
@@ -80,6 +86,7 @@ class cardbox_card implements \renderable, \templatable {
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
+        $data['allowedtoedit'] = $this->allowedtoedit;
         //$data['cards'] = true;
         return $data;
         
