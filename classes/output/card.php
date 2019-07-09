@@ -25,16 +25,18 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_card implements \renderable, \templatable {
 
+    private $cmid;
     private $cardid;
     private $topic;
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
 
-    public function __construct($cardid, $context) {
+    public function __construct($cardid, $context, $cmid) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
         
+        $this->cmid = $cmid;
         $this->cardid = $cardid;
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
 
@@ -73,6 +75,7 @@ class cardbox_card implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output) {
         
         $data = array();
+        $data['cmid'] = $this->cmid;
         $data['cardid'] = $this->cardid;
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;

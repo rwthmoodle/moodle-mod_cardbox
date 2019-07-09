@@ -138,8 +138,14 @@ if ($action === 'editcard') {
 
     require_once('card_form.php');
     $cardid = required_param('cardid', PARAM_INT);
-
-    $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
+    $from = optional_param('from', 'review', PARAM_ALPHA);
+    
+    if ($from === 'review') {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
+    } else {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+    }
+    
     $actionurl = $returnurl; //new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => $action));
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
@@ -179,12 +185,13 @@ if ($action === 'editcard') {
         }
         $entry->cardimage = $draftitemid;
         $entry->action = 'editcard';
+        $entry->from = $from;
     }
     $mform->set_data($entry);
     
     if ($mform->is_cancelled()) {
         
-        $action = 'review';
+        $action = $from;
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
@@ -240,13 +247,13 @@ if ($action === 'editcard') {
             }
         }
 
-        $action = 'review';
+        $action = $from; //'review';
 
     } else {
 
-        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard'));
+        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard', 'from' => $from));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
-        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
+        echo $myrenderer->cardbox_render_tabs($taburl, $from, $context);
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
         $mform->display();
 
@@ -470,7 +477,7 @@ if ($action === 'overview') {
         $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
         
         // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context);
+        $overview = new cardbox_overview($list, $offset, $context, $cmid);
         
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');

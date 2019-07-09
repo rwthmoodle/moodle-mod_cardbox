@@ -32,17 +32,17 @@ class cardbox_overview implements \renderable, \templatable {
     
     private $cards = array();
     
-    public function __construct($list, $offset, $context) {
+    public function __construct($list, $offset, $context, $cmid) {
         
         require_once('card.php');
-        
+
         global $PAGE;
         
         $perpage = 10;
         $renderer = $PAGE->get_renderer('mod_cardbox');
         
         for ($i = $offset; ($i < count($list) && $i < $offset+$perpage); $i++) {
-            $card = new cardbox_card($list[$i], $context);
+            $card = new cardbox_card($list[$i], $context, $cmid);
             $this->cards[] = $card->export_for_template($renderer);
         }
 
