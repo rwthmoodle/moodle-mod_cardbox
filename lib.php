@@ -254,7 +254,9 @@ function mod_cardbox_pluginfile($course, $cm, $context, $filearea, $args, $force
         return false;
     }
     // 3. Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
-    require_login($course, true, $cm);
+    // Disabled, so that students can see images in changenotification emails:
+    //require_login($course, true, $cm);
+    
     // 4. Check the relevant capabilities - these may vary depending on the filearea being accessed.
     if (!has_capability('mod/cardbox:view', $context)) {
         return false;

@@ -25,26 +25,70 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_card implements \renderable, \templatable {
 
-    private $frontimages;
-    private $frontimagesrc;
-    private $fronttexts;
-    private $fronttext;
-    private $backimages;
-    private $backimagesrc;
-    private $backtexts;
-    private $backtext;
+    private $cmid;
+    private $cardid;
+    private $topic;
+    private $question = array('images' => array(), 'texts' => array());
+    private $answer = array('images' => array(), 'texts' => array());
+    private $allowedtoedit = false;
 
-    public function __construct($cardid) {
+    public function __construct($cardid, $context, $cmid, $allowedtoedit) {
         
+        require_once('model/cardcollection.class.php');
+        require_once('locallib.php');
         
+        $this->cmid = $cmid;
+        $this->cardid = $cardid;
         
+        if ($allowedtoedit) {
+            $this->allowedtoedit = true;
+        }
+        
+        $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
+
+        $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
+        
+        if (empty($this->topic)) {
+            $this->topic = get_string('notopic', 'cardbox');
+        }
+        
+        $fs = get_file_storage();
+        foreach ($contents as $content) {
+
+            if ($content->contenttype == 1) { // XXX: make dynamic!
+
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                if ($content->cardside == 0) {
+                    $this->question['images'][] = array('imagesrc' => $download_url);
+                } else {
+                    $this->answer['images'][] = array('imagesrc' => $download_url);
+                }
+
+            } else if ($content->cardside == 0) {
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->question['texts'][] = array('text' => $content->content);
+
+            } else {
+                
+                $content->content = cardbox_format_string($content->content);
+                $this->answer['texts'][] = array('text' => $content->content);
+            }
+        }
         
     }
     
     public function export_for_template(\renderer_base $output) {
         
         $data = array();
-        
+        $data['cmid'] = $this->cmid;
+        $data['cardid'] = $this->cardid;
+        $data['topic'] = $this->topic;
+        $data['question'] = $this->question;
+        $data['answer'] = $this->answer;
+        $data['allowedtoedit'] = $this->allowedtoedit;
+        //$data['cards'] = true;
+        return $data;
         
     }
 }

@@ -33,6 +33,9 @@ $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
 $string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
 $string['setting_autocorrection_label'] = 'Vorsicht geboten!';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
+$string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
+$string['changenotification:subject'] = 'Änderungsmitteilung';
+$string['changenotification:message'] = 'Die folgende Lernkarte wurde bearbeitet. Sie sehen die bearbeitete Version.';
 
 // Reminders
 $string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/innen versenden';
@@ -45,6 +48,7 @@ $string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karte
 $string['addflashcard'] = 'Karte anlegen';
 $string['practice'] = 'Üben';
 $string['statistics'] = 'Fortschritt';
+$string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
@@ -78,6 +82,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
+$string['info:nocardsavailableforoverview'] = 'Der Karteikasten ist leer.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
