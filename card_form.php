@@ -57,6 +57,9 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_ALPHANUM);
+        
+        $mform->addElement('hidden', 'from');
+        $mform->setType('from', PARAM_ALPHA);
 
         $mform->addElement('hidden', 'cardid');
         $mform->setType('cardid', PARAM_INT);
@@ -104,7 +107,7 @@ class mod_cardbox_card_form extends moodleform {
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
     }
-    
+
     // Loads the old file in the filemanager.
 //    public function data_preprocessing(&$defaultvalues) {
 //        if ($this->current->instance) {
