@@ -85,6 +85,15 @@ class mod_cardbox_card_form extends moodleform {
                           'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
 
+        ////////////////
+        
+        // Enter an audio file instead or as a supplement
+        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
+        
+        /////////////////
+        
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
 //        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         $torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));

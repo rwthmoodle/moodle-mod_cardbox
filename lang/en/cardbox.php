@@ -61,6 +61,7 @@ $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Question or prompt';
 $string['image'] = 'Question image';
+$string['sound'] = 'Question sound';
 $string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';

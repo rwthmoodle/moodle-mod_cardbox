@@ -61,6 +61,7 @@ $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
 $string['enterquestion'] = 'Frage';
 $string['image'] = 'Bild zur Frage';
+$string['sound'] = 'Tonaufnahme zur Frage';
 $string['enteranswer'] = 'Lösung';
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
