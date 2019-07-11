@@ -122,6 +122,7 @@ if ($action === 'addflashcard') {
 
         $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'addflashcard'));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
+        echo $OUTPUT->heading(format_string($cardbox->name));
         echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
         echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
         $mform->display();
@@ -264,8 +265,9 @@ if ($action === 'practice') {
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    echo $OUTPUT->heading("$cardbox->name");
+    //echo $OUTPUT->heading("$cardbox->name");
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
 
@@ -360,8 +362,9 @@ if ($action === 'statistics') {
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'statistics'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    echo $OUTPUT->heading("$cardbox->name"); // XXX
+    //echo $OUTPUT->heading("$cardbox->name"); // XXX
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
     
@@ -393,13 +396,16 @@ if ($action === 'review') {
     
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
     
-    echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
+    //echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
 
+    echo "<h4>" . get_string('titleforreview', 'cardbox') . "</h4>";
+    
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id);
     $list = $collection->cardbox_get_card_list();
