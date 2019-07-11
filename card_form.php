@@ -84,19 +84,20 @@ class mod_cardbox_card_form extends moodleform {
         $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
                           'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
-
-        ////////////////
         
         // Enter an audio file instead or as a supplement
         $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
                           'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
-        
-        /////////////////
-        
+
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
 //        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
-        $torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
+        //$torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
+        $torepeat = array();
+        $solution = $mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        //$mform->addRule('answer', null, 'required', null, 'client');
+        $torepeat[] = $solution;
+        
         $mform->setType('answer', PARAM_RAW);
         if (!empty($customdata['answercount'])) {
             $initialrepeats = $customdata['answercount'];
@@ -109,7 +110,17 @@ class mod_cardbox_card_form extends moodleform {
         $addfieldsno = 1; // How many fields to add at a time / at button click.
         $addstring = get_string('addanswer', 'cardbox');
         $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
-        
+
+        // Enter an image instead or as a supplement
+        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $mform->addElement('filemanager', 'answerimage', get_string('answerimage', 'cardbox'), null, $options);
+
+        // Enter an audio file instead or as a supplement
+        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $mform->addElement('filemanager', 'answersound', get_string('answersound', 'cardbox'), null, $audiooptions);
+
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
     }
