@@ -56,6 +56,7 @@ $string['titleforaddflashcard'] = 'New card';
 $string['titleforpractice'] = 'Practice';
 $string['titleforreview'] = 'Check card';
 $string['titleforcardedit'] = 'Edit card';
+$string['intro:overview'] = 'This overview displays all cards that have been approved.';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';

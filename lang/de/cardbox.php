@@ -52,10 +52,11 @@ $string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Neue Karte';
+$string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
 $string['titleforpractice'] = 'Üben';
-$string['titleforreview'] = 'Karte überprüfen';
+$string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.'; //'Karte überprüfen';
 $string['titleforcardedit'] = 'Karte bearbeiten';
+$string['intro:overview'] = 'Die Übersicht umfasst alle bereits freigegebenen Karten.';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';
@@ -82,7 +83,6 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
-$string['info:nocardsavailableforoverview'] = 'Der Karteikasten ist leer.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
