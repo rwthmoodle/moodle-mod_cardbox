@@ -122,8 +122,11 @@ if ($action === 'addflashcard') {
 
         $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'addflashcard'));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
+        echo $OUTPUT->heading(format_string($cardbox->name));
         echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-        echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
+        //echo $OUTPUT->heading(get_string('titleforaddflashcard', 'cardbox'));
+//        $info = get_string('titleforaddflashcard', 'cardbox');
+//        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
         $mform->display();
 
     }
@@ -134,20 +137,12 @@ if ($action === 'addflashcard') {
 
 if ($action === 'editcard') {
 
-    require_capability('mod/cardbox:approvecard', $context);
-
     global $DB;
 
     require_once('card_form.php');
     $cardid = required_param('cardid', PARAM_INT);
-    $from = optional_param('from', 'review', PARAM_ALPHA);
-    
-    if ($from === 'review') {
-        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
-    } else {
-        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
-    }
-    
+
+    $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
     $actionurl = $returnurl; //new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => $action));
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
@@ -187,13 +182,12 @@ if ($action === 'editcard') {
         }
         $entry->cardimage = $draftitemid;
         $entry->action = 'editcard';
-        $entry->from = $from;
     }
     $mform->set_data($entry);
     
     if ($mform->is_cancelled()) {
         
-        $action = $from;
+        $action = 'review';
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
@@ -249,17 +243,13 @@ if ($action === 'editcard') {
             }
         }
 
-        if ($from === 'overview') { // i.e. if the card had already been approved and has possibly been practiced.
-            cardbox_send_change_notification($cmid, $cardbox, $cardid);
-        }
-        
-        $action = $from; //'review';
+        $action = 'review';
 
     } else {
 
-        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard', 'from' => $from));
+        $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard'));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
-        echo $myrenderer->cardbox_render_tabs($taburl, $from, $context);
+        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
         $mform->display();
 
@@ -277,8 +267,9 @@ if ($action === 'practice') {
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    echo $OUTPUT->heading("$cardbox->name");
+    //echo $OUTPUT->heading("$cardbox->name");
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
 
@@ -373,8 +364,9 @@ if ($action === 'statistics') {
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'statistics'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    echo $OUTPUT->heading("$cardbox->name"); // XXX
+    //echo $OUTPUT->heading("$cardbox->name"); // XXX
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
     
@@ -406,13 +398,16 @@ if ($action === 'review') {
     
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
     echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
     
-    echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
+    // echo $OUTPUT->heading("<span id='cardbox-review-headline'>" . get_string('titleforreview', 'cardbox') . "</span>");
 
+    // echo "<h4>" . get_string('titleforreview', 'cardbox') . "</h4>";
+    
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id);
     $list = $collection->cardbox_get_card_list();
@@ -421,6 +416,9 @@ if ($action === 'review') {
         $info = get_string('info:nocardsavailableforreview', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
+    } else {
+        $info = get_string('titleforreview', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
     }
 
     // 2.a) Include scripts to control the behaviour of the page.
@@ -447,48 +445,5 @@ if ($action === 'review') {
 
     // 4. Render the view.
     echo $renderer->cardbox_render_review($review);
-
-}
-
-/* **************************************************** Overview of all cards **************************************************** */
-
-if ($action === 'overview') {
-
-    $page = optional_param('page', 0, PARAM_INT);
-    $perpage = 10;
-    $offset = $page * $perpage;
-    
-    require_once('model/cardcollection.class.php'); // model.
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
-    
-    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
-    echo $OUTPUT->header();
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-    echo $OUTPUT->heading("$cardbox->name");
-
-    // 1. Create the model.
-    $collection = new cardbox_cardcollection($cardbox->id, true);
-    $list = $collection->cardbox_get_card_list();
-
-    $context = context_module::instance($cmid);
-
-    if (empty($list)) {
-        $info = get_string('info:nocardsavailableforoverview', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-        return;
-        
-    } else {
-        
-        $totalcount = count($list);
-        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
-        
-        // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid);
-        
-        // 4. Render the page.
-        $renderer = $PAGE->get_renderer('mod_cardbox');
-        echo $renderer->cardbox_render_overview($overview);
-        echo $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
-    }
 
 }
