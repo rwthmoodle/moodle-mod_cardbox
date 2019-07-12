@@ -56,6 +56,7 @@ $string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Le
 $string['titleforpractice'] = 'Üben';
 $string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.'; //'Karte überprüfen';
 $string['titleforcardedit'] = 'Karte bearbeiten';
+$string['intro:overview'] = 'Die Übersicht umfasst alle bereits freigegebenen Karten.';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';

@@ -475,8 +475,8 @@ if ($action === 'overview') {
     
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
     echo $OUTPUT->header();
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     echo $OUTPUT->heading("$cardbox->name");
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id, true);
@@ -493,6 +493,9 @@ if ($action === 'overview') {
         
         $totalcount = count($list);
         $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+        
+        $info = get_string('intro:overview', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         
         // 2. Create a view controller.
         $overview = new cardbox_overview($list, $offset, $context, $cmid);
