@@ -48,9 +48,9 @@ $string['statistics'] = 'Fortschritt';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Neue Karte';
+$string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
 $string['titleforpractice'] = 'Üben';
-$string['titleforreview'] = 'Karte überprüfen';
+$string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.'; //'Karte überprüfen';
 $string['titleforcardedit'] = 'Karte bearbeiten';
 
 // Form elements for creating a new card
