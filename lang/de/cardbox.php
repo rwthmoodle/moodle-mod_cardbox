@@ -33,6 +33,9 @@ $string['setting_autocorrection'] = 'Autokorrektur aktivieren';
 $string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
 $string['setting_autocorrection_label'] = 'Vorsicht geboten!';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
+$string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
+$string['changenotification:subject'] = 'Änderungsmitteilung';
+$string['changenotification:message'] = 'Die folgende Lernkarte wurde bearbeitet. Sie sehen die bearbeitete Version.';
 
 // Reminders
 $string['send_practice_reminders'] = 'E-Mail-Erinnerungen an die Kursteilnehmer/innen versenden';
@@ -45,13 +48,15 @@ $string['reminderfooting'] = 'Diese Erinnerung wurde automatisch von Ihrem Karte
 $string['addflashcard'] = 'Karte anlegen';
 $string['practice'] = 'Üben';
 $string['statistics'] = 'Fortschritt';
+$string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Neue Karte';
+$string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
 $string['titleforpractice'] = 'Üben';
-$string['titleforreview'] = 'Karte überprüfen';
+$string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.'; //'Karte überprüfen';
 $string['titleforcardedit'] = 'Karte bearbeiten';
+$string['intro:overview'] = 'Die Übersicht umfasst alle bereits freigegebenen Karten.';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';

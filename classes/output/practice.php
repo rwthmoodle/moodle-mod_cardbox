@@ -100,13 +100,13 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else if ($content->cardside == 0) {
                 
-                $content->content = cardbox_format_string($content->content);
+                $content->content = $content->content; // cardbox_format_string($content->content);
                 
                 $this->question['texts'][] = array('text' => $content->content, 'puretext' => strip_tags($content->content));
 
             } else {
                 
-                $content->content = cardbox_format_string($content->content);
+                $content->content = $content->content; // cardbox_format_string($content->content);
                 
                 $this->answer['texts'][] = array('text' => $content->content, 'puretext' => strip_tags($content->content));
                 $solutioncount++;
