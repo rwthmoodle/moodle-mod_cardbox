@@ -115,14 +115,14 @@ class mod_cardbox_card_form extends moodleform {
         $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
 
         // Enter an image instead or as a supplement
-        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-        $mform->addElement('filemanager', 'answerimage', get_string('answerimage', 'cardbox'), null, $options);
-
-        // Enter an audio file instead or as a supplement
-        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-        $mform->addElement('filemanager', 'answersound', get_string('answersound', 'cardbox'), null, $audiooptions);
+//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+//        $mform->addElement('filemanager', 'answerimage', get_string('answerimage', 'cardbox'), null, $options);
+//
+//        // Enter an audio file instead or as a supplement
+//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+//        $mform->addElement('filemanager', 'answersound', get_string('answersound', 'cardbox'), null, $audiooptions);
 
         $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
 
