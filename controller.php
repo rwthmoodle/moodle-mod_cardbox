@@ -238,8 +238,10 @@ if ($action === 'editcard') {
     $actionurl = $returnurl; //new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => $action));
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
-
     $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => 1), IGNORE_MISSING);
+    
+    $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // name of the filemanager element
+    $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => 3), IGNORE_MISSING);
 
     $topic = cardbox_get_topic($cardid);
     $answers = cardbox_get_answers($cardid);
@@ -255,9 +257,14 @@ if ($action === 'editcard') {
 
     // XXX Vielleicht einmal in der DB fragen, ob schon ein Bild für die Karte vorliegt und je nachdem unterschiedlich weiter?
     
-    // Copy the file (if there is on) from the 'real' area into the draft area.
+    // Copy the picture file (if there is on) from the 'real' area into the draft area.
     if (!empty($itemid)) {
         file_prepare_draft_area($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+    }
+    
+    // Copy the audio file (if there is on) from the 'real' area into the draft area.
+    if (!empty($itemid2)) {
+        file_prepare_draft_area($draftitemid2, $context->id, $component, $filearea, $itemid2, $options);
     }
 
     // Pass the data of this card to the card_form for editing.
@@ -274,6 +281,7 @@ if ($action === 'editcard') {
             $entry->from = $from;
         }
         $entry->cardimage = $draftitemid;
+        $entry->cardsound = $draftitemid2;
         $entry->action = 'editcard';
         $entry->next = $nextcardid;
     }
@@ -338,6 +346,27 @@ if ($action === 'editcard') {
                     $itemid = cardbox_save_new_cardcontent($cardid, 0, 1, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
+                    break;
+                }
+            }
+        }
+        
+        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
+        $draftitemid2 = file_get_submitted_draft_itemid('cardsound');
+        
+        // Copy all the audio files from the 'real' area, into the draft area.
+        file_prepare_draft_area($draftitemid2, $context->id, $component, $filearea, 0, array('subdirs'=>true));
+
+        // Save the audio file.
+        if ($draftitemid2 != null) {
+            $fs = get_file_storage();
+            $usercontext = context_user::instance($USER->id);
+            if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false)) {          
+                foreach ($files as $file) {
+                    // Save a reference to the image data in cardbox_cardcontents.
+                    $itemid2 = cardbox_save_new_cardcontent($cardid, 0, 3, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
+                    // Save the actual image data in moodle.
+                    file_save_draft_area_files($draftitemid2, $context->id, $component, $filearea, $itemid2, $options);
                     break;
                 }
             }
