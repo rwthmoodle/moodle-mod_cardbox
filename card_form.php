@@ -80,6 +80,34 @@ class mod_cardbox_card_form extends moodleform {
         // Enter a prompt or question. // XXX Make width / number of columns dynamic
 //        $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
 
+        /****************** question experiment **********************/
+        
+//        $questiongroup = array();
+//        $questiongroup[] =& $mform->createElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+//        
+//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+//        $questiongroup[] =& $mform->createElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
+//        
+//        
+//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+//        $questiongroup[] =& $mform->createElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
+//        
+//        
+////        $questiongroup[] =& $mform->createElement('filemanager', 'picture', 'Flamingo');
+//        $mform->addGroup($questiongroup, 'questiongroup', get_string('enterquestion', 'cardbox'), array(' '), true);
+//
+//        //$mform->setType('questiongroup', PARAM_CLEANHTML);
+//
+//        //$mform->addGroupRule('questiongroup', array('value' => array(array(list, of, rule, params, but, fieldname))));
+////        $mform->addRule('questiongroup', null, 'required', null, 'client');
+//        
+        
+        /****************** end of question experiment **********************/
+        
+        /****************** question **********************/
+        
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
@@ -93,6 +121,10 @@ class mod_cardbox_card_form extends moodleform {
                           'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
 
+        
+        /****************** end of question **********************/
+        
+        
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
 //        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         //$torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
@@ -128,6 +160,68 @@ class mod_cardbox_card_form extends moodleform {
 
     }
 
+    /**
+     * This function checks whether the user entered text, an image and/or an audio file
+     * for a question.
+     *
+     * @global type $USER
+     * @param type $data
+     * @param type $files
+     * @return type
+     */
+    function validation($data, $files) {
+
+        global $USER;
+
+        $errors = parent::validation($data, $files);
+
+        $question = $data['question'];
+        $questiontext = $question['text'];
+        
+        $fs = get_file_storage();
+        $usercontext = context_user::instance($USER->id);
+
+        $draftitemid = $data['cardimage'];
+        $imagefiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false);
+
+        $draftitemid2 = $data['cardsound'];
+        $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
+        
+        $answers = $data['answer'];
+        $answer = $answers[0];
+        $answertext = $answer['text'];
+
+        if ( (empty($questiontext) && empty($imagefiles) && empty($audiofiles)) || empty($answertext) ) {
+            $errors['files'] = get_string('required');
+        }
+        return $errors;
+        
+        
+//        global $USER;
+//
+//        $errors = parent::validation($data, $files);
+//
+//        $questiongroup = $data['questiongroup'];
+//        
+//        $question = $questiongroup['question'];
+//        $questiontext = $question['text'];
+//        
+//        $fs = get_file_storage();
+//        $usercontext = context_user::instance($USER->id);
+//
+//        $draftitemid = $questiongroup['cardimage'];
+//        $imagefiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false);
+//
+//        $draftitemid2 = $questiongroup['cardsound'];
+//        $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
+//
+//        if (empty($questiontext) && empty($imagefiles) && empty($audiofiles)) {
+//            $errors['files'] = get_string('required');
+//        }
+//        return $errors;
+
+    }
+
     // Loads the old file in the filemanager.
 //    public function data_preprocessing(&$defaultvalues) {
 //        if ($this->current->instance) {
@@ -138,4 +232,5 @@ class mod_cardbox_card_form extends moodleform {
 ////            $this->_form->disabledIf('files', 'update', 'notchecked', 2);
 //        }
 //    }
+
 }

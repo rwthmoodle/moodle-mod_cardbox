@@ -82,6 +82,7 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
+$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
