@@ -72,9 +72,11 @@ $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
+$string['saveandaccept'] = 'Save and accept';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
+$string['success:addandapprovenewcard'] = 'The card was created and approved for practice.';
 $string['success:approve'] = 'The card was approved and is now free to use.';
 $string['success:edit'] = 'The card was edited.';
 $string['success:reject'] = 'The card was deleted.';

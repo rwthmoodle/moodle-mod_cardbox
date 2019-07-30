@@ -54,7 +54,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('hidden', 'course'); // Course id.
         $mform->setType('course', PARAM_INT);
-
+        
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_ALPHANUM);
         
@@ -156,10 +156,58 @@ class mod_cardbox_card_form extends moodleform {
 //                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
 //        $mform->addElement('filemanager', 'answersound', get_string('answersound', 'cardbox'), null, $audiooptions);
 
-        $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
+        
+        $context = context_module::instance($customdata['cmid']);
+        
+        if (has_capability('mod/cardbox:approvecard', $context)) {
+            $this->add_action_buttons_for_managers(true);
+
+        } else {
+            $this->add_action_buttons(true, get_string('savecard', 'cardbox'));
+        }
 
     }
 
+    /**
+     * This function allows managers to save and accept a card in one action.
+     *
+     * @param type $cancel
+     * @param type $submitlabel
+     * @param type $submit2label
+     */
+    function add_action_buttons_for_managers($cancel=true, $submitlabel=null, $submit2label=null) {
+        if (is_null($submitlabel)) {
+            $submitlabel = get_string('saveandaccept', 'cardbox');
+        }
+
+        if (is_null($submit2label)) {
+            $submit2label = get_string('savecard', 'cardbox');
+        }
+
+        $mform = $this->_form;
+
+        // elements in a row need a group
+        $buttonarray = array();
+
+        if ($submit2label !== false) {
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton2', $submit2label);
+        }
+
+        if ($submitlabel !== false) {
+            $buttonarray[] = &$mform->createElement('submit', 'submitbutton', $submitlabel);
+        }
+
+        if ($cancel) {
+            $buttonarray[] = &$mform->createElement('cancel');
+        }
+
+        $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
+        $mform->setType('buttonar', PARAM_RAW);
+        $mform->closeHeaderBefore('buttonar');
+    }
+
+    
+    
     /**
      * This function checks whether the user entered text, an image and/or an audio file
      * for a question.

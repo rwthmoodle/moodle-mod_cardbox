@@ -47,7 +47,7 @@ if ($action === 'addflashcard') {
     $component = 'mod_cardbox';
     $filearea = 'content';
 
-    $customdata = array('cardboxid' => $cardbox->id);
+    $customdata = array('cardboxid' => $cardbox->id, 'cmid' => $cmid);
     $mform = new mod_cardbox_card_form(null, $customdata);
     $mform->set_data($entry);
 
@@ -66,6 +66,12 @@ if ($action === 'addflashcard') {
     // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
         
+        if (!empty($formdata->submitbutton)) {
+            $submitbutton = $formdata->submitbutton;
+        } else {
+            $submitbutton = null;
+        }
+
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -83,7 +89,7 @@ if ($action === 'addflashcard') {
         }
 
         // Create a new entry in cardbox_cards table.
-        $cardid = cardbox_save_new_card($cardbox->id, $topicid);
+        $cardid = cardbox_save_new_card($cardbox->id, $submitbutton, $context, $topicid);
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
@@ -177,8 +183,14 @@ if ($action === 'addflashcard') {
                 }
             }
         }
-
-        redirect($actionurl, get_string('success:addnewcard', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
+        
+        if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+            $message = get_string('success:addandapprovenewcard', 'cardbox');
+        } else {
+            $message = get_string('success:addnewcard', 'cardbox');
+        }      
+                
+        redirect($actionurl, $message, null, \core\output\notification::NOTIFY_INFO);
         // TODO: check for errors, validate form
         
     } else {

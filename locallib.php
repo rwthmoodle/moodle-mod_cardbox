@@ -74,7 +74,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $topicid = null) {
+function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null) {
 
     global $DB, $USER;
 
@@ -84,8 +84,14 @@ function cardbox_save_new_card($cardboxid, $topicid = null) {
     $cardrecord->author = $USER->id;
     $cardrecord->timecreated = time();
     $cardrecord->timemodified = null;
-    $cardrecord->approved = 0;
-    $cardrecord->approvedby = null;
+    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        $cardrecord->approved = 1;
+        $cardrecord->approvedby = $USER->id;
+    } else {
+        $cardrecord->approved = 0;
+        $cardrecord->approvedby = null;
+    }
+
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
     return $cardid;

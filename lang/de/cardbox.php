@@ -72,9 +72,11 @@ $string['answersound'] = 'Tonaufnahme zur Lösung';
 $string['enteranswer'] = 'Lösungstext';
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
+$string['saveandaccept'] = 'Speichern und freigeben';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
+$string['success:addandapprovenewcard'] = 'Die Lernkarte wurde erstellt und für die Übung freigegeben.';
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = 'Die Karte wurde gelöscht.';
