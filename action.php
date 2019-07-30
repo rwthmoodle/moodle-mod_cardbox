@@ -68,7 +68,7 @@ if ($action === 'review') {
     }
     
     if (empty($success)) {
-        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // TODO: check double string entries.
+        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // XXX check double string entries.
     }
     
     if ($nextcard != 0) {

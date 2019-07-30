@@ -225,6 +225,7 @@ if ($action === 'editcard') {
 
     require_once('card_form.php');
     $cardid = required_param('cardid', PARAM_INT);
+    $nextcardid = optional_param('next', 0, PARAM_INT);
 
     $from = optional_param('from', 'review', PARAM_ALPHA);
     
@@ -244,7 +245,7 @@ if ($action === 'editcard') {
     $answers = cardbox_get_answers($cardid);
     $answercount = count($answers);
 
-    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id);
+    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id, 'cmid' => $cmid);
     $mform = new mod_cardbox_card_form($actionurl, $customdata);
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
@@ -274,6 +275,7 @@ if ($action === 'editcard') {
         }
         $entry->cardimage = $draftitemid;
         $entry->action = 'editcard';
+        $entry->next = $nextcardid;
     }
     $mform->set_data($entry);
     
@@ -284,6 +286,12 @@ if ($action === 'editcard') {
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
         
+        if (!empty($formdata->submitbutton)) {
+            $submitbutton = $formdata->submitbutton;
+        } else {
+            $submitbutton = null;
+        }
+
         // Create or select a topic for the card.
         switch ($formdata->topic) {
             case -1: // Card belongs to no topic.
@@ -301,7 +309,7 @@ if ($action === 'editcard') {
         }
 
         // Update the entry in cardbox_cards table and delete the original content items.
-        $success = cardbox_edit_card($cardid, $topicid);
+        $success = cardbox_edit_card($cardid, $topicid, $submitbutton, $context);
 
         // TODO: Fehlerbehandlung.
         
@@ -339,6 +347,10 @@ if ($action === 'editcard') {
             cardbox_send_change_notification($cmid, $cardbox, $cardid);
         }
 
+        if (!empty($nextcardid) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+            $cardid = $nextcardid;
+        }
+        
         $action = $from;
 
     } else {
@@ -510,11 +522,11 @@ if ($action === 'review') {
     
     if (empty($list)) {
         $info = get_string('info:nocardsavailableforreview', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
     } else {
         $info = get_string('titleforreview', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
+        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
     }
 
     // 2.a) Include scripts to control the behaviour of the page.

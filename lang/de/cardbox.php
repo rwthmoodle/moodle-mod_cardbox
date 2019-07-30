@@ -87,7 +87,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
 
 // Info notifications
-$string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
+$string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';

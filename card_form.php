@@ -64,6 +64,10 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('hidden', 'cardid');
         $mform->setType('cardid', PARAM_INT);
         $mform->setDefault('cardid', 0);
+        
+        $mform->addElement('hidden', 'next');
+        $mform->setType('next', PARAM_INT);
+        $mform->setDefault('next', 0);
 
         // Get topics to choose from when creating a new card.
         $topiclist = cardbox_get_topics($customdata['cardboxid'], true);

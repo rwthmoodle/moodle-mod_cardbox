@@ -140,14 +140,19 @@ function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
  * @param int $topicid
  * @return bool whether or not the update was successful
  */
-function cardbox_edit_card($cardid, $topicid) {
+function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context) {
 
-    global $DB;
+    global $DB, $USER;
     
     $record = new stdClass();
     $record->id = $cardid;
     $record->topic = $topicid;
     $record->timemodified = time();
+    
+    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        $record->approved = 1;
+        $record->approvedby = $USER->id;
+    }
 
     $success = $DB->update_record('cardbox_cards', $record);
     
