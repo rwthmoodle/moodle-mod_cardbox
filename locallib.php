@@ -215,20 +215,10 @@ function cardbox_add_new_cards() {
     
     global $DB, $USER;
 
-    $sql1 = "SELECT MAX(card)"
-            . " FROM {cardbox_progress} p"
-            . " WHERE p.userid = ?";
-
-    $lastnew = $DB->get_field_sql($sql1, array($USER->id)); // can return null.
-
-    if (empty($lastnew)) {
-        $lastnew = 0;
-    }
-
     $sql2 = "SELECT c.id"
             . " FROM {cardbox_cards} c"
-            . " WHERE c.id > ? AND approved = ?";
-    $newcards = $DB->get_fieldset_sql($sql2, array($lastnew, '1'));
+            . " WHERE approved = ? AND NOT EXISTS (SELECT card FROM {cardbox_progress} p WHERE p.userid = ? AND p.card = c.id)";
+    $newcards = $DB->get_fieldset_sql($sql2, array('1', $USER->id));
 
     if (empty($newcards)) {
         return;
