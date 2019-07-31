@@ -37,7 +37,8 @@
 
 .path-mod-cardbox .img-fluid {
     max-width: 100%;
-    height: auto;
+    max-height: 600px;
+    
 }
 
 .path-mod-cardbox .form-inline {
@@ -248,7 +249,7 @@
 
 }
 
-/* col-md Medium devices (landscape tablets, 768px and up) */
+/* Medium devices (landscape tablets, 768px and up) */
 @media (min-width: 768px) {
     
     .path-mod-cardbox .cardbox-feedback {

@@ -66,12 +66,17 @@ $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Question or prompt';
 $string['image'] = 'Question image';
+$string['sound'] = 'Question sound';
+$string['answerimage'] = 'Answer image';
+$string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
+$string['saveandaccept'] = 'Save and accept';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
+$string['success:addandapprovenewcard'] = 'The card was created and approved for practice.';
 $string['success:approve'] = 'The card was approved and is now free to use.';
 $string['success:edit'] = 'The card was edited.';
 $string['success:reject'] = 'The card was deleted.';
@@ -79,6 +84,7 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
+$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
@@ -107,7 +113,7 @@ $string['notopicpreferred'] = 'no preference';
 $string['practiceall'] = 'Practice cards before they are due';
 $string['practiceall_help'] = 'These cards do not proceed to the next deck if answered correctly. Thus, you can practice as often as you wish without risking that cards leave the cardbox forever after only a few days.';
 $string['beginpractice'] = 'Start practice';
-$string['applysettings'] = 'Applay';
+$string['applysettings'] = 'Apply';
 $string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.

@@ -74,7 +74,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $topicid = null) {
+function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null) {
 
     global $DB, $USER;
 
@@ -84,8 +84,14 @@ function cardbox_save_new_card($cardboxid, $topicid = null) {
     $cardrecord->author = $USER->id;
     $cardrecord->timecreated = time();
     $cardrecord->timemodified = null;
-    $cardrecord->approved = 0;
-    $cardrecord->approvedby = null;
+    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        $cardrecord->approved = 1;
+        $cardrecord->approvedby = $USER->id;
+    } else {
+        $cardrecord->approved = 0;
+        $cardrecord->approvedby = null;
+    }
+
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
     return $cardid;
@@ -134,14 +140,19 @@ function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
  * @param int $topicid
  * @return bool whether or not the update was successful
  */
-function cardbox_edit_card($cardid, $topicid) {
+function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context) {
 
-    global $DB;
+    global $DB, $USER;
     
     $record = new stdClass();
     $record->id = $cardid;
     $record->topic = $topicid;
     $record->timemodified = time();
+    
+    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        $record->approved = 1;
+        $record->approvedby = $USER->id;
+    }
 
     $success = $DB->update_record('cardbox_cards', $record);
     

@@ -66,12 +66,17 @@ $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
 $string['enterquestion'] = 'Frage';
 $string['image'] = 'Bild zur Frage';
-$string['enteranswer'] = 'Lösung';
+$string['answerimage'] = 'Bild zur Lösung';
+$string['sound'] = 'Tonaufnahme zur Frage';
+$string['answersound'] = 'Tonaufnahme zur Lösung';
+$string['enteranswer'] = 'Lösungstext';
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
+$string['saveandaccept'] = 'Speichern und freigeben';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
+$string['success:addandapprovenewcard'] = 'Die Lernkarte wurde erstellt und für die Übung freigegeben.';
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = 'Die Karte wurde gelöscht.';
@@ -79,9 +84,10 @@ $string['success:reject'] = 'Die Karte wurde gelöscht.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
+$string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
 
 // Info notifications
-$string['info:nocardsavailableforreview'] = 'Zurzeit liegen keine neuen Karten zur Überprüfung vor.';
+$string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
