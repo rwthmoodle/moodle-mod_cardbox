@@ -6,8 +6,14 @@
         </div>
     {{/images}}
 
+    {{#sounds}}
+        <audio controls>
+            <source src='{{soundsrc}}' type='audio/mpeg'>
+        </audio>
+    {{/sounds}}
+
     {{#texts}}
         <div class="cardbox-card-text {{#images}}text-center{{/images}}">{{{text}}}</div>
     {{/texts}}
-    
+
 </div>

@@ -43,8 +43,13 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
         // Start with a particular card.
         if (__cardid != 0) {
             position = __cardlist.indexOf(''+__cardid);
-            cardinreview = __cardid;
-            next = __cardlist[position+1];
+            
+//            if () {
+//                
+//            } else {
+                cardinreview = __cardid;
+                next = __cardlist[position+1];
+//            }
 
         } else {
             position = 0;
@@ -118,8 +123,11 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
                         view.remove();
 
                         var info = "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" + M.util.get_string('info:waslastcardforreview', 'cardbox') + "</div></span>";
-                        var headline = document.getElementById('cardbox-review-headline');
-                        headline.parentNode.insertAdjacentHTML('afterend', info);
+//                        var headline = document.getElementById('cardbox-review-headline');
+//                        headline.parentNode.insertAdjacentHTML('afterend', info);
+                        
+                        let notificationpanel = document.getElementById('cardbox-review-notification');
+                        notificationpanel.innerHTML = info;
 
                     }
 
@@ -186,7 +194,7 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
          * @returns {undefined}
          */
         function openCardFormForEditing() {
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinreview;
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinreview + '&next=' + next;
             window.location.href = goTo;
         }
         

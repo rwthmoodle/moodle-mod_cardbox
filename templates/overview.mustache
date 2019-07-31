@@ -1,0 +1,39 @@
+<div id="cardbox-overview">
+
+    {{#cards}}
+        <div class="container-fluid cardbox-studyview">
+
+            <h5>{{# str }} reviewtopic, cardbox {{/ str }}<em>{{topic}}</em></h5>
+            <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+                <div class="hidden-xs col-lg-1 col-xl-2"></div>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div class="cardbox-card-left-side">
+                        {{#question}}
+                            {{> mod_cardbox/cardside }}
+                        {{/question}}
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div class="cardbox-card-right-side">
+                        {{#answer}}
+                            {{> mod_cardbox/cardside }}
+                        {{/answer}}
+                    </div>
+                </div>
+                <div class="hidden-xs col-lg-1 col-xl-2">
+                    {{#allowedtoedit}}
+                        <form action="view.php" method="post" autocomplete="off">
+                            <input type="hidden" name="id" value="{{cmid}}">
+                            <input type="hidden" name="action" value="editcard">
+                            <input type="hidden" name="from" value="overview">
+                            <input type="hidden" name="cardid" value="{{cardid}}">
+                            <button id="cardbox-edit" type="submit" class="btn btn-primary cardbox-review-button" title="{{# str }} edit, cardbox {{/ str }}"><i class='icon fa fa-pencil fa-fw'></i></button>
+                        </form>
+                    {{/allowedtoedit}}
+                </div>
+            </div>
+
+        </div>
+    {{/cards}}
+
+</div>

@@ -32,6 +32,9 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Activate autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = 'Activate with care.';
+$string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
+$string['changenotification:subject'] = 'Change notification';
+$string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';
 
 // Reminders
 $string['send_practice_reminders'] = 'Send e-mail reminders to the course participants';
@@ -45,6 +48,7 @@ $string['reminderfooting'] = 'This reminder was sent automatically by your cardb
 $string['addflashcard'] = 'Add a card';
 $string['practice'] = 'Practice';
 $string['statistics'] = 'Progress';
+$string['overview'] = 'Overview';
 $string['review'] = 'Review';
 
 // Subpage titles
@@ -52,6 +56,7 @@ $string['titleforaddflashcard'] = 'New card';
 $string['titleforpractice'] = 'Practice';
 $string['titleforreview'] = 'Check card';
 $string['titleforcardedit'] = 'Edit card';
+$string['intro:overview'] = 'This overview displays all cards that have been approved.';
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';
@@ -61,12 +66,17 @@ $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Question or prompt';
 $string['image'] = 'Question image';
+$string['sound'] = 'Question sound';
+$string['answerimage'] = 'Answer image';
+$string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
+$string['saveandaccept'] = 'Save and accept';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
+$string['success:addandapprovenewcard'] = 'The card was created and approved for practice.';
 $string['success:approve'] = 'The card was approved and is now free to use.';
 $string['success:edit'] = 'The card was edited.';
 $string['success:reject'] = 'The card was deleted.';
@@ -74,10 +84,12 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
+$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
 // Info notifications
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
+$string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
 $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';
@@ -101,7 +113,7 @@ $string['notopicpreferred'] = 'no preference';
 $string['practiceall'] = 'Practice cards before they are due';
 $string['practiceall_help'] = 'These cards do not proceed to the next deck if answered correctly. Thus, you can practice as often as you wish without risking that cards leave the cardbox forever after only a few days.';
 $string['beginpractice'] = 'Start practice';
-$string['applysettings'] = 'Applay';
+$string['applysettings'] = 'Apply';
 $string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.

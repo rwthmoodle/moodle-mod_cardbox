@@ -25,8 +25,8 @@ defined('MOODLE_INTERNAL') || die();
 
 class cardbox_review implements \renderable, \templatable {
     
-    private $question = array('images' => array(), 'texts' => array());
-    private $answer = array('images' => array(), 'texts' => array());
+    private $question = array('images' => array(), 'sounds' => array(), 'texts' => array());
+    private $answer = array('images' => array(), 'sounds' => array(), 'texts' => array());
     private $cardid;
     
     /**
@@ -65,14 +65,23 @@ class cardbox_review implements \renderable, \templatable {
                     $this->answer['images'][] = array('imagesrc' => $download_url);
                 }
 
+            } else if ($content->contenttype == 3) { // audio files
+
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                if ($content->cardside == 0) {
+                    $this->question['sounds'][] = array('soundsrc' => $download_url);
+                } else {
+                    $this->answer['sounds'][] = array('soundsrc' => $download_url);
+                }
+            
             } else if ($content->cardside == 0) {
                 
-                $content->content = cardbox_format_string($content->content);
+                $content->content = $content->content; // cardbox_format_string($content->content);
                 $this->question['texts'][] = array('text' => $content->content);
 
             } else {
                 
-                $content->content = cardbox_format_string($content->content);
+                $content->content = $content->content; // cardbox_format_string($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
         }
