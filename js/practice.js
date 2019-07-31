@@ -71,7 +71,6 @@ function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper func
             } 
         }
 
-
     });
 }
 
@@ -243,8 +242,7 @@ class Coordinate {
                     // 2. Render the solution along with the user's corrected answer(s) and give feedback.
                     this.output.renderAnswer(this.evaluate, this.eventhandling);
                     break;
-                    
-                    
+     
                 case 'do-not-know':
                     
                     // 1. Inform evaluation that no answer was given.
