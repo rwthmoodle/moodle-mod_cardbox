@@ -200,7 +200,7 @@ if ($action === 'addflashcard') {
         
         if ($mform->is_submitted() && empty($mform->is_validated())) {
             $info = get_string('error:createcard', 'cardbox');
-            echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
+            echo "<span class='notification'><div class='alert alert-danger alert-block fade in' role='alert'>" . $info . "</div></span>";
         }
         
         
@@ -386,8 +386,15 @@ if ($action === 'editcard') {
 
         $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'editcard', 'from' => $from));
         echo $OUTPUT->header(); // Display course name, navigation bar at the very top and "Dashboard->...->..." bar.
-        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
+        
+        if ($mform->is_submitted() && empty($mform->is_validated())) {
+            $info = get_string('error:createcard', 'cardbox');
+            echo "<span class='notification'><div class='alert alert-danger alert-block fade in' role='alert'>" . $info . "</div></span>";
+        }
+        
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
+        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
+        
         $mform->display();
 
     }

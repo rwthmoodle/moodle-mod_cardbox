@@ -72,7 +72,7 @@ $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
-$string['saveandaccept'] = 'Save and accept';
+$string['saveandaccept'] = 'Save and accept without review';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
