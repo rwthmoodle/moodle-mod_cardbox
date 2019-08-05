@@ -63,16 +63,16 @@ class mod_cardbox_renderer extends plugin_renderer_base {
 
         $level1 = array($this->cardbox_create_tab($baseurl, 'addflashcard', 'addflashcard'));
 
-//        if (has_capability('mod/cardbox:practice', $context)) { // Commented out for the test phase so that teachers can see what students see.
+//      if (has_capability('mod/cardbox:practice', $context)) { // Commented out for the test phase so that teachers can see what students see.
             $level1[] = $this->cardbox_create_tab($baseurl, 'practice', 'practice');
             $level1[] = $this->cardbox_create_tab($baseurl, 'statistics', 'statistics');
-//        }
+//      }
 
         if (has_capability('mod/cardbox:approvecard', $context)) {
             $level1[] = $this->cardbox_create_tab($baseurl, 'review', 'review');
         }
         
-        $level1[] = $this->cardbox_create_tab($baseurl, 'overview', 'overview');
+        //$level1[] = $this->cardbox_create_tab($baseurl, 'overview', 'overview');
 
         return $this->tabtree($level1, $selected, $inactive);
     }

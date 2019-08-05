@@ -410,14 +410,6 @@ function cardbox_update_card_progress($dataobject, $iscorrect) {
     return $success;
 }
 
-function cardbox_format_string($input) {
-
-    $string = ltrim($input, '<p>');
-    $string = rtrim($string, '</p>');
-    return format_text($string);
-        
-}
-
 /**
  * This function sends system and/or email notifications to
  * inform students that an already approved card was edited.
