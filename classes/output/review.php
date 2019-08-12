@@ -73,9 +73,9 @@ class cardbox_review implements \renderable, \templatable {
                 } else {
                     $this->answer['sounds'][] = array('soundsrc' => $download_url);
                 }
-            
+
             } else if ($content->cardside == 0) {
-                
+
                 $content->content = $content->content; // cardbox_format_string($content->content);
                 $this->question['texts'][] = array('text' => $content->content);
 
