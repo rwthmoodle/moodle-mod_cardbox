@@ -44,7 +44,7 @@ function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper func
         var output = new Output(__case, templates);
         var statistics = new Statistics(chart);
 
-        var coordinate = new Coordinate(__cmid, $, evaluate, output, statistics, __selection, __data, __case);
+        var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case);
         var eventhandling = new EventHandling(coordinate);
         coordinate.addEventHandler(eventhandling);
 
@@ -189,7 +189,7 @@ class EventHandling {
 
 class Coordinate {
 
-        constructor(cmid, $, evaluate, output, statistics, selection, data, mode) {
+        constructor(cmid, evaluate, output, statistics, selection, data, mode) {
 
             this.cmid = cmid;
             this.selection = selection;
@@ -244,7 +244,6 @@ class Coordinate {
                     break;
      
                 case 'do-not-know':
-                    
                     // 1. Inform evaluation that no answer was given.
                     this.evaluate.registerUnknownAnswer(this.data);
                     // 2. Render the solution and give feedback.
@@ -477,7 +476,7 @@ class Evaluate {
         if (userinput.length < solutions.length) {
             this.answeriscomplete = 0;
             if (userinput.length === 0) {
-                answergiven = 0;
+                this.answergiven = 0;
             }
 
         } else {
@@ -636,7 +635,7 @@ class Output {
      * @returns {undefined}
      */
     renderAnswer(evaluate, eventhandling, data = null) {
- 
+
         if (this.case % 2 == 0) { // If the user is in auto-check mode.
             
             var evaluation = evaluate.getEvaluation();
