@@ -75,13 +75,13 @@ class cardbox_review implements \renderable, \templatable {
                 }
 
             } else if ($content->cardside == 0) {
-
-                $content->content = $content->content; // cardbox_format_string($content->content);
+                
+                $content->content = format_text($content->content);
                 $this->question['texts'][] = array('text' => $content->content);
 
             } else {
                 
-                $content->content = $content->content; // cardbox_format_string($content->content);
+                $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
         }
