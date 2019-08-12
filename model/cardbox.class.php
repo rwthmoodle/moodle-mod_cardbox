@@ -102,22 +102,26 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
         return $selection;
     }
+
     /**
-     * Function returns an array specifying how many cards there are in each box
+     * Function returns an array specifying how many due/not-due cards there are in each box
      * (for this user and this cardbox instance).
      *
      * @return array
      */
     public function cardbox_get_status() {
 
+        $now = new DateTime("now");
+        
         $cardsperbox = [];
-        $cardsperbox[] = count($this->boxes[0]);
-        $cardsperbox[] = count($this->boxes[1]);
-        $cardsperbox[] = count($this->boxes[2]);
-        $cardsperbox[] = count($this->boxes[3]);
-        $cardsperbox[] = count($this->boxes[4]);
-        $cardsperbox[] = count($this->boxes[5]);
-        $cardsperbox[] = count($this->boxes[6]);
+        
+        $cardsperbox[0] = count($this->boxes[0]);
+        $cardsperbox[6] = count($this->boxes[6]);
+        
+        for ($i = 1; $i <= 5; $i++) {
+            $cardsperbox[$i] = $this->selectionalgorithm->cardbox_count_due_and_not_due($this->boxes[$i], $now);
+        }
+
         return $cardsperbox;
 
     }

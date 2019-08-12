@@ -87,6 +87,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
 
 // Info notifications
+$string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
 $string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
@@ -150,6 +151,8 @@ $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['known'] = 'gelernt';
 $string['flashcards'] = 'Karten';
+$string['flashcardsdue'] = 'fällig';
+$string['flashcardsnotdue'] = 'Nicht fällig';
 $string['box'] = 'Fach';
 
 $string['titleperformancechart'] = 'Vergangene Übungen';

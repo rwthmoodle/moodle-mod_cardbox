@@ -87,6 +87,7 @@ $string['error:updateafterreview'] = 'Update failed.';
 $string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
 // Info notifications
+$string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
@@ -146,6 +147,8 @@ $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
 $string['known'] = 'mastered';
 $string['flashcards'] = 'cards';
+$string['flashcardsdue'] = 'due';
+$string['flashcardsnotdue'] = 'not due yet';
 $string['box'] = 'box';
 
 $string['titleperformancechart'] = 'Past practice sessions';
