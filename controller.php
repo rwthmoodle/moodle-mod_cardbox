@@ -514,7 +514,7 @@ if ($action === 'statistics') {
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     $info = get_string('info:statisticspage', 'cardbox');
-    $help = $OUTPUT->help_icon('help:nocardsdueforpractice', 'cardbox');
+    $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
     echo "<span id='nocardsduenotification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
     
     //echo $OUTPUT->heading("$cardbox->name"); // XXX

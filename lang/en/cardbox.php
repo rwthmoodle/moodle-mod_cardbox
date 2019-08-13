@@ -100,6 +100,8 @@ $string['help:nocardsavailableforpractice_help'] = 'You have correctly answered 
 $string['info:nocardsdueforpractice'] = 'None of your cards are due for repetition yet.';
 $string['help:nocardsdueforpractice'] = 'No cards due';
 $string['help:nocardsdueforpractice_help'] = 'New cards are due immediately. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
+$string['help:whenarecardsdue'] = 'When are cards due';
+$string['help:whenarecardsdue_help'] = 'New cards are immediately due for practice. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
 $string['help:practiceanyway'] = 'If you would like to practice, nevertheless, please click on <em>Options</em> and select <em>Practice cards before they are due</em>.';
 
 // Title and form elements for choosing the settings for a new practice session

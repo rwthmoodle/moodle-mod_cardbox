@@ -99,6 +99,8 @@ $string['help:nocardsavailableforpractice_help'] = 'Sie haben alle zurzeit verf�
 $string['info:nocardsdueforpractice'] = "Derzeit sind keine Karten zur Wiederholung fällig.";
 $string['help:nocardsdueforpractice'] = 'Keine Karten fällig';
 $string['help:nocardsdueforpractice_help'] = 'Neue Karten sind sofort fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
+$string['help:whenarecardsdue'] = 'Wann sind Karten fällig';
+$string['help:whenarecardsdue_help'] = 'Neue Karten sind sofort zur Wiederholung fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
 $string['help:practiceanyway'] = 'Möchten Sie dennoch üben, so klicken Sie bitte auf <em>Einstellungen</em> und wählen Sie die Option <em>Auch nicht-fällige Karten üben</em> aus.';
 
 // Title and form elements for choosing the settings for a new practice session
@@ -152,7 +154,7 @@ $string['new'] = 'neu';
 $string['known'] = 'gelernt';
 $string['flashcards'] = 'Karten';
 $string['flashcardsdue'] = 'fällig';
-$string['flashcardsnotdue'] = 'Nicht fällig';
+$string['flashcardsnotdue'] = 'noch nicht fällig';
 $string['box'] = 'Fach';
 
 $string['titleperformancechart'] = 'Vergangene Übungen';
