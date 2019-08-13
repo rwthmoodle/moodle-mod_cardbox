@@ -69,7 +69,12 @@ $string['image'] = 'Bild zur Frage';
 $string['answerimage'] = 'Bild zur Lösung';
 $string['sound'] = 'Tonaufnahme zur Frage';
 $string['answersound'] = 'Tonaufnahme zur Lösung';
-$string['enteranswer'] = 'Lösungstext';
+$string['enteranswer'] = 'Lösungstext (Hilfe-Icon beachten)';
+$string['answer_repeat'] = 'weitere Lösung';
+//$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
+
+$string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>';
+
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';

@@ -138,18 +138,20 @@ class mod_cardbox_card_form extends moodleform {
         $torepeat[] = $solution;
         
         $mform->setType('answer', PARAM_RAW);
+
         if (!empty($customdata['answercount'])) {
             $initialrepeats = $customdata['answercount'];
         } else {
             $initialrepeats = 1;
         }
         $roptions = array();
+        $roptions['answer']['helpbutton'] = array('answer_repeat', 'cardbox'); //array('answer_repeat', 'helpbutton', array('answer_repeat', 'answer_repeat', 'cardbox'));
         $repeathiddenname = 'answer_repeat';
         $addfieldsname = 'answer_add_fields';
         $addfieldsno = 1; // How many fields to add at a time / at button click.
         $addstring = get_string('addanswer', 'cardbox');
         $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
-
+        
         // Enter an image instead or as a supplement
 //        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
 //                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
