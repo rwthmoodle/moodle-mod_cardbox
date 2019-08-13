@@ -40,9 +40,6 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
 
         var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
 
-        console.log('__boxcount: ', __boxcount);
-        console.log('__boxcount[0][due]:', __boxcount[0]['due']);
-
         var cardboxdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
@@ -96,7 +93,8 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                    position: 'top'
                },
                legend: {
-                   display: false
+                   display: true,
+                   position: 'right'
                },
                ticks: {
                    beginAtZero: true,
