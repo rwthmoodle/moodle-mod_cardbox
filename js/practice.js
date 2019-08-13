@@ -319,7 +319,7 @@ class Coordinate {
 
         registerProgress(iscorrect) {
             // Regular cards, i.e. cards that still count for the statistics:
-            if (this.isrepetition == 0) {
+            if (this.isrepetition === 0) {
 
                 if (iscorrect === 1) {
                     this.statistics.incrementCountRight();
@@ -337,18 +337,18 @@ class Coordinate {
 
             // Cards that are repeated because they were answered wrongly before:
             // If it was answered wrongly again:
-            } else if (iscorrect == 0) {
+            } else if (iscorrect === 0) {
                 // Mark the card for repetition once more.
                 // Unless this was the last card and the next card is going to be this card once more, anyway.
                 if (!this.islastcard) {
-                    this.toRepeat.push(cardId);
+                    this.toRepeat.push(this.cardId);
                 }
             }
         }
 
         registerAndRenderNextCard(newdata) {
 
-            if (this.next == 0) {
+            if (this.next === 0) {
                 this.statistics.finishPractice(this.cmid);
 
             } else {
@@ -379,9 +379,9 @@ class Coordinate {
             this.islastcard = false;
             
             // This was the last card of this practice session.
-            if (this.position == (this.cardcount-1) && this.toRepeat.length === 0) {
+            if (this.position === (this.cardcount-1) && this.toRepeat.length === 0) {
                 
-                if (iscorrect == 1) {
+                if (iscorrect === 1) {
                     this.next = 0;
                 } else {
                     this.islastcard = true;
@@ -394,7 +394,7 @@ class Coordinate {
                 this.next = this.selection[this.position+1];
             
             // There are only cards left that are to be repeated.
-            } else if (this.position == (this.cardcount-1) && this.toRepeat.length !== 0) {
+            } else if (this.position === (this.cardcount-1) && this.toRepeat.length !== 0) {
                 this.next = this.toRepeat.shift();
                 this.willBeRepetition = 1;
                 

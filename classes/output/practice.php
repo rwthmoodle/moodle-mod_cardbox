@@ -74,13 +74,17 @@ class cardbox_practice implements \renderable, \templatable {
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         require_once('model/cardbox.class.php');
 
+        $table = 'cardbox_contenttypes';
+        $image = $DB->get_field($table, 'id', array('name' => 'image'), MUST_EXIST);
+        $sound = $DB->get_field($table, 'id', array('name' => 'audio'), MUST_EXIST);
+        
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($cardid);
 
         $fs = get_file_storage();
         $solutioncount = 0;
         foreach ($contents as $content) {
 
-            if ($content->contenttype == 1) { // images XXX: make dynamic!
+            if ($content->contenttype == $image) { // images
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
@@ -89,7 +93,7 @@ class cardbox_practice implements \renderable, \templatable {
                     $this->answer['images'][] = array('imagesrc' => $download_url);
                 }
 
-            } else if ($content->contenttype == 3) { // audio files
+            } else if ($content->contenttype == $sound) { // audio files
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {

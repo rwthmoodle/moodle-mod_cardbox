@@ -44,9 +44,9 @@ function xmldb_cardbox_install() {
     $condition = [];
     $types = $DB->record_exists($table, $condition);
     if (!$types) {
-        $DB->insert_record($table, array('type' => 'image', 'name' => 'image'), false, false);
-        $DB->insert_record($table, array('type' => 'text', 'name' => 'question'), false, false);
-        $DB->insert_record($table, array('type' => 'text', 'name' => 'answer'), false, false);
+        $DB->insert_record($table, array('type' => 'file', 'name' => 'image'), false, false);
+        $DB->insert_record($table, array('type' => 'text', 'name' => 'text'), false, false);
+        $DB->insert_record($table, array('type' => 'file', 'name' => 'audio'), false, false);
     }
 
 }
