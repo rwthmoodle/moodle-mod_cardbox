@@ -29,9 +29,9 @@ $string['pluginname'] = 'Karteikasten';
 $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
 $string['pluginadministration'] = 'Karteikasten Administration';
-$string['setting_autocorrection'] = 'Autokorrektur aktivieren';
-$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
-$string['setting_autocorrection_label'] = 'Vorsicht geboten!';
+$string['setting_autocorrection'] = 'Autokorrektur erlauben';
+$string['setting_autocorrection_help'] = 'Die Studierenden wählen vor jeder Übung, ob sie ihre Antworten selbst überprüfen oder eintippen und durch das Programm überprüfen lassen möchten. Die Autokorrektur unterstützt jedoch nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
+$string['setting_autocorrection_label'] = '<font color="red">nur für Textinhalte geeignet</font>';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 $string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
@@ -111,14 +111,16 @@ $string['help:practiceanyway'] = 'Möchten Sie dennoch üben, so klicken Sie bit
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Übungseinstellungen';
 $string['choosecorrectionmode'] = 'Übungsmodus';
-$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren, so wählen Sie den Selbstkontrollmodus.';
+$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren (z.B. Formeln), so wählen Sie den Selbstkontrollmodus.';
 $string['selfcorrection'] = 'Selbstkontrolle';
 $string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
-$string['weightopic_help'] = 'Wenn Sie ein Thema gewichten, wird dieses verstärkt geübt. Dies bedeutet jedoch nicht, dass alle oder ausschließlich Karten zu diesem Thema geübt werden.';
+$string['weightopic_help'] = 'Karten des entsprechenden Themas werden bevorzugt für die Übung ausgewählt.';
 $string['notopicpreferred'] = 'keine Gewichtung';
-$string['practiceall'] = 'Auch nicht-fällige Karten üben';
-$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
+$string['practiceall'] = 'Zu früh wiederholen';
+$string['practiceall_help'] = 'Zu früh wiederholte Karten wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach 1 Tag als dauerhaft gelernt verlassen.';
+
+//$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
 $string['beginpractice'] = 'Jetzt üben';
 $string['applysettings'] = 'Anwenden';
 $string['cancel'] = 'Abbrechen';

@@ -108,11 +108,11 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
     }
     
     public function cardbox_count_due_and_not_due($cards, $now) {
-        
+
         $result = array('due' => 0, 'notdue' => 0);
-        
+
         foreach ($cards as $card) {
-            
+
             $last = new DateTime("@$card->lastpracticed");
             $card->duedatetime = $last->add($this->spacing[$card->cardposition]);
             if ($card->duedatetime <= $now) {
@@ -120,14 +120,12 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
             } else {
                 $result['notdue']++;
             }
-                
+ 
         }
-        
+
         return $result;
 
     }
-    
-    
 
     /**
      * This function sorts/prioritises cards within a box, favouring those that

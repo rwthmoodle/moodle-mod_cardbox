@@ -66,7 +66,7 @@ if ($action === 'addflashcard') {
         } else { // for guests.
             redirect($actionurl, '');
         }
-        
+
     // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
         
