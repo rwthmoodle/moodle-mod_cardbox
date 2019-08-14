@@ -54,16 +54,29 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
             ],
 
            datasets: [{
-               label: M.util.get_string('flashcards', 'cardbox'),
-               data: [__boxcount[0], __boxcount[1], __boxcount[2], __boxcount[3], __boxcount[4], __boxcount[5], __boxcount[6]],
-               backgroundColor: [
-                    '#0066ff',
-                    '#0066ff',
-                    '#0066ff',
-                    '#0066ff',
-                    '#0066ff',
-                    '#0066ff',
-                    '#00b33c'
+                label: M.util.get_string('flashcardsdue', 'cardbox'),
+                data: [__boxcount[0], __boxcount[1]['due'], __boxcount[2]['due'], __boxcount[3]['due'], __boxcount[4]['due'], __boxcount[5]['due'], 0],
+                backgroundColor: [
+                        '#0066ff',
+                        '#0066ff',
+                        '#0066ff',
+                        '#0066ff',
+                        '#0066ff',
+                        '#0066ff',
+                        '#00b33c'
+                ]
+            },
+            {
+                label: M.util.get_string('flashcardsnotdue', 'cardbox'),
+                data: [0, __boxcount[1]['notdue'], __boxcount[2]['notdue'], __boxcount[3]['notdue'], __boxcount[4]['notdue'], __boxcount[5]['notdue'], __boxcount[6]],
+                backgroundColor: [
+                        '#99c2ff',
+                        '#99c2ff',
+                        '#99c2ff',
+                        '#99c2ff',
+                        '#99c2ff',
+                        '#99c2ff',
+                        '#00b33c'
                 ]
            }]
 
@@ -80,7 +93,8 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                    position: 'top'
                },
                legend: {
-                   display: false
+                   display: true,
+                   position: 'right'
                },
                ticks: {
                    beginAtZero: true,
@@ -92,7 +106,8 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                             display: true,
                             labelString: M.util.get_string('barchartxaxislabel', 'cardbox'),
                             fontSize: 16,
-                        }
+                        },
+                        stacked: true
                     }],
                     yAxes: [{
                         scaleLabel: {
@@ -104,7 +119,8 @@ function displayCharts(Y, __cmid, __boxcount, __performance) { // Wrapper functi
                             beginAtZero: true,
                             min: 0,
                             stepSize: 10
-                        }
+                        },
+                        stacked: true
                     }]
                 }
            }

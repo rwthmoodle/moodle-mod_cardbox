@@ -29,9 +29,9 @@ $string['pluginname'] = 'Card Box';
 $string['modulenameplural'] = 'Card Boxes';
 $string['cardboxname'] = 'Name of this Card Box';
 $string['pluginadministration'] = 'Flashcards Administration';
-$string['setting_autocorrection'] = 'Activate autocorrection';
+$string['setting_autocorrection'] = 'Allow autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
-$string['setting_autocorrection_label'] = 'Activate with care.';
+$string['setting_autocorrection_label'] = '<font color="red">only suitable for text</font>'; // 'Activate with care.';
 $string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
 $string['changenotification:subject'] = 'Change notification';
 $string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';
@@ -70,6 +70,8 @@ $string['sound'] = 'Question sound';
 $string['answerimage'] = 'Answer image';
 $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
+$string['answer_repeat'] = 'Add another solution';
+$string['answer_repeat_help'] = "If the solution consists of several parts, please enter them individually by clicking 'Add another solution'. This enables the program to check answers for completeness. If there are valid alternatives for the solution, please enter all of them in the first input field.";
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
 $string['saveandaccept'] = 'Save and accept without review';
@@ -87,6 +89,7 @@ $string['error:updateafterreview'] = 'Update failed.';
 $string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
 // Info notifications
+$string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
 $string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
@@ -99,6 +102,8 @@ $string['help:nocardsavailableforpractice_help'] = 'You have correctly answered 
 $string['info:nocardsdueforpractice'] = 'None of your cards are due for repetition yet.';
 $string['help:nocardsdueforpractice'] = 'No cards due';
 $string['help:nocardsdueforpractice_help'] = 'New cards are due immediately. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
+$string['help:whenarecardsdue'] = 'When are cards due';
+$string['help:whenarecardsdue_help'] = 'New cards are immediately due for practice. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
 $string['help:practiceanyway'] = 'If you would like to practice, nevertheless, please click on <em>Options</em> and select <em>Practice cards before they are due</em>.';
 
 // Title and form elements for choosing the settings for a new practice session
@@ -108,7 +113,7 @@ $string['choosecorrectionmode_help'] = 'You can type in your answer and have it 
 $string['selfcorrection'] = 'Check yourself';
 $string['autocorrection'] = 'Automatic check';
 $string['weightopic'] = 'Priority topic';
-$string['weightopic_help'] = 'Cards belonging to the priority topic will be favoured in the selection of cards for practice. This does not mean, however, that only these cards or all of these cards will be selected.';
+$string['weightopic_help'] = 'Cards belonging to the priority topic will be favoured in the selection of cards for practice.';
 $string['notopicpreferred'] = 'no preference';
 $string['practiceall'] = 'Practice cards before they are due';
 $string['practiceall_help'] = 'These cards do not proceed to the next deck if answered correctly. Thus, you can practice as often as you wish without risking that cards leave the cardbox forever after only a few days.';
@@ -146,6 +151,8 @@ $string['titleoverviewchart'] = 'Cardbox';
 $string['new'] = 'new';
 $string['known'] = 'mastered';
 $string['flashcards'] = 'cards';
+$string['flashcardsdue'] = 'due';
+$string['flashcardsnotdue'] = 'not due yet';
 $string['box'] = 'box';
 
 $string['titleperformancechart'] = 'Past practice sessions';

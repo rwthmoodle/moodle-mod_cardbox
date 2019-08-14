@@ -52,6 +52,7 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
 
         // 1. Shuffle the topics.
 
+        // 1.1 Collect the topics.
         $coll = new stdClass();
         $coll->notopic = [];
         foreach ($topics as $topic) {

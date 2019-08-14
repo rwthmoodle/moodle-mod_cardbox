@@ -263,7 +263,22 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2019070101, 'cardbox');
     }
+    
+    if ($oldversion < 2019081300) {
 
+        global $DB;
+        $table = 'cardbox_contenttypes';
+        $condition = [];
+        $types = $DB->record_exists($table, $condition);
+        if (!$types) {
+            $DB->insert_record($table, array('type' => 'file', 'name' => 'image'), false, false);
+            $DB->insert_record($table, array('type' => 'text', 'name' => 'text'), false, false);
+            $DB->insert_record($table, array('type' => 'file', 'name' => 'audio'), false, false);
+        }
+        
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2019081300, 'cardbox');
+    }
 
     return true;
 

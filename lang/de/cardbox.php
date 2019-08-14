@@ -29,9 +29,9 @@ $string['pluginname'] = 'Karteikasten';
 $string['modulenameplural'] = 'Karteikästen';
 $string['cardboxname'] = 'Name des Karteikastens';
 $string['pluginadministration'] = 'Karteikasten Administration';
-$string['setting_autocorrection'] = 'Autokorrektur aktivieren';
-$string['setting_autocorrection_help'] = 'Die Autokorrektur unterstützt nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
-$string['setting_autocorrection_label'] = 'Vorsicht geboten!';
+$string['setting_autocorrection'] = 'Autokorrektur erlauben';
+$string['setting_autocorrection_help'] = 'Die Studierenden wählen vor jeder Übung, ob sie ihre Antworten selbst überprüfen oder eintippen und durch das Programm überprüfen lassen möchten. Die Autokorrektur unterstützt jedoch nur Texteingaben. Sie sollte deaktiviert werden, falls z.B. Formeln abgefragt werden.';
+$string['setting_autocorrection_label'] = '<font color="red">nur für Textinhalte geeignet</font>';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 $string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
@@ -69,7 +69,12 @@ $string['image'] = 'Bild zur Frage';
 $string['answerimage'] = 'Bild zur Lösung';
 $string['sound'] = 'Tonaufnahme zur Frage';
 $string['answersound'] = 'Tonaufnahme zur Lösung';
-$string['enteranswer'] = 'Lösungstext';
+$string['enteranswer'] = 'Lösungstext (Hilfe-Icon beachten)';
+$string['answer_repeat'] = 'weitere Lösung';
+//$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
+
+$string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>';
+
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
@@ -87,6 +92,7 @@ $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
 
 // Info notifications
+$string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
 $string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
@@ -98,19 +104,23 @@ $string['help:nocardsavailableforpractice_help'] = 'Sie haben alle zurzeit verf�
 $string['info:nocardsdueforpractice'] = "Derzeit sind keine Karten zur Wiederholung fällig.";
 $string['help:nocardsdueforpractice'] = 'Keine Karten fällig';
 $string['help:nocardsdueforpractice_help'] = 'Neue Karten sind sofort fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
+$string['help:whenarecardsdue'] = 'Wann sind Karten fällig';
+$string['help:whenarecardsdue_help'] = 'Neue Karten sind sofort zur Wiederholung fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
 $string['help:practiceanyway'] = 'Möchten Sie dennoch üben, so klicken Sie bitte auf <em>Einstellungen</em> und wählen Sie die Option <em>Auch nicht-fällige Karten üben</em> aus.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Übungseinstellungen';
 $string['choosecorrectionmode'] = 'Übungsmodus';
-$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren, so wählen Sie den Selbstkontrollmodus.';
+$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren (z.B. Formeln), so wählen Sie den Selbstkontrollmodus.';
 $string['selfcorrection'] = 'Selbstkontrolle';
 $string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
-$string['weightopic_help'] = 'Wenn Sie ein Thema gewichten, wird dieses verstärkt geübt. Dies bedeutet jedoch nicht, dass alle oder ausschließlich Karten zu diesem Thema geübt werden.';
+$string['weightopic_help'] = 'Karten des entsprechenden Themas werden bevorzugt für die Übung ausgewählt.';
 $string['notopicpreferred'] = 'keine Gewichtung';
-$string['practiceall'] = 'Auch nicht-fällige Karten üben';
-$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
+$string['practiceall'] = 'Zu früh wiederholen';
+$string['practiceall_help'] = 'Zu früh wiederholte Karten wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach 1 Tag als dauerhaft gelernt verlassen.';
+
+//$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
 $string['beginpractice'] = 'Jetzt üben';
 $string['applysettings'] = 'Anwenden';
 $string['cancel'] = 'Abbrechen';
@@ -150,6 +160,8 @@ $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['known'] = 'gelernt';
 $string['flashcards'] = 'Karten';
+$string['flashcardsdue'] = 'fällig';
+$string['flashcardsnotdue'] = 'noch nicht fällig';
 $string['box'] = 'Fach';
 
 $string['titleperformancechart'] = 'Vergangene Übungen';

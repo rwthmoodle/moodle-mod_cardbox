@@ -29,11 +29,11 @@ use core_user;
  * This clas
  */
 class remind extends \core\task\scheduled_task {
-    
+
     public function execute() {
-        
+
         global $DB;
-        
+
         $sm = get_string_manager();
 
         $sql = "SELECT cm.id, cm.course AS courseid, cm.id AS coursemoduleid, ca.name AS cardboxname, co.fullname AS coursename "
@@ -44,7 +44,7 @@ class remind extends \core\task\scheduled_task {
                 . "WHERE m.name = ?";
 
         $cardboxes =  $DB->get_records_sql($sql, array('cardbox'));
-        
+
         foreach ($cardboxes as $cardbox) {
 
             $info = new \stdClass();
