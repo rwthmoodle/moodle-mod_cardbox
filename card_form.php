@@ -106,29 +106,37 @@ class mod_cardbox_card_form extends moodleform {
 //
 //        //$mform->addGroupRule('questiongroup', array('value' => array(array(list, of, rule, params, but, fieldname))));
 ////        $mform->addRule('questiongroup', null, 'required', null, 'client');
-//        
-        
+//
+
         /****************** end of question experiment **********************/
-        
+
         /****************** question **********************/
-        
+
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
-        // Enter an image instead or as a supplement
-        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        // Enter an image instead or as a supplement.
+//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $options = array();
+        $options['accepted_types'] = array('.bmp', '.gif', '.jpeg', '.jpg', '.png', '.svg');
+        $options['maxbytes'] = 0;
+        $options['maxfiles'] = 1;
+        $options['mainfile'] = true;
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
-        
-        // Enter an audio file instead or as a supplement
-        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+
+        // Enter an audio file instead or as a supplement.
+//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
+//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $audiooptions = array();
+        $audiooptions['accepted_types'] = array('.mp3');
+        $audiooptions['maxbytes'] = 0;
+        $audiooptions['maxfiles'] = 1;
+        $audiooptions['mainfile'] = true;
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
 
-        
         /****************** end of question **********************/
-        
-        
+
         // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
 //        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
         //$torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
