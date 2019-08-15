@@ -605,46 +605,46 @@ if ($action === 'review') {
 
 /* **************************************************** Overview of all cards **************************************************** */
 
-//if ($action === 'overview') {
-//
-//    $page = optional_param('page', 0, PARAM_INT);
-//    $perpage = 10;
-//    $offset = $page * $perpage;
-//    
-//    require_once('model/cardcollection.class.php'); // model.
-//    require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
-//    
-//    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
-//    echo $OUTPUT->header();
-//    echo $OUTPUT->heading("$cardbox->name");
-//    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-//
-//    // 1. Create the model.
-//    $collection = new cardbox_cardcollection($cardbox->id, true);
-//    $list = $collection->cardbox_get_card_list();
-//
-//    $context = context_module::instance($cmid);
-//
-//    if (empty($list)) {
-//        $info = get_string('info:nocardsavailableforoverview', 'cardbox');
-//        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-//        return;
-//        
-//    } else {
-//        
-//        $totalcount = count($list);
-//        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
-//        
-//        $info = get_string('intro:overview', 'cardbox');
-//        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
-//        
-//        // 2. Create a view controller.
-//        $overview = new cardbox_overview($list, $offset, $context, $cmid);
-//        
-//        // 4. Render the page.
-//        $renderer = $PAGE->get_renderer('mod_cardbox');
-//        echo $renderer->cardbox_render_overview($overview);
-//        echo $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
-//    }
-//
-//}
+if ($action === 'overview') {
+
+    $page = optional_param('page', 0, PARAM_INT);
+    $perpage = 10;
+    $offset = $page * $perpage;
+    
+    require_once('model/cardcollection.class.php'); // model.
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
+    
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading("$cardbox->name");
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+
+    // 1. Create the model.
+    $collection = new cardbox_cardcollection($cardbox->id, true);
+    $list = $collection->cardbox_get_card_list();
+
+    $context = context_module::instance($cmid);
+
+    if (empty($list)) {
+        $info = get_string('info:nocardsavailableforoverview', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+        
+    } else {
+        
+        $totalcount = count($list);
+        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+        
+        $info = get_string('intro:overview', 'cardbox');
+        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        
+        // 2. Create a view controller.
+        $overview = new cardbox_overview($list, $offset, $context, $cmid);
+        
+        // 4. Render the page.
+        $renderer = $PAGE->get_renderer('mod_cardbox');
+        echo $renderer->cardbox_render_overview($overview);
+        echo $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
+    }
+
+}
