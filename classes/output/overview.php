@@ -30,14 +30,28 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_overview implements \renderable, \templatable {
     
+    private $topicid;
+    private $topics = array();
     private $cards = array();
     
-    public function __construct($list, $offset, $context, $cmid, $usedforemail = false) {
-        
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false) {
+
         require_once('card.php');
 
-        global $PAGE;
+        global $DB, $PAGE;
+
+        $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
+
+        $this->topicid = $topicid;
         
+        foreach ($topics as $topic) {
+            if ($topic->id == $topicid) {
+                $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true);
+            } else {
+                $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => false);
+            }
+        }
+
         $perpage = 10;
         $renderer = $PAGE->get_renderer('mod_cardbox');
         
@@ -56,6 +70,14 @@ class cardbox_overview implements \renderable, \templatable {
 
     public function export_for_template(\renderer_base $output) {
         $data = array();
+        
+        if ($this->topicid == -1) {
+            $data['nopreference'] = true;
+        } else if ($this->topicid == 0) {
+            $data['cardswithouttopic'] = true;
+        }
+
+        $data['topics'] = $this->topics;
         $data['cards'] = $this->cards;
         return $data;
     }

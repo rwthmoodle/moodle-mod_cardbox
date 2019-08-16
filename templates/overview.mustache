@@ -1,5 +1,13 @@
 <div id="cardbox-overview">
 
+    <span>Themenfilter </span><span><select id="cardbox-overview-topicfilter" class="custom-select">
+        <option value="-1" {{#nopreference}}selected{{/nopreference}}>keine Auswahl</option>
+        {{#topics}}
+            <option value="{{topicid}}" {{#selected}}selected{{/selected}}>{{topic}}</option>
+        {{/topics}}
+        <option value="0" {{#cardswithouttopic}}selected{{/cardswithouttopic}}>{{# str }} notopic, cardbox {{/ str }}</option>
+    </select></span>
+
     {{#cards}}
         <div class="container-fluid cardbox-studyview">
 
