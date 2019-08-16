@@ -114,7 +114,7 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name) {
     $cardcontent = new stdClass();
     $cardcontent->card = $cardid;
     $cardcontent->cardside = $cardside; // 0 for question page
-    $cardcontent->contenttype = $contenttype; // 1 for image; // XXX Make dynamic (SQL join, install.php)
+    $cardcontent->contenttype = $contenttype; // 1 for image;
     $cardcontent->content = $name; // $file->get_filename();
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 

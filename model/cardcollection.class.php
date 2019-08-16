@@ -28,15 +28,24 @@ class cardbox_cardcollection {
     private $cardbox;
     private $flashcards; // new/unapproved flashcards.
 
-    public function __construct($cardboxid, $getall = false) {
+    public function __construct($cardboxid, $topic = null, $getall = false) {
 
         global $DB;
         $this->cardbox = $cardboxid;
-
+        
+        $approved = '0';
         if ($getall) {
-            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '1'));
-        } else {
-            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, '0'));
+            $approved = '1';
+        }
+        
+        if (is_null($topic) || $topic == -1) { // no topic preference.
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, $approved));
+                        
+        } else if ($topic == 0) { // only cards without a topic.
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ? AND topic IS NULL', array($cardboxid, $approved));
+            
+        } else { // a specific topic preference.
+            $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ? AND topic = ?', array($cardboxid, $approved, $topic));
         }
 
     }

@@ -607,6 +607,7 @@ if ($action === 'review') {
 
 if ($action === 'overview') {
 
+    $topic = optional_param('topic', -1, PARAM_INT);
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
     $offset = $page * $perpage;
@@ -620,7 +621,7 @@ if ($action === 'overview') {
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
     // 1. Create the model.
-    $collection = new cardbox_cardcollection($cardbox->id, true);
+    $collection = new cardbox_cardcollection($cardbox->id, $topic, true);
     $list = $collection->cardbox_get_card_list();
 
     $context = context_module::instance($cmid);
@@ -638,8 +639,11 @@ if ($action === 'overview') {
         $info = get_string('intro:overview', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js"));
+        $PAGE->requires->js_init_call('startOverview', array($cmid, $topic));
+        
         // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid);
+        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic);
         
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');
