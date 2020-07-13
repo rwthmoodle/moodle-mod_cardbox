@@ -171,3 +171,4 @@ $string['barchartxaxislabel'] = 'Deck';
 $string['barchartyaxislabel'] = 'Card count';
 $string['linegraphxaxislabel'] = 'Date';
 $string['linegraphyaxislabel'] = '% known';
+$string['lastpractise'] = 'last practised on';
