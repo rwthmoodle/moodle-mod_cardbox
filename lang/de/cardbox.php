@@ -180,3 +180,4 @@ $string['barchartxaxislabel'] = 'Fach';
 $string['barchartyaxislabel'] = 'Kartenzahl';
 $string['linegraphxaxislabel'] = 'Datum';
 $string['linegraphyaxislabel'] = '% gewusst';
+$string['lastpractise'] = 'zuletzt geübt am';
