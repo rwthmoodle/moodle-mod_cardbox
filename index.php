@@ -63,16 +63,16 @@ if ($usesections) {
 }
 $html = '<table class="generaltable" width="90%" cellspacing="1" cellpadding="5" text-align="center" ><thead>' . "\n";
 $html .= '<tr><th class="header-c0" scope="col">'.get_string('choosetopic', 'cardbox').'</th>';
-$html .= '<th class="header-c1" scope="col">' . get_string('modulenameplural', 'cardbox') . '</th>';
-$html .= '<th class="header-c2" scope="col"> '.ucwords(get_string('barchartyaxislabel', 'cardbox')).' </th>';
+$html .= '<th class="header-c1" scope="col">' . get_string('modulename', 'cardbox') . '</th>';
+$html .= '<th class="header-c2" scope="col"> '.ucfirst(get_string('barchartyaxislabel', 'cardbox')).' </th>';
 if (!has_capability('mod/cardbox:practice', $context)) {
     $html .= '</tr></thead><tbody>';
 } else {
-$html .= '<th class="header-c3" scope="col">'.ucwords(get_string('lastpractise', 'cardbox')).'</th>';
-$html .= '<th class="header-c4" scope="col">'.ucwords(get_string('new', 'cardbox').' '.get_string('flashcards', 'cardbox')).'</th>';
-$html .= '<th class="header-c3" scope="col">'.ucwords(get_string('known', 'cardbox').' '.get_string('flashcards', 'cardbox')).'</th>';
-$html .= '<th class="header-c5" scope="col">'.ucwords(get_string('flashcards', 'cardbox').' '.get_string('flashcardsdue', 'cardbox')).'</th>';
-$html .= '<th class="header-c6" scope="col">'.ucwords(get_string('flashcards', 'cardbox').' '.get_string('flashcardsnotdue', 'cardbox')).'</th></tr></thead><tbody>';
+$html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('lastpractise', 'cardbox')).'</th>';
+$html .= '<th class="header-c4" scope="col">'.ucfirst(get_string('newcard', 'cardbox')).'</th>';
+$html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('knowncard', 'cardbox')).'</th>';
+$html .= '<th class="header-c5" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.get_string('flashcardsdue', 'cardbox')).'</th>';
+$html .= '<th class="header-c6" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.get_string('flashcardsnotdue', 'cardbox')).'</th></tr></thead><tbody>';
 }
 foreach ($modinfo->instances['cardbox'] as $cm) {
     if (!$cm->uservisible) {
@@ -102,7 +102,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                                     AND cbp.userid = :userid',
                                     ['cardbox' => $cbid->id, 'userid' => $USER->id, 'approved' => '1']);
                     if (implode(',', array_keys($lastpractised)) == '') {
-                        $html .= '<td class="cell-c3">Not practised yet</td>';
+                        $html .= '<td class="cell-c3">'.get_string('nopractise', 'cardbox').'</td>';
                     } else {
                         $html .= '<td class="cell-c3">'.userdate(implode(',', array_keys($lastpractised)),
                                                                             get_string('strftimerecent')).'</td>';
