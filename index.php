@@ -49,6 +49,7 @@ $context = context_course::instance($course->id);
 
 require_capability('mod/cardbox:view', $context);
 
+
 /*$collection = new cardbox_cardcollection($cardbox->id, $topic, true);
 $list = $collection->cardbox_get_card_list();
 $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic);*/
@@ -56,12 +57,10 @@ $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, 
 $strplural = get_string('modulenameplural', 'cardbox');
 $usesections = course_format_uses_sections($course->format);
 $modinfo = get_fast_modinfo($course);
-
 if ($usesections) {
     $strsectionname = get_string('sectionname', 'format_'.$course->format);
     $sections = $modinfo->get_section_info_all();
 }
-
 $html = '<table class="generaltable" width="90%" cellspacing="1" cellpadding="5" text-align="center" ><thead>' . "\n";
 $html .= '<tr><th class="header-c0" scope="col">'.get_string('choosetopic', 'cardbox').'</th>';
 $html .= '<th class="header-c1" scope="col">' . get_string('modulenameplural', 'cardbox') . '</th>';
@@ -80,7 +79,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
         continue;
     }
     $sectionname = '';
-    if ($usesections && $cm->sectionnum) {
+    if ($usesections && $cm->sectionnum >= 0) {
         $sectionname = get_section_name($course, $sections[$cm->sectionnum]); //gives the section name where the cardbox is
         $cbids = $DB->get_records('cardbox', array('name' => $cm->get_formatted_name())); //details of the cardbox
         foreach ($cbids as $cbid) {
