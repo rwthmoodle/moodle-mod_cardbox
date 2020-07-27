@@ -81,9 +81,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
     $sectionname = '';
     if ($usesections && $cm->sectionnum >= 0) {
         $sectionname = get_section_name($course, $sections[$cm->sectionnum]); //gives the section name where the cardbox is
-        $cbids = $DB->get_records('cardbox', array('id' => $cm->instance)); //details of the cardbox
-        foreach ($cbids as $cbid) {
-            if ($DB->record_exists('cardbox_cards', ['cardbox' => $cbid->id, 'approved' => '1'])) {
+            if ($DB->record_exists('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1'])) {
                 // If cardbox activity has cards
                 $html .= '<tr>';
                 // Row begins with section and cardbox activity name.
@@ -91,7 +89,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                 $html .= '<td class="cell-c1 " >
                           <a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.$cm->get_formatted_name().'</a></td>';
                 // Number of cards in the cardbox.
-                $cardcount = $DB->count_records('cardbox_cards', ['cardbox' => $cbid->id, 'approved' => '1']);
+                $cardcount = $DB->count_records('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1']);
                 $html .= '<td class="cell-c2" >'.$cardcount.'</td>';
                 if (has_capability('mod/cardbox:practice', $context)) {
                     // Last Practised column.
@@ -100,7 +98,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                 WHERE cbp.card in (SELECT id from {cardbox_cards} cc
                                     WHERE cc.cardbox = :cardbox and approved = :approved)
                                     AND cbp.userid = :userid',
-                                    ['cardbox' => $cbid->id, 'userid' => $USER->id, 'approved' => '1']);
+                                    ['cardbox' => $cm->instance, 'userid' => $USER->id, 'approved' => '1']);
                     if (implode(',', array_keys($lastpractised)) == '') {
                         $html .= '<td class="cell-c3">'.get_string('nopractise', 'cardbox').'</td>';
                     } else {
@@ -113,7 +111,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                     require_once('model/cardbox.class.php');
                     require_once('model/card_selection_algorithm.php');
                     $select = new cardbox_card_selection_algorithm(null, true);
-                    $cardboxmodel = new cardbox_cardboxmodel($cbid->id, $select);
+                    $cardboxmodel = new cardbox_cardboxmodel($cm->instance, $select);
                     $boxcount = $cardboxmodel->cardbox_get_status();
                     // New cards.
                     $html .= '<td class="cell-c4">'.$boxcount[0].'</td>';
@@ -143,7 +141,6 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                 }
                 $html .= '</tr>';
             }
-        }
     }
 }
 
