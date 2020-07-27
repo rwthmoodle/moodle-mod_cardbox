@@ -81,7 +81,7 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
     $sectionname = '';
     if ($usesections && $cm->sectionnum >= 0) {
         $sectionname = get_section_name($course, $sections[$cm->sectionnum]); //gives the section name where the cardbox is
-        $cbids = $DB->get_records('cardbox', array('name' => $cm->get_formatted_name())); //details of the cardbox
+        $cbids = $DB->get_records('cardbox', array('id' => $cm->instance)); //details of the cardbox
         foreach ($cbids as $cbid) {
             if ($DB->record_exists('cardbox_cards', ['cardbox' => $cbid->id, 'approved' => '1'])) {
                 // If cardbox activity has cards
