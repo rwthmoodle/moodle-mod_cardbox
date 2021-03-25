@@ -36,7 +36,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         $this->id = $cardboxid;
         
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
-        cardbox_add_new_cards();
+        cardbox_add_new_cards($cardboxid);
 
         // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
         $this->cardbox_get_users_cards();

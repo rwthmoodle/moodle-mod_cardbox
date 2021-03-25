@@ -280,6 +280,128 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2019081300, 'cardbox');
     }
 
+    if ($oldversion < 2021032301) {
+
+        $table = new xmldb_table('cardbox');
+        $index = new xmldb_index('course_idx', XMLDB_INDEX_NOTUNIQUE, array('course'));
+
+        // Conditionally launch add index course_idx.
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021032301, 'cardbox');
+    }
+
+    if ($oldversion < 2021032302) {
+
+        $table = new xmldb_table('cardbox_topics');
+        $index_cardboxid = new xmldb_index('cardboxid_idx', XMLDB_INDEX_NOTUNIQUE, array('cardboxid'));
+
+        // Conditionally launch add index course_idx.
+        if (!$dbman->index_exists($table, $index_cardboxid)) {
+            $dbman->add_index($table, $index_cardboxid);
+        }
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021032302, 'cardbox');
+    }
+
+    if ($oldversion < 2021032303) {
+        
+        $table_cards = new xmldb_table('cardbox_cards');
+        $index_cardboxid = new xmldb_index('cardboxid_idx', XMLDB_INDEX_NOTUNIQUE, array('cardbox'));
+        $index_topic = new xmldb_index('topic_idx', XMLDB_INDEX_NOTUNIQUE, array('topic'));
+        $index_cardboxapproved = new xmldb_index('cardboxapproved_idx', XMLDB_INDEX_NOTUNIQUE, array('cardbox', 'approved'));
+        // Adding indexes to table cardbox_cards
+        if (!$dbman->index_exists($table_cards, $index_cardboxid)) {
+            $dbman->add_index($table_cards, $index_cardboxid);
+        }
+        if (!$dbman->index_exists($table_cards, $index_topic)) {
+            $dbman->add_index($table_cards, $index_topic);
+        }
+        if (!$dbman->index_exists($table_cards, $index_cardboxapproved)) {
+            $dbman->add_index($table_cards, $index_cardboxapproved);
+        }
+        upgrade_mod_savepoint(true, 2021032303, 'cardbox');
+    } 
+    
+    if ($oldversion < 2021032304) {
+
+        $table_progress = new xmldb_table('cardbox_progress');
+        $index_userid_card = new xmldb_index('cardboxid_idx', XMLDB_INDEX_NOTUNIQUE, array('userid', 'card'));
+        $index_cardposition = new xmldb_index('cardboxapproved_idx', XMLDB_INDEX_NOTUNIQUE, array('cardposition'));
+        // Adding indexes to table cardbox_progress
+        if (!$dbman->index_exists($table_progress, $index_userid_card)) {
+            $dbman->add_index($table_progress, $index_userid_card);
+        }
+        if (!$dbman->index_exists($table_progress, $index_cardposition)) {
+            $dbman->add_index($table_progress, $index_cardposition);
+        }
+        upgrade_mod_savepoint(true, 2021032304, 'cardbox');
+    }
+    
+    if ($oldversion < 2021032305) {
+        $table_cardcontents = new xmldb_table('cardbox_cardcontents');
+        $index_card_contenttype = new xmldb_index('card_contenttype_idx', XMLDB_INDEX_NOTUNIQUE, array('card', 'contenttype'));
+        $index_card = new xmldb_index('card_idx', XMLDB_INDEX_NOTUNIQUE, array('card'));
+        $index_cardside = new xmldb_index('cardside_idx', XMLDB_INDEX_NOTUNIQUE, array('cardside'));
+        $index_contenttype = new xmldb_index('contenttype_idx', XMLDB_INDEX_NOTUNIQUE, array('contenttype'));
+        // Adding indexes to table cardbox_cardcontents
+        if (!$dbman->index_exists($table_cardcontents, $index_card_contenttype)) {
+            $dbman->add_index($table_cardcontents, $index_card_contenttype);
+        }
+        if (!$dbman->index_exists($table_cardcontents, $index_card)) {
+            $dbman->add_index($table_cardcontents, $index_card);
+        }
+        if (!$dbman->index_exists($table_cardcontents, $index_cardside)) {
+            $dbman->add_index($table_cardcontents, $index_cardside);
+        }
+        if (!$dbman->index_exists($table_cardcontents, $index_contenttype)) {
+            $dbman->add_index($table_cardcontents, $index_contenttype);
+        }
+        upgrade_mod_savepoint(true, 2021032305, 'cardbox');
+    }
+
+    if ($oldversion < 2021032306) {
+        $table_contenttypes = new xmldb_table('cardbox_contenttypes');
+        
+        $index_contentname = new xmldb_index('contentname_idx', XMLDB_INDEX_NOTUNIQUE, array('name'));
+        $index_types = new xmldb_index('types_idx', XMLDB_INDEX_NOTUNIQUE, array('type'));
+
+        // Adding indexes to table cardbox_contenttypes;
+        if (!$dbman->index_exists($table_contenttypes, $index_contentname)) {
+            $dbman->add_index($table_contenttypes, $index_contentname);
+        }
+        if (!$dbman->index_exists($table_contenttypes, $index_types)) {
+            $dbman->add_index($table_contenttypes, $index_types);
+        }
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021032306, 'cardbox');
+    }
+        
+    if ($oldversion < 2021032307) {
+        $table_statistics = new xmldb_table('cardbox_statistics');
+
+        $index_userid_userid = new xmldb_index('userid_userid_idx', XMLDB_INDEX_NOTUNIQUE, array('id', 'userid'));
+        // Adding indexes to table cardbox_statistics
+        if (!$dbman->index_exists($table_statistics, $index_userid_userid)) {
+            $dbman->add_index($table_statistics, $index_userid_userid);
+        }
+    
+        upgrade_mod_savepoint(true, 2021032307, 'cardbox');
+    } 
+
+    if ($oldversion < 2021032308) {
+
+        $table = new xmldb_table('cardbox_topics');
+        $index_topicname = new xmldb_index('topicname_idx', XMLDB_INDEX_NOTUNIQUE, array('topicname'));
+
+        if (!$dbman->index_exists($table, $index_topicname)) {
+            $dbman->add_index($table, $index_topicname);
+        }
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021032308, 'cardbox');
+    }
     return true;
 
 }

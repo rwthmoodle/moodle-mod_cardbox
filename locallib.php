@@ -211,14 +211,17 @@ function cardbox_delete_card($cardid) {
  * @global obj $USER
  * @return type
  */
-function cardbox_add_new_cards() {
+function cardbox_add_new_cards($cardboxid) {
     
     global $DB, $USER;
 
     $sql2 = "SELECT c.id"
             . " FROM {cardbox_cards} c"
-            . " WHERE approved = ? AND NOT EXISTS (SELECT card FROM {cardbox_progress} p WHERE p.userid = ? AND p.card = c.id)";
-    $newcards = $DB->get_fieldset_sql($sql2, array('1', $USER->id));
+            . " WHERE c.cardbox = :cbid AND c.approved = :appr"
+            . " AND NOT EXISTS (SELECT card FROM {cardbox_progress} p WHERE p.userid = :uid AND p.card = c.id)";
+    $params = ['cbid' => $cardboxid, 'appr' => '1', 'uid' => $USER->id];
+    $newcards = $DB->get_fieldset_sql($sql2, $params);
+
 
     if (empty($newcards)) {
         return;
@@ -418,16 +421,16 @@ function cardbox_update_card_progress($dataobject, $iscorrect) {
  */
 function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
 
-    global $CFG, $PAGE;
+    global $CFG, $DB, $PAGE;
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
 
     $context = context_module::instance($cmid);
 
     $sm = get_string_manager();
 
-    //new cardbox_card($cardid, $cardbox->context, $cmid, false);
+    $topicid = $DB->get_field('cardbox_cards', 'topic', ['id' => $cardid], MUST_EXIST);
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $overview = new cardbox_overview(array($cardid), 0, $context, $cmid, true);
+    $overview = new cardbox_overview(array($cardid), 0, $context, $cmid, $cardid, $topicid, true);
 
     $recipients = get_enrolled_users($context, 'mod/cardbox:practice');
 
