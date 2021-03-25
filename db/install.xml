@@ -18,6 +18,9 @@
       <KEYS>
         <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for cardbox"/>
       </KEYS>
+      <INDEXES>
+        <INDEX NAME="course_idx" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
     </TABLE>
     <TABLE NAME="cardbox_topics" COMMENT="Default comment for the table, please edit me">
         <FIELDS>
@@ -28,6 +31,10 @@
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
+        <INDEXES>
+            <INDEX NAME="cardboxid_idx" UNIQUE="false" FIELDS="cardboxid"/>
+            <INDEX NAME="topicname_idx" UNIQUE="false" FIELDS="topicname"/>
+        </INDEXES>
     </TABLE>
     <TABLE NAME="cardbox_cards" COMMENT="Save meta information about each flashcard">
         <FIELDS>
@@ -43,6 +50,11 @@
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
+        <INDEXES>
+            <INDEX NAME="cardbox_idx" UNIQUE="false" FIELDS="cardbox"/>
+            <INDEX NAME="topic_idx" UNIQUE="false" FIELDS="topic"/>
+            <INDEX NAME="cardboxapproved_idx" UNIQUE="false" FIELDS="cardbox, approved"/>
+        </INDEXES>
     </TABLE>
     <TABLE NAME="cardbox_progress" COMMENT="traces the progress of cards through the boxes for each user">
         <FIELDS>
@@ -56,6 +68,11 @@
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
+        <INDEXES>
+            <INDEX NAME="userid_card_idx" UNIQUE="false" FIELDS="userid, card"/>
+            <INDEX NAME="cardposition_idx" UNIQUE="false" FIELDS="cardposition"/>
+        </INDEXES>
+
     </TABLE>
     <TABLE NAME="cardbox_cardcontents" COMMENT="saves card content such as prompts, questions, answers and images">
         <FIELDS>
@@ -68,16 +85,26 @@
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
+        <INDEXES>
+            <INDEX NAME="card_contenttype_idx" UNIQUE="false" FIELDS="card, contenttype"/>
+            <INDEX NAME="card_idx" UNIQUE="false" FIELDS="card"/>
+            <INDEX NAME="cardside_idx" UNIQUE="false" FIELDS="cardside"/>
+            <INDEX NAME="contenttype_idx" UNIQUE="false" FIELDS="contenttype"/>
+        </INDEXES>
     </TABLE>    
     <TABLE NAME="cardbox_contenttypes" COMMENT="Default comment for the table, please edit me">
-    <FIELDS>
-        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-        <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-    </FIELDS>
-    <KEYS>
-        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-    </KEYS>
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="types_idx" UNIQUE="false" FIELDS="type"/>
+            <INDEX NAME="contentname_idx" UNIQUE="false" FIELDS="name"/>
+        </INDEXES>
     </TABLE>
     <TABLE NAME="cardbox_statistics" COMMENT="This table tracks the users' performance over time.">
         <FIELDS>
@@ -90,6 +117,9 @@
         <KEYS>
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
+        <INDEXES>
+            <INDEX NAME="userid_userid_idx" UNIQUE="false" FIELDS="id, userid"/>
+    </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>

@@ -169,9 +169,14 @@ class cardbox_card_selection_algorithm implements cardbox_card_selection_interfa
         
         // Differences in due datetime that are only up to 3 hours
         // are ignored in favour of second level priorities.
-        $timespan = 3;
-        $ignore = new DateInterval('PT'.$timespan.'H');
-        if ($a->duedatetime->diff($b->duedatetime) <= $ignore ) {
+        $diff = $a->duedatetime->diff($b->duedatetime);
+        if ($diff->y == 0 && $diff->m == 0 && $diff->d == 0 && (
+                $diff->h < 3 || (
+                    $diff->h == 3 && $diff->i == 0 && $diff->s == 0 && $diff == 0
+                )
+            )
+        ) 
+        {
             return self::cardbox_compare_cards_2nd_level($a, $b);
         }
         
