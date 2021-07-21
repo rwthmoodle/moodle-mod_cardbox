@@ -423,20 +423,21 @@ if ($action === 'practice') {
     $startnow = optional_param('start', false, PARAM_BOOL);
     $correction = optional_param('mode', 0, PARAM_INT); // automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // topic to prioritize.
+    $onlyonetopic = optional_param('onlyonetopic', -1, PARAM_INT); // topic to study.
     $practiceall = optional_param('practiceall', true, PARAM_BOOL);
     $openmodal = true;
 
     // 1. Create a virtual cardbox for this practice session, i.e. create the model.
-    $select = new cardbox_card_selection_algorithm($topic, $practiceall);
+    $select = new cardbox_card_selection_algorithm($topic, $practiceall, $onlyonetopic);
     $sort = new cardbox_card_sorting_algorithm();
-    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort);
-    
+    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort, $onlyonetopic);
+
     $cardcount = $cardboxmodel->cardbox_count_cards();
     $duecardcount = $cardboxmodel->cardbox_count_due_cards();
 
     // Inform the user that their cardbox is empty.
     if (empty($cardcount)) {
-        
+
         $info = get_string('info:nocardsavailable', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailable', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
@@ -492,8 +493,11 @@ if ($action === 'practice') {
 
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/start.php');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js?ver=00002"));
         $PAGE->requires->js_init_call('startOptions', array($cmid, $openmodal), true);
+
+/*         $group = $mform->createElement('group', 'groupname', get_string('label'), $groupitems, null, false);
+        $mform->disabledIf($elementName, $dependentOn, $condition = 'notchecked', $value='1'); */
 
         $start = new cardbox_start($cardbox->autocorrection, $cardbox->id);
 

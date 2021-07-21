@@ -117,6 +117,8 @@ $string['autocorrection'] = 'Automatische Kontrolle';
 $string['weightopic'] = 'Thema gewichten';
 $string['weightopic_help'] = 'Karten des entsprechenden Themas werden bevorzugt für die Übung ausgewählt.';
 $string['notopicpreferred'] = 'keine Gewichtung';
+$string['onlyonetopic'] = 'Thema';
+$string['onlyonetopic_help'] = 'Wenn Sie ein Thema auswählen, üben Sie ausschließlich Karten aus diesem Thema. Es werden keine Karten aus anderen Themen abgefragt.';
 $string['practiceall'] = 'Zu früh wiederholen';
 $string['practiceall_help'] = 'Zu früh wiederholte Karten wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach 1 Tag als dauerhaft gelernt verlassen.';
 

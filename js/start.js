@@ -33,6 +33,16 @@ function startOptions(Y, __cmid, __openmodal) {
             modal.style.display = 'block';
         }
 
+        document.getElementById('cardbox-onlyonetopic').addEventListener('change', function(e) {
+            if (document.getElementById('cardbox-onlyonetopic').value!=-1) {
+                document.getElementById('cardbox-topic-select').style.display = 'none';
+                document.getElementById('cardbox-topic-description').style.display = 'none';
+            } else {
+                document.getElementById('cardbox-topic-select').style.display = 'flex';
+                document.getElementById('cardbox-topic-description').style.display = 'flex';
+            }
+        });
+
         document.getElementById('cardbox-apply-settings').addEventListener('click', function(e) {
             e.preventDefault();
             applySettings();
@@ -60,6 +70,7 @@ function startOptions(Y, __cmid, __openmodal) {
             
             var topic = document.getElementById('cardbox-topic').value;
             var practiceall = document.getElementById('cardbox-practiceall').checked;
+            var onlyonetopic = document.getElementById('cardbox-onlyonetopic').value;
             var correctionmode;
 
             var radios = document.getElementById('cardbox-form').elements['correctionmode'];
@@ -71,7 +82,7 @@ function startOptions(Y, __cmid, __openmodal) {
                 }
             }
 
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic +'&practiceall=' + practiceall;
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic +'&practiceall=' + practiceall +'&onlyonetopic=' + onlyonetopic;
             window.location.href = goTo;
 
         }

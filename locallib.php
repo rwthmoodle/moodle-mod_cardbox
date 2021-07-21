@@ -211,7 +211,7 @@ function cardbox_delete_card($cardid) {
  * @global obj $USER
  * @return type
  */
-function cardbox_add_new_cards($cardboxid) {
+function cardbox_add_new_cards($cardboxid, $topic) {
     
     global $DB, $USER;
 
@@ -222,9 +222,18 @@ function cardbox_add_new_cards($cardboxid) {
     $params = ['cbid' => $cardboxid, 'appr' => '1', 'uid' => $USER->id];
     $newcards = $DB->get_fieldset_sql($sql2, $params);
 
-
     if (empty($newcards)) {
         return;
+    }
+
+    if ($topic != -1) {
+        $cards = [];
+        foreach ($newcards as $card) {
+            if ($DB->get_record_select('cardbox_cards', 'id =' . $card->id, null, 'topic') === $topic) {
+                $cards[] = $card;
+            }
+        }
+        $newcards = $cards;
     }
 
     $dataobjects = array();
