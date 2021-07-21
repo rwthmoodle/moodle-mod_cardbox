@@ -31,14 +31,41 @@
  */
 function startOverview(Y, __cmid, __topic) { // Wrapper function that is called by controller.php.
 
-    var topicfilter = document.getElementById('cardbox-overview-topicfilter');
+    require(['jquery', 'core/notification'], function ($, notification) {
+        var topicfilter = document.getElementById('cardbox-overview-topicfilter');
 
-    topicfilter.onchange = function() {
+        topicfilter.onchange = function() {
+
+            var select = this.options[this.selectedIndex];        
+            var topicid = select['value'];
+            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid;
+
+        }
+
+        $('.cardbox-delete-button').each(function (i, button) {
+            let id = button.id.split('-');
+            let cardid = id[2];
+            $('#' + button.id).click(function () {
+                deleteCard(cardid);
+            });
+        });
         
-        var select = this.options[this.selectedIndex];        
-        var topicid = select['value'];
-        window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid;
-        
-    }
+        function deleteCard(cardid) {
+            notification.confirm(M.util.get_string('deletecard','cardbox'),M.util.get_string('deletecardinfo','cardbox'),M.util.get_string('yes', 'cardbox'), M.util.get_string('cancel', 'cardbox'),function () {
+                /* return */ $.ajax({
+                    type: "POST",
+                    url: "controller.php",
+                    data: { "action": 'deletecard', sesskey: M.cfg.sesskey}
+                }).then(function(){
+                   
+                    var goTo = window.location.pathname + '?id=' + __cmid + '&action=deletecard&cardid=' + cardid;
+                    window.location.href = goTo;
+                }); 
+            });
+
+        }
+         
+    });
+
 
 }

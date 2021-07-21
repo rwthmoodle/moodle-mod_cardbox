@@ -25,6 +25,10 @@ defined('MOODLE_INTERNAL') || die();
 
 global $USER, $DB;
 
+if (!isset($action)) {
+    $action = required_param('action', PARAM_ALPHA);
+}
+
 $text = $DB->get_field('cardbox_contenttypes', 'id', array('name' => 'text'), MUST_EXIST);
 $image = $DB->get_field('cardbox_contenttypes', 'id', array('name' => 'image'), MUST_EXIST);
 $sound = $DB->get_field('cardbox_contenttypes', 'id', array('name' => 'audio'), MUST_EXIST);
@@ -404,6 +408,21 @@ if ($action === 'editcard') {
 
 }
 
+/* **************************************************** Delete cards **************************************************** */
+
+if ($action === 'deletecard') {
+
+    require_capability('mod/cardbox:deletecard', $context);
+
+    $cardid = required_param('cardid', PARAM_INT);
+    if ($DB->record_exists('cardbox_cards', ['id' => $cardid])) {
+        $DB->delete_records('cardbox_cards', ['id' => $cardid]);
+        $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
+        $DB->delete_records('cardbox_progress', ['card' => $cardid]);
+    }
+    $action = 'overview';
+}
+
 /* **************************************************** Practice cards **************************************************** */
 
 if ($action === 'practice') {
@@ -643,6 +662,11 @@ if ($action === 'overview') {
         $info = get_string('intro:overview', 'cardbox');
         echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         
+        // Load strings and include js.
+        $stringman = get_string_manager();
+        $strings = $stringman->load_component_strings('cardbox', 'en');
+        $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
+
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js"));
         $PAGE->requires->js_init_call('startOverview', array($cmid, $topic));
         
