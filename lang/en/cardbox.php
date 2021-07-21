@@ -177,3 +177,8 @@ $string['lastpractise'] = 'last practised';
 $string['nopractise'] = 'not practised yet';
 $string['newcard'] = 'new cards';
 $string['knowncard'] = 'mastered cards';
+
+$string['yes'] = 'Yes';
+$string['cancel'] = 'Cancel';
+$string['deletecard'] = 'Delete card?';
+$string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';

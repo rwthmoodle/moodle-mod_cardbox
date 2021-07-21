@@ -186,3 +186,8 @@ $string['lastpractise'] = 'zuletzt geübt';
 $string['nopractise'] = 'noch nicht geübt';
 $string['newcard'] = 'karten neu';
 $string['knowncard'] = 'karten gelernt';
+
+$string['yes'] = 'Ja';
+$string['cancel'] = 'Abbrechen';
+$string['deletecard'] = 'Karte löschen?';
+$string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';
