@@ -55,11 +55,17 @@ class cardbox_start implements \renderable, \templatable {
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
         $this->topics = array();
+        $this->choicestopics = array();
 
         $topiclist = cardbox_get_topics($cardboxid);
 
         foreach ($topiclist as $key => $value) {
             $this->topics[] = array('value' => $key, 'label' => $value);
+            if ($key === -1) {
+                $this->choicestopics[] = array('value' => $key, 'label' => 'all');
+            } else {
+                $this->choicestopics[] = array('value' => $key, 'label' => $value);
+            }
         }
 
     }
@@ -78,9 +84,11 @@ class cardbox_start implements \renderable, \templatable {
         $data['autoenabled'] = $this->autocorrectionoption;
         $data['autodisabled'] = !$this->autocorrectionoption;
         $data['topics'] = $this->topics;
+        $data['choicestopics'] = $this->choicestopics;
         $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
         $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
         $data['helpbuttonpracticeall'] = $OUTPUT->help_icon('practiceall', 'cardbox');
+        $data['helpbuttononlyonetopic'] = $OUTPUT->help_icon('onlyonetopic', 'cardbox');
 
         return $data;
 

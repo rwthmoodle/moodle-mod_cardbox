@@ -31,15 +31,15 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     private $selectionalgorithm;
     private $sortingalgorithm;
     
-    public function __construct($cardboxid, cardbox_card_selection_interface $selectionalgorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null) {
+    public function __construct($cardboxid, cardbox_card_selection_interface $selectionalgorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null, $topic=-1) {
         
         $this->id = $cardboxid;
         
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
-        cardbox_add_new_cards($cardboxid);
+        cardbox_add_new_cards($cardboxid, $topic);
 
         // 2. Access all cards in this user's cardbox system and adjust the overall cardcount.
-        $this->cardbox_get_users_cards();
+        $this->cardbox_get_users_cards($topic);
 
         $this->selectionalgorithm = $selectionalgorithm;
         $this->sortingalgorithm = $sortingalgorithm;
@@ -137,7 +137,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @global obj $USER
      * @return array of objects or null
      */
-    private function cardbox_get_users_cards() {
+    private function cardbox_get_users_cards($topic) {
 
         global $DB, $USER;
 
@@ -149,6 +149,17 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 . "ORDER BY p.cardposition";
 
         $this->flashcards = $DB->get_records_sql($sql, array($USER->id, $this->id));
+
+        if ($topic != -1) {
+            $cards = [];
+            $topicname = $DB->get_record_select('cardbox_topics', 'id=' . $topic, null, 'topicname');
+            foreach ($this->flashcards as $card) {
+                if (strcmp($card->topicname, $topicname->topicname) == 0) {
+                    $cards[] = $card;
+                }
+            }
+            $this->flashcards = $cards;
+        }
 
         foreach ($this->flashcards as $card) {
             $this->boxes[$card->cardposition][] = $card;

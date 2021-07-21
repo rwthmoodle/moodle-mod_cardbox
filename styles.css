@@ -138,22 +138,23 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     background-color: rgba(32, 32, 32, 0.75); /* Black w/ opacity */
 }
 
-/*.path-mod-cardbox .modal-body .cardbox-options .row {
+.path-mod-cardbox .modal-body .cardbox-options .row {
     margin-bottom: 1.5em;
-}*/
+}
 
 .path-mod-cardbox .cardbox-options {
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 61.8% 38.2%;
+    grid-template-columns: 65% 35%;
     /*grid-template-rows: 33% 33% 34%;/*61.8% 38.2%;*/
-    grid-template-areas: "A B" "C D" "E F";
+    grid-template-areas: "A B" "C D" "E F" "G H";
     align-items: center;
     justify-items: start; /*no visible effect*/
 }
 
-.path-mod-cardbox .goldenleft {
+.path-mod-cardbox .goldenleft,
+.path-mod-cardbox .goldenrigth {
     margin-bottom: 2em;
 }
 
@@ -181,16 +182,25 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox .item.e {
     grid-area: E;
-    margin-bottom: 0rem !important;
 }
 
 .path-mod-cardbox .item.f {
     grid-area: F;
 }
 
-.path-mod-cardbox #cardbox-topic {
-    height: 75%;
+.path-mod-cardbox .item.g {
+    grid-area: G;
+    margin-bottom: 0em;
 }
+
+.path-mod-cardbox .item.h {
+    grid-area: H;
+    margin-bottom: 0em;
+}
+
+/* .path-mod-cardbox #cardbox-topic {
+    height: 75%;
+} */
 
 /************************** Practice: autocorrection mode, solution display *****************************************************/
 
