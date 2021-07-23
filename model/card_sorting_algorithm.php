@@ -41,7 +41,7 @@ class cardbox_card_sorting_algorithm implements cardbox_card_sorting_interface {
         $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardselection[0]->card), $strictness=MUST_EXIST);
         $topics = $DB->get_fieldset_select('cardbox_topics', 'topicname', 'cardboxid = ?', array($cardboxid));
 
-        shuffle($cardeselection); // Randomize order of cards before sorting.
+        shuffle($cardselection); // Randomize order of cards before sorting.
                 
         if (empty($topics)) {
             

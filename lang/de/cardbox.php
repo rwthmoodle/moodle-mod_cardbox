@@ -65,6 +65,7 @@ $string['notopic'] = 'nicht zugeordnet';
 $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
 $string['enterquestion'] = 'Frage';
+$string['entercontext'] = 'Zusatzinformationen zur Frage (optional)';
 $string['image'] = 'Bild zur Frage';
 $string['answerimage'] = 'Bild zur Lösung';
 $string['sound'] = 'Tonaufnahme zur Frage';

@@ -107,7 +107,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
  * @param string $name
  * @return int
  */
-function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name) {
+function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $context = null) {
 
     global $DB;
 
@@ -116,6 +116,7 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name) {
     $cardcontent->cardside = $cardside; // 0 for question page
     $cardcontent->contenttype = $contenttype; // 1 for image;
     $cardcontent->content = $name; // $file->get_filename();
+    $cardcontent->context = $context;
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 
     return $itemid;
@@ -316,6 +317,25 @@ function cardbox_get_answers($cardid) {
     return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ?', array($cardid, 1, 2));
 
 }
+
+/**
+ * Function returns the context belonging to the specified card if set.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_context($cardid) {
+ 
+    global $DB;
+    $context = $DB->get_field('cardbox_cardcontents', 'context', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2), IGNORE_MISSING);
+    if (empty($context)) {
+        $context = '';
+    }
+    return $context;
+
+}
+
 /**
  * Function returns 0...1 image item ids belonging to the specified card.
  *
