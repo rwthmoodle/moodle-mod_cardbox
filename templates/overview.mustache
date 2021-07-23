@@ -12,7 +12,13 @@
         <div class="container-fluid cardbox-studyview">
 
             <h5>{{# str }} reviewtopic, cardbox {{/ str }}<em>{{topic}}</em></h5>
-            <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+            
+                {{#contextavailable}}
+                    <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent" style="margin-bottom:0px">
+                {{/contextavailable}}
+                {{^contextavailable}}
+                    <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+                {{/contextavailable}}
                 <div class="hidden-xs col-lg-1 col-xl-2"></div>
                 <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
                     <div class="cardbox-card-left-side">
@@ -42,6 +48,9 @@
                     {{/allowedtoedit}}
                 </div>
             </div>
+            {{#contextavailable}}
+                <div class='cardbox-context-overview' >{{context}}</div>
+            {{/contextavailable}}
 
         </div>
     {{/cards}}

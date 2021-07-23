@@ -65,6 +65,7 @@ $string['notopic'] = 'not assigned';
 $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Question or prompt';
+$string['entercontext'] = 'Additional information for this question (optional)';
 $string['image'] = 'Question image';
 $string['sound'] = 'Question sound';
 $string['answerimage'] = 'Answer image';

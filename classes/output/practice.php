@@ -33,6 +33,7 @@ class cardbox_practice implements \renderable, \templatable {
     private $case3 = false; // answer_selfcheck.
     private $case4 = false; // answer_autocheck.
     private $inputfields = array();
+    private $context;
 
     /**
      * Function builds the view of a flashcard during practice.
@@ -116,6 +117,19 @@ class cardbox_practice implements \renderable, \templatable {
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
             }
+            if ($content->cardside == 0) {
+                if ($content->context != null) {
+                    if (strpos($content->context, '>')) {
+                        $strpos1 = strpos($content->context, '>');
+                        $length = strrpos($content->context, '<') - $strpos1 - 1;
+                        $this->context = substr($content->context, $strpos1 + 1, $length);
+                    } else {
+                        $this->context = $content->context;
+                    }
+                } else {
+                    $this->context = null;
+                }
+            }
         }
 
     }
@@ -130,7 +144,12 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case3'] = $this->case3;
         $data['case4'] = $this->case4;
         $data['inputfields'] = $this->inputfields;
-        
+        $data['context'] = $this->context;
+        if ($this->context != null) {
+            $data['contextavailable'] = true;
+        } else {
+            $data['contextavailable'] = false;
+        }
         return $data;
 
     }

@@ -111,6 +111,8 @@ class mod_cardbox_card_form extends moodleform {
         /****************** end of question experiment **********************/
 
         /****************** question **********************/
+        $mform->addElement('editor', 'context', get_string('entercontext', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->setType('question', PARAM_RAW);
 
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);

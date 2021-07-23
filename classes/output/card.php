@@ -31,6 +31,7 @@ class cardbox_card implements \renderable, \templatable {
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
     private $allowedtoedit = false;
+    private $context;
 
     public function __construct($cardid, $context, $cmid, $allowedtoedit) {
         
@@ -74,6 +75,19 @@ class cardbox_card implements \renderable, \templatable {
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
+            if ($content->cardside == 0) {
+                if ($content->context != null) {
+                    if (strpos($content->context, '>')) {
+                        $strpos1 = strpos($content->context, '>');
+                        $length = strrpos($content->context, '<') - $strpos1 - 1;
+                        $this->context = substr($content->context, $strpos1 + 1, $length);
+                    } else {
+                        $this->context = $content->context;
+                    }
+                } else {
+                    $this->context = null;
+                }
+            }
         }
         
     }
@@ -86,6 +100,12 @@ class cardbox_card implements \renderable, \templatable {
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
+        $data['context'] = $this->context;
+        if ($this->context != null) {
+            $data['contextavailable'] = true;
+        } else {
+            $data['contextavailable'] = false;
+        }
         $data['allowedtoedit'] = $this->allowedtoedit;
         //$data['cards'] = true;
         return $data;

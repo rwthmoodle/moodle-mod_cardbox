@@ -28,6 +28,7 @@ class cardbox_review implements \renderable, \templatable {
     private $question = array('images' => array(), 'sounds' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'sounds' => array(), 'texts' => array());
     private $cardid;
+    private $context;
     
     /**
      * 
@@ -84,6 +85,19 @@ class cardbox_review implements \renderable, \templatable {
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
+            if ($content->cardside == 0) {
+                if ($content->context != null) {
+                    if (strpos($content->context, '>')) {
+                        $strpos1 = strpos($content->context, '>');
+                        $length = strrpos($content->context, '<') - $strpos1 - 1;
+                        $this->context = substr($content->context, $strpos1 + 1, $length);
+                    } else {
+                        $this->context = $content->context;
+                    }
+                } else {
+                    $this->context = null;
+                }
+            }
         }
 
     }
@@ -98,6 +112,12 @@ class cardbox_review implements \renderable, \templatable {
             $data['topic'] = $this->topic;
         } else {
             $data['topic'] = get_string('notopic', 'cardbox');
+        }
+        $data['context'] = $this->context;
+        if ($this->context != null) {
+            $data['contextavailable'] = true;
+        } else {
+            $data['contextavailable'] = false;
         }
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
