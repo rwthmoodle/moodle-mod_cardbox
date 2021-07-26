@@ -192,3 +192,6 @@ $string['yes'] = 'Ja';
 $string['cancel'] = 'Abbrechen';
 $string['deletecard'] = 'Karte löschen?';
 $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';
+
+$string['addtionalinformation'] = 'Zusatzinformationen:';
+$string['card'] = 'Frage/Antwort:';

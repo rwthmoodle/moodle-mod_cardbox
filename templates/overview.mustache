@@ -9,17 +9,23 @@
     </select></span>
 
     {{#cards}}
-        <div class="container-fluid cardbox-studyview">
+        <div class="container-fluid cardbox-studyview" style="">
 
-            <h5>{{# str }} reviewtopic, cardbox {{/ str }}<em>{{topic}}</em></h5>
+{{!             <h5>{{# str}} {{! reviewtopic, cardbox {{/ str }}{{! <em>{{topic}}{{! </em></h5> }}
             
+
+            <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+
                 {{#contextavailable}}
-                    <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent" style="margin-bottom:0px">
+                <div class="row reviewcontent" style="padding-top: 0px">
+                    <p class="col-lg-1 col-xl-2">{{# str }} addtionalinformation, cardbox {{/ str }}</p>
+                        <div class='cardbox-context-overview' style="padding-left: 5px">{{context}}</div>
+                    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+                </div>
+                <br>
                 {{/contextavailable}}
-                {{^contextavailable}}
-                    <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
-                {{/contextavailable}}
-                <div class="hidden-xs col-lg-1 col-xl-2"></div>
+
+                <div class="hidden-xs col-lg-1 col-xl-2">{{# str }} card, cardbox {{/ str }}</div>
                 <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
                     <div class="cardbox-card-left-side">
                         {{#question}}
@@ -47,12 +53,16 @@
                         
                     {{/allowedtoedit}}
                 </div>
-            </div>
-            {{#contextavailable}}
-                <div class='cardbox-context-overview' >{{context}}</div>
-            {{/contextavailable}}
+                <br>
+                <div class="row reviewcontent">
+                    <p class="col-lg-1 col-xl-2" style="margin:0px">{{# str }} reviewtopic, cardbox {{/ str }}</p>
+                        <p class='cardbox-context-overview' style="padding-left: 5px">{{topic}}</p>
+                    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+                </div>
 
+            </div>
         </div>
+
     {{/cards}}
 
 </div>
