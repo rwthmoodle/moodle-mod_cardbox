@@ -7,7 +7,12 @@
 }
 
 .path-mod-cardbox .cardbox-studyview {
-
+    width: 100%;
+    margin-left: 0%;
+    padding-left: 0%;
+    padding-right: 0%;
+    margin-top: 90px;
+    margin-bottom: 90px;
 }
 
 /*.path-mod-cardbox #cardbox-see-options {
@@ -93,8 +98,13 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox .reviewcontent {
-    margin-top: 50px;
-    margin-bottom: 30px;
+/*     margin-top: 50px; */
+/*     margin-bottom: 30px; */
+    width: 100%;
+    margin-top: 0px;
+    padding-left: 15px;
+    line-height:1;
+    padding-top: 10px;
 }
 
 .path-mod-cardbox .cardbox-review-button {
@@ -221,10 +231,12 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox .cardbox-context-overview {
-    margin-left: 16% !important;
-    margin-right: 16% !important;
+/*     margin-left: 16% !important;
+    margin-right: 16% !important; */
     margin-bottom: 1em;
-    padding: 10px;
+    padding: 0px;
+    width: 66%;
+    margin: 0%;
 }
 
 .path-mod-cardbox .cardbox-context-practice {

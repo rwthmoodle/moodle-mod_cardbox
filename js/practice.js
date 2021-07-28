@@ -427,6 +427,7 @@ class Evaluate {
         this.answeriscomplete = 0;
         this.answergiven = 1;
         this.data;
+        this.necessaryanswers;
         
     }
     
@@ -446,6 +447,7 @@ class Evaluate {
         this.answeriscomplete = 0;
         this.answergiven = 1;
         this.useranswers;
+        this.necessaryanswers = data.necessaryanswers;
 
         var solutions = data.answer.texts;            
         var userinput = [];
@@ -454,7 +456,13 @@ class Evaluate {
 
         // 1. Collect the user's answers in an array.
         var i;
-        for (i = 1; i <= solutions.length; i++) {
+        var length;
+        if (this.necessaryanswers === "1") {
+            length = 1;
+        } else {
+            length = solutions.length;
+        }
+        for (i = 1; i <= length; i++) {
             (function (innerI){
                 var ui = document.getElementById('cardbox-userinput-' + innerI).value;
                 if (ui.trim() !== '') {
@@ -546,6 +554,9 @@ class Evaluate {
                     userinput: userinput,
                     colorclass: 'cardbox-input-color-correct'
                 };
+                if (this.necessaryanswers === "1") {
+                    this.necessaryanswers = -1;
+                }
 
             } else {
                 // Note that the user made at least one mistake.
@@ -566,7 +577,7 @@ class Evaluate {
     
     getEvaluation() {
         
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) ) {
+        if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || this.necessaryanswers === -1 ) {
             return 'correctandcomplete';
 
         } else if ( (this.answergiven === 1) && (this.answeriscorrect === 1) ) {

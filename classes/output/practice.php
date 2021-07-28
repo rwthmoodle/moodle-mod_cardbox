@@ -34,6 +34,7 @@ class cardbox_practice implements \renderable, \templatable {
     private $case4 = false; // answer_autocheck.
     private $inputfields = array();
     private $context;
+    private $necessaryanswers = 0;
 
     /**
      * Function builds the view of a flashcard during practice.
@@ -85,6 +86,19 @@ class cardbox_practice implements \renderable, \templatable {
         $solutioncount = 0;
         foreach ($contents as $content) {
 
+            if ($content->cardside == 0) {
+                if ($content->context != null) {
+                    if (strpos($content->context, '>')) {
+                        $strpos1 = strpos($content->context, '>');
+                        $length = strrpos($content->context, '<') - $strpos1 - 1;
+                        $this->context = substr($content->context, $strpos1 + 1, $length);
+                    } else {
+                        $this->context = $content->context;
+                    }
+                } else {
+                    $this->context = null;
+                }
+            }
             if ($content->contenttype == $image) { // images
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
@@ -117,18 +131,9 @@ class cardbox_practice implements \renderable, \templatable {
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
             }
-            if ($content->cardside == 0) {
-                if ($content->context != null) {
-                    if (strpos($content->context, '>')) {
-                        $strpos1 = strpos($content->context, '>');
-                        $length = strrpos($content->context, '<') - $strpos1 - 1;
-                        $this->context = substr($content->context, $strpos1 + 1, $length);
-                    } else {
-                        $this->context = $content->context;
-                    }
-                } else {
-                    $this->context = null;
-                }
+            $this->necessaryanswers = $content->necessaryanswers;
+            if ($content->necessaryanswers != 0) {
+                $this->inputfields = ['number' => '1'];
             }
         }
 
@@ -145,6 +150,7 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case4'] = $this->case4;
         $data['inputfields'] = $this->inputfields;
         $data['context'] = $this->context;
+        $data['necessaryanswers'] = $this->necessaryanswers;
         if ($this->context != null) {
             $data['contextavailable'] = true;
         } else {

@@ -111,8 +111,6 @@ class mod_cardbox_card_form extends moodleform {
         /****************** end of question experiment **********************/
 
         /****************** question **********************/
-        $mform->addElement('editor', 'context', get_string('entercontext', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
-        $mform->setType('question', PARAM_RAW);
 
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
@@ -136,6 +134,10 @@ class mod_cardbox_card_form extends moodleform {
         $audiooptions['maxfiles'] = 1;
         $audiooptions['mainfile'] = true;
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
+
+        /****************** context **********************/
+        $mform->addElement('editor', 'context', get_string('entercontext', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->setType('question', PARAM_RAW);
 
         /****************** end of question **********************/
 
@@ -161,7 +163,20 @@ class mod_cardbox_card_form extends moodleform {
         $addfieldsno = 1; // How many fields to add at a time / at button click.
         $addstring = get_string('addanswer', 'cardbox');
         $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
-        
+
+        if ($test > 1) {
+            $aoptions = [
+                '0' => get_string('allanswersnecessary', 'cardbox'),
+                '1' => get_string('oneanswersnecessary', 'cardbox')
+            ];
+            $select = $mform->addElement('select', 'answers', get_string('answers', 'cardbox'), $aoptions);
+            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+            $mform->setDefault('answers', $necessaryanswers);
+            if (!empty($customdata['answers'])) {
+                $select->setSelected($customdata['answers']);
+            }
+        }
+
         // Enter an image instead or as a supplement
 //        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
 //                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
