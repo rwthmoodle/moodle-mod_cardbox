@@ -27,6 +27,9 @@
 
 defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
 
+define('CARDBOX_EVALUATE_ALL', 0);
+define('CARDBOX_EVALUATE_ONE', 1);
+
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/cardbox/lib.php');
  
@@ -61,6 +64,10 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->setType('autocorrection', PARAM_BOOL);
         $mform->setDefault('autocorrection', 1);
         $mform->addHelpButton('autocorrection', 'setting_autocorrection', 'cardbox');
+
+        $mform->addElement('select', 'necessaryanswers', get_string('answers', 'cardbox'), array('-1' => get_string('allanswersnecessary', 'cardbox'), '1' => get_string('oneanswersnecessary', 'cardbox')));
+        $mform->setDefault('necessaryanswers', CARDBOX_EVALUATE_ALL);
+        $mform->addHelpButton('necessaryanswers', 'necessaryanswers', 'cardbox');
 
         $this->standard_coursemodule_elements();
 

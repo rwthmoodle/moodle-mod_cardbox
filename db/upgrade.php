@@ -417,6 +417,35 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021072102, 'cardbox');
     }
 
+    if ($oldversion < 2021072600) {
+
+        // Define field context to be added to cardbox_cardcontents.
+        $table = new xmldb_table('cardbox_cardcontents');
+        $field = new xmldb_field('necessaryanswers', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'context');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021072600, 'cardbox');
+    }
+
+    if ($oldversion < 2021072800) {
+
+        // Define field context to be added to cardbox_cardcontents.
+        $table = new xmldb_table('cardbox');
+        $field = new xmldb_field('necessaryanswers', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '-1', 'autocorrection');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021072800, 'cardbox');
+    }
+    
+
     return true;
 
 }

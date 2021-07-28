@@ -23,6 +23,9 @@
  */
 defined('MOODLE_INTERNAL') || die();
 
+define('CARDBOX_EVALUATE_ALL', 0);
+define('CARDBOX_EVALUATE_ONE', 1);
+
 global $USER, $DB;
 
 if (!isset($action)) {
@@ -99,13 +102,19 @@ if ($action === 'addflashcard') {
         // Create a new entry in cardbox_cards table.
         $cardid = cardbox_save_new_card($cardbox->id, $submitbutton, $context, $topicid);
 
+        if ($formdata->answers != null) {
+            $necessaryanswers = $formdata->answers;
+        } else {
+            $necessaryanswers = CARDBOX_EVALUATE_ALL;
+        }
+
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
-            cardbox_save_new_cardcontent($cardid, 0, $text, $formdata->question['text'], $formdata->context['text']);
+            cardbox_save_new_cardcontent($cardid, 0, $text, $formdata->question['text'], $formdata->context['text'], $necessaryanswers);
         }
         // Save the text of the answer/s.
         foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, $text, $answer['text']);
+            cardbox_save_new_cardcontent($cardid, 1, $text, $answer['text'], $necessaryanswers);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -121,7 +130,7 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, $image, $file->get_filename(), $formdata->context['text']); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, $image, $file->get_filename(), $formdata->context['text'], $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -142,7 +151,7 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemidaudio, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemidaudio = cardbox_save_new_cardcontent($cardid, 0, $sound, $file->get_filename(), $formdata->context['text']); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemidaudio = cardbox_save_new_cardcontent($cardid, 0, $sound, $file->get_filename(), $formdata->context['text'], $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemidaudio, $context->id, $component, $filearea, $itemidaudio, $options);
                     break;
@@ -163,7 +172,7 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid3, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid3 = cardbox_save_new_cardcontent($cardid, 1, $image, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemid3 = cardbox_save_new_cardcontent($cardid, 1, $image, $file->get_filename(), $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid3, $context->id, $component, $filearea, $itemid3, $options);
                     break;
@@ -184,7 +193,7 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid4, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid4 = cardbox_save_new_cardcontent($cardid, 1, $sound, $file->get_filename()); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemid4 = cardbox_save_new_cardcontent($cardid, 1, $sound, $file->get_filename(), $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid4, $context->id, $component, $filearea, $itemid4, $options);
                     break;
@@ -253,8 +262,9 @@ if ($action === 'editcard') {
     $topic = cardbox_get_topic($cardid);
     $answers = cardbox_get_answers($cardid);
     $answercount = count($answers);
+    $necessaryanswers = cardbox_get_necessaryanswers($cardid);
 
-    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id, 'cmid' => $cmid);
+    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id, 'cmid' => $cmid, 'answers' => $necessaryanswers);
     $mform = new mod_cardbox_card_form($actionurl, $customdata);
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
@@ -328,14 +338,20 @@ if ($action === 'editcard') {
         $success = cardbox_edit_card($cardid, $topicid, $submitbutton, $context);
 
         // TODO: Fehlerbehandlung.
+
+        if ($formdata->answers != null) {
+            $necessaryanswers = $formdata->answers;
+        } else {
+            $necessaryanswers = CARDBOX_EVALUATE_ALL;
+        }
         
         // Save the question text if there is any.
         if (!empty($formdata->question)) {
-            cardbox_save_new_cardcontent($cardid, 0, $text, $formdata->question['text'], $formdata->context['text']);
+            cardbox_save_new_cardcontent($cardid, 0, $text, $formdata->question['text'], $formdata->context['text'], $necessaryanswers);
         }
         // Save the text of the answer/s.
         foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, $text, $answer['text']);
+            cardbox_save_new_cardcontent($cardid, 1, $text, $answer['text'], null, $necessaryanswers);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -351,7 +367,7 @@ if ($action === 'editcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, $image, $file->get_filename(), $formdata->context['text']); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, $image, $file->get_filename(), $formdata->context['text'], $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -372,7 +388,7 @@ if ($action === 'editcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false)) {          
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid2 = cardbox_save_new_cardcontent($cardid, 0, $sound, $file->get_filename(), $formdata->context['text']); // XXX Make contenttype dynamic (SQL join, install.php)
+                    $itemid2 = cardbox_save_new_cardcontent($cardid, 0, $sound, $file->get_filename(), $formdata->context['text'], $necessaryanswers); // XXX Make contenttype dynamic (SQL join, install.php)
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid2, $context->id, $component, $filearea, $itemid2, $options);
                     break;
@@ -502,7 +518,7 @@ if ($action === 'practice') {
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00005"));
         $params = array($cmid, $selection, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 

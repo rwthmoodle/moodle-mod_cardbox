@@ -107,7 +107,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
  * @param string $name
  * @return int
  */
-function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $context = null) {
+function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $context = null, $necessaryanswers = -1) {
 
     global $DB;
 
@@ -117,6 +117,7 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $
     $cardcontent->contenttype = $contenttype; // 1 for image;
     $cardcontent->content = $name; // $file->get_filename();
     $cardcontent->context = $context;
+    $cardcontent->necessaryanswers = $necessaryanswers;
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 
     return $itemid;
@@ -285,6 +286,22 @@ function cardbox_get_topic($cardid) { // XXX opject-oriented with card class?
     }
     
     return $topic;
+
+}
+/**
+ * Function returns the amount of necessary answers of the card.
+ *
+ * @global obj $DB
+ * @param int $cardid
+ * @return int
+ */
+function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with card class?
+    
+    global $DB;
+    
+    $necessaryanswers = $DB->get_field('cardbox_cardcontents', 'necessaryanswers', array('card' => $cardid, 'cardside' => '0'), IGNORE_MISSING);
+    
+    return $necessaryanswers;
 
 }
 /**
