@@ -239,11 +239,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     margin: 0%;
 }
 
-.path-mod-cardbox .cardbox-context-practice {
-    margin-left: 25% !important;
-    margin-right: 25% !important;
-    padding: 10px;
-    margin-top: 1em, 
+.path-mod-cardbox .cardbox-answercontext-practice {
+    padding: 0%;
+    margin-bottom: 15px;
 }
 
 .path-mod-cardbox .cardbox-card-left-side, .path-mod-cardbox .cardbox-card-right-side {

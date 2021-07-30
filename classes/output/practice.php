@@ -33,7 +33,8 @@ class cardbox_practice implements \renderable, \templatable {
     private $case3 = false; // answer_selfcheck.
     private $case4 = false; // answer_autocheck.
     private $inputfields = array();
-    private $context;
+    private $questioncontext = null;
+    private $answercontext = null;
     private $necessaryanswers = 0;
 
     /**
@@ -86,20 +87,15 @@ class cardbox_practice implements \renderable, \templatable {
         $solutioncount = 0;
         foreach ($contents as $content) {
 
-            if ($content->cardside == 0) {
-                if ($content->context != null) {
-                    if (strpos($content->context, '>')) {
-                        $strpos1 = strpos($content->context, '>');
-                        $length = strrpos($content->context, '<') - $strpos1 - 1;
-                        $this->context = substr($content->context, $strpos1 + 1, $length);
-                    } else {
-                        $this->context = $content->context;
-                    }
-                } else {
-                    $this->context = null;
-                }
-            }
-            if ($content->contenttype == $image) { // images
+            if ($content->area == 1 && $content->cardside == 0) { //check if there is context for the question
+
+                $this->questioncontext = $content->content;
+
+            } else if ($content->area == 1 && $content->cardside == 1) { //check if there is context for the answer
+                
+                $this->answercontext = $content->content;
+
+            } else if ($content->contenttype == $image) { // images
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
@@ -118,15 +114,15 @@ class cardbox_practice implements \renderable, \templatable {
                 }
 
             } else if ($content->cardside == 0) {
-                
+
                 $content->content = $content->content; // cardbox_format_string($content->content);
-                
+
                 $this->question['texts'][] = array('text' => $content->content, 'puretext' => strip_tags($content->content));
 
             } else {
-                
+
                 $content->content = $content->content; // cardbox_format_string($content->content);
-                
+
                 $this->answer['texts'][] = array('text' => $content->content, 'puretext' => strip_tags($content->content));
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
@@ -149,15 +145,14 @@ class cardbox_practice implements \renderable, \templatable {
         $data['case3'] = $this->case3;
         $data['case4'] = $this->case4;
         $data['inputfields'] = $this->inputfields;
-        $data['context'] = $this->context;
+        $data['contextquestion'] = $this->questioncontext;
+        $data['contextanswer'] = $this->answercontext;
         $data['necessaryanswers'] = $this->necessaryanswers;
-        if ($this->context != null) {
-            $data['contextavailable'] = true;
-        } else {
-            $data['contextavailable'] = false;
-        }
+        $data['contextquestionavailable'] = $this->questioncontext != null;
+        $data['contextansweravailable'] = $this->answercontext != null;
+
         return $data;
 
     }
-    
+
 }

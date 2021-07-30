@@ -445,6 +445,19 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021072800, 'cardbox');
     }
     
+    if ($oldversion < 2021072902) {
+
+        // Define field context to be added to cardbox_cardcontents.
+        $table = new xmldb_table('cardbox_cardcontents');
+        $field = new xmldb_field('area', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'contenttype');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021072902, 'cardbox');
+    }
 
     return true;
 

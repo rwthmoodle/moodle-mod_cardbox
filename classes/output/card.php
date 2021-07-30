@@ -31,7 +31,8 @@ class cardbox_card implements \renderable, \templatable {
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
     private $allowedtoedit = false;
-    private $context;
+    private $questioncontext = null;
+    private $answercontext = null;
 
     public function __construct($cardid, $context, $cmid, $allowedtoedit) {
         
@@ -56,7 +57,15 @@ class cardbox_card implements \renderable, \templatable {
         $fs = get_file_storage();
         foreach ($contents as $content) {
 
-            if ($content->contenttype == 1) { // XXX: make dynamic!
+            if ($content->area == 1 && $content->cardside == 0) { //check if there is context for the question
+
+                $this->questioncontext = $content->content;
+
+            } else if ($content->area == 1 && $content->cardside == 1) { //check if there is context for the answer
+                
+                $this->answercontext = $content->content;
+
+            } else if ($content->contenttype == 1) { // XXX: make dynamic!
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
@@ -75,19 +84,6 @@ class cardbox_card implements \renderable, \templatable {
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
-            if ($content->cardside == 0) {
-                if ($content->context != null) {
-                    if (strpos($content->context, '>')) {
-                        $strpos1 = strpos($content->context, '>');
-                        $length = strrpos($content->context, '<') - $strpos1 - 1;
-                        $this->context = substr($content->context, $strpos1 + 1, $length);
-                    } else {
-                        $this->context = $content->context;
-                    }
-                } else {
-                    $this->context = null;
-                }
-            }
         }
         
     }
@@ -100,14 +96,11 @@ class cardbox_card implements \renderable, \templatable {
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
-        $data['context'] = $this->context;
-        if ($this->context != null) {
-            $data['contextavailable'] = true;
-        } else {
-            $data['contextavailable'] = false;
-        }
+        $data['answercontext'] = $this->answercontext;
+        $data['questioncontext'] = $this->questioncontext;
+        $data['contextquestionavailable'] = $this->questioncontext != null;
+        $data['contextansweravailable'] = $this->answercontext != null;
         $data['allowedtoedit'] = $this->allowedtoedit;
-        //$data['cards'] = true;
         return $data;
         
     }

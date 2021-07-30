@@ -32,6 +32,13 @@
 
 <div id="cardbox-practice-user-interaction" class="row">
 
+    {{#contextansweravailable}}
+    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+        <div class="col-lg-10 col-xl-8 cardbox-answercontext-practice">{{{contextanswer}}}</div>
+    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+    <br>
+    {{/contextansweravailable}}
+
     <div class="hidden-xs col-lg-1 col-xl-2"></div>
     <div id="cardbox-feedback-wrapper" class="col-lg-10 col-xl-8 cardbox-feedback">
         <div class="row">
