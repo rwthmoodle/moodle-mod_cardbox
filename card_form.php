@@ -135,8 +135,8 @@ class mod_cardbox_card_form extends moodleform {
         $audiooptions['mainfile'] = true;
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
 
-        /****************** context **********************/
-        $mform->addElement('editor', 'context', get_string('entercontext', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        /****************** questioncontext **********************/
+        $mform->addElement('editor', 'questioncontext', get_string('entercontextquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
         /****************** end of question **********************/
@@ -176,6 +176,10 @@ class mod_cardbox_card_form extends moodleform {
                 $select->setSelected($customdata['answers']);
             }
         }
+
+        /****************** answercontext **********************/
+        $mform->addElement('editor', 'answercontext', get_string('entercontextanswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->setType('question', PARAM_RAW);
 
         // Enter an image instead or as a supplement
 //        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,

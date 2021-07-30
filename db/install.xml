@@ -81,8 +81,8 @@
             <FIELD NAME="card" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
             <FIELD NAME="cardside" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false"/>
             <FIELD NAME="contenttype" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="area" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
             <FIELD NAME="content" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
-            <FIELD NAME="context" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
             <FIELD NAME="necessaryanswers" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false"/>
         </FIELDS>
         <KEYS>

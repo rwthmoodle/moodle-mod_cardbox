@@ -107,7 +107,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
  * @param string $name
  * @return int
  */
-function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $context = null, $necessaryanswers = -1) {
+function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 0, $name, $necessaryanswers = -1) {
 
     global $DB;
 
@@ -115,8 +115,8 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $
     $cardcontent->card = $cardid;
     $cardcontent->cardside = $cardside; // 0 for question page
     $cardcontent->contenttype = $contenttype; // 1 for image;
+    $cardcontent->area = $area; //0->main, 1->context
     $cardcontent->content = $name; // $file->get_filename();
-    $cardcontent->context = $context;
     $cardcontent->necessaryanswers = $necessaryanswers;
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 
@@ -314,7 +314,7 @@ function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with car
 function cardbox_get_questiontext($cardid) {
 
     global $DB;
-    $questiontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2), IGNORE_MISSING);
+    $questiontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2, 'area' => 0), IGNORE_MISSING);
     if (empty($questiontext)) {
         $questiontext = '';
     }
@@ -331,21 +331,39 @@ function cardbox_get_questiontext($cardid) {
 function cardbox_get_answers($cardid) {
     
     global $DB;
-    return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ?', array($cardid, 1, 2));
+    return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ? AND area = ?', array($cardid, 1, 2, 0));
 
 }
 
 /**
- * Function returns the context belonging to the specified card if set.
+ * Function returns the context belonging to the specified question if set.
  *
  * @global obj $DB
  * @param type $cardid
  * @return string or array
  */
-function cardbox_get_context($cardid) {
+function cardbox_get_questioncontext($cardid) {
  
     global $DB;
-    $context = $DB->get_field('cardbox_cardcontents', 'context', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2), IGNORE_MISSING);
+    $context = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'area' => 1), IGNORE_MISSING);
+    if (empty($context)) {
+        $context = '';
+    }
+    return $context;
+
+}
+
+/**
+ * Function returns the context belonging to the specified answer if set.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_answercontext($cardid) {
+
+    global $DB;
+    $context = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 1, 'area' => 1), IGNORE_MISSING);
     if (empty($context)) {
         $context = '';
     }
