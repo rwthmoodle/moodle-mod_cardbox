@@ -171,9 +171,9 @@ class mod_cardbox_card_form extends moodleform {
             ];
             $select = $mform->addElement('select', 'answers', get_string('answers', 'cardbox'), $aoptions);
             $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
-            $mform->setDefault('answers', $necessaryanswers);
+            $select->setSelected($customdata['answers']);
             if (!empty($customdata['answers'])) {
-                $select->setSelected($customdata['answers']);
+                $mform->setDefault('answers', $necessaryanswers);
             }
         }
 

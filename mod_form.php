@@ -65,7 +65,7 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->setDefault('autocorrection', 1);
         $mform->addHelpButton('autocorrection', 'setting_autocorrection', 'cardbox');
 
-        $mform->addElement('select', 'necessaryanswers', get_string('answers', 'cardbox'), array('-1' => get_string('allanswersnecessary', 'cardbox'), '1' => get_string('oneanswersnecessary', 'cardbox')));
+        $mform->addElement('select', 'necessaryanswers', get_string('answers', 'cardbox'), array('0' => get_string('allanswersnecessary', 'cardbox'), '1' => get_string('oneanswersnecessary', 'cardbox')));
         $mform->setDefault('necessaryanswers', CARDBOX_EVALUATE_ALL);
         $mform->addHelpButton('necessaryanswers', 'necessaryanswers', 'cardbox');
 
