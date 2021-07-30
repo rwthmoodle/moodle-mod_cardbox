@@ -74,7 +74,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null) {
+function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null, $necessaryanswers = 0) {
 
     global $DB, $USER;
 
@@ -91,6 +91,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
         $cardrecord->approved = 0;
         $cardrecord->approvedby = null;
     }
+    $cardrecord->necessaryanswers = $necessaryanswers;
 
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
@@ -107,7 +108,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
  * @param string $name
  * @return int
  */
-function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 0, $name, $necessaryanswers = -1) {
+function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 0, $name) {
 
     global $DB;
 
@@ -117,7 +118,6 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 
     $cardcontent->contenttype = $contenttype; // 1 for image;
     $cardcontent->area = $area; //0->main, 1->context
     $cardcontent->content = $name; // $file->get_filename();
-    $cardcontent->necessaryanswers = $necessaryanswers;
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 
     return $itemid;
@@ -142,7 +142,7 @@ function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
  * @param int $topicid
  * @return bool whether or not the update was successful
  */
-function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context) {
+function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context, $necessaryanswers) {
 
     global $DB, $USER;
     
@@ -155,6 +155,8 @@ function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context) {
         $record->approved = 1;
         $record->approvedby = $USER->id;
     }
+
+    $record->necessaryanswers = $necessaryanswers;
 
     $success = $DB->update_record('cardbox_cards', $record);
     
@@ -299,7 +301,7 @@ function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with car
     
     global $DB;
     
-    $necessaryanswers = $DB->get_field('cardbox_cardcontents', 'necessaryanswers', array('card' => $cardid, 'cardside' => '0'), IGNORE_MISSING);
+    $necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $cardid), IGNORE_MISSING);
     
     return $necessaryanswers;
 

@@ -127,12 +127,11 @@ class cardbox_practice implements \renderable, \templatable {
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
             }
-            $this->necessaryanswers = $content->necessaryanswers;
-            if ($content->necessaryanswers != 0) {
-                $this->inputfields = ['number' => '1'];
-            }
         }
-
+        $this->necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $cardid), IGNORE_MISSING);
+        if ($this->necessaryanswers != 0) {
+            $this->inputfields = ['number' => '1'];
+        }
     }
 
     public function export_for_template(\renderer_base $output) {
