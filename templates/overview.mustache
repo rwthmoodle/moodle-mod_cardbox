@@ -16,14 +16,11 @@
 
             <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
 
-                {{#contextavailable}}
-                <div class="row reviewcontent" style="padding-top: 0px">
-                    <p class="col-lg-1 col-xl-2">{{# str }} addtionalinformation, cardbox {{/ str }}</p>
-                        <div class='cardbox-context-overview' style="padding-left: 5px">{{context}}</div>
+                <div class="row reviewcontent">
+                    <p class="col-lg-1 col-xl-2" >{{# str }} reviewtopic, cardbox {{/ str }}</p>
+                        <p class="cardbox-context-overview">{{topic}}</p>
                     <div class="hidden-xs col-lg-1 col-xl-2"></div>
-                </div>
-                <br>
-                {{/contextavailable}}
+                </div>                
 
                 <div class="hidden-xs col-lg-1 col-xl-2">{{# str }} card, cardbox {{/ str }}</div>
                 <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
@@ -54,14 +51,54 @@
                     {{/allowedtoedit}}
                 </div>
                 <br>
+
+                {{#contextquestionavailable}}
                 <div class="row reviewcontent">
-                    <p class="col-lg-1 col-xl-2" style="margin:0px">{{# str }} reviewtopic, cardbox {{/ str }}</p>
-                        <p class='cardbox-context-overview' style="padding-left: 5px">{{topic}}</p>
-                    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+
+                    <div class="col-lg-1 col-xl-2">{{# str }} addtionalinformation, cardbox {{/ str }}</div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                        <div>
+                            <div class='cardbox-context-overview' style="padding-right: 15px">{{{questioncontext}}}</div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                        <div>
+                            {{#contextansweravailable}}
+                                <div class='cardbox-context-overview' style="padding-left: 25px">{{{answercontext}}}</div>
+                            {{/contextansweravailable}}
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-xl-2">
                 </div>
 
+                {{/contextquestionavailable}}
+
+                {{^contextquestionavailable}}
+                {{#contextansweravailable}}
+
+                <div class="row reviewcontent">
+
+                    <div class="col-lg-1 col-xl-2">{{# str }} addtionalinformation, cardbox {{/ str }}</div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+
+                            <div class='cardbox-context-overview'></div>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+
+                            <div class='cardbox-context-overview' style="padding-left: 25px">{{{answercontext}}}</div>
+
+                    </div>
+                    <div class="col-lg-1 col-xl-2">
+                </div>
+
+                {{/contextansweravailable}}
+                {{/contextquestionavailable}}
+                
             </div>
+            
         </div>
+        <hr style="background-color:Black; height: 0,5px">
 
     {{/cards}}
 

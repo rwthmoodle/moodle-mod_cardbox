@@ -21,11 +21,22 @@
 
 <div id="cardbox-practice-user-interaction" class="row">
 
-    {{#contextansweravailable}}
+     {{#contextansweravailable}}
+    
     <div class="hidden-xs col-lg-1 col-xl-2"></div>
-        <div class="col-lg-10 col-xl-8 cardbox-answercontext-practice">{{{contextanswer}}}</div>
-    <div class="hidden-xs col-lg-1 col-xl-2"></div>
-    <br>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div >
+                        <div class='cardbox-context-overview'></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+                    <div >
+                        <div class='cardbox-answercontext-practice'>{{# str }} addtionalinformation, cardbox {{/ str }}<br>{{{contextanswer}}}</div>
+                    </div>
+                </div>
+                <div class="hidden-xs col-lg-1 col-xl-2">
+    </div>
+    
     {{/contextansweravailable}}
 
     <div class="hidden-xs col-sm-6"></div>
