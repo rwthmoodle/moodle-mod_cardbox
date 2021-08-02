@@ -297,12 +297,11 @@ function cardbox_get_topic($cardid) { // XXX opject-oriented with card class?
  * @param int $cardid
  * @return int
  */
-function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with card class?
-    
+function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with card class?    
     global $DB;
-    
+
     $necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $cardid), IGNORE_MISSING);
-    
+
     return $necessaryanswers;
 
 }
