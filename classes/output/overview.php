@@ -60,9 +60,15 @@ class cardbox_overview implements \renderable, \templatable {
         } else {
             $allowedtoedit = false;
         }
+
+        if (has_capability('mod/cardbox:seestatus', $context)) {
+            $seestatus = true;
+        } else {
+            $seestatus = false;
+        }
         
         for ($i = $offset; ($i < count($list) && $i < $offset+$perpage); $i++) {
-            $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit);
+            $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit, $seestatus);
             $this->cards[] = $card->export_for_template($renderer);
         }
 

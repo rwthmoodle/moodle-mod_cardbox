@@ -192,3 +192,5 @@ $string['deletecardinfo'] = 'The card and the progress of this card will be dele
 
 $string['addtionalinformation'] = 'Additional information:';
 $string['card'] = 'Question/Answer:';
+$string['cardposition'] = 'Deck:';
+$string['cardposition_help'] = 'This shows which deck this card is in. The higher the number, the better the card is already learned. New cards and already learned cards are no longer assigned to a box.';

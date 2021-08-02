@@ -33,8 +33,10 @@ class cardbox_card implements \renderable, \templatable {
     private $allowedtoedit = false;
     private $questioncontext = null;
     private $answercontext = null;
+    private $seestatus = false;
+    private $status;
 
-    public function __construct($cardid, $context, $cmid, $allowedtoedit) {
+    public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
@@ -45,15 +47,21 @@ class cardbox_card implements \renderable, \templatable {
         if ($allowedtoedit) {
             $this->allowedtoedit = true;
         }
-        
+
+        if ($seestatus) {
+            $this->seestatus = true;
+        }
+
+        $this->status = cardbox_get_status($cardid);
+
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
 
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
-        
+
         if (empty($this->topic)) {
             $this->topic = get_string('notopic', 'cardbox');
         }
-        
+
         $fs = get_file_storage();
         foreach ($contents as $content) {
 
@@ -62,7 +70,7 @@ class cardbox_card implements \renderable, \templatable {
                 $this->questioncontext = $content->content;
 
             } else if ($content->area == 1 && $content->cardside == 1) { //check if there is context for the answer
-                
+
                 $this->answercontext = $content->content;
 
             } else if ($content->contenttype == 1) { // XXX: make dynamic!
@@ -75,21 +83,23 @@ class cardbox_card implements \renderable, \templatable {
                 }
 
             } else if ($content->cardside == 0) {
-                
+
                 $content->content = format_text($content->content);
                 $this->question['texts'][] = array('text' => $content->content);
 
             } else {
-                
+
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
         }
-        
+
     }
-    
+
     public function export_for_template(\renderer_base $output) {
-        
+
+        global $OUTPUT;
+
         $data = array();
         $data['cmid'] = $this->cmid;
         $data['cardid'] = $this->cardid;
@@ -101,7 +111,10 @@ class cardbox_card implements \renderable, \templatable {
         $data['contextquestionavailable'] = $this->questioncontext != null;
         $data['contextansweravailable'] = $this->answercontext != null;
         $data['allowedtoedit'] = $this->allowedtoedit;
+        $data['seestatus'] = $this->seestatus;
+        $data['status'] = $this->status;
+        $data['helpicon'] = $OUTPUT->help_icon('cardposition', 'cardbox');
         return $data;
-        
+
     }
 }

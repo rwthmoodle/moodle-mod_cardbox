@@ -373,6 +373,27 @@ function cardbox_get_answercontext($cardid) {
 }
 
 /**
+ * Function returns the status belonging to the specified card.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_status($cardid) {
+
+    global $DB;
+    $status = $DB->get_field('cardbox_progress', 'cardposition', array('card' => $cardid), IGNORE_MISSING);
+    if ($status === "0") {
+        $status = get_string('newcard', 'cardbox');
+    }
+    if ($status === "6") {
+        $status = get_string('knowncard', 'cardbox');
+    }
+    return $status;
+
+}
+ 
+/**
  * Function returns 0...1 image item ids belonging to the specified card.
  *
  * @global obj $DB
