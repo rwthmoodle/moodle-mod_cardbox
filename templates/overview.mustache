@@ -68,7 +68,7 @@
                             {{/contextansweravailable}}
                         </div>
                     </div>
-                    <div class="col-lg-1 col-xl-2">
+                    <div class="col-lg-1 col-xl-2"></div>
                 </div>
 
                 {{/contextquestionavailable}}
@@ -89,11 +89,29 @@
                             <div class='cardbox-context-overview' style="padding-left: 25px">{{{answercontext}}}</div>
 
                     </div>
-                    <div class="col-lg-1 col-xl-2">
+                    <div class="col-lg-1 col-xl-2"></div>
                 </div>
 
                 {{/contextansweravailable}}
                 {{/contextquestionavailable}}
+
+                {{#seestatus}}
+                <div class="row reviewcontent">
+
+                    <div class="col-lg-1 col-xl-2">{{# str }} cardposition, cardbox {{/ str }} {{{helpicon}}}</div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+
+                            <div class='cardbox-context-overview'>{{status}}</div>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4 cardbox-column">
+
+                            <div class='cardbox-context-overview' style="padding-left: 25px"></div>
+
+                    </div>
+                    <div class="col-lg-1 col-xl-2"></div>
+                </div>
+                {{/seestatus}}
                 
             </div>
             

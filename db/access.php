@@ -87,4 +87,12 @@ $capabilities = array(
         )
     ),
 
+    'mod/cardbox:seestatus' => array(
+        'captype' => 'read',
+        'contextlevel' => CONTEXT_MODULE,
+        'archetypes' => array(
+            'student' => CAP_ALLOW
+        )
+    ),
+
 );
