@@ -383,7 +383,7 @@ function cardbox_get_status($cardid) {
 
     global $DB;
     $status = $DB->get_field('cardbox_progress', 'cardposition', array('card' => $cardid), IGNORE_MISSING);
-    if ($status === "0") {
+    if ($status === "0" || $status === 0) {
         $status = get_string('newcard', 'cardbox');
     }
     if ($status === "6") {

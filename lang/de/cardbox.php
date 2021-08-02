@@ -72,6 +72,8 @@ $string['entercontextanswer'] = 'Zusatzinformationen zur Antwort (optional)';
 $string['answers'] = 'Wie viele Antworten werden benötigt?';
 $string['allanswersnecessary'] = 'Alle';
 $string['oneanswersnecessary'] = 'Eine';
+$string['necessaryanswerslocked'] = 'Nachträgliches Verändern der Anzahl an notwendigen Antworten erlauben?';
+$string['necessaryanswerslocked_help'] = 'Wenn "Ja" ausgewählt ist, dann ist es möglich beim Erstellen oder Bearbeiten einer Karte die Anzahl an erforderlichen Antworten zu verändern.';
 $string['image'] = 'Bild zur Frage';
 $string['answerimage'] = 'Bild zur Lösung';
 $string['sound'] = 'Tonaufnahme zur Frage';
@@ -195,6 +197,7 @@ $string['newcard'] = 'karten neu';
 $string['knowncard'] = 'karten gelernt';
 
 $string['yes'] = 'Ja';
+$string['no'] = 'Nein';
 $string['cancel'] = 'Abbrechen';
 $string['deletecard'] = 'Karte löschen?';
 $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';

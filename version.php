@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_cardbox';
-$plugin->version = 2021080200; // The current module version (Date: YYYYMMDDXX).
+$plugin->version = 2021080202; // The current module version (Date: YYYYMMDDXX).
 $plugin->release = 'kickoff'; // Rename
 $plugin->requires = 2018120302.05; // Requires this Moodle version.
 $plugin->cron = 0; // Optional. Period for cron to check this module (secs).

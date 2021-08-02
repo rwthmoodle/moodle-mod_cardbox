@@ -33,6 +33,7 @@ class cardbox_overview implements \renderable, \templatable {
     private $topicid;
     private $topics = array();
     private $cards = array();
+    private $color = 'true';
     
     public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false) {
 
@@ -68,8 +69,13 @@ class cardbox_overview implements \renderable, \templatable {
         }
         
         for ($i = $offset; ($i < count($list) && $i < $offset+$perpage); $i++) {
-            $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit, $seestatus);
+            $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit, $seestatus, $this->color);
             $this->cards[] = $card->export_for_template($renderer);
+            if ($this->color) {
+                $this->color = false;
+            } else {
+                $this->color = true;
+            }
         }
 
     }

@@ -72,6 +72,8 @@ $string['entercontextanswer'] = 'Additional information for the answer (optional
 $string['answers'] = 'How many answers are necessary?';
 $string['allanswersnecessary'] = 'all';
 $string['oneanswersnecessary'] = 'one';
+$string['necessaryanswerslocked'] = 'Allow to change the number of necessary answers afterwards?';
+$string['necessaryanswerslocked_help'] = 'If "Yes" is selected, then it is possible to change the number of required responses when creating or editing a card.';
 $string['image'] = 'Question image';
 $string['sound'] = 'Question sound';
 $string['answerimage'] = 'Answer image';
@@ -186,6 +188,7 @@ $string['newcard'] = 'new cards';
 $string['knowncard'] = 'mastered cards';
 
 $string['yes'] = 'Yes';
+$string['no'] = 'No';
 $string['cancel'] = 'Cancel';
 $string['deletecard'] = 'Delete card?';
 $string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';

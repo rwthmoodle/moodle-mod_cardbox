@@ -35,8 +35,9 @@ class cardbox_card implements \renderable, \templatable {
     private $answercontext = null;
     private $seestatus = false;
     private $status;
+    private $color;
 
-    public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
+    public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus, $color) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
@@ -52,6 +53,7 @@ class cardbox_card implements \renderable, \templatable {
             $this->seestatus = true;
         }
 
+        $this->color = $color;
         $this->status = cardbox_get_status($cardid);
 
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
@@ -114,6 +116,7 @@ class cardbox_card implements \renderable, \templatable {
         $data['seestatus'] = $this->seestatus;
         $data['status'] = $this->status;
         $data['helpicon'] = $OUTPUT->help_icon('cardposition', 'cardbox');
+        $data['color'] = $this->color;
         return $data;
 
     }
