@@ -552,7 +552,7 @@ if ($action === 'practice') {
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00005"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00008"));
         $params = array($cmid, $selection, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 

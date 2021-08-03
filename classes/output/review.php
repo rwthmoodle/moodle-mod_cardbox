@@ -30,6 +30,7 @@ class cardbox_review implements \renderable, \templatable {
     private $cardid;
     private $questioncontext = null;
     private $answercontext = null;
+    private $necessaryanswers = null;
     
     /**
      * 
@@ -38,7 +39,9 @@ class cardbox_review implements \renderable, \templatable {
      * @param int $cardid
      */
     public function __construct($context, $collection = null, $cardid = null) {
-        
+
+        global $DB;
+
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
 
@@ -54,6 +57,15 @@ class cardbox_review implements \renderable, \templatable {
             // TODO: Fehlerbehandlung
         }
         $this->topic = cardbox_cardcollection::cardbox_get_topic($this->cardid);
+
+        if (cardbox_cardcollection::cardbox_get_necessaryanswerslocked($this->cardid) === "0") {
+            $necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $this->cardid), IGNORE_MISSING);
+            if ($necessaryanswers === "0") {
+                $this->necessaryanswers = get_string('allanswersnecessary', 'cardbox');
+            } else {
+                $this->necessaryanswers = get_string('oneanswersnecessary', 'cardbox');
+            }
+        }
 
         $fs = get_file_storage();
         foreach ($contents as $content) {
@@ -117,6 +129,8 @@ class cardbox_review implements \renderable, \templatable {
         $data['questioncontext'] = $this->questioncontext;
         $data['contextquestionavailable'] = $this->questioncontext != null;
         $data['contextansweravailable'] = $this->answercontext != null;
+        $data['necessaryanswersavailable'] = $this->necessaryanswers != null;
+        $data['necessaryanswers'] = $this->necessaryanswers;
         return $data;
     }
 }
