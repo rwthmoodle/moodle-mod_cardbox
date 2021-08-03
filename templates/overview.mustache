@@ -9,7 +9,14 @@
     </select></span>
 
     {{#cards}}
-        <div class="container-fluid cardbox-studyview" style="">
+
+        {{#color}}
+        <div class="container-fluid cardbox-studyview">
+        {{/color}}
+
+        {{^color}}
+        <div class="container-fluid cardbox-studyview" style="background-color: lightgrey">
+        {{/color}}
 
 {{!             <h5>{{# str}} {{! reviewtopic, cardbox {{/ str }}{{! <em>{{topic}}{{! </em></h5> }}
             

@@ -69,6 +69,9 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->setDefault('necessaryanswers', CARDBOX_EVALUATE_ALL);
         $mform->addHelpButton('necessaryanswers', 'necessaryanswers', 'cardbox');
 
+        $mform->addElement('select', 'necessaryanswerslocked', get_string('necessaryanswerslocked', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
+        $mform->addHelpButton('necessaryanswerslocked', 'necessaryanswerslocked', 'cardbox');
+
         $this->standard_coursemodule_elements();
 
         $this->add_action_buttons();

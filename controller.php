@@ -101,8 +101,11 @@ if ($action === 'addflashcard') {
                 $topicid = $formdata->topic;
         }
 
-        if ($formdata->answers != null) {
+        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+        if (!empty($formdata->answers)) {
             $necessaryanswers = $formdata->answers;
+        } else if ($necessaryanswerslocked === "1") {
+            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         } else {
             $necessaryanswers = CARDBOX_EVALUATE_ALL;
         }
@@ -347,8 +350,17 @@ if ($action === 'editcard') {
                 $topicid = $formdata->topic;
         }
 
-        if ($formdata->answers != null) {
+        /* if ($formdata->answers != null) {
             $necessaryanswers = $formdata->answers;
+        } else {
+            $necessaryanswers = CARDBOX_EVALUATE_ALL;
+        } */
+
+        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+        if (!empty($formdata->answers)) {
+            $necessaryanswers = $formdata->answers;
+        } else if ($necessaryanswerslocked === "1") {
+            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         } else {
             $necessaryanswers = CARDBOX_EVALUATE_ALL;
         }
