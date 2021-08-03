@@ -104,5 +104,18 @@ class cardbox_cardcollection {
                 . "WHERE c.id = ?";
         return $DB->get_field_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
     }
-  
+
+    /**
+     *
+     * @global type $DB
+     * @param type $cardid
+     * @return type
+     */
+    static function cardbox_get_necessaryanswerslocked($cardid) {
+        global $DB;
+
+        $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardid), IGNORE_MISSING);
+        return $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $cardboxid), IGNORE_MISSING);
+    }
+
 }

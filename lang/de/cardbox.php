@@ -203,6 +203,7 @@ $string['deletecard'] = 'Karte löschen?';
 $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';
 
 $string['addtionalinformation'] = 'Zusatzinformationen:';
+$string['addtionalinformationlabel'] = '<p style="font-weight:bold; margin:0%">Zusatzinformationen:</p>';
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
 $string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten sind in keinem Fach. Nach Fach 5 werden Karten als "gelernt" angesehen und nicht mehr geübt.';

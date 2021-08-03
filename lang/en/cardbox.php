@@ -194,6 +194,7 @@ $string['deletecard'] = 'Delete card?';
 $string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';
 
 $string['addtionalinformation'] = 'Additional information:';
+$string['addtionalinformationlabel'] = '<p style="font-weight:bold; margin:0%">Additional information:</p>';
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';
-$string['cardposition_help'] = 'Shows which deck this card is in. The higher the number the better the card has already been learned. New cards are not yet in a box. After box 5 cards are considered "learned" and are no longer practiced.';
+$string['cardposition_help'] = 'Shows which deck this card is in. The higher the number the better the card has already been learned. New cards are not yet in a box. After box 5 cards are considered "mastered" and are no longer practiced.';
