@@ -578,6 +578,8 @@ class Evaluate {
     getEvaluation() {
         
         if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || this.necessaryanswers === -1 ) {
+            this.answeriscorrect === 1;
+            this.answeriscomplete === 1;
             return 'correctandcomplete';
 
         } else if ( (this.answergiven === 1) && (this.answeriscorrect === 1) ) {
@@ -593,14 +595,14 @@ class Evaluate {
     }
     
     isCardCorrect() {
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) ) {
+        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) || this.necessaryanswers === -1) {
             return true;
         }
         return false;
     }
     
     overrideJudgement() {
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) ) {
+        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) || this.necessaryanswers === -1) {
             this.answeriscorrect = 0;
         } else {
             this.answeriscorrect = 1;
