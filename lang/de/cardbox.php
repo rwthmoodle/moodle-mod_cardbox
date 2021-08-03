@@ -205,4 +205,4 @@ $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte al
 $string['addtionalinformation'] = 'Zusatzinformationen:';
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
-$string['cardposition_help'] = 'Hier wird angezeigt, in welchem Deck sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten und bereits gelernte Karten sind keinem Kasten mehr zugeteilt.';
+$string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten sind in keinem Fach. Nach Fach 5 werden Karten als "gelernt" angesehen und nicht mehr geübt.';
