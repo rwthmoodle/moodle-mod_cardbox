@@ -65,12 +65,12 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->setDefault('autocorrection', 1);
         $mform->addHelpButton('autocorrection', 'setting_autocorrection', 'cardbox');
 
-        $mform->addElement('select', 'necessaryanswers', get_string('necessaryanswers', 'cardbox'), array('0' => get_string('allanswersnecessary', 'cardbox'), '1' => get_string('oneanswersnecessary', 'cardbox')));
+        $mform->addElement('select', 'necessaryanswers', get_string('necessaryanswers_activity', 'cardbox'), array('0' => get_string('necessaryanswers_all', 'cardbox'), '1' => get_string('necessaryanswers_one', 'cardbox')));
         $mform->setDefault('necessaryanswers', CARDBOX_EVALUATE_ALL);
-        $mform->addHelpButton('necessaryanswers', 'necessaryanswers', 'cardbox');
+        $mform->addHelpButton('necessaryanswers', 'necessaryanswers_activity', 'cardbox');
 
-        $mform->addElement('select', 'necessaryanswerslocked', get_string('necessaryanswerslocked', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
-        $mform->addHelpButton('necessaryanswerslocked', 'necessaryanswerslocked', 'cardbox');
+        $mform->addElement('select', 'necessaryanswerslocked', get_string('necessaryanswers_activity_locked', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
+        $mform->addHelpButton('necessaryanswerslocked', 'necessaryanswers_activity_locked', 'cardbox');
 
         $mform->addElement('select', 'casesensitive', get_string('casesensitive', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
         $mform->addHelpButton('casesensitive', 'casesensitive', 'cardbox');
