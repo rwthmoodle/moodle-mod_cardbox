@@ -167,10 +167,10 @@ class mod_cardbox_card_form extends moodleform {
         $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         if ($test > 1 && $necessaryanswerslocked === "0") {
             $aoptions = [
-                '0' => get_string('allanswersnecessary', 'cardbox'),
-                '1' => get_string('oneanswersnecessary', 'cardbox')
+                '0' => get_string('necessaryanswers_all', 'cardbox'),
+                '1' => get_string('necessaryanswers_one', 'cardbox')
             ];
-            $select = $mform->addElement('select', 'answers', get_string('answers', 'cardbox'), $aoptions);
+            $select = $mform->addElement('select', 'answers', get_string('necessaryanswers_card', 'cardbox'), $aoptions);
             $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
 
             if (!empty($customdata['answers']) && $customdata['answers'] != $necessaryanswers) {

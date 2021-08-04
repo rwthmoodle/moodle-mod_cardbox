@@ -61,9 +61,9 @@ class cardbox_review implements \renderable, \templatable {
         if (cardbox_cardcollection::cardbox_get_necessaryanswerslocked($this->cardid) === "0") {
             $necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $this->cardid), IGNORE_MISSING);
             if ($necessaryanswers === "0") {
-                $this->necessaryanswers = get_string('allanswersnecessary', 'cardbox');
+                $this->necessaryanswers = get_string('necessaryanswers_all', 'cardbox');
             } else {
-                $this->necessaryanswers = get_string('oneanswersnecessary', 'cardbox');
+                $this->necessaryanswers = get_string('necessaryanswers_one', 'cardbox');
             }
         }
 
