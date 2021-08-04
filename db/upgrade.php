@@ -503,6 +503,20 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021080201, 'cardbox');
     }
 
+    if ($oldversion < 2021080400) {
+
+        // Define field necessaryanswerseditable to be added to cardbox.
+        $table = new xmldb_table('cardbox');
+        $field = new xmldb_field('casesensitive', XMLDB_TYPE_INTEGER, '2', null, XMLDB_NOTNULL, null, '0', 'necessaryanswerslocked');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021080400, 'cardbox');
+    }
+
     return true;
 
 }

@@ -428,6 +428,7 @@ class Evaluate {
         this.answergiven = 1;
         this.data;
         this.necessaryanswers;
+        this.casesensitive;
         
     }
     
@@ -448,12 +449,14 @@ class Evaluate {
         this.answergiven = 1;
         this.useranswers;
         this.necessaryanswers = data.necessaryanswers;
+        this.casesensitive = data.casesensitive;
 
         var solutions = data.answer.texts;            
         var userinput = [];
+        var userinputtocompare = [];
         var matches = [];
         var answers = [];
-
+        
         // 1. Collect the user's answers in an array.
         var i;
         var length;
@@ -464,12 +467,23 @@ class Evaluate {
         }
         for (i = 1; i <= length; i++) {
             (function (innerI){
-                var ui = document.getElementById('cardbox-userinput-' + innerI).value;
+                var ui = document.getElementById('cardbox-userinput-' + innerI).value;  
                 if (ui.trim() !== '') {
                     userinput.push(ui);
                 }
 
             })(i);
+        }
+
+        if (this.casesensitive === "1") {
+            for (var i=0; i<solutions.length; i++) {
+                solutions[i].puretext = solutions[i].puretext.toLowerCase();
+            }       
+            for (var i=0; i<userinput.length; i++) {
+                userinputtocompare[i] = userinput[i].toLowerCase();
+            }
+        } else {
+            userinputtocompare = userinput;
         }
 
         // 2. For each solution: Check whether it is among the user's answers and collect the matches.
@@ -505,11 +519,13 @@ class Evaluate {
 
             var j;
             var userinputitem;
-            for (j = 0; j < userinput.length; j++) {
+            var userinputitemtocompare;
+            for (j = 0; j < userinputtocompare.length; j++) {
                 (function (innerI){
 
                     userinputitem = userinput[innerI];
-                    if (compare(solutionitem, userinputitem)) {
+                    userinputitemtocompare = userinputtocompare[innerI];
+                    if (compare(solutionitem, userinputitemtocompare)) {
 
                             if ( matches.indexOf(userinputitem) === -1 ) {
 
@@ -531,10 +547,7 @@ class Evaluate {
          */
         function compare(a, b) {
 
-            a = a.toLowerCase();
-            b = b.toLowerCase();
-
-            if ( (a.includes(b)) || (b.includes(a)) ) {
+            if (a === b) {
                 return true;
             }
             return false;

@@ -202,4 +202,17 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         return ($a->cardside < $b->cardside) ? -1 : 1;
 
     }
+
+    /**
+     *
+     * @global type $DB
+     * @param type $cardid
+     * @return type
+     */
+    static function cardbox_get_casesensitive($cardid) {
+        global $DB;
+
+        $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardid), IGNORE_MISSING);
+        return $DB->get_field('cardbox', 'casesensitive', array('id' => $cardboxid), IGNORE_MISSING);
+    }
 }

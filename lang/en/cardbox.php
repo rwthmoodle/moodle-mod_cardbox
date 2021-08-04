@@ -34,6 +34,8 @@ $string['setting_autocorrection_help'] = 'Autocorrection only works for normal t
 $string['setting_autocorrection_label'] = '<font color="red">only suitable for text</font>'; // 'Activate with care.';
 $string['necessaryanswers_help'] = 'Set the default value for "How many answers are necessary?" in the card creation form.';
 $string['necessaryanswers'] = 'Default settings for "How many answers are necessary?"';
+$string['casesensitive'] = 'Case sensitivity';
+$string['casesensitive_help'] = 'Specifies whether, when practising with automatic control, entries that only differ from the correct answer in terms of upper/lower case are also counted as correct.';
 $string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
 $string['changenotification:subject'] = 'Change notification';
 $string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';

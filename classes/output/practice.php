@@ -36,6 +36,7 @@ class cardbox_practice implements \renderable, \templatable {
     private $questioncontext = null;
     private $answercontext = null;
     private $necessaryanswers = 0;
+    private $casesensitive = 0;
 
     /**
      * Function builds the view of a flashcard during practice.
@@ -82,6 +83,8 @@ class cardbox_practice implements \renderable, \templatable {
         $sound = $DB->get_field($table, 'id', array('name' => 'audio'), MUST_EXIST);
         
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($cardid);
+
+        $this->casesensitive = cardbox_cardboxmodel::cardbox_get_casesensitive($cardid);
 
         $fs = get_file_storage();
         $solutioncount = 0;
@@ -147,6 +150,7 @@ class cardbox_practice implements \renderable, \templatable {
         $data['contextquestion'] = $this->questioncontext;
         $data['contextanswer'] = $this->answercontext;
         $data['necessaryanswers'] = $this->necessaryanswers;
+        $data['casesensitive'] = $this->casesensitive;
         $data['contextquestionavailable'] = $this->questioncontext != null;
         $data['contextansweravailable'] = $this->answercontext != null;
 

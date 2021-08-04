@@ -34,6 +34,8 @@ $string['setting_autocorrection_help'] = 'Die Studierenden wählen vor jeder Üb
 $string['setting_autocorrection_label'] = '<font color="red">nur für Textinhalte geeignet</font>';
 $string['necessaryanswers_help'] = 'Den Standardwert für Auswahlfeld "Wie viele Antworten werden benötigt?" im Kartenerstellungsformular festlegen.';
 $string['necessaryanswers'] = 'Standardeinstellung für "Wie viele Antworten werden benötigt?"';
+$string['casesensitive'] = 'Groß- und Kleinschreibung beachten';
+$string['casesensitive_help'] = 'Gibt an, ob beim Üben mit automatischer Kontrolle Eingaben, die sich nur in der Groß-/Kleinschreibung von der richtig Antwort unterscheiden, auch als richtig gewertet werden.';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 $string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
