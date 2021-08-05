@@ -65,7 +65,11 @@ function startReview(Y, __cmid, __cardlist, __cardid = 0) {
                 approve();
             });
 
-            document.getElementById('cardbox-edit').addEventListener('click', function(e) {
+            document.getElementById('cardbox-review-edit').addEventListener('click', function(e) {
+                edit();
+            });
+
+            document.getElementById('cardbox-overview-edit').addEventListener('click', function(e) {
                 edit();
             });
 

@@ -148,6 +148,7 @@ $string['proceed'] = 'Next';
 
 $string['solution'] = 'Solution';
 $string['yoursolution'] = 'Your answer';
+$string['answer'] = 'Answer';
 
 // Practice mode: Feedback
 $string['feedback:correctandcomplete'] = 'Well done.';
