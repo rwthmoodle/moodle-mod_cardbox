@@ -21,7 +21,7 @@
 {{!             <h5>{{# str}} {{! reviewtopic, cardbox {{/ str }}{{! <em>{{topic}}{{! </em></h5> }}
             
 
-            <div id="cardbox-card-in-review" data-cardid="{{cardid}}" class="row reviewcontent">
+            <div id="cardbox-card-in-overview-{{cardid}}" data-cardid="{{cardid}}" class="row reviewcontent">
 
                 <div class="row reviewcontent">
                     <p class="col-lg-1 col-xl-2" >{{# str }} reviewtopic, cardbox {{/ str }}</p>
@@ -51,7 +51,7 @@
                             <input type="hidden" name="action" value="editcard">
                             <input type="hidden" name="from" value="overview">
                             <input type="hidden" name="cardid" value="{{cardid}}">
-                            <button id="cardbox-edit" type="submit" class="btn btn-primary cardbox-review-button" title="{{# str }} edit, cardbox {{/ str }}"><i class='icon fa fa-pencil fa-fw'></i></button>
+                            <button id="cardbox-overview-edit" type="submit" class="btn btn-primary cardbox-review-button" title="{{# str }} edit, cardbox {{/ str }}"><i class='icon fa fa-pencil fa-fw'></i></button>
                         </form>
                         <button id="cardbox-delete-{{cardid}}" type="submit" class="btn btn-primary cardbox-delete-button cardbox-review-button" title="{{# str }} edit, cardbox {{/ str }}"><i class='icon fa fa-trash fa-fw'></i></button>
                         

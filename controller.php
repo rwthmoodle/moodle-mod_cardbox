@@ -232,7 +232,7 @@ if ($action === 'addflashcard') {
         
         if ($mform->is_submitted() && empty($mform->is_validated())) {
             $info = get_string('error:createcard', 'cardbox');
-            echo "<span class='notification'><div class='alert alert-danger alert-block fade in' role='alert'>" . $info . "</div></span>";
+            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         }
         
         
@@ -447,7 +447,7 @@ if ($action === 'editcard') {
         
         if ($mform->is_submitted() && empty($mform->is_validated())) {
             $info = get_string('error:createcard', 'cardbox');
-            echo "<span class='notification'><div class='alert alert-danger alert-block fade in' role='alert'>" . $info . "</div></span>";
+            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block>" . $info . "</div></span>";
         }
         
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
@@ -510,7 +510,7 @@ if ($action === 'practice') {
 
         $info = get_string('info:nocardsavailable', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailable', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
+        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . " " . $help . "</span>";
         return;
     
     // Inform the user that all of their cards have the status 'mastered' and are no longer repeated.
@@ -518,7 +518,7 @@ if ($action === 'practice') {
         
         $info = get_string('info:nocardsavailableforpractice', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsavailableforpractice', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
+        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . " " . $help . "</span>";
         return;
     
     // Inform the user that none of their cards are due for practice right now.
@@ -527,7 +527,7 @@ if ($action === 'practice') {
         $info_part1 = get_string('info:nocardsdueforpractice', 'cardbox');
         $info_part2 = get_string('help:practiceanyway', 'cardbox');
         $help = $OUTPUT->help_icon('help:nocardsdueforpractice', 'cardbox');
-        echo "<span id='nocardsduenotification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info_part1 . " " . $help . "<br>" . $info_part2 . "</div></span>";
+        echo "<span id='nocardsduenotification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info_part1 . " " . $help . "<br>" . $info_part2 . "</span>";
         $openmodal = false;
     }
 
@@ -592,7 +592,7 @@ if ($action === 'statistics') {
 
     $info = get_string('info:statisticspage', 'cardbox');
     $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
-    echo "<span id='nocardsduenotification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . " " . $help . "</div></span>";
+    echo "<span id='nocardsduenotification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . " " . $help . "</span>";
     
     //echo $OUTPUT->heading("$cardbox->name"); // XXX
 
@@ -643,11 +643,11 @@ if ($action === 'review') {
     
     if (empty($list)) {
         $info = get_string('info:nocardsavailableforreview', 'cardbox');
-        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        echo "<span id='cardbox-review-notification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         return;
     } else {
         $info = get_string('titleforreview', 'cardbox');
-        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
+        echo "<span id='cardbox-review-notification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
     }
 
     // 2.a) Include scripts to control the behaviour of the page.
@@ -655,7 +655,7 @@ if ($action === 'review') {
     $strings = $stringman->load_component_strings('cardbox', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 //    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js")); // TODO: Entfernen, falls doch nicht benutzt.
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js?ver=00002"));
 
     // 2.b) Call script wrapper function.
     if (empty($cardid)) {
@@ -702,7 +702,7 @@ if ($action === 'overview') {
 
     if (empty($list)) {
         $info = get_string('info:nocardsavailableforoverview', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         return;
         
     } else {
@@ -711,7 +711,7 @@ if ($action === 'overview') {
         $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
         
         $info = get_string('intro:overview', 'cardbox');
-        echo "<span class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         
         // Load strings and include js.
         $stringman = get_string_manager();

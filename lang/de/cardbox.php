@@ -155,6 +155,7 @@ $string['proceed'] = 'Weiter';
 
 $string['solution'] = 'Lösung';
 $string['yoursolution'] = 'Ihre Antwort';
+$string['answer'] = 'Antwort';
 
 // Practice mode: Feedback
 
