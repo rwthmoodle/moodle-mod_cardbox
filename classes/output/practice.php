@@ -102,6 +102,10 @@ class cardbox_practice implements \renderable, \templatable {
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
                 if ($content->cardside == 0) {
+                    if ($content->area == 2) {
+                        $this->question['images'][0] += array('imagealt' => $content->content);
+                        continue;
+                    }
                     $this->question['images'][] = array('imagesrc' => $download_url);
                 } else {
                     $this->answer['images'][] = array('imagesrc' => $download_url);

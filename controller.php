@@ -27,6 +27,7 @@ define('CARDBOX_EVALUATE_ALL', 0);
 define('CARDBOX_EVALUATE_ONE', 1);
 define('CARD_MAIN_INFORMATION', 0);
 define('CARD_CONTEXT_INFORMATION', 1);
+define('CARD_IMAGEDESCRIPTION_INFORMATION', 2);
 
 global $USER, $DB;
 
@@ -151,6 +152,10 @@ if ($action === 'addflashcard') {
                     break;
                 }
             }
+            // Save the imagedescription if there is any.
+            if (!empty($formdata->imagedescription)) {
+                cardbox_save_new_cardcontent($cardid, 0, $image, CARD_IMAGEDESCRIPTION_INFORMATION, $formdata->imagedescription);
+            }
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -270,7 +275,7 @@ if ($action === 'editcard') {
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
     $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => $image), IGNORE_MISSING);
-    
+
     $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // name of the filemanager element
     $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => $sound), IGNORE_MISSING);
 
@@ -315,6 +320,7 @@ if ($action === 'editcard') {
             $entry->from = $from;
         }
         $entry->cardimage = $draftitemid;
+        $entry->imagedescription = cardbox_get_imagedescription($cardid);
         $entry->cardsound = $draftitemid2;
         $entry->action = 'editcard';
         $entry->next = $nextcardid;
@@ -406,6 +412,10 @@ if ($action === 'editcard') {
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
                 }
+            }
+            // Save the imagedescription if there is any.
+            if (!empty($formdata->imagedescription)) {
+                cardbox_save_new_cardcontent($cardid, 0, $image, CARD_IMAGEDESCRIPTION_INFORMATION, $formdata->imagedescription);
             }
         }
         

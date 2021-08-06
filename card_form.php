@@ -125,6 +125,8 @@ class mod_cardbox_card_form extends moodleform {
         $options['mainfile'] = true;
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
 
+        $mform->addElement('text', 'imagedescription', get_string('imagedescription', 'cardbox'));
+
         // Enter an audio file instead or as a supplement.
 //        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
 //                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
