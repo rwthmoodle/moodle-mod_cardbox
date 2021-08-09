@@ -408,6 +408,23 @@ function cardbox_get_image_itemid($cardid) {
 
 }
 /**
+ * Function returns the imagedescription belonging to the specified image if set.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_imagedescription($cardid) {
+
+    global $DB;
+    $imagedescription = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'area' => 2), IGNORE_MISSING);
+    if (empty($imagedescription)) {
+        $imagedescription = '';
+    }
+    return $imagedescription;
+
+}
+/**
  * Function converts the timestamp into a human readable format (D. M Y),
  * taking the user's timezone into account.
  *

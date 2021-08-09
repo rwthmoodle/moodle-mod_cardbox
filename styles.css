@@ -17,6 +17,10 @@
     padding-bottom: 30px;
 }
 
+.path-mod-cardbox .mform .form-group input[type="text"] {
+    width: 100% !important;
+}
+
 /*.path-mod-cardbox #cardbox-see-options {
     display: none;
 }*/

@@ -77,6 +77,7 @@ $string['necessaryanswers_card'] = 'How many answers are necessary?';
 $string['necessaryanswers_all'] = 'all';
 $string['necessaryanswers_one'] = 'one';
 $string['image'] = 'Question image';
+$string['imagedescription'] = 'Describe this image for someone who cannot see it';
 $string['sound'] = 'Question sound';
 $string['answerimage'] = 'Answer image';
 $string['answersound'] = 'Answer sound';
