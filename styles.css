@@ -2,7 +2,7 @@
     font-size: 30px !important;
 }*/
 
-.path-mod-cardbox button {
+.path-mod-cardbox button:not([data-action="toggle-manual-completion"]) {
     border: none !important;
 }
 

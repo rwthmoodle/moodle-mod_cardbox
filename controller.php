@@ -495,6 +495,10 @@ if ($action === 'practice') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
+    // Render the activity information.
+    $completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
+    $activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id);
+    echo $OUTPUT->activity_information($cm, $completiondetails, $activitydates);
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     //echo $OUTPUT->heading("$cardbox->name");
 
