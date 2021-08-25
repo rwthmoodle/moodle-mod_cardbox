@@ -178,6 +178,10 @@ $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
 $string['edit'] = 'Edit';
 $string['skip'] = 'Skip';
+$string['countcardapprove'] = '{&a} cards have been approved and ready for practise';
+$string['countcardreject'] = '{&a} cards have been rejected';
+$string['rejectcard'] = 'Reject Card';
+$string['rejectcardinfo'] = 'Do you want to reject the selected {$a} cards? These cards will be deleted and cannot be recovered.';
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
@@ -196,6 +200,7 @@ $string['no'] = 'No';
 $string['cancel'] = 'Cancel';
 $string['deletecard'] = 'Delete card?';
 $string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';
+
 
 $string['addtionalinformation'] = 'Additional information:';
 $string['addtionalinformationlabel'] = '<p style="font-weight:bold; margin:0%">Additional information:</p>';

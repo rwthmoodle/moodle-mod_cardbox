@@ -2,23 +2,12 @@
     font-size: 30px !important;
 }*/
 
-.path-mod-cardbox button:not([data-action="toggle-manual-completion"]) {
+.path-mod-cardbox button {
     border: none !important;
 }
 
 .path-mod-cardbox .cardbox-studyview {
-    width: 100%;
-    margin-left: 0%;
-    padding-left: 0%;
-    padding-right: 0%;
-/*     margin-top: 90px;
-    margin-bottom: 90px; */
-    padding-top: 30px;
-    padding-bottom: 30px;
-}
 
-.path-mod-cardbox .mform .form-group input[type="text"] {
-    width: 100% !important;
 }
 
 /*.path-mod-cardbox #cardbox-see-options {
@@ -48,11 +37,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox .cardbox-text {
-    padding-left: 30px;
-}
-
-.path-mod-cardbox .cardbox-buttons {
-    padding-right: 21px;
+    
 }
 
 .path-mod-cardbox .img-fluid {
@@ -105,22 +90,21 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox #review-button-wrapper {
     text-align: center;
+    max-width: fit-content;
+    padding-right: 0px;;
 }
 
 .path-mod-cardbox .reviewcontent {
-/*     margin-top: 50px; */
-/*     margin-bottom: 30px; */
-    width: 100%;
-    margin-top: 0px;
-    padding-left: 15px;
-    line-height:1;
-    padding-top: 10px;
+    margin-top: 50px;
+    margin-bottom: 30px;
+    display: flex;
+    justify-content: center
 }
 
 .path-mod-cardbox .cardbox-review-button {
     border-radius: 0px;
-    margin-left: 2em;
-    margin-left: 2em;
+    /*margin-left: 1em;
+    margin-left: 1em;*/
 }
 /*.path-mod-cardbox .cardbox-review-button {
     border-radius: 70%;
@@ -128,7 +112,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }*/
 
 .path-mod-cardbox #cardbox-approve {
-    padding-left: 1.3em;
+    /*padding-left: 1.3em;*/
 /*    background-color: #00b33c;
     margin-right: 1em;*/
 }
@@ -230,6 +214,24 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-text {
     font-size: 16px !important;
 }
+#review-div{
+    display: none;
+}
+.sticky-review-arr{
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    right: 50%;
+    width: -webkit-fill-available;
+    margin-left: 10%;
+    margin-bottom: 10%;
+}
+
+.cardbox-card-context{
+    font-size: 0.9375rem;
+    margin-bottom: 1%;
+    height:10%;
+}
 
 .path-mod-cardbox .cardbox-selfcheck-question-side {
     margin-bottom: 1rem;
@@ -241,21 +243,17 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox .cardbox-context-overview {
-
-/*     margin-top: 1em;
-    margin-bottom: 1em; */
-/*    padding: 2em; */
-/*     width: 66%; */
-    padding-left: 5px;
-    padding-right: 5px;
-/*     padding-top: 0px; */
+    margin-left: 16% !important;
+    margin-right: 16% !important;
+    margin-bottom: 1em;
+    padding: 10px;
 }
 
-.path-mod-cardbox .cardbox-answercontext-practice {
-
-    padding:0px; 
-    padding-left: 1em; 
-    margin-bottom: 0px
+.path-mod-cardbox .cardbox-context-practice {
+    margin-left: 25% !important;
+    margin-right: 25% !important;
+    padding: 10px;
+    margin-top: 1em, 
 }
 
 .path-mod-cardbox .cardbox-card-left-side, .path-mod-cardbox .cardbox-card-right-side {
@@ -265,7 +263,26 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     padding: 1em;
     height: 94%;
 }
-
+.cardbox-card-right-side-multi {
+    border-radius: 3px;
+    margin-bottom: 2em;
+    height: 94%;
+}
+.cardbox-cardside-multi {
+    border: 1px solid #e6e6e6;
+    padding: 1em;
+}
+.checkbox-card{
+    margin-left: 2%;
+}
+.kontext-grid{
+    display: grid;
+    grid-template-columns: 33.33% 33.33% ;
+    justify-content: center;
+    grid-gap: 2.3%;
+    margin-left: 10%;
+    margin-right: 22%;
+}
 @media (max-width: 323px) {
 
     .path-mod-cardbox #cardbox-feedback-wrapper, .path-mod-cardbox #cardbox-feedback, .path-mod-cardbox #cardbox-proceed-buttons {
@@ -283,6 +300,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
     .path-mod-cardbox .cardbox-card-left-side {
         margin-right: 1em;
+        margin-left: 1em;
         padding: 2em;
     }
     

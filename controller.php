@@ -275,7 +275,7 @@ if ($action === 'editcard') {
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
     $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => $image), IGNORE_MISSING);
-
+    
     $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // name of the filemanager element
     $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => $sound), IGNORE_MISSING);
 
@@ -482,6 +482,22 @@ if ($action === 'deletecard') {
         $DB->delete_records('cardbox_progress', ['card' => $cardid]);
     }
     $action = 'overview';
+
+}
+/* **************************************************** Delete cards from review **************************************************** */
+if ($action === 'rejectcard') {
+
+    require_capability('mod/cardbox:approvecard', $context);
+
+    $cardids = required_param('cardid', PARAM_TEXT);
+    foreach ((explode(",", $cardids)) as $cardid ) {
+        if ($DB->record_exists('cardbox_cards', ['id' => $cardid])) {
+            $DB->delete_records('cardbox_cards', ['id' => $cardid]);
+            $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
+        }
+    }
+    $action = 'review';
+
 }
 
 /* **************************************************** Practice cards **************************************************** */
@@ -495,10 +511,6 @@ if ($action === 'practice') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
-    // Render the activity information.
-    $completiondetails = \core_completion\cm_completion_details::get_instance($cm, $USER->id);
-    $activitydates = \core\activity_dates::get_dates_for_module($cm, $USER->id);
-    echo $OUTPUT->activity_information($cm, $completiondetails, $activitydates);
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
     //echo $OUTPUT->heading("$cardbox->name");
 
@@ -634,10 +646,86 @@ if ($action === 'statistics') {
     echo $renderer->cardbox_render_statistics($statistics);
 
 }
-
 /* **************************************************** Approve/edit cards **************************************************** */
 
 if ($action === 'review') {
+    require_once('review_form.php');
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
+
+    require_once('model/cardcollection.class.php'); // model.
+    //require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php'); // view controller.
+
+    // 1. Create the model.
+    $collection = new cardbox_cardcollection($cardbox->id);
+    $list = $collection->cardbox_get_card_list();
+    $page = optional_param('page', 0, PARAM_INT);
+    $perpage = 3;
+    $offset = $page * $perpage;
+
+    $passlist = array_slice($list, $offset, $perpage);
+    $customdata = array('cardboxid' => $cardbox->id, 'cmid' => $cmid, 'cardlist' => $passlist, 'context' => $context, 'page' => $page, 
+    'perpage' => $perpage, 'offset' => $offset, 'totalcount' => count($list));
+    $totalcount = count($list);
+    if (empty($list)) {
+        $info = get_string('info:nocardsavailableforreview', 'cardbox');
+        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
+        return;
+    } else {
+        if(empty($message)){
+            $info = get_string('titleforreview', 'cardbox');
+            echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
+        }else {
+            echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $message. "</div></span>";
+        }
+    }
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('cardbox', 'en');
+    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
+    $params = array($cmid, $list);
+    $PAGE->requires->js_init_call('startReview', $params, true);
+    $mform = new mod_cardbox_review_form(null, $customdata);
+    $mform->display();
+    if ($fromform = $mform->get_data()) {
+        // Processign form data submitted.
+        $filtered = array();
+        $btn = preg_grep('/btn/', array_keys(get_object_vars($fromform)));
+        $btnfunc = rtrim(array_values($btn)[0], 'btn');
+        if (($btnfunc) == 'approve') {
+            foreach ($fromform as $key => $value) {
+                if (preg_match('/chck/', $key)) {
+                    $filtered[] = substr($key, 4, strlen($key));
+                    $dataobject = new stdClass();
+                    $dataobject->id = substr($key, 4, strlen($key));
+                    $dataobject->approved = '1';
+                    $dataobject->approvedby = $USER->id;
+                    $success = $DB->update_record('cardbox_cards', $dataobject, false);
+                }
+            }
+            redirect($actionurl, '');
+        } else {
+            foreach ($fromform as $key => $value) {
+                if (preg_match('/chck/', $key)) {
+                    $filtered[] = substr($key, 4, strlen($key));
+                    //$PAGE->requires->js_init_call('rejectcard', substr($key, 4, strlen($key)));
+                    //cardbox_delete_card(substr($key, 4, strlen($key)));
+                    //redirect($actionurl,  '');
+                }
+            }
+            $rejectparams = array($cmid, $filtered, count($filtered));
+            $PAGE->requires->js_init_call('rejectcard', $rejectparams, true);
+
+        }
+    }
+    echo $OUTPUT->paging_bar($totalcount, $page, $perpage, $actionurl);
+}
+/* **************************************************** Approve/edit cards **************************************************** 
+
+if ($action === 'review2') {
     
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
     echo $OUTPUT->header();
@@ -657,11 +745,11 @@ if ($action === 'review') {
     
     if (empty($list)) {
         $info = get_string('info:nocardsavailableforreview', 'cardbox');
-        echo "<span id='cardbox-review-notification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
+        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>$info</div></span>";
         return;
     } else {
         $info = get_string('titleforreview', 'cardbox');
-        echo "<span id='cardbox-review-notification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
+        echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $info . "</div></span>";
     }
 
     // 2.a) Include scripts to control the behaviour of the page.
@@ -669,7 +757,7 @@ if ($action === 'review') {
     $strings = $stringman->load_component_strings('cardbox', 'en');
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 //    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js")); // TODO: Entfernen, falls doch nicht benutzt.
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js?ver=00002"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/review.js"));
 
     // 2.b) Call script wrapper function.
     if (empty($cardid)) {
@@ -689,7 +777,7 @@ if ($action === 'review') {
     // 4. Render the view.
     echo $renderer->cardbox_render_review($review);
 
-}
+}*/
 
 /* **************************************************** Overview of all cards **************************************************** */
 
