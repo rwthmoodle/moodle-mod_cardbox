@@ -101,6 +101,13 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     justify-content: center
 }
 
+.topic-review {
+    margin-bottom: 10px;
+    width: 100%;
+    margin-left: 11%;
+    margin-right: 24%;
+}
+
 .path-mod-cardbox .cardbox-review-button {
     border-radius: 0px;
     /*margin-left: 1em;
@@ -259,13 +266,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .path-mod-cardbox .cardbox-card-left-side, .path-mod-cardbox .cardbox-card-right-side {
     border: 1px solid #e6e6e6;
     border-radius: 3px;
-    margin-bottom: 2em;
+/*     margin-bottom: 2em; */
     padding: 1em;
     height: 94%;
 }
 .cardbox-card-right-side-multi {
     border-radius: 3px;
-    margin-bottom: 2em;
+/*     margin-bottom: 2em; */
+    margin-right: 1em;
+    margin-left: 0.2em;
     height: 94%;
 }
 .cardbox-cardside-multi {
@@ -299,13 +308,14 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     }
 
     .path-mod-cardbox .cardbox-card-left-side {
-        margin-right: 1em;
+        margin-right: 0.2em;
         margin-left: 1em;
         padding: 2em;
     }
     
     .path-mod-cardbox .cardbox-card-right-side {
-        margin-left: 1em;
+        margin-right: 1em;
+        margin-left: 0.2em;
         padding: 2em;
     }
 

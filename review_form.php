@@ -73,10 +73,10 @@ class mod_cardbox_review_form extends moodleform {
                     switch($cardcontent->contenttype){
                         case 1:
                             $downloadurl = cardbox_get_download_url($customdata['context'], $cardcontent->id, $cardcontent->content);
-                            $question .= '<div class="cardbox-image"><img src="'.$downloadurl.'" alt="" class="img-fluid mx-auto d-block"></div>';
+                            $question .= '<div class="cardbox-image"><img src="'.$downloadurl.'" alt="" class="img-fluid  d-block"></div>';
                         break;
                         case 2:
-                            $question .= '<div class="cardbox-card-text text-center"><div class="text_to_html">'.
+                            $question .= '<div class="cardbox-card-text text-center"><div class="text_to_html" style="text-align: center;">'.
                             $cardcontent->content.'</div></div>';
                         break;
                         case 3:
@@ -96,21 +96,21 @@ class mod_cardbox_review_form extends moodleform {
                     if ($multianswers > 1) {
                         $count++;
                         if($cardid != $value){
-                            $answer .= '<div class="cardbox-card-right-side-multi"><div style="height:90%">';
+                            $answer .= '<div class="cardbox-card-right-side-multi"><div style="height:100%">';
                             $cardid = $value;
                         }
-                        $eachheight = (90-($multianswers-1))/$multianswers;
+                        $eachheight = (100-($multianswers-1))/$multianswers;
                         if ($count == $multianswers){
                             $answer .= '<div class="cardbox-cardside-multi" style ="height:'.$eachheight.'%">
-                        <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
-                        '</div></div></div></div>';
+                            <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
+                            '</div></div></div></div>';
                         } else {
                             $answer .= '<div class="cardbox-cardside-multi" style ="height:'.$eachheight.'%; margin-bottom: 1%">
                         <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
                         '</div></div></div>';
                         }
                     } else {
-                        $answer .= '<div class="cardbox-cardside"><div class="cardbox-card-text "><div class="text_to_html"><div style="height:90%">'
+                        $answer .= '<div class="cardbox-cardside"><div class="cardbox-card-text "><div class="text_to_html"><div style="height:100%">'
                         .$cardcontent->content.'</div></div></div></div>';
                     }
                 }
@@ -128,17 +128,17 @@ class mod_cardbox_review_form extends moodleform {
             }
             $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'" class="row reviewcontent">');
 
-            $mform->addElement('html', '<div class="col-xl-4 cardbox-column"><div class="cardbox-card-left-side">
-                                         <div class="cardbox-cardside"><div style="height:90%"><p>'.
-                                           strtoupper(get_string('choosetopic', 'cardbox').': '.$topicname).'</p>'.$question.'</div>
-                                           <div class="cardbox-card-context">'.$qcontext.
-                                           '</div></div></div></div>');
+            $mform->addElement('html', '<div class="topic-review"><p>'. strtoupper(get_string('choosetopic', 'cardbox').': '.
+                                        $topicname).'</p></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column"><div class="cardbox-card-left-side">
+                                        <div class="cardbox-cardside"><div style="height:100%">'.$question.'</div>
+                                        </div></div><div style="margin:15px;"><p>'.$qcontext.
+                                        '</p></div></div></div>');
             if ($multianswers > 1) {
-                $mform->addElement('html', '<div class="col-xl-4 cardbox-column">'
-                .$answer.'<div class="cardbox-card-context">'.$acontext.'</div></div></div>');
+                $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column">'
+                .$answer.'</div><div style="margin:15px; margin-left: 0.2em">'.$acontext.'</div></div></div>');
             } else {
-                $mform->addElement('html', '<div class="col-xl-4 cardbox-column"><div class="cardbox-card-right-side"><div style="height:90%">'
-                .$answer.'</div><div class="cardbox-card-context">'.$acontext.'</div></div></div>');
+                $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column"><div class="cardbox-card-right-side"><div style="height:90%">'
+                .$answer.'</div></div><div style="margin:15px; margin-left: 0.2em">'.$acontext.'</div></div></div>');
             }
             $mform->addElement('html', '<div class="col-xs-2"><div id="review-button-wrapper">
             <div class="btn-group-vertical" role="group" aria-label="review-actions">
