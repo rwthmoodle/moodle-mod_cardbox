@@ -50,7 +50,24 @@ class mod_cardbox_review_form extends moodleform {
         $mform->addElement('html', '<div id="container-fluid cardbox-studyview">');
         $topicname = '';
         $cardid = '';
-        
+
+        //further cards with answer suggestions 
+
+        $cards = $DB->get_records_select('cardbox_cardcontents', 'area = 3' , null, '', 'card');
+
+        if (empty($customdata["cardlist"]) && !empty($cards)){
+            foreach ($cards as $card) {
+                $cardlist[] = $card->card;
+            }
+            $customdata["cardlist"] = $cardlist;
+        }
+
+        foreach ($cards as $card) {
+            if (!in_array($card->card, $customdata["cardlist"], false)) {
+                array_push($customdata["cardlist"], $card->card);
+            }
+        }
+
         foreach ($customdata['cardlist'] as $key => $value) {
             
             $cardcontents = $DB->get_records_sql(
@@ -152,20 +169,21 @@ class mod_cardbox_review_form extends moodleform {
                     $topicname = get_string('notopic', 'cardbox');
                 }
             }
-            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'" class="row reviewcontent">');
+            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'" class="row reviewcontent" style="margin-bottom: 0px;">');
 
             $mform->addElement('html', '<div class="topic-review">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
                                         $topicname).'</div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;"><div class="cardbox-card-left-side">
                                         <div class="cardbox-cardside"><div style="height:100%">'.$question.'</div>
-                                        </div></div><div style="margin:15px; margin-top: 0px"><p>'.$qcontext.
-                                        '</p></div></div></div>');
+                                        </div></div></div></div>');
+
             if ($multianswers > 1) {
                 $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%"><div style="height: 100%">'
-                .$answer.'</div></div><div style="margin:15px; margin-left: 0.2em; margin-top: 0px">'.$acontext.'</div></div></div>');
+                .$answer.'</div></div></div></div>');
             } else {
                 $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;"><div class="cardbox-card-right-side"><div>'
-                .$answer.'</div></div><div style="margin:15px; margin-left: 0.2em;">'.$acontext.'</div></div></div>');
+                .$answer.'</div></div></div></div>');
             }
+
             $mform->addElement('html', '<div class="col-xs-2"><div id="review-button-wrapper">
             <div class="btn-group-vertical" role="group" aria-label="review-actions">
             <button id="cardbox-edit-'.$value.'" type="button" class="btn btn-primary cardbox-review-button" title="Edit"><i class="icon fa fa-pencil fa-fw"></i></button>
@@ -174,6 +192,11 @@ class mod_cardbox_review_form extends moodleform {
             $mform->addElement('checkbox', 'chck'.$value); // Checkbox for selection
             $mform->addElement('html', '</div>');
             $mform->addElement('html', '</div>'); // ending cardbox-card-in-review and row reviewcontent
+
+            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 0px">
+            <div class="col-xl-4" style="margin-left: 10%; padding-right: 0px;"><div class="cardbox-column" >'.$qcontext.
+            '</div></div><div class="col-xl-4" style="padding-left:0.5%;"><div class="cardbox-column" ><div>'.$acontext.'</div></div></div></div>');
+
         }
         $mform->addElement('html', '<div id= "review-div" class="cardbox-card-in-review sticky-review-arr">');
         $reviewbtngrp = array();
