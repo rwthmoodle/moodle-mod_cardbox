@@ -96,20 +96,6 @@
             <INDEX NAME="cardside_idx" UNIQUE="false" FIELDS="cardside"/>
             <INDEX NAME="contenttype_idx" UNIQUE="false" FIELDS="contenttype"/>
         </INDEXES>
-    </TABLE>    
-    <TABLE NAME="cardbox_contenttypes" COMMENT="Default comment for the table, please edit me">
-        <FIELDS>
-            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
-            <FIELD NAME="type" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-            <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
-        </FIELDS>
-        <KEYS>
-            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
-        </KEYS>
-        <INDEXES>
-            <INDEX NAME="types_idx" UNIQUE="false" FIELDS="type"/>
-            <INDEX NAME="contentname_idx" UNIQUE="false" FIELDS="name"/>
-        </INDEXES>
     </TABLE>
     <TABLE NAME="cardbox_statistics" COMMENT="This table tracks the users' performance over time.">
         <FIELDS>

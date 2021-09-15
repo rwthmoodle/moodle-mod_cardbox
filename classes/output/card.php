@@ -30,14 +30,14 @@ class cardbox_card implements \renderable, \templatable {
     private $topic;
     private $question = array('images' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'texts' => array());
+    private $multipleanswers = false;
     private $allowedtoedit = false;
     private $questioncontext = null;
     private $answercontext = null;
     private $seestatus = false;
     private $status;
-    private $color;
 
-    public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus, $color) {
+    public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
         
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
@@ -53,7 +53,6 @@ class cardbox_card implements \renderable, \templatable {
             $this->seestatus = true;
         }
 
-        $this->color = $color;
         $this->status = cardbox_get_status($cardid);
 
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
@@ -67,19 +66,19 @@ class cardbox_card implements \renderable, \templatable {
         $fs = get_file_storage();
         foreach ($contents as $content) {
 
-            if ($content->area == 1 && $content->cardside == 0) { //check if there is context for the question
+            if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
 
                 $this->questioncontext = $content->content;
 
-            } else if ($content->area == 1 && $content->cardside == 1) { //check if there is context for the answer
+            } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
 
                 $this->answercontext = $content->content;
 
-            } else if ($content->contenttype == 1) { // XXX: make dynamic!
+            } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) {
 
                 $download_url = cardbox_get_download_url($context, $content->id, $content->content);
-                if ($content->cardside == 0) {
-                    if ($content->area == 2) {
+                if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
+                    if ($content->area == CARD_IMAGEDESCRIPTION_INFORMATION) {
                         $this->question['images'][0] += array('imagealt' => $content->content);
                         continue;
                     }
@@ -88,7 +87,7 @@ class cardbox_card implements \renderable, \templatable {
                     $this->answer['images'][] = array('imagesrc' => $download_url);
                 }
 
-            } else if ($content->cardside == 0) {
+            } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
 
                 $content->content = format_text($content->content);
                 $this->question['texts'][] = array('text' => $content->content);
@@ -98,6 +97,9 @@ class cardbox_card implements \renderable, \templatable {
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
             }
+        }
+        if (count((array)$this->answer) > 1) {
+            $this->multipleanswers = true;
         }
 
     }
@@ -109,9 +111,10 @@ class cardbox_card implements \renderable, \templatable {
         $data = array();
         $data['cmid'] = $this->cmid;
         $data['cardid'] = $this->cardid;
-        $data['topic'] = $this->topic;
+        $data['topic'] = strtoupper($this->topic);
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
+        $data['multipleanswers'] = $this->multipleanswers;
         $data['answercontext'] = $this->answercontext;
         $data['questioncontext'] = $this->questioncontext;
         $data['contextquestionavailable'] = $this->questioncontext != null;
@@ -120,7 +123,6 @@ class cardbox_card implements \renderable, \templatable {
         $data['seestatus'] = $this->seestatus;
         $data['status'] = $this->status;
         $data['helpicon'] = $OUTPUT->help_icon('cardposition', 'cardbox');
-        $data['color'] = $this->color;
         return $data;
 
     }

@@ -40,6 +40,8 @@ function startOptions(Y, __cmid, __openmodal) {
             } else {
                 document.getElementById('cardbox-topic-select').style.display = 'flex';
                 document.getElementById('cardbox-topic-description').style.display = 'flex';
+                document.getElementById('cardbox-onlyonetopic-select').style.marginBottom = '2em';
+                document.getElementById('cardbox-onlyonetopic-choices').style.marginBottom = '2em';
             }
         });
 
@@ -58,6 +60,12 @@ function startOptions(Y, __cmid, __openmodal) {
             modal.style.display = 'none';
         });
 
+        document.getElementById('cardbox-see-options').addEventListener('click', function(e) {
+            document.getElementById('cardbox-practiceall-select').style.display = 'none';
+            document.getElementById('cardbox-practiceall-choices').style.display = 'none';
+            document.getElementById('cardbox-practiceall-yes').checked = true;
+        });
+
         // If the user clicks anywhere outside of the modal, close it.
         window.onclick = function(event) {
             if (event.target == modal) {
@@ -69,8 +77,9 @@ function startOptions(Y, __cmid, __openmodal) {
         function applySettings() {
             
             var topic = document.getElementById('cardbox-topic').value;
-            var practiceall = document.getElementById('cardbox-practiceall').checked;
+            var practiceall = document.getElementById('cardbox-practiceall-yes').checked;
             var onlyonetopic = document.getElementById('cardbox-onlyonetopic').value;
+            var amountcards = document.getElementById('cardbox-amountcards').value;
             var correctionmode;
 
             var radios = document.getElementById('cardbox-form').elements['correctionmode'];
@@ -82,7 +91,8 @@ function startOptions(Y, __cmid, __openmodal) {
                 }
             }
 
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic +'&practiceall=' + practiceall +'&onlyonetopic=' + onlyonetopic;
+
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=practice&start=true&mode=' + correctionmode + '&topic=' + topic +'&practiceall=' + practiceall +'&onlyonetopic=' + onlyonetopic +'&amountcards=' + amountcards;
             window.location.href = goTo;
 
         }

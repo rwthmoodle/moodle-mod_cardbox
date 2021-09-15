@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog" style="max-width: 400px">
     <div class="modal-content">
 
         <div class="modal-header">
@@ -8,7 +8,7 @@
 
         <div class="modal-body cardbox-options">
 
-            <div class="item a goldenleft">{{# str }} choosecorrectionmode, cardbox {{/ str }}&nbsp; {{{helpbuttoncorrectionmode}}}</div>
+            <div class="item a goldenleft">{{# str }} choosecorrectionmode, cardbox {{/ str }}</div>
             <div class="item b goldenrigth">
                 <form id="cardbox-form" class="felement">
                     <input type="radio" id="cardbox-autocorrection" name="correctionmode" value="0" class="form-check-input" {{#autoenabled}}checked{{/autoenabled}} {{#autodisabled}}disabled{{/autodisabled}}> {{# str }} autocorrection, cardbox {{/ str }}<br>
@@ -16,8 +16,8 @@
                 </form>
             </div>
 
-            <div class="item c goldenleft">{{# str }} onlyonetopic, cardbox {{/ str }}&nbsp; {{{helpbuttononlyonetopic}}}</div>
-            <div class="item d goldenrigth">
+            <div class="item c goldenleft" id="cardbox-onlyonetopic-select">{{# str }} onlyonetopic, cardbox {{/ str }}</div>
+            <div class="item d goldenrigth" id="cardbox-onlyonetopic-choices">
                 <select id="cardbox-onlyonetopic" name="onlyonetopic" class="custom-select">
                     {{#choicestopics}}
                         <option value="{{value}}">{{label}}</option>
@@ -25,7 +25,7 @@
                 </select>
             </div>
 
-            <div class="item e goldenleft" id="cardbox-topic-description">{{# str }} weightopic, cardbox {{/ str }}&nbsp; {{{helpbuttontopic}}}</div>
+            <div class="item e goldenleft" id="cardbox-topic-description">{{# str }} weightopic, cardbox {{/ str }}</div>
             <div class="item f goldenrigth" id="cardbox-topic-select">
                 <select id="cardbox-topic" name="topic" class="custom-select">
                     {{#topics}}
@@ -33,10 +33,23 @@
                     {{/topics}}
                 </select>
             </div>
+            
+            <div id="cardbox-practiceall-select" class="item g goldenleft">{{# str }} practiceall, cardbox {{/ str }}&nbsp; {{{helpbuttonpracticeall}}}</div>
+            <div id="cardbox-practiceall-choices" class="item h goldenrigth">
+                <form id="cardbox-form-practiceall" class="felement">
+                    <input type="radio" id="cardbox-practiceall-yes" name="practiceall" value="0" class="form-check-input"> {{# str }} yes, cardbox {{/ str }}<br>
+                    <input type="radio" id="cardbox-practiceall-no" name="practiceall" value="1" class="form-check-input" checked>{{# str }} no, cardbox {{/ str }}
+                </form>
 
-            <div class="item g goldenleft">{{# str }} practiceall, cardbox {{/ str }}&nbsp; {{{helpbuttonpracticeall}}}</div>
-            <div class="item h goldenrigth">
-                <input type="checkbox" id="cardbox-practiceall" name="practiceall">
+            </div>
+
+            <div class="item i goldenleft" id="cardbox-amount-cards">{{# str }} maxnumbercardspractice, cardbox {{/ str }}</div>
+            <div class="item j goldenrigth" id="cardbox-amount-cards-select">
+                <select id="cardbox-amountcards" name="amount-cards" class="custom-select">
+                    {{#amountcards}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/amountcards}}
+                </select>
             </div>
 
         </div>

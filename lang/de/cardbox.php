@@ -38,6 +38,9 @@ $string['necessaryanswers_activity_locked'] = 'Nachträgliches Verändern der An
 $string['necessaryanswers_activity_locked_help'] = 'Wenn "Ja" ausgewählt ist, dann ist es möglich beim Erstellen oder Bearbeiten einer Karte die Anzahl an erforderlichen Antworten zu verändern.';
 $string['casesensitive'] = 'Groß- und Kleinschreibung beachten';
 $string['casesensitive_help'] = 'Gibt an, ob beim Üben mit automatischer Kontrolle Eingaben, die sich nur in der Groß-/Kleinschreibung von der richtig Antwort unterscheiden, auch als richtig gewertet werden.';
+$string['numberofcardssetting'] = 'Anzahl an zu übenden Karten';
+$string['numberofcardssetting_help'] = 'Gibt an, wie viele Karten die Studenten pro Übeeinheit lernen sollen. Ist "Studenten entscheiden" ausgewählt, so haben sie die freie Wahl.';
+$string['studentschoose'] = 'Studenten entscheiden';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 $string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
@@ -56,6 +59,7 @@ $string['practice'] = 'Üben';
 $string['statistics'] = 'Fortschritt';
 $string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
+$string['massimport'] = 'Karten importieren';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
@@ -66,7 +70,7 @@ $string['intro:overview'] = 'Die Übersicht umfasst alle bereits freigegebenen K
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Thema';
-$string['reviewtopic'] = 'Thema: ';
+$string['reviewtopic'] = 'THEMA: ';
 $string['notopic'] = 'nicht zugeordnet';
 $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
@@ -83,10 +87,7 @@ $string['sound'] = 'Tonaufnahme zur Frage';
 $string['answersound'] = 'Tonaufnahme zur Lösung';
 $string['enteranswer'] = 'Lösungstext (Hilfe-Icon beachten)';
 $string['answer_repeat'] = 'weitere Lösung';
-//$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
-
 $string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>';
-
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
@@ -103,10 +104,20 @@ $string['success:reject'] = 'Die Karte wurde gelöscht.';
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
 
+// Import cards
+$string['examplesinglecsv'] = 'Beispieltextdatei für Karten mit nur einer Antwort.';
+$string['examplesinglecsv_help'] = 'Beispieltextdatei für Karten mit nur einer Antwort.';
+$string['examplemulticsv'] = 'Beispieltextdatei für Karten mit mehreren Antworten';
+$string['examplemulticsv_help'] = 'Beispieltextdatei für Karten mit mehreren Antworten';
+$string['cancelimport'] = 'Import wurde storniert';
+$string['importpreview'] = 'Preview der Importkarten';
+$string['importsuccess'] = '{$a} Karten erfolgreich importiert';
+
 // Info notifications
 $string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
 $string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
+$string['info:nocardsavailableforoverview'] = 'In dieser Kartenbox befinden sich keine Karten.';
 $string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
@@ -118,59 +129,57 @@ $string['help:nocardsdueforpractice'] = 'Keine Karten fällig';
 $string['help:nocardsdueforpractice_help'] = 'Neue Karten sind sofort fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
 $string['help:whenarecardsdue'] = 'Wann sind Karten fällig';
 $string['help:whenarecardsdue_help'] = 'Neue Karten sind sofort zur Wiederholung fällig. Ansonsten entscheidet das Fach:<ol><li>Fach: täglich</li><li>Fach: nach 3 Tagen</li><li>Fach: nach 7 Tagen</li><li>Fach: nach 16 Tagen</li><li>Fach: nach 34 Tagen</li></ol>';
-$string['help:practiceanyway'] = 'Möchten Sie dennoch üben, so klicken Sie bitte auf <em>Einstellungen</em> und wählen Sie die Option <em>Auch nicht-fällige Karten üben</em> aus.';
+$string['help:practiceanyway'] = 'Wenn Sie trotzdem üben, wandern richtig beantwortete Karten nicht weiter, sondern verbleiben in ihrem aktuellen Fach.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Übungseinstellungen';
 $string['choosecorrectionmode'] = 'Übungsmodus';
-$string['choosecorrectionmode_help'] = 'Sie können Ihre Antworten eingeben und korrigieren lassen. Möchten Sie lieber mündlich antworten oder Lösungen handschriftlich notieren (z.B. Formeln), so wählen Sie den Selbstkontrollmodus.';
 $string['selfcorrection'] = 'Selbstkontrolle';
 $string['autocorrection'] = 'Automatische Kontrolle';
-$string['weightopic'] = 'Thema gewichten';
-$string['weightopic_help'] = 'Karten des entsprechenden Themas werden bevorzugt für die Übung ausgewählt.';
+$string['weightopic'] = 'Fokus';
 $string['notopicpreferred'] = 'keine Gewichtung';
 $string['onlyonetopic'] = 'Thema';
-$string['onlyonetopic_help'] = 'Wenn Sie ein Thema auswählen, üben Sie ausschließlich Karten aus diesem Thema. Es werden keine Karten aus anderen Themen abgefragt.';
-$string['practiceall'] = 'Zu früh wiederholen';
+$string['practiceall'] = 'Alle Karten üben';
 $string['practiceall_help'] = 'Zu früh wiederholte Karten wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach 1 Tag als dauerhaft gelernt verlassen.';
+$string['maxnumbercardspractice'] = 'Max. Anzahl an Karten';
+$string['undefined'] = 'Unbegrenzt';
 
-//$string['practiceall_help'] = 'Diese wandern bei richtiger Antwort kein Fach weiter. So können Sie in Prüfungsphasen beliebig oft üben, ohne dass die Karten den Karteikasten nach wenigen Tagen verlassen.';
 $string['beginpractice'] = 'Jetzt üben';
 $string['applysettings'] = 'Anwenden';
 $string['cancel'] = 'Abbrechen';
 
 // Practice mode: Buttons.
-$string['options'] = 'Einstellungen';
-//$string['options'] = 'Korrekturmodus';
+$string['options'] = 'Trotzdem üben';
+$string['endpractice'] = 'Üben beenden';
 
 $string['checkanswer'] = 'Überprüfen';
 $string['submitanswer'] = 'Antworten';
 $string['dontknow'] = 'Weiß ich nicht';
-
 $string['markascorrect'] = 'Gewusst';
 $string['markasincorrect'] = 'Nicht gewusst';
 $string['override'] = 'Überstimmen';
 $string['override_iscorrect'] = 'Als richtig werten';
 $string['override_isincorrect'] = 'Als falsch werten';
 $string['proceed'] = 'Weiter';
+$string['suggestanswer_label'] = 'Bitte schlagen Sie eine neue Lösung vor';
+$string['suggestanswer'] = 'Antwort vorschlagen';
+$string['suggestanswer_send'] = 'Antwort absenden';
+$string['cardsleft'] = 'Verbleibende Karten:';
 
 $string['solution'] = 'Lösung';
 $string['yoursolution'] = 'Ihre Antwort';
-$string['answer'] = 'Antwort';
 
 // Practice mode: Feedback
-
 $string['feedback:correctandcomplete'] = 'Richtig!';
-$string['feedback:incomplete'] = 'Unvollständig.';
+$string['feedback:incomplete'] = 'Unvollständig!';
 $string['feedback:correctbutincomplete'] = 'Es fehlen {$a} Antworten.';
-$string['feedback:incorrectandpossiblyincomplete'] = 'Falsche Antwort';
-$string['feedback:notknown'] = 'Keine Antwort.';
+$string['feedback:incorrectandpossiblyincomplete'] = 'Falsche Antwort!';
+$string['feedback:notknown'] = 'Keine Antwort!';
 
 $string['sessioncompleted'] = 'Fertig! :-)';
 $string['titleprogresschart'] = 'Ergebnis';
 $string['right'] = 'richtig';
 $string['wrong'] = 'falsch';
-
 $string['titleoverviewchart'] = 'Karteikasten';
 $string['new'] = 'neu';
 $string['known'] = 'gelernt';
@@ -187,6 +196,10 @@ $string['approve'] = 'Freigeben';
 $string['reject'] = 'Ablehnen';
 $string['edit'] = 'Bearbeiten';
 $string['skip'] = 'Überspringen';
+$string['countcardapprove'] = '{&a} Karten wurden genehmigt und stehen für die Übung bereit';
+$string['countcardreject'] = '{&a} Karten wurden abgelehnt';
+$string['rejectcard'] = 'Karte ablehnen';
+$string['rejectcardinfo'] = 'Möchten Sie die ausgewählten {$a} Karten ablehnen? Diese Karten werden gelöscht und können nicht wiederhergestellt werden.';
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
@@ -206,8 +219,9 @@ $string['cancel'] = 'Abbrechen';
 $string['deletecard'] = 'Karte löschen?';
 $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';
 
-$string['addtionalinformation'] = 'Zusatzinformationen:';
-$string['addtionalinformationlabel'] = '<p style="font-weight:bold; margin:0%">Zusatzinformationen:</p>';
+$string['topicfilter'] = 'Thema ';
+$string['noselection'] = 'alle';
+
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
 $string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten sind in keinem Fach. Nach Fach 5 werden Karten als "gelernt" angesehen und nicht mehr geübt.';

@@ -40,6 +40,7 @@ $action = required_param('action', PARAM_ALPHA); // ...'$action' determines what
 
 if ($action === 'review') {
     
+    global $DB;
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
     
     $cardid = required_param('cardid', PARAM_INT);
@@ -53,11 +54,18 @@ if ($action === 'review') {
         case 'approve':
             $dataobject->approved = '1';
             $dataobject->approvedby = $USER->id;
+            $dataobject->area = CARD_MAIN_INFORMATION;
             $success = $DB->update_record('cardbox_cards', $dataobject, false);
+            $success = $DB->update_record('cardbox_contents', $dataobject, false);
             break;
         
         case 'reject':
-            $success = cardbox_delete_card($cardid);
+            $cardapproved = cardbox_card_approved($cardid);
+            if ($cardapproved) {
+                $success = $DB->delete_records('cardbox_contents', array('card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION));
+            } else {
+                $success = cardbox_delete_card($cardid);
+            }
             break;
         
         case 'skip':
@@ -96,6 +104,7 @@ if ($action === 'updateandnext') {
     $next = required_param('next', PARAM_INT);
     $isrepetition = required_param('isrepetition', PARAM_INT);
     $case = optional_param('case', 1, PARAM_INT);
+    $cardsleft = required_param('cardsleft', PARAM_INT);
 
     $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
     if (empty($dataobject)) {
@@ -121,7 +130,7 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $practice = new cardbox_practice($case, $context, $next);
+        $practice = new cardbox_practice($case, $context, $next, $cardsleft);
         $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);
@@ -154,6 +163,41 @@ if ($action === 'saveperformance') {
         echo json_encode(['status' => 'error', 'reason' => 'failedtosaveperformance']);
     } else {
         echo json_encode(['status' => 'success']);
+    }
+
+}
+
+/* * ********************** Suggest answer for a specific card *********************** */
+
+if ($action === 'suggestanswer') {
+
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
+
+    $cardid = required_param('cardid', PARAM_INT);
+    $case = optional_param('case', 5, PARAM_INT);
+
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $practice = new cardbox_practice($case, $context, $cardid);
+    $newdata = $practice->export_for_template($renderer);
+
+    echo json_encode(['status' => 'success', 'newdata' => $newdata]);
+
+}
+
+/* ****************************************** Suggest answer for a card **************************************************** */
+
+
+if ($action === 'savesuggestedanswer') {
+
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
+
+    $cardid = required_param('cardid', PARAM_INT);
+//    $iscorrect = required_param('iscorrect', PARAM_INT);
+    $case = optional_param('case', 1, PARAM_INT);
+    $userinput = required_param('userinput', PARAM_TEXT);
+
+    if (!(empty($userinput) || $userinput === "")) {
+        cardbox_save_new_cardcontent($cardid, 1, 2, 3, $userinput);
     }
 
 }
