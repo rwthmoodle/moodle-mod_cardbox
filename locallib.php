@@ -23,6 +23,18 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+define('CARDBOX_EVALUATE_ALL', 0);
+define('CARDBOX_EVALUATE_ONE', 1);
+define('CARD_MAIN_INFORMATION', 0);
+define('CARD_CONTEXT_INFORMATION', 1);
+define('CARD_IMAGEDESCRIPTION_INFORMATION', 2);
+define('CARD_ANSERSUGGESTION_INFORMATION', 3);
+define('CARDBOX_CARDSIDE_QUESTION', 0);
+define('CARDBOX_CARDSIDE_ANSWER', 1);
+define('CARDBOX_CONTENTTYPE_IMAGE', 0);
+define('CARDBOX_CONTENTTYPE_TEXT', 1);
+define('CARDBOX_CONTENTTYPE_AUDIO', 2);
+
 /**
  * Function creates a new record in cardbox_topics table.
  * 
@@ -115,7 +127,7 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 
     $cardcontent = new stdClass();
     $cardcontent->card = $cardid;
     $cardcontent->cardside = $cardside; // 0 for question page
-    $cardcontent->contenttype = $contenttype; // 1 for image;
+    $cardcontent->contenttype = $contenttype; // 0 for image;
     $cardcontent->area = $area; //0->main, 1->context
     $cardcontent->content = $name; // $file->get_filename();
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
@@ -315,13 +327,15 @@ function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with car
 function cardbox_get_questiontext($cardid) {
 
     global $DB;
-    $questiontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'contenttype' => 2, 'area' => 0), IGNORE_MISSING);
+    $questiontext = $DB->get_field('cardbox_cardcontents', 'content',
+        ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION, 'contenttype' => CARDBOX_CONTENTTYPE_TEXT,
+        'area' => CARD_MAIN_INFORMATION], IGNORE_MISSING);
     if (empty($questiontext)) {
         $questiontext = '';
     }
     return $questiontext;
-
 }
+
 /**
  * Function returns 1...n answer items belonging to the specified card.
  *
@@ -330,10 +344,26 @@ function cardbox_get_questiontext($cardid) {
  * @return string or array
  */
 function cardbox_get_answers($cardid) {
-    
     global $DB;
-    return $DB->get_fieldset_select('cardbox_cardcontents', 'content', 'card = ? AND cardside = ? AND contenttype = ? AND area = ?', array($cardid, 1, 2, 0));
+    return $DB->get_fieldset_select('cardbox_cardcontents', 'content',
+        'card = :cardid AND cardside = :cardside AND contenttype = :contenttype AND area = :area',
+        ['cardid' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER, 'contenttype' => CARDBOX_CONTENTTYPE_TEXT,
+        'area' => CARD_MAIN_INFORMATION]);
+}
 
+/**
+ * Function returns 1...n answer items belonging to the specified card.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_get_notapproved_answers($cardid) {
+    global $DB;
+    return $DB->get_fieldset_select('cardbox_cardcontents', 'content',
+        'card = :cardid AND cardside = :cardside AND contenttype = :contenttype AND area = :area',
+        ['cardid' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER, 'contenttype' => CARDBOX_CONTENTTYPE_TEXT,
+        'area' => CARD_ANSERSUGGESTION_INFORMATION]);
 }
 
 /**
@@ -346,7 +376,8 @@ function cardbox_get_answers($cardid) {
 function cardbox_get_questioncontext($cardid) {
  
     global $DB;
-    $context = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'area' => 1), IGNORE_MISSING);
+    $context = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION,
+     'area' => CARD_CONTEXT_INFORMATION], IGNORE_MISSING);
     if (empty($context)) {
         $context = '';
     }
@@ -364,7 +395,8 @@ function cardbox_get_questioncontext($cardid) {
 function cardbox_get_answercontext($cardid) {
 
     global $DB;
-    $context = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 1, 'area' => 1), IGNORE_MISSING);
+    $context = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER,
+     'area' => CARD_CONTEXT_INFORMATION], IGNORE_MISSING);
     if (empty($context)) {
         $context = '';
     }
@@ -392,6 +424,25 @@ function cardbox_get_status($cardid) {
     return $status;
 
 }
+
+/**
+ * Function returns true if the specified card card is approved.
+ *
+ * @global obj $DB
+ * @param type $cardid
+ * @return string or array
+ */
+function cardbox_card_approved($cardid) {
+
+    global $DB;
+    $status = $DB->get_field('cardbox_cards', 'approved', array('id' => $cardid), IGNORE_MISSING);
+    if ($status === "0") {
+        return false;
+    } else {
+        return true;
+    }
+}
+
  
 /**
  * Function returns 0...1 image item ids belonging to the specified card.
@@ -403,7 +454,7 @@ function cardbox_get_status($cardid) {
 function cardbox_get_image_itemid($cardid) {
 
     global $DB;
-    $imageitemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => 1), IGNORE_MISSING);
+    $imageitemid = $DB->get_field('cardbox_cardcontents', 'id', ['card' => $cardid, 'contenttype' => CARDBOX_CONTENTTYPE_IMAGE], IGNORE_MISSING);
     return $imageitemid;
 
 }
@@ -417,7 +468,8 @@ function cardbox_get_image_itemid($cardid) {
 function cardbox_get_imagedescription($cardid) {
 
     global $DB;
-    $imagedescription = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'cardside' => 0, 'area' => 2), IGNORE_MISSING);
+    $imagedescription = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION,
+     'area' => CARD_IMAGEDESCRIPTION_INFORMATION], IGNORE_MISSING);
     if (empty($imagedescription)) {
         $imagedescription = '';
     }
@@ -561,4 +613,94 @@ function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
     }
     
     
+}
+
+function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $cardboxid) {
+    global $DB, $USER;
+    $topiccache = [];
+    while ($line = $cir->next()) {
+        $card = new stdClass;
+        $card->topic = null;
+        if ($topicidx = array_search('topic', $columns)) {
+            $topic = trim($line[$topicidx]);
+            if (array_key_exists($topic, $topiccache)) {
+                $card->topic = $topiccache[$topic];
+            } else {
+                if ($topic != null || $topic == "" || $topic != "null" ) {
+                    if (!$DB->record_exists('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid])) {
+                        $card->topic = $DB->insert_record('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid], true);
+                    } else {
+                        $card->topic = $DB->get_field("cardbox_topics", "id", array("topicname" => $topic, 'cardboxid' => $cardboxid));
+                    }
+                }
+                $topiccache[$topic] = $card->topic;
+            }
+        }
+        $card->cardbox = $cardboxid;
+        $card->author = $USER->id;
+        $card->timecreated = time();
+        $card->approved = '1';
+        $card->approvedby = $USER->id;
+        $card->necessaryanswers = '0';
+        $cardid = $DB->insert_record('cardbox_cards', $card, true); // New row in cardbox_cards table created.
+        $cardcontent = new stdClass;
+        foreach ($line as $key => $value) {
+            $value = trim($value);
+            // Common to all content
+            $cardcontent->card = $cardid;
+            $cardcontent->contenttype = CARDBOX_CONTENTTYPE_TEXT;
+            $cardcontent->content = '<p>'.$value.'</p>';
+                // Based on which info it is, create DB records
+                // ques : This is the main question
+                // ans : This is the main answer. Multiple answer not supported yet
+                // qcontext: This is the context info for question
+                // acontext: This is the context info for answer
+            $columnname = $columns[$key];
+            if ($columnname == 'ques') {
+                $cardcontent->cardside = CARDBOX_CARDSIDE_QUESTION;
+                $cardcontent->area = CARD_MAIN_INFORMATION;
+            } else if (preg_match('/^ans[0-9]*$/', $columnname)) {
+                $cardcontent->cardside = CARDBOX_CARDSIDE_ANSWER;
+                $cardcontent->area = CARD_MAIN_INFORMATION;
+            } else if ($columnname == 'qcontext') {
+                $cardcontent->cardside = CARDBOX_CARDSIDE_QUESTION;
+                $cardcontent->area = CARD_CONTEXT_INFORMATION;
+            } else if ($columnname == 'acontext') {
+                $cardcontent->cardside = CARDBOX_CARDSIDE_ANSWER;
+                $cardcontent->area = CARD_CONTEXT_INFORMATION;
+            } else {
+                continue;
+            }
+            $cardcontent->id = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
+        }
+    }
+}
+
+function validate_columns(array $filecolumns) {
+    $errors = [];
+    $warnings = [];
+    if (!in_array('ques', $filecolumns)) {
+        $errors[] = 'ERR: Question field missing';
+    }
+    if (!in_array('ans', $filecolumns) && empty(preg_grep('/^ans[0-9]*$/', $filecolumns))) {
+        $errors[] = 'ERR: Answer field(s) missing';
+    }
+    $comparearray = ['ques'];
+    foreach ($filecolumns as $key => $column) {
+        if (starts_with($column, 'ans')) { // Replace with str_starts_with in PHP 8.0.
+            array_push($comparearray, $column);
+        }
+    }
+    $extracolumns = array_diff($filecolumns, $comparearray);
+    $allowed = ['acontext', 'qcontext', 'topic'];
+    foreach ($extracolumns as $column) {
+        if (!in_array($column, $allowed)) {
+            $warnings[] = 'WARN: '.$column.' is not recognised';
+        }
+    }
+    return [$errors, $warnings];
+}
+
+function starts_with($fullvalue, $searchvalue) {
+    return substr_compare($fullvalue, $searchvalue, 0, strlen($searchvalue)) === 0;
 }

@@ -31,6 +31,7 @@ class cardbox_start implements \renderable, \templatable {
 
     private $topics;
     private $autocorrectionoption = false;
+    private $amountcards;
     
     public function __construct($autocorrection, $cardboxid) {
         
@@ -39,6 +40,8 @@ class cardbox_start implements \renderable, \templatable {
         if ($autocorrection == 1) {
             $this->autocorrectionoption = true;
         }
+
+        $this->cardbox_define_amount_of_cards_to_study();
         
     }
     
@@ -69,26 +72,36 @@ class cardbox_start implements \renderable, \templatable {
         }
 
     }
+
+    public function cardbox_define_amount_of_cards_to_study() {
+        $this->amountcards = array();
+        $this->amountcards[] = array('value' => 0, 'label' => get_string('undefined', 'cardbox'));
+        $this->amountcards[] = array('value' => 10, 'label' => 10);
+        $this->amountcards[] = array('value' => 20, 'label' => 20);
+        $this->amountcards[] = array('value' => 30, 'label' => 30);
+        $this->amountcards[] = array('value' => 40, 'label' => 40);
+        $this->amountcards[] = array('value' => 50, 'label' => 50);
+
+    }
+
     /**
      * Function returns an array with data. The keys of the array have matching variables
      * in the template. These are replaced with the array values by the renderer.
-     * 
+     *
      * @global type $OUTPUT
      * @param \renderer_base $output
      * @return type
      */
     public function export_for_template(\renderer_base $output) {
-        
+
         global $OUTPUT;
-        
+
         $data['autoenabled'] = $this->autocorrectionoption;
         $data['autodisabled'] = !$this->autocorrectionoption;
         $data['topics'] = $this->topics;
         $data['choicestopics'] = $this->choicestopics;
-        $data['helpbuttoncorrectionmode'] = $OUTPUT->help_icon('choosecorrectionmode', 'cardbox');
-        $data['helpbuttontopic'] = $OUTPUT->help_icon('weightopic', 'cardbox');
         $data['helpbuttonpracticeall'] = $OUTPUT->help_icon('practiceall', 'cardbox');
-        $data['helpbuttononlyonetopic'] = $OUTPUT->help_icon('onlyonetopic', 'cardbox');
+        $data['amountcards'] = $this->amountcards;
 
         return $data;
 

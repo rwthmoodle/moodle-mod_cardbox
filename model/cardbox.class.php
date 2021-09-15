@@ -76,7 +76,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      *
      * @return array of ints
      */
-    public function cardbox_get_card_selection() {
+    public function cardbox_get_card_selection($amountcards = 0) {
         
         $selection = array();
         
@@ -97,9 +97,20 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
         
         // Return the ids of the cards.
-        foreach ($cards as $card) {
-            $selection[] = $card->card;
+        if ($amountcards === 0) {
+            foreach ($cards as $card) {
+                $selection[] = $card->card;
+            }
+        } else {
+            foreach ($cards as $card) {
+                $selection[] = $card->card;
+                $amountcards--;
+                if ($amountcards === 0) {
+                    break;
+                }
+            }
         }
+        
         return $selection;
     }
 

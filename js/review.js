@@ -32,7 +32,7 @@
  * @param int __cardid
  * @returns {undefined}
  */
-function startReview(Y, __cmid, __cardlist) {
+function startReview(Y, __cmid) {
 
     require(['jquery', 'core/templates', 'core/notification'], function ($, templates, notification) {
         
@@ -40,12 +40,18 @@ function startReview(Y, __cmid, __cardlist) {
 
         function registerEventListeners() {
             
-            __cardlist.forEach(function (item, index) {
-                document.getElementById('cardbox-edit-'+item).addEventListener('click', function(e) {
-                    edit(item);
+            const editbtns = document.querySelectorAll('#cardbox-review .cardbox-review-button');
+            editbtns.forEach(btn => {
+                const card = btn.closest('#cardbox-card-in-review');
+                const cardid = card.getAttribute('data-cardid');
+                btn.addEventListener('click', e => {
+                    edit(cardid);
                 });
-                document.getElementById('id_chck'+item).addEventListener('click', function(e) {
-                    var checked = document.querySelectorAll('input:checked');
+            });
+            const checkboxes = document.querySelectorAll('#cardbox-review input[type="checkbox"]');
+            checkboxes.forEach(c => {
+                c.addEventListener('click', e => {
+                    var checked = document.querySelectorAll('#cardbox-review input:checked');
                     if (checked.length === 0) {
                         // there are no checked checkboxes
                         document.getElementById('review-div').style.display = 'none';

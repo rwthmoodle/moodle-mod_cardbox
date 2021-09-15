@@ -34,14 +34,14 @@
  */
 function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper function that is called by controller.php.
 
-    require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
+    require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
         /*********** 1. Variables and Calls ***********/
 
         removeNotifications();
 
         var evaluate = new Evaluate();
-        var output = new Output(__case, templates);
+        var output = new Output(__case, templates, notification);
         var statistics = new Statistics(chart);
 
         var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case);
@@ -96,6 +96,16 @@ class EventHandling {
 
         }.bind(this));
 
+        document.getElementById('cardbox-end-session').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('end-practice');
+
+        }.bind(this));
+
     }
     /**
      * 
@@ -120,6 +130,16 @@ class EventHandling {
 
             // Notify controller of this click event.
             this.controller.reactTo('do-not-know');
+
+        }.bind(this));
+
+        document.getElementById('cardbox-end-session').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('end-practice');
 
         }.bind(this));
 
@@ -148,7 +168,41 @@ class EventHandling {
             e.preventDefault();
 
             // Notify controller of this click event.
+/*             this.controller.reactTo('mark-as-incorrect'); */
+            document.getElementById('cardbox-proceed').hidden = false;
+            document.getElementById('cardbox-suggestanswer').hidden = false; 
+            document.getElementById('cardbox-mark-as-incorrect').disabled = true;
+            document.getElementById('cardbox-mark-as-correct').disabled = true;
+
+        }.bind(this));
+
+        document.getElementById('cardbox-suggestanswer').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('suggest-answer');
+
+        }.bind(this));
+
+        document.getElementById('cardbox-proceed').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
             this.controller.reactTo('mark-as-incorrect');
+
+        }.bind(this));
+
+        document.getElementById('cardbox-suggestanswer').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('suggest-answer');
 
         }.bind(this));
 
@@ -182,6 +236,41 @@ class EventHandling {
 
         }.bind(this));
 
+        document.getElementById('cardbox-suggestanswer').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('suggest-answer');
+
+        }.bind(this));
+
+
+    }
+
+    registerEventsForSuggestAnswerAutoCheck() {
+
+        document.getElementById('cardbox-cancel-button').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('proceed');
+
+        }.bind(this));
+
+        document.getElementById('cardbox-savesuggestedanswer').addEventListener('click', function(e) {
+
+            // Prevent page reload.
+            e.preventDefault();
+
+            // Notify controller of this click event.
+            this.controller.reactTo('savesuggestedanswer');
+
+        }.bind(this)); 
+
     }
 
 } // EventHandling
@@ -197,6 +286,7 @@ class Coordinate {
             this.case = mode;
             
             this.cardcount = selection.length;
+            this.cardsleft = selection.length;
             
             // Information about the current flashcard.
             this.position = 0;
@@ -247,7 +337,7 @@ class Coordinate {
                     // 1. Inform evaluation that no answer was given.
                     this.evaluate.registerUnknownAnswer(this.data);
                     // 2. Render the solution and give feedback.
-                    this.output.renderAnswer(this.evaluate, this.eventhandling); 
+                    this.output.renderAnswer(this.evaluate, this.eventhandling);
                     break;
                 
                 // II. answer-view events for updating the card data and getting a new card.
@@ -274,13 +364,37 @@ class Coordinate {
                 case 'override':
 
                     this.evaluate.overrideJudgement();
-                    if (this.evaluate.isCardCorrect()) {
-                        this.proceed(1);
-                    } else {
-                        this.proceed(0);
-                    }
+                    document.getElementById('cardbox-override').disabled = true;
+                    var feedbackbox = document.getElementById("cardbox-feedback");
+                    feedbackbox.classList.remove('cardbox-error');                
+                    feedbackbox.classList.add('cardbox-success');
+                    feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
+                    document.getElementById('cardbox-user-solution').classList.replace('cardbox-input-color-incorrect', 'cardbox-input-color-correct');
                     break;
                 
+                case 'suggest-answer':
+
+                    this.suggestAnswer(this.data);
+                    break;
+
+                case 'savesuggestedanswer':
+
+                    if (this.case === 1) {
+                        var iscorrect = false;     
+                    } else {
+                        if (this.evaluate.isCardCorrect()) {
+                            var iscorrect = true;
+                        } else {
+                            var iscorrect = false;
+                        }   
+                    }
+                    this.savesuggestedAnswer(this.data, iscorrect);
+                    break;
+
+                case 'end-practice':
+
+                    this.statistics.finishPractice(this.cmid);
+
             }
  
         }
@@ -295,12 +409,15 @@ class Coordinate {
 
             // 1. Determine which (if any) card is next to come.
             this.determineNextCard(iscorrect);
+            if (iscorrect === 1) {
+                this.cardsleft = this.cardsleft - 1;
+            }
 
             // 2. Update the status of the current card and request the next card (if there is one).
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey}
+                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, cardsleft: this.cardsleft}
             }).then(function(data) {
                 var result = JSON.parse(data);
                 
@@ -308,9 +425,38 @@ class Coordinate {
                 this.registerProgress(iscorrect);
 
                 // 4. Show the next card or finish the practice session with a doughnut progress chart.
+                
                 this.registerAndRenderNextCard(result.newdata);
 
             }.bind(this));
+        }
+
+        suggestAnswer(data) {
+
+
+            data['case1'] = false;
+            data['case2'] = false;
+            data['case3'] = false;
+            data['case4'] = false;
+            data['case5'] = true;
+
+            this.output.renderSuggestAnswerTemplate(this.eventhandling, data);
+
+        }
+
+        savesuggestedAnswer(data, iscorrect) {
+
+            var userinput = document.getElementById('cardbox-suggestanswer-input').value;  
+
+            $.ajax({
+                type: 'POST',
+                url: 'action.php',
+                data: {id: this.cmid, action: 'savesuggestedanswer', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, userinput: userinput}
+            }).then(function(iscorrect) {
+
+                this.proceed(iscorrect);
+
+            }.bind(this, iscorrect));
         }
 
         getRandomInt(max) {
@@ -360,6 +506,8 @@ class Coordinate {
                 } else {
                     this.cardId = this.next;
                 }
+/*                 newdata['selectionsize'] = this.cardcount; */
+                newdata['cardsleft'] = this.cardsleft;
                 //this.output.renderNewQuestion(this.eventhandling).bind(this);
                 this.output.renderNewQuestion(this.eventhandling, newdata);
             }
@@ -438,6 +586,11 @@ class Evaluate {
         this.answeriscorrect = 0;
         this.answeriscomplete = 0;
         this.data = data;
+        var answer = {
+            userinput: ' ',
+            colorclass: 'cardbox-input-color-incorrect'
+        };        
+        this.data['userinputitems'] = answer;
     }
 
     checkAnswer(data) {
@@ -474,6 +627,7 @@ class Evaluate {
 
             })(i);
         }
+/*         data["morethanonesolution"] = (solutions.length>1); */
 
         if (this.casesensitive === "1") {
             for (var i=0; i<solutions.length; i++) {
@@ -491,7 +645,16 @@ class Evaluate {
         // 3. Collect matches and non-matches and transform them into a displayable form.
         //    Also determine whether there are incorrect answers.
         userinput.forEach(collect.bind(this));
-        this.data['userinputitems'] = answers; // auslagern in Output
+        if (answers.length === 0) {
+            var answer = {
+                userinput: ' ',
+                colorclass: 'cardbox-input-color-incorrect'
+            };        
+            answers.push(answer);
+            this.data['userinputitems'] = answers;
+        } else {
+            this.data['userinputitems'] = answers; // auslagern in Output   
+        }
         this.useranswers = answers; // testweise
 
         // 4. Check whether there are as many answers as solutions.
@@ -569,9 +732,17 @@ class Evaluate {
                 };
                 if (this.necessaryanswers === "1") {
                     this.necessaryanswers = -1;
+/*                     document.getElementById('cardbox-proceed').disabled = false; */
                 }
 
-            } else {
+            } /* else if (userinput === "" || userinput === null)  {
+                // Note that the user made at least one mistake.
+                this.answeriscorrect = 0;
+                var answer = {
+                    userinput: "-",
+                    colorclass: 'cardbox-input-color-incorrect'
+                }
+            } */ else {
                 // Note that the user made at least one mistake.
                 this.answeriscorrect = 0;
                 var answer = {
@@ -615,7 +786,7 @@ class Evaluate {
     }
     
     overrideJudgement() {
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) || this.necessaryanswers === -1) {
+        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1)) {
             this.answeriscorrect = 0;
         } else {
             this.answeriscorrect = 1;
@@ -627,9 +798,10 @@ class Evaluate {
 
 class Output {
     
-    constructor(casex, templates) {
+    constructor(casex, templates, notification) {
         this.case = casex;
         this.templates = templates;
+        this.notification = notification;
     }
     /**
      * Function rerenders the template with the question data of a new flashcard.
@@ -654,6 +826,23 @@ class Output {
         })(this.templates, data, this.case);
 
     }
+
+    renderSuggestAnswerTemplate(eventhandling, data) {
+
+        (function (templates, data) {
+                    templates.render('mod_cardbox/practice', data)
+                            .then(function (html, js) {
+                                templates.replaceNodeContents('#cardbox-practice', html, js);
+                            }).then(function () {
+
+                            eventhandling.registerEventsForSuggestAnswerAutoCheck();
+
+                            });// Add a catch.
+        })(this.templates, data);
+
+    }
+    
+
     /**
      * 
      * @param bool considercardcorrect
@@ -672,6 +861,18 @@ class Output {
             newdata['case4'] = true;
             
             if (considercardcorrect) {
+                if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
+                    newdata['cardcorrect'] = false;    
+                } else {
+                    newdata['cardcorrect'] = true;
+                }
+                newdata['showbuttonsuggestanswer'] = false;
+            } else {
+                newdata['showbuttonsuggestanswer'] = true;
+                newdata['cardcorrect'] = false;    
+            }
+            
+            if (considercardcorrect) {
                 newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
             } else {
                 newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
@@ -686,22 +887,24 @@ class Output {
             
         }
         
-        (function (templates, data, mode) {
+        (function (templates, notification, data, mode) {
                     templates.render('mod_cardbox/practice', data)
                             .then(function (html, js) {
                                 templates.replaceNodeContents('#cardbox-practice', html, js);
-                            }).then(function () {
-                                    if (mode % 2 == 0) {
-                                        giveFeedback(evaluation);
-                                        // Register event listeners for the newly rendered partial.
-                                        eventhandling.registerEventsForAnswerAutoCheck();
-                                    } else {
-                                        // Register event listeners for the newly rendered partial.
-                                        eventhandling.registerEventsForAnswerSelfCheck();
-                                    }
-                                    
-                            }); // Add a catch.
-        })(this.templates, newdata, this.case);
+                            })
+                            .then(function () {
+                                if (mode % 2 == 0) {
+                                    giveFeedback(evaluation);
+                                    // Register event listeners for the newly rendered partial.
+                                    eventhandling.registerEventsForAnswerAutoCheck();
+                                } else {
+                                    // Register event listeners for the newly rendered partial.
+                                    eventhandling.registerEventsForAnswerSelfCheck();
+                                }
+                                
+                            })
+                            .fail(notification.exception);
+        })(this.templates, this.notification, newdata, this.case);
 
         /**
          * Function places a green, yellow or red feedback notification around the proceed buttons.
@@ -711,30 +914,31 @@ class Output {
          */
         function giveFeedback(evaluation) {
 
-            var wrapper = document.getElementById("cardbox-feedback-wrapper");
+/*             var wrapper = document.getElementById("cardbox-feedback-wrapper"); */
             var feedbackbox = document.getElementById("cardbox-feedback");
 
             if (evaluation === 'correctandcomplete') {
                 
-                wrapper.classList.add('cardbox-success');
+                feedbackbox.classList.add('cardbox-success');
                 feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
 
 
             } else if (evaluation === 'incomplete') {
 
-                wrapper.classList.add('cardbox-warning');
+                feedbackbox.classList.add('cardbox-warning');
                 feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
 
 
             } else if (evaluation === 'notknown') {
 
-                wrapper.classList.add('cardbox-error');
+                feedbackbox.classList.add('cardbox-error');
                 feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
+                document.getElementById('cardbox-override').disabled = true; 
 
 
             } else {
 
-                wrapper.classList.add('cardbox-error');
+                feedbackbox.classList.add('cardbox-error');
                 feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
             }
 

@@ -53,17 +53,22 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox #cardbox-userinput, .path-mod-cardbox .cardbox-userinput {
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 15px;
 }
 
 .path-mod-cardbox .cardbox-input-color-correct {
-    color: #00b33c;
+    border-color: #2ab300!important;
+    border: solid;
+    margin-bottom: 5px;
 }
 
 .path-mod-cardbox .cardbox-input-color-incorrect {
-    color: #e60000;
+    border-color: #ac0303!important;
+    border: solid;
+    margin-bottom: 5px;
 }
+
 
 /*.path-mod-cardbox .form-control {
     width: 50% !important;
@@ -83,9 +88,30 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     border: none;
 }
 
+.path-mod-cardbox .cardbox-practice .btn {
+    float: right;
+    width: 20%;
+}
+
+
 .path-mod-cardbox #cardbox-practice-feedback {
 /*    height: 100px !important;
     width: 100px !important;*/
+}
+
+.path-mod-cardbox #cardbox-practice {
+    margin-top: 30px;
+}
+
+.path-mod-cardbox .cardbox-contextfield-practice {
+    max-width: none;
+    padding: 0%;
+    min-height: 2em;
+}
+
+.path-mod-cardbox #cardbox-answer-text .cardbox-card-text {
+/*     font-size: .9375rem!important; */
+    font-weight: bold;
 }
 
 .path-mod-cardbox #review-button-wrapper {
@@ -94,21 +120,24 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     padding-right: 0px;;
 }
 
-.path-mod-cardbox .reviewcontent {
+.path-mod-cardbox .reviewcontent,
+.path-mod-cardbox .overviewcontent {
     margin-top: 50px;
     margin-bottom: 30px;
     display: flex;
     justify-content: center
 }
 
-.topic-review {
+.topic-review, .topic-overview {
     margin-bottom: 10px;
     width: 100%;
     margin-left: 11%;
     margin-right: 24%;
 }
 
-.path-mod-cardbox .cardbox-review-button {
+.path-mod-cardbox .cardbox-review-button,
+.path-mod-cardbox .cardbox-overview-button-edit, 
+.path-mod-cardbox .cardbox-overview-button-delete {
     border-radius: 0px;
     /*margin-left: 1em;
     margin-left: 1em;*/
@@ -157,9 +186,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     width: 100%;
     height: 100%;
     display: grid;
-    grid-template-columns: 65% 35%;
+    grid-template-columns: 45% 55%;
     /*grid-template-rows: 33% 33% 34%;/*61.8% 38.2%;*/
-    grid-template-areas: "A B" "C D" "E F" "G H";
+    grid-template-areas: "A B" "C D" "E F" "G H" "I J";
     align-items: center;
     justify-items: start; /*no visible effect*/
 }
@@ -180,9 +209,12 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 .path-mod-cardbox .item.a {
     grid-area: A;
+    margin-top: 15px;
 }
 .path-mod-cardbox .item.b {
     grid-area: B;
+    margin-left: 20px;
+    margin-top: 15px;
 }
 .path-mod-cardbox .item.c {
     grid-area: C;
@@ -201,11 +233,22 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox .item.g {
     grid-area: G;
-    margin-bottom: 0em;
+/*     margin-bottom: 0em; */
 }
 
 .path-mod-cardbox .item.h {
     grid-area: H;
+/*     margin-bottom: 0em; */
+    margin-left: 20px;
+}
+
+.path-mod-cardbox .item.i {
+    grid-area: I;
+    margin-bottom: 0em;
+}
+
+.path-mod-cardbox .item.j {
+    grid-area: J;
     margin-bottom: 0em;
 }
 
@@ -224,14 +267,20 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 #review-div{
     display: none;
 }
+
 .sticky-review-arr{
-    position: fixed;
+    /*position: fixed;
     bottom: 0;
     left: 50%;
     right: 50%;
     width: -webkit-fill-available;
     margin-left: 10%;
-    margin-bottom: 10%;
+    margin-bottom: 10%;*/
+    position: fixed;
+    bottom: 50%;
+    left: 80%;
+    right: 50%;
+    width: 400px;
 }
 
 .cardbox-card-context{
@@ -268,18 +317,31 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     border-radius: 3px;
 /*     margin-bottom: 2em; */
     padding: 1em;
-    height: 94%;
+    height: 100%;
 }
 .cardbox-card-right-side-multi {
     border-radius: 3px;
 /*     margin-bottom: 2em; */
     margin-right: 1em;
     margin-left: 0.2em;
-    height: 94%;
+    height: 100%;
+    display:grid;
 }
 .cardbox-cardside-multi {
     border: 1px solid #e6e6e6;
     padding: 1em;
+    margin-bottom: 1%;
+}
+.cardbox-cardside-multi:last-child {
+    margin-bottom: 0;
+}
+/*.cardbox-sugg-answer{
+    height:100%;
+    display:grid;
+}*/
+.cardbox-cardside-multi.suggestion {
+    border-color: mediumvioletred;
+    border-style: solid;
 }
 .checkbox-card{
     margin-left: 2%;
@@ -324,9 +386,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
         padding-right: 0 !important;
     }
 
-    .path-mod-cardbox #cardbox-override, .path-mod-cardbox #cardbox-proceed {
+    /* .path-mod-cardbox #cardbox-override, .path-mod-cardbox #cardbox-proceed {
         float: right !important;
-    }
+    } */
 
 }
 
@@ -357,8 +419,11 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox #cardbox-feedback {
-    font-size: 16px;
-    padding-top: 0.2em;
+/*     font-size: 16px; */
+/*     padding-top: 0.2em; */
+    margin-top: 4%;
+/*     margin-bottom: 1%; */
+/*     font-size: 1.4rem!important; */
 }
 
 .path-mod-cardbox .cardbox-feedback {
@@ -373,22 +438,26 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     /*padding-left: 2em;*/
 }
 
-.path-mod-cardbox #cardbox-proceed {
+.path-mod-cardbox #cardbox-suggestanswer, .path-mod-cardbox #cardbox-cancel-button,
+.path-mod-cardbox #cardbox-mark-as-incorrect {
     margin-right: 0.5em;
 }
 
 .path-mod-cardbox .cardbox-success {
-    background-color: #8dc060;
-    border-color: #8dc060;
+/*     background-color: #8dc060;
+    border-color: #8dc060; */
+    color: #2ab300!important;
 }
 
 .path-mod-cardbox .cardbox-warning {
-    background-color: #fff059;
+/*     background-color: #fff059;
     border-color: #fff059;
+ */    color: #b1a415;
 }
 
 .path-mod-cardbox .cardbox-error {
-    background-color: #cc071e;
+/*     background-color: #cc071e;
     border-color: #cc071e;
-    color: white;
+    color: white; */
+    color: #ac0303!important;
 }

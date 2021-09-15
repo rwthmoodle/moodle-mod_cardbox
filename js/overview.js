@@ -42,6 +42,15 @@ function startOverview(Y, __cmid, __topic) { // Wrapper function that is called 
 
         }
 
+        const editbtns = document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit');
+        editbtns.forEach(btn => {
+            const card = btn.closest('#cardbox-card-in-overview');
+            const cardid = card.getAttribute('data-cardid');
+            btn.addEventListener('click', e => {
+                edit(cardid);
+            });
+        });
+
         $('.cardbox-delete-button').each(function (i, button) {
             let id = button.id.split('-');
             let cardid = id[2];
@@ -49,23 +58,24 @@ function startOverview(Y, __cmid, __topic) { // Wrapper function that is called 
                 deleteCard(cardid);
             });
         });
-        
-        function deleteCard(cardid) {
-            notification.confirm(M.util.get_string('deletecard','cardbox'),M.util.get_string('deletecardinfo','cardbox'),M.util.get_string('yes', 'cardbox'), M.util.get_string('cancel', 'cardbox'),function () {
-                /* return */ $.ajax({
-                    type: "POST",
-                    url: "controller.php",
-                    data: { "action": 'deletecard', sesskey: M.cfg.sesskey}
-                }).then(function(){
-                   
-                    var goTo = window.location.pathname + '?id=' + __cmid + '&action=deletecard&cardid=' + cardid;
-                    window.location.href = goTo;
-                }); 
-            });
 
+        function edit(card) {
+            openCardFormForEditing(card);
+        }
+        
+        function openCardFormForEditing(cardinoverview) {
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinoverview;
+            window.location.href = goTo;
         }
          
+
+        function deleteCard(cardid) {
+            notification.confirm(M.util.get_string('deletecard','cardbox'),M.util.get_string('deletecardinfo','cardbox'),M.util.get_string('yes', 'cardbox'), M.util.get_string('cancel', 'cardbox'),function () {
+                window.location.href = window.location.pathname + '?id=' + __cmid + '&action=deletecard&cardid=' + cardid + '&sesskey=' + M.cfg.sesskey;
+            }); 
+
+        }
     });
 
-
+    
 }

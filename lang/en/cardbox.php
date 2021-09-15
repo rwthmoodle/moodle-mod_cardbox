@@ -38,6 +38,9 @@ $string['necessaryanswers_activity_locked'] = 'Allow to change the number of nec
 $string['necessaryanswers_activity_locked_help'] = 'If "Yes" is selected, then it is possible to change the number of required responses when creating or editing a card.';
 $string['casesensitive'] = 'Case sensitivity';
 $string['casesensitive_help'] = 'Specifies whether, when practising with automatic control, entries that only differ from the correct answer in terms of upper/lower case are also counted as correct.';
+$string['numberofcardssetting'] = 'Number of cards to practice';
+$string['numberofcardssetting_help'] = 'Specifies how many cards students should learn per practice session. If "Students decide" is selected, they have free choice.';
+$string['studentschoose'] = 'Students choose';
 $string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
 $string['changenotification:subject'] = 'Change notification';
 $string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';
@@ -56,6 +59,7 @@ $string['practice'] = 'Practice';
 $string['statistics'] = 'Progress';
 $string['overview'] = 'Overview';
 $string['review'] = 'Review';
+$string['massimport'] = 'Import cards';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'New card';
@@ -66,7 +70,7 @@ $string['intro:overview'] = 'This overview displays all cards that have been app
 
 // Form elements for creating a new card
 $string['choosetopic'] = 'Topic';
-$string['reviewtopic'] = 'Topic: ';
+$string['reviewtopic'] = 'TOPIC: ';
 $string['notopic'] = 'not assigned';
 $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
@@ -100,6 +104,15 @@ $string['success:reject'] = 'The card was deleted.';
 $string['error:updateafterreview'] = 'Update failed.';
 $string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
 
+// Import cards
+$string['examplesinglecsv'] = 'Example text file for cards having single answers';
+$string['examplesinglecsv_help'] = 'Example text file for cards having single answers';
+$string['examplemulticsv'] = 'Example text file for cards having multiple answers';
+$string['examplemulticsv_help'] = 'Example text file for cards having multiple answers';
+$string['cancelimport'] = 'Import was cancelled';
+$string['importpreview'] = 'Import cards preview';
+$string['importsuccess'] = '{$a} cards imported successfully';
+
 // Info notifications
 $string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
@@ -116,27 +129,29 @@ $string['help:nocardsdueforpractice'] = 'No cards due';
 $string['help:nocardsdueforpractice_help'] = 'New cards are due immediately. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
 $string['help:whenarecardsdue'] = 'When are cards due';
 $string['help:whenarecardsdue_help'] = 'New cards are immediately due for practice. For any other card the deck decides:<ol><li>deck: daily</li><li>deck: after 3 days</li><li>deck: after 7 days</li><li>deck: after 16 days</li><li>deck: after 34 days</li></ol>';
-$string['help:practiceanyway'] = 'If you would like to practice, nevertheless, please click on <em>Options</em> and select <em>Practice cards before they are due</em>.';
+$string['help:practiceanyway'] = 'If you practice anyway, correctly answered cards do not move on, but remain in their current tray.';
 
 // Title and form elements for choosing the settings for a new practice session
 $string['titleforchoosesettings'] = 'Practice options';
 $string['choosecorrectionmode'] = 'Practice mode';
-$string['choosecorrectionmode_help'] = 'You can type in your answer and have it checked. If you prefer oral answers or handwriting, please select "Check yourself".';
 $string['selfcorrection'] = 'Check yourself';
 $string['autocorrection'] = 'Automatic check';
-$string['weightopic'] = 'Priority topic';
-$string['weightopic_help'] = 'Cards belonging to the priority topic will be favoured in the selection of cards for practice.';
+$string['weightopic'] = 'Focus';
 $string['notopicpreferred'] = 'no preference';
-$string['practiceall'] = 'Practice cards before they are due';
+$string['practiceall'] = 'Practice all cards';
 $string['practiceall_help'] = 'These cards do not proceed to the next deck if answered correctly. Thus, you can practice as often as you wish without risking that cards leave the cardbox forever after only a few days.';
 $string['onlyonetopic'] = 'Topic';
-$string['onlyonetopic_help'] = 'If you select a topic you will practice only cards from that topic. You will not be asked about cards from other topics.';
+$string['maxnumbercardspractice'] = 'Max. number of cards';
+$string['undefined'] = 'No limit';
+
 $string['beginpractice'] = 'Start practice';
 $string['applysettings'] = 'Apply';
 $string['cancel'] = 'Cancel';
 
 // Practice mode: Buttons.
-$string['options'] = 'Options';
+$string['options'] = 'Practice anyway';
+$string['endpractice'] = 'End practice';
+
 $string['dontknow'] = "I don't know";
 $string['checkanswer'] = 'Check';
 $string['submitanswer'] = 'Answer';
@@ -146,17 +161,20 @@ $string['override'] = 'Override';
 $string['override_iscorrect'] = 'No, I was right!';
 $string['override_isincorrect'] = 'No, I was wrong.';
 $string['proceed'] = 'Next';
+$string['suggestanswer_label'] = 'Please suggest a new solution';
+$string['suggestanswer'] = 'Suggest answer';
+$string['suggestanswer_send'] = 'Send answer';
+$string['cardsleft'] = 'Remaining cards:';
 
 $string['solution'] = 'Solution';
 $string['yoursolution'] = 'Your answer';
-$string['answer'] = 'Answer';
 
 // Practice mode: Feedback
-$string['feedback:correctandcomplete'] = 'Well done.';
-$string['feedback:incomplete'] = 'Answers missing.';
+$string['feedback:correctandcomplete'] = 'Well done!';
+$string['feedback:incomplete'] = 'Answers missing!';
 $string['feedback:correctbutincomplete'] = 'There are {$a} answers missing.';
-$string['feedback:incorrectandpossiblyincomplete'] = 'Incorrect.';
-$string['feedback:notknown'] = 'No answer given';
+$string['feedback:incorrectandpossiblyincomplete'] = 'Incorrect!';
+$string['feedback:notknown'] = 'No answer given!';
 
 $string['sessioncompleted'] = 'Finished! :-)';
 $string['titleprogresschart'] = 'Results';
@@ -202,8 +220,9 @@ $string['deletecard'] = 'Delete card?';
 $string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';
 
 
-$string['addtionalinformation'] = 'Additional information:';
-$string['addtionalinformationlabel'] = '<p style="font-weight:bold; margin:0%">Additional information:</p>';
+$string['topicfilter'] = 'Topic ';
+$string['noselection'] = 'all';
+
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';
 $string['cardposition_help'] = 'Shows which deck this card is in. The higher the number the better the card has already been learned. New cards are not yet in a box. After box 5 cards are considered "mastered" and are no longer practiced.';

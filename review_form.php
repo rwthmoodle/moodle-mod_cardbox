@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
 
 require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
-require_once('locallib.php');
+require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class mod_cardbox_review_form extends moodleform {
     function definition($action = null, $preselected = null) {
@@ -49,152 +49,136 @@ class mod_cardbox_review_form extends moodleform {
         $mform->addElement('html', '<div id="cardbox-review">');
         $mform->addElement('html', '<div id="container-fluid cardbox-studyview">');
         $topicname = '';
-        $cardid = '';
 
-        //further cards with answer suggestions 
+        foreach ($customdata['cardlist'] as $cardid) {
 
-        $cards = $DB->get_records_select('cardbox_cardcontents', 'area = 3' , null, '', 'card');
-
-        if (empty($customdata["cardlist"]) && !empty($cards)){
-            foreach ($cards as $card) {
-                $cardlist[] = $card->card;
-            }
-            $customdata["cardlist"] = $cardlist;
-        }
-
-        foreach ($cards as $card) {
-            if (!in_array($card->card, $customdata["cardlist"], false)) {
-                array_push($customdata["cardlist"], $card->card);
-            }
-        }
-
-        foreach ($customdata['cardlist'] as $key => $value) {
-            
             $cardcontents = $DB->get_records_sql(
-                'SELECT mcc.id,mcc.card,mcc.cardside,mcc.contenttype,mcc.content,
-                    (SELECT topicname from {cardbox_topics} where id =mcc2.topic) AS topicname
-                    FROM {cardbox_cardcontents} mcc join {cardbox_cards} mcc2 on mcc.card=mcc2.id
-                        where mcc.card = :cardid and area in (0,3) order by 6',
-                        ['cardid' => $value]);
-            
+                'SELECT mcc.id, mcc.card, mcc.cardside, mcc.contenttype, mcc.content, mcc.area,
+                    (SELECT topicname from {cardbox_topics} where id = mcc2.topic) AS topicname
+                    FROM {cardbox_cardcontents} mcc join {cardbox_cards} mcc2 on mcc.card = mcc2.id
+                        where mcc.card = :cardid and area in (:areamain, :areasugg) order by topicname',
+                [
+                    'cardid' => $cardid,
+                    'areamain' => CARD_MAIN_INFORMATION,
+                    'areasugg' => CARD_ANSERSUGGESTION_INFORMATION
+                ]
+            );
+
             $question = '';
             $answer = '';
-            $qcontext = null;
-            $acontext = null;
             $count = 0;
-            
+            $countsuggestedanswers = 0;
+            $divadded = false;
             foreach ($cardcontents as $cardcontent) {
-                //Question Side
-                if ($cardcontent->cardside == "0" ){
-                    $qcontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $value, 'cardside' => $cardcontent->cardside, 'contenttype' => 2, 'area' => 1), IGNORE_MISSING);
+
+                // Question Side.
+                if ($cardcontent->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     switch($cardcontent->contenttype){
-                        case 1:
+                        case CARDBOX_CONTENTTYPE_IMAGE:
                             $downloadurl = cardbox_get_download_url($customdata['context'], $cardcontent->id, $cardcontent->content);
                             $question .= '<div class="cardbox-image"><img src="'.$downloadurl.'" alt="" class="img-fluid  d-block"></div>';
                         break;
-                        case 2:
+                        case CARDBOX_CONTENTTYPE_TEXT:
                             $question .= '<div class="cardbox-card-text text-center"><div class="text_to_html" style="text-align: center;">'.
                             $cardcontent->content.'</div></div>';
                         break;
-                        case 3:
+                        case CARDBOX_CONTENTTYPE_AUDIO:
                             $downloadurl = cardbox_get_download_url($customdata['context'], $cardcontent->id, $cardcontent->content);
                             $question .= '<audio controls="">
-                            <source src="'.$downloadurl.'" type="audio/mpeg">
-                        </audio>';
+                                              <source src="'.$downloadurl.'" type="audio/mpeg">
+                                          </audio>';
                         break;
                         default:
                             print_r('ERROR!');
                     }
                 } else {
-                    $acontext = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $value, 'cardside' => $cardcontent->cardside, 'contenttype' => 2, 'area' => 1), IGNORE_MISSING);
-                    $multianswers = $DB->count_records('cardbox_cardcontents',
-                        ['cardside' => $cardcontent->cardside, 'card' => $value, 'area' => 0]);
-                    $multianswers += $DB->count_records('cardbox_cardcontents',
-                        ['cardside' => $cardcontent->cardside, 'card' => $value, 'area' => 3]);
+                    $countapprovedanswers = $DB->count_records('cardbox_cardcontents',
+                        ['cardside' => $cardcontent->cardside, 'card' => $cardid, 'area' => CARD_MAIN_INFORMATION]);
+                    $countsuggestedanswers = $countapprovedanswers + $DB->count_records('cardbox_cardcontents',
+                        ['cardside' => CARDBOX_CARDSIDE_ANSWER, 'card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION]);
 
-
-                    if ($multianswers > 1) {
+                    if ($countsuggestedanswers > 1) {
                         $count++;
-                        if($cardid != $value){
-                            $answer .= '<div class="cardbox-card-right-side-multi"><div style="height: 100%">';
-                            $cardid = $value;
+                        if (!$divadded) {
+                            $answer .= '<div class="cardbox-card-right-side-multi">';
+                            $divadded = true;
                         }
-                        $eachheight = (100-$multianswers)/$multianswers;
+                        $height = (100 - ($countsuggestedanswers - 1)) / $countsuggestedanswers;
 
-                        $suggestedanswers = $DB->get_records('cardbox_cardcontents', array('card' => $value, 'cardside' => $cardcontent->cardside, 'area' => 3), '', 'content');
-                        $solutionsapproved = true;
+                        $answerapproved = true;
+                        $suggestedanswers = $DB->get_records('cardbox_cardcontents', ['card' => $cardid,
+                            'cardside' => CARDBOX_CARDSIDE_ANSWER, 'area' => CARD_ANSERSUGGESTION_INFORMATION], '', 'id, content');
                         foreach ($suggestedanswers as $suggestedanswer) {
-                            if ($count == $multianswers){
-                                if ($suggestedanswer->content === $cardcontent->content) {
-                                    $answer .= '<div class="cardbox-cardside-multi" style ="height:'.($eachheight-1).'%; border-color: mediumvioletred; border-style: solid;">
-                                    <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
-                                    '</div></div></div></div>';
-                                    $solutionsapproved = false;
-                                }
-                            } else {
-                                if ($suggestedanswer->content === $cardcontent->content) {
-                                    $answer .= '<div class="cardbox-cardside-multi" style ="height:'.$eachheight.'%; border-color: mediumvioletred; border-style: solid; margin-bottom: 1%">
+                            if ($suggestedanswer->content === $cardcontent->content) {
+                                $answerapproved = false;
+                            }
+                        }
+                        $class = 'cardbox-cardside-multi';
+                        if (!$answerapproved) {
+                            $class .= ' suggestion';
+                        }
+                        $answer .= '<div class="'.$class.'" >
                                     <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
                                     '</div></div></div>';
-                                    $solutionsapproved = false;
-                                }
-                            }
-                        }
-                        if ($solutionsapproved){
-                            if ($count == $multianswers){
-                                $answer .= '<div class="cardbox-cardside-multi" style ="height:'.($eachheight-1).'%">
-                                <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
-                                '</div></div></div></div>';
-                            } else {
-                                $answer .= '<div class="cardbox-cardside-multi" style ="height:'.$eachheight.'%; margin-bottom: 1%">
-                                <div class="cardbox-card-text "><div class="text_to_html">'.$cardcontent->content.
-                                '</div></div></div>';
-                            }
+                        if ($count == $countsuggestedanswers) {
+                            $answer .= '</div>';
                         }
 
                     } else {
-                        $answer .= '<div class="cardbox-cardside"><div class="cardbox-card-text "><div class="text_to_html"><div style="height:100%">'
-                        .$cardcontent->content.'</div></div></div></div>';
+                        $answer .= '<div class="cardbox-cardside"><div class="cardbox-card-text "><div class="text_to_html">'
+                            .'<div style="height:100%">'.$cardcontent->content.'</div></div></div></div>';
                     }
                 }
             }
-            if (!is_null($cardcontents[$cardcontent->id]->topicname)) {
-                if ($topicname != $cardcontents[$cardcontent->id]->topicname) {
-                    $topicname = $cardcontents[$cardcontent->id]->topicname;
-                    //$mform->addElement('html', '<div class="alert alert-dark" role="alert"><h5>Topic:<i> '.$topicname.'</i><h5></div>');
-                }
-            } else {
-                if ($topicname != get_string('notopic', 'cardbox')) {
-                    //$mform->addElement('html', '<div class="alert alert-dark" role="alert"><h5>Topic:<i> Not assigned </i><h5></div>');
-                    $topicname = get_string('notopic', 'cardbox');
-                }
-            }
-            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'" class="row reviewcontent" style="margin-bottom: 0px;">');
+            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$cardid.'" class="row reviewcontent" style="margin-bottom: 0px;">');
 
             $mform->addElement('html', '<div class="topic-review">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
                                         $topicname).'</div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;"><div class="cardbox-card-left-side">
                                         <div class="cardbox-cardside"><div style="height:100%">'.$question.'</div>
                                         </div></div></div></div>');
 
-            if ($multianswers > 1) {
+            if ($countsuggestedanswers > 1) {
                 $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%"><div style="height: 100%">'
-                .$answer.'</div></div></div></div>');
+                .$answer.'</div></div></div>');
             } else {
                 $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;"><div class="cardbox-card-right-side"><div>'
                 .$answer.'</div></div></div></div>');
             }
 
             $mform->addElement('html', '<div class="col-xs-2"><div id="review-button-wrapper">
-            <div class="btn-group-vertical" role="group" aria-label="review-actions">
-            <button id="cardbox-edit-'.$value.'" type="button" class="btn btn-primary cardbox-review-button" title="Edit"><i class="icon fa fa-pencil fa-fw"></i></button>
-            </div></div></div>');
-            $mform->addElement('html', '<div class="col-lg-1 checkbox-card">');
-            $mform->addElement('checkbox', 'chck'.$value); // Checkbox for selection
+                <div class="btn-group-vertical" role="group" aria-label="review-actions">
+                <button id="cardbox-edit-'.$cardid.'" type="button" class="btn btn-primary cardbox-review-button" title="Edit"><i class="icon fa fa-pencil fa-fw"></i></button>
+                </div></div></div>');
+            $cardapproved = cardbox_card_approved($cardid);
+            if ($cardapproved) {
+                $mform->addElement('html', '<div class="col-lg-1 checkbox-card">');
+                while (true) {
+                    if ($countapprovedanswers < 1) {
+                        foreach ($suggestedanswers as $suggestedanswer) {
+                                $mform->addElement('html', '<div style ="height:'.$height.'%">');
+                                $mform->addElement('checkbox', 'chck'.$cardid.'-'.strip_tags(str_replace(" ", "" , $suggestedanswer->content))); // Checkbox for selection
+                                $mform->addElement('html', '</div>');
+                        }
+                        break;
+                    } else {
+                        $mform->addElement('html', '<div style ="height:'.($height-1).'%"></div>');
+                        $countapprovedanswers--;
+                    }
+                }
+
+            } else {
+                $mform->addElement('html', '<div class="col-lg-1 checkbox-card">');
+                $mform->addElement('checkbox', 'chck'.$cardid);
+            }
             $mform->addElement('html', '</div>');
             $mform->addElement('html', '</div>'); // ending cardbox-card-in-review and row reviewcontent
 
-            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$value.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 0px">
-            <div class="col-xl-4" style="margin-left: 10%; padding-right: 0px;"><div class="cardbox-column" >'.$qcontext.
+            $qcontext = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION,
+                'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
+            $acontext = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER,
+                'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
+            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$cardid.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
+            <div class="col-xl-4" style="margin-left: 10%; padding-right: 0px; padding-left: 1%;"><div class="cardbox-column" >'.$qcontext.
             '</div></div><div class="col-xl-4" style="padding-left:0.5%;"><div class="cardbox-column" ><div>'.$acontext.'</div></div></div></div>');
 
         }

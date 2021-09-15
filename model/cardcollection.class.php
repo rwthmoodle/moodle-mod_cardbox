@@ -87,8 +87,9 @@ class cardbox_cardcollection {
     
     static function cardbox_get_cardcontents($cardid) {
         global $DB;
-        return $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
-
+        $cardcontents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid, 'area' => CARD_MAIN_INFORMATION));
+        $cardcontexts = $DB->get_records('cardbox_cardcontents', array('card' => $cardid, 'area' => CARD_CONTEXT_INFORMATION));
+        return array_merge($cardcontents, $cardcontexts);
     }
     /**
      * 
