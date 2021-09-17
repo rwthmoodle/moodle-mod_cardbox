@@ -38,6 +38,13 @@ if ($action === 'addflashcard') {
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
 
+    $stringman = get_string_manager();
+    $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+    $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00000"));
+    $params = array($cmid, 1, null); // true means: the user checks their own results.
+    $PAGE->requires->js_init_call('addCard', $params, true);
+
     // Contextual data to pass on to the card form.
     if (empty($entry)) {
         $entry = new stdClass();
@@ -109,8 +116,15 @@ if ($action === 'addflashcard') {
             cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->question['text']);
         }
         // Save the text of the answer/s.
-        foreach ($formdata->answer as $answer) {
+        /* foreach ($formdata->answer as $answer) {
             cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $answer['text']);
+        } */
+
+        for ($i = 1; $i <= 10; $i++) {
+            $answer = 'answer'. $i;
+            if ($formdata->$answer['text'] != "") {
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->$answer['text']);
+            }
         }
 
         // Save the questioncontext text if there is any.
@@ -145,6 +159,8 @@ if ($action === 'addflashcard') {
             // Save the imagedescription if there is any.
             if (!empty($formdata->imagedescription)) {
                 cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_IMAGEDESCRIPTION_INFORMATION, $formdata->imagedescription);
+            } else {
+
             }
         }
 
@@ -307,9 +323,10 @@ if ($action === 'editcard') {
         $entry->question['format'] = '1';
         $entry->questioncontext['text'] = cardbox_get_questioncontext($cardid);
         $entry->answercontext['text'] = cardbox_get_answercontext($cardid);
-        for ($i = 0; $i < $answercount; $i++) {
-            $entry->answer[$i]['text'] = $answers[$i];
-            $entry->answer[$i]['format'] = '1';
+        for ($i = 1; $i <= $answercount; $i++) {
+            $answer = 'answer' . $i;
+            $entry->$answer['text'] = $answers[($i - 1)];
+            $entry->$answer['format'] = '1';
             $entry->from = $from;
         }
         $entry->cardimage = $draftitemid;
@@ -374,8 +391,11 @@ if ($action === 'editcard') {
             cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->question['text']);
         }
         // Save the text of the answer/s.
-        foreach ($formdata->answer as $answer) {
-            cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $answer['text']);
+        for ($i = 1; $i <= 10; $i++) {
+            $answer = 'answer'. $i;
+            if ($formdata->$answer['text'] != "") {
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->$answer['text']);
+            }
         }
 
         // Save the questioncontext text if there is any.
@@ -452,6 +472,21 @@ if ($action === 'editcard') {
             $info = get_string('error:createcard', 'cardbox');
             echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block>" . $info . "</div></span>";
         }
+
+        //Javacript information 
+
+        $data = array();
+        $data['showquescontext'] = ($entry->questioncontext['text'] != "");
+        $data['showanscontext'] = ($entry->answercontext['text'] != "");
+        $data['showquesimage'] = ($entry->cardimage != 0);
+        $data['showquessound'] = ($entry->cardsound != 0);
+
+        $stringman = get_string_manager();
+        $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
+        $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00000"));
+        $params = array($cmid, $answercount, $data); // true means: the user checks their own results.
+        $PAGE->requires->js_init_call('addCard', $params, true);
         
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
         echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);

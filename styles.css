@@ -378,3 +378,24 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     color: white; */
     color: #ac0303!important;
 }
+
+.path-mod-cardbox #id_addcontextques,
+.path-mod-cardbox #id_addcontextans,
+.path-mod-cardbox #id_addsound,
+.path-mod-cardbox #id_addimage {
+    color: #fff;
+    background-color: #00549F;
+    border-color: #00549F;
+} 
+
+.path-mod-cardbox #fitem_id_cardimage,
+.path-mod-cardbox #fitem_id_imagedescription,
+.path-mod-cardbox #fitem_id_cardsound,
+.path-mod-cardbox #fitem_id_questioncontext,
+.path-mod-cardbox #fitem_id_answercontext,
+.path-mod-cardbox #fgroup_id_imgdescriptionar,
+.path-mod-cardbox #fitem_id_answer2, .path-mod-cardbox #fitem_id_answer3, .path-mod-cardbox #fitem_id_answer4, 
+.path-mod-cardbox #fitem_id_answer5, .path-mod-cardbox #fitem_id_answer6, .path-mod-cardbox #fitem_id_answer7, 
+.path-mod-cardbox #fitem_id_answer8, .path-mod-cardbox #fitem_id_answer9, .path-mod-cardbox #fitem_id_answer10 {
+    display: none;
+}
