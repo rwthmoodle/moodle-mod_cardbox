@@ -75,19 +75,30 @@ $string['notopic'] = 'nicht zugeordnet';
 $string['addnewtopic'] = 'Thema anlegen';
 $string['entertopic'] = 'Thema anlegen';
 $string['enterquestion'] = 'Frage';
-$string['entercontextquestion'] = 'Zusatzinformationen zur Frage (optional)';
-$string['entercontextanswer'] = 'Zusatzinformationen zur Antwort (optional)';
+$string['entercontextquestion'] = 'Zusatzinformationen zur Frage';
+$string['addcontext'] = 'Kontextzeile hinzufügen';
+$string['removecontext'] = 'Kontextzeile entfernen';
+$string['entercontextanswer'] = 'Zusatzinformationen zur Antwort';
 $string['necessaryanswers_card'] = 'Wie viele Antworten werden benötigt?';
 $string['necessaryanswers_all'] = 'Alle';
 $string['necessaryanswers_one'] = 'Eine';
+$string['addimage'] = 'Bild hinzufügen';
+$string['removeimage'] = 'Bild entfernen';
 $string['image'] = 'Bild zur Frage';
-$string['imagedescription'] = 'Beschreibung des Bildes für jemanden, der das Bild nicht sehen kann';
+$string['imagedescription'] = 'Beschreibung des Bildes für jemanden, der das Bild nicht sehen kann (empfohlen)';
+$string['imgdescriptionnecessary_label'] = 'Beschreibung nicht notwendig';
 $string['answerimage'] = 'Bild zur Lösung';
+$string['addsound'] = 'Tonaufnahme hinzufügen';
+$string['removesound'] = 'Tonaufnahme entfernen';
 $string['sound'] = 'Tonaufnahme zur Frage';
 $string['answersound'] = 'Tonaufnahme zur Lösung';
-$string['enteranswer'] = 'Lösungstext (Hilfe-Icon beachten)';
+$string['enteranswer'] = 'Lösungstext';
 $string['answer_repeat'] = 'weitere Lösung';
-$string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>';
+//$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
+
+/* $string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>'; */
+$string['answer_repeat_help'] = 'Bei mehreren Lösungen nutzen Sie bitte für jede Antwort ein separates Lösungsfeld. Ein weiteres Lösungsfeld kann durch den Button "weitere Lösung" hinzugefügt werden. Um einzustellen, ob Studierende nun alle Antworten wissen müssen oder nur eine (falls es um Alternativantworten geht) nutzen Sie bitte den Dropdown darunter.';
+
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
@@ -102,7 +113,7 @@ $string['success:reject'] = 'Die Karte wurde gelöscht.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
-$string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie keine Frage und/oder keine Lösung enthält.';
+$string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie entweder keine Frage und/oder keine Lösung enthält oder falls ein Bild hochgeladen wurde die Bildbeschreibung fehlt.';
 
 // Import cards
 $string['examplesinglecsv'] = 'Beispieltextdatei für Karten mit nur einer Antwort.';

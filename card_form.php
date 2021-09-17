@@ -71,42 +71,22 @@ class mod_cardbox_card_form extends moodleform {
 
         // Get topics to choose from when creating a new card.
         $topiclist = cardbox_get_topics($customdata['cardboxid'], true);
-        $select = $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist);
+        
+        $choosetopicarray = array();
+        $choosetopicarray[] =& $mform->createElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist);
+        $choosetopicarray[] =& $mform->createElement('text', 'newtopic', '');
+        $mform->addGroup($choosetopicarray, 'choosetopicar', get_string('choosetopic', 'cardbox'), array(' '), false);
+        
+/*         $select = $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist); */
         if (!empty($customdata['topic'])) {
-            $select->setSelected($customdata['topic']);
+            $choosetopicarray[0]->setSelected($customdata['topic']);
         }
 
         // Text input field for creating a new topic.
-        $mform->addElement('text', 'newtopic', ''); // $mform->addElement('text', 'newtopic', get_string('entertopic', 'cardbox'));
+/*         $mform->addElement('text', 'newtopic', ''); // $mform->addElement('text', 'newtopic', get_string('entertopic', 'cardbox')); */
         $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
-        $mform->disabledIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to.
+        $mform->hideIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to.
 
-        // Enter a prompt or question. // XXX Make width / number of columns dynamic
-//        $mform->addElement('textarea', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="2" cols="105"');
-
-        /****************** question experiment **********************/
-        
-//        $questiongroup = array();
-//        $questiongroup[] =& $mform->createElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
-//        
-//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-//        $questiongroup[] =& $mform->createElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
-//        
-//        
-//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-//        $questiongroup[] =& $mform->createElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
-//        
-//        
-////        $questiongroup[] =& $mform->createElement('filemanager', 'picture', 'Flamingo');
-//        $mform->addGroup($questiongroup, 'questiongroup', get_string('enterquestion', 'cardbox'), array(' '), true);
-//
-//        //$mform->setType('questiongroup', PARAM_CLEANHTML);
-//
-//        //$mform->addGroupRule('questiongroup', array('value' => array(array(list, of, rule, params, but, fieldname))));
-////        $mform->addRule('questiongroup', null, 'required', null, 'client');
-//
 
         /****************** end of question experiment **********************/
 
@@ -115,11 +95,15 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
-        // Enter an image instead or as a supplement.
-//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+        $btnarrayquestion = array();
+        $btnarrayquestion[] =& $mform->createElement('button', 'addimage', get_string('addimage', 'cardbox'));
+        $btnarrayquestion[] =& $mform->createElement('button', 'addsound', get_string('addsound', 'cardbox'));
+        $btnarrayquestion[] =& $mform->createElement('button', 'addcontextques', get_string('addcontext', 'cardbox'));
+        $mform->addGroup($btnarrayquestion, 'buttonar', '', array(' '), false);
+
         $options = array();
         $options['accepted_types'] = array('.bmp', '.gif', '.jpeg', '.jpg', '.png', '.svg');
+/*         $options['accepted_types'] = array('.bmp, .gif, .jpeg, .jpg, .png, .svg'); */
         $options['maxbytes'] = 0;
         $options['maxfiles'] = 1;
         $options['mainfile'] = true;
@@ -127,9 +111,13 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('text', 'imagedescription', get_string('imagedescription', 'cardbox'));
 
-        // Enter an audio file instead or as a supplement.
-//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
+
+        $label = get_string('imgdescriptionnecessary_label', 'cardbox');
+        $imagedescriptionarray = array();
+        $imagedescriptionarray[] =& $mform->createElement('checkbox', 'imgdescriptionnecessary', '');
+        $imagedescriptionarray[] =& $mform->createElement('html', "<p style='margin: 1rem'>$label</p>");
+        $mform->addGroup($imagedescriptionarray, 'imgdescriptionar', '', array(' '), false);
+
         $audiooptions = array();
         $audiooptions['accepted_types'] = array('.mp3');
         $audiooptions['maxbytes'] = 0;
@@ -143,31 +131,21 @@ class mod_cardbox_card_form extends moodleform {
 
         /****************** end of question **********************/
 
-        // Enter 1...n correct answers. // XXX Make width / number of columns dynamic
-//        $torepeat = array($mform->createElement('textarea', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="2" cols="105"'));
-        //$torepeat = array($mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"'));
-        $torepeat = array();
-        $solution = $mform->createElement('editor', 'answer', get_string('enteranswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
-        //$mform->addRule('answer', null, 'required', null, 'client');
-        $torepeat[] = $solution;
-        
-        $mform->setType('answer', PARAM_RAW);
+        $infoanswer = get_string('answer_repeat_help', 'cardbox');
+        $mform->addElement('html', "<p style='margin: 1rem'>$infoanswer</p>");
 
-        if (!empty($customdata['answercount'])) {
-            $initialrepeats = $customdata['answercount'];
-        } else {
-            $initialrepeats = 1;
+        for ($i = 1; $i <= 10; $i++) {
+            $mform->addElement('editor', "answer$i", get_string('enteranswer', 'cardbox') , 'wrap="virtual" rows="5" cols="150"');
+            $mform->setType("answer$i", PARAM_RAW);
         }
-        $roptions = array();
-        $roptions['answer']['helpbutton'] = array('answer_repeat', 'cardbox'); //array('answer_repeat', 'helpbutton', array('answer_repeat', 'answer_repeat', 'cardbox'));
-        $repeathiddenname = 'answer_repeat';
-        $addfieldsname = 'answer_add_fields';
-        $addfieldsno = 1; // How many fields to add at a time / at button click.
-        $addstring = get_string('addanswer', 'cardbox');
-        $test = $this->repeat_elements($torepeat, $initialrepeats, $roptions, $repeathiddenname, $addfieldsname, $addfieldsno, $addstring);
+
+        $btnarrayanswer = array();
+        $btnarrayanswer[] =& $mform->createElement('button', 'addanswer', get_string('answer_repeat', 'cardbox'));
+        $btnarrayanswer[] =& $mform->createElement('button', 'addcontextans', get_string('addcontext', 'cardbox'));
+        $mform->addGroup($btnarrayanswer, 'buttonar', '', array(' '), false);
 
         $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
-        if ($test > 1 && $necessaryanswerslocked === "0") {
+        if ($necessaryanswerslocked === "0") {
             $aoptions = [
                 '0' => get_string('necessaryanswers_all', 'cardbox'),
                 '1' => get_string('necessaryanswers_one', 'cardbox')
@@ -182,19 +160,11 @@ class mod_cardbox_card_form extends moodleform {
         }
 
         /****************** answercontext **********************/
+
+/*         $mform->addElement('button', 'addcontextans', get_string('addcontext', 'cardbox'));
+ */
         $mform->addElement('editor', 'answercontext', get_string('entercontextanswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
-
-        // Enter an image instead or as a supplement
-//        $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-//        $mform->addElement('filemanager', 'answerimage', get_string('answerimage', 'cardbox'), null, $options);
-//
-//        // Enter an audio file instead or as a supplement
-//        $audiooptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 1,
-//                          'accepted_types' => array('mp3'), 'return_types'=> FILE_INTERNAL | FILE_EXTERNAL);
-//        $mform->addElement('filemanager', 'answersound', get_string('answersound', 'cardbox'), null, $audiooptions);
-
         
         $context = context_module::instance($customdata['cmid']);
         
@@ -274,50 +244,17 @@ class mod_cardbox_card_form extends moodleform {
         $draftitemid2 = $data['cardsound'];
         $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
         
-        $answers = $data['answer'];
-        $answer = $answers[0];
+        $answer = $data['answer1'];
         $answertext = $answer['text'];
+
+        if (empty($data['imgdescriptionnecessary']) && !empty($imagefiles) && $data['imagedescription'] === "") {
+            $errors['files'] = get_string('error:imagedescription', 'cardbox');
+        }
 
         if ( (empty($questiontext) && empty($imagefiles) && empty($audiofiles)) || empty($answertext) ) {
             $errors['files'] = get_string('required');
         }
         return $errors;
-        
-        
-//        global $USER;
-//
-//        $errors = parent::validation($data, $files);
-//
-//        $questiongroup = $data['questiongroup'];
-//        
-//        $question = $questiongroup['question'];
-//        $questiontext = $question['text'];
-//        
-//        $fs = get_file_storage();
-//        $usercontext = context_user::instance($USER->id);
-//
-//        $draftitemid = $questiongroup['cardimage'];
-//        $imagefiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false);
-//
-//        $draftitemid2 = $questiongroup['cardsound'];
-//        $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
-//
-//        if (empty($questiontext) && empty($imagefiles) && empty($audiofiles)) {
-//            $errors['files'] = get_string('required');
-//        }
-//        return $errors;
-
     }
-
-    // Loads the old file in the filemanager.
-//    public function data_preprocessing(&$defaultvalues) {
-//        if ($this->current->instance) {
-//            $contextid = $this->context->id;
-//            $draftitemid = file_get_submitted_draft_itemid('cardimage');
-//            file_prepare_draft_area($draftitemid, $contextid, 'mod_cardbox', 'content', 0, array('subdirs' => true));
-//            $defaultvalues['cardimage'] = $draftitemid;
-////            $this->_form->disabledIf('files', 'update', 'notchecked', 2);
-//        }
-//    }
 
 }

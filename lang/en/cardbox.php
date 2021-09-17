@@ -75,19 +75,28 @@ $string['notopic'] = 'not assigned';
 $string['addnewtopic'] = 'create a topic';
 $string['entertopic'] = 'create a topic';
 $string['enterquestion'] = 'Question or prompt';
-$string['entercontextquestion'] = 'Additional information for this question (optional)';
-$string['entercontextanswer'] = 'Additional information for the answer (optional)';
+$string['entercontextquestion'] = 'Additional information for this question';
+$string['addcontext'] = 'Add context';
+$string['removecontext'] = 'Remove context';
+$string['entercontextanswer'] = 'Additional information for the answer';
 $string['necessaryanswers_card'] = 'How many answers are necessary?';
 $string['necessaryanswers_all'] = 'all';
 $string['necessaryanswers_one'] = 'one';
+$string['addimage'] = 'Add image';
+$string['removeimage'] = 'Remove image';
 $string['image'] = 'Question image';
-$string['imagedescription'] = 'Describe this image for someone who cannot see it';
+$string['imagedescription'] = 'Describe this image for someone who cannot see it (recommended)';
+$string['imgdescriptionnecessary_label'] = 'This image is decorative only';
+$string['addsound'] = 'Add sound';
+$string['removesound'] = 'Remove sound';
 $string['sound'] = 'Question sound';
 $string['answerimage'] = 'Answer image';
 $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['answer_repeat'] = 'Add another solution';
-$string['answer_repeat_help'] = "If the solution consists of several parts, please enter them individually by clicking 'Add another solution'. This enables the program to check answers for completeness. If there are valid alternatives for the solution, please enter all of them in the first input field.";
+/* $string['answer_repeat_help'] = "If the solution consists of several parts, please enter them individually by clicking 'Add another solution'. This enables the program to check answers for completeness. If there are valid alternatives for the solution, please enter all of them in the first input field."; */
+$string['answer_repeat_help'] = 'If you have multiple solutions, please use a separate solution field for each answer. Another solution field can be added by the button "additional solution". To set whether students need to know all answers or only one (in case of alternative answers) please use the dropdown below.';
+
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
 $string['saveandaccept'] = 'Save and accept without review';
@@ -102,7 +111,8 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
-$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer.';
+$string['error:createcard'] = 'The card was not created, because it is either missing a question and/or answer or if you uploaded a picture the imagedescription might be missing.';
+
 
 // Import cards
 $string['examplesinglecsv'] = 'Example text file for cards having single answers';
