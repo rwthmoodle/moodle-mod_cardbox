@@ -12,9 +12,11 @@
 
         {{#cards}}
 
-            <div id="cardbox-card-in-overview" data-cardid="{{cardid}}" class="row overviewcontent" style="margin-bottom: 0px;">
+            <div id="cardbox-card-in-overview" data-cardid="{{cardid}}" class="row overviewcontent" style="margin-bottom: 0px;">  
+                <div class="topic-overview" style="display: grid;grid-template-columns: 90% 10%;margin-left: 20%;">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}
+                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-right: 100%">
+                </div>
 
-                <div class="topic-overview" style="margin-left: 16%">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                 <div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
                     <div class="cardbox-card-left-side">
                             <div class="cardbox-cardside">
