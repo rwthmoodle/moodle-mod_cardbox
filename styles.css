@@ -6,6 +6,24 @@
 
 }
 
+/*.path-mod-cardbox #cardbox-see-options {
+    display: none;
+}*/
+
+#cardbox-cardcontainer-question {
+    /*padding: 30px;*/
+    display: grid;
+    grid-template-columns: 90% 10%;
+}
+
+
+.path-mod-cardbox .cardbox-card {
+    /*margin: 0 auto;
+    /*max-width: 700px;
+    border: 0.5px solid !important;
+    border-color: #cccccc !important;
+    padding-bottom: 15px;*/
+}
 td.cell-c0, td.cell-c1, td.cell-c2, td.cell-c3, td.cell-c4, td.cell-c5,  td.cell-c6, td.cell-c7 {
     text-align:center;
 }
@@ -58,7 +76,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     float: right;
     width: fit-content;
 }
-
+.cardbox_card_deck_icon{
+    height:30px;
+    width: 30px;
+}
 .path-mod-cardbox #cardbox-practice {
     margin-top: 30px;
 }

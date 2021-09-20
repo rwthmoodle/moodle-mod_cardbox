@@ -76,7 +76,7 @@ class cardbox_practice implements \renderable, \templatable {
                 // TODO Error handling.
         }
         $this->cardsleft = $cardsleft;
-
+        $this->cardbox_getcarddeck($cardid);
         $this->cardbox_prepare_cardcontents($context, $cardid);
 
     }
@@ -156,7 +156,23 @@ class cardbox_practice implements \renderable, \templatable {
             $this->inputfields = ['number' => '1'];
         }
     }
+    public function cardbox_getcarddeck(int $cardid) {
+        global $CFG, $DB, $USER;
+        if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
+            $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
+            if ($this->deck == 0){
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
+            } else if ($this->deck == 6) {
+                $this->deckdeckimgurlimg = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+            } else {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
+            }
+        } else {
+            $this->deck = null;
+            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
+        }
 
+    }
     public function export_for_template(\renderer_base $output) {
 
         $data = array();
@@ -178,6 +194,8 @@ class cardbox_practice implements \renderable, \templatable {
         $data['icon'] = "";
         $data['morethanonesolution'] = ($this->answercount > 1);
         $data['cardsleft'] = $this->cardsleft;
+        $data['deck'] = $this->deck;
+        $data['deckimgurl'] = $this->deckimgurl;
         return $data;
 
     }
