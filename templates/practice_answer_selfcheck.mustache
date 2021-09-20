@@ -9,6 +9,9 @@
         {{#question}}
             {{> mod_cardbox/cardside }}
         {{/question}}
+        {{#deck}}
+            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon">
+        {{/deck}}
     </div>
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3">
     <!--<button id="cardbox-see-options" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cardboxPracticeSettings">{{# str }} options, cardbox {{/ str }}</button>-->
