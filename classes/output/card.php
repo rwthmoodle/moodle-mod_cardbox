@@ -59,6 +59,8 @@ class cardbox_card implements \renderable, \templatable {
 
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
 
+        $this->cardbox_getcarddeck($cardid, $allowedtoedit);
+
         if (empty($this->topic)) {
             $this->topic = get_string('notopic', 'cardbox');
         }
@@ -104,6 +106,37 @@ class cardbox_card implements \renderable, \templatable {
 
     }
 
+    public function cardbox_getcarddeck(int $cardid, bool $allowedtoedit) {
+        global $CFG, $DB, $USER;
+        if($allowedtoedit){
+            $decktostudentcount = $DB->get_records_sql(
+                                'SELECT card, cardposition, count(userid) as users FROM {cardbox_progress}
+                                    where card = :cardid
+                                        group by cardposition',
+                                            ['cardid' => $cardid]);
+            $totalstudent = 0;
+            $weightedsum = 0;
+            foreach ($decktostudentcount as $carddecktostudent) {
+                $totalstudent++;
+                $weightedsum += $carddecktostudent->cardposition * $carddecktostudent->users;
+            }
+            $this->deck = round($weightedsum / $totalstudent);
+        } else if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
+            $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
+        } else {
+            $this->deck = null;
+        }
+
+        if ($this->deck == 0 || $this->deck == null) {
+            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
+        } else if ($this->deck == 6) {
+            $this->deckdeckimgurlimg = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+        } else {
+            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
+        }
+
+    }
+
     public function export_for_template(\renderer_base $output) {
 
         global $OUTPUT;
@@ -123,6 +156,8 @@ class cardbox_card implements \renderable, \templatable {
         $data['seestatus'] = $this->seestatus;
         $data['status'] = $this->status;
         $data['helpicon'] = $OUTPUT->help_icon('cardposition', 'cardbox');
+        $data['deck'] = $this->deck;
+        $data['deckimgurl'] = $this->deckimgurl;
         return $data;
 
     }
