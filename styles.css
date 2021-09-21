@@ -91,10 +91,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     min-height: 2em;
 }
 
-.path-mod-cardbox #cardbox-answer-text .cardbox-card-text {
-/*     font-size: .9375rem!important; */
+/* .path-mod-cardbox #cardbox-answer-text .cardbox-card-text {
+    font-size: .9375rem!important;
     font-weight: bold;
-}
+} */
 
 .path-mod-cardbox #review-button-wrapper {
     text-align: center;
@@ -361,6 +361,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 /*     font-size: 16px; */
 /*     padding-top: 0.2em; */
     margin-top: 4%;
+    font-weight: 700;
 /*     margin-bottom: 1%; */
 /*     font-size: 1.4rem!important; */
 }
