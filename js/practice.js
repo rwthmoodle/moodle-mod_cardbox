@@ -857,15 +857,32 @@ class Output {
             var considercardcorrect = evaluate.isCardCorrect();
             var newdata = evaluate.getDataToDisplay();
             
+            if (evaluation === 'incomplete') {
+                var solutionstodisplay = [];
+                newdata['answer']['texts'].forEach(function(answer) {
+                    var match = false;
+                    newdata['userinputitems'].forEach(function(userinput) {
+                        if (answer['puretext'] === userinput['userinput']) {
+                            match = true;
+                        } 
+                    }.bind(answer));
+                    if (!match) {
+                        solutionstodisplay.push(answer);
+                    }
+                }.bind(newdata));
+                newdata['answer']['texts'] = solutionstodisplay;
+            }
+
             newdata['case2'] = false;
             newdata['case4'] = true;
             
             if (considercardcorrect) {
-                if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
+                /* if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
                     newdata['cardcorrect'] = false;    
                 } else {
                     newdata['cardcorrect'] = true;
-                }
+                } */
+                newdata['cardcorrect'] = true;
                 newdata['showbuttonsuggestanswer'] = false;
             } else {
                 newdata['showbuttonsuggestanswer'] = true;
