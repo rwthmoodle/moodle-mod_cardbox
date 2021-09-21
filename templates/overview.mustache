@@ -13,12 +13,32 @@
         {{#cards}}
 
             <div id="cardbox-card-in-overview" data-cardid="{{cardid}}" class="row overviewcontent" style="margin-bottom: 0px;">  
-                <div class="topic-overview" style="display: grid;grid-template-columns: 90% 10%;margin-left: 20%;">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}
-                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-right: 100%">
-                </div>
+
+                {{#allowedtoedit}}
+{{!                     <div class="col-xl-2"></div> }}
+                    <div class="col-xl-4" style="margin-left: 13.5%">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%;"> 
+                        <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
+                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                        </div>
+                    </div>
+                    <div class="col-xl-2"></div> 
+                {{/allowedtoedit}}
+
+                {{^allowedtoedit}}
+                    <div class="col-xl-2"></div>
+                    <div class="col-xl-4">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%"> 
+                        <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
+                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                        </div>
+                    </div>
+                    <div class="col-xl-2"></div> 
+                {{/allowedtoedit}}
 
                 <div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
-                    <div class="cardbox-card-left-side">
+                    
+                        <div class="cardbox-card-left-side">
                             <div class="cardbox-cardside">
                                 <div style="height:100%">
                                 {{#question}}
@@ -32,28 +52,36 @@
 
                 <div class="col-xl-4" style="padding:0px;">
                     <div class="cardbox-column" style="height: 100%;">
-                        <div class="cardbox-card-right-side">
-                            <div>
-                                {{! {{#multipleanswers}}
-                                {{!    {{#answer}}
-                                {{!        <div class="cardbox-card-right-side-multi">
+
+                                 {{#multipleanswers}}
+                                    {{#answer}}
+                                    <div style="height: 100%">
+                                        <div class="cardbox-card-right-side-multi">
+
+                                        {{#texts}}
                                             <div class="cardbox-cardside-multi">
-                                                {{> mod_cardbox/cardside }}
-                                {{!           </div>
+                                                <div class="cardbox-card-text">{{{text}}}</div>
+                                            </div>
+                                        {{/texts}}
+
                                         </div>
+                                    </div>
                                     {{/answer}}
-                                {{!{{/multipleanswers}}
+                                {{/multipleanswers}}
                                 
 
-                                {{!{{^multipleanswers}}
-                                    <div class="cardbox-cardside">
-                                        {{#answer}}
-                                            {{> mod_cardbox/cardside }}
-                                        {{/answer}}
+                                {{^multipleanswers}}
+                                <div class="cardbox-card-right-side">
+                                    <div>
+                                        <div class="cardbox-cardside">
+                                            {{#answer}}
+                                                {{> mod_cardbox/cardside }}
+                                            {{/answer}}
+                                        </div>
                                     </div>
-                                {{!{{/multipleanswers}}
-                            </div>
-                        </div>
+                                </div>
+                                {{/multipleanswers}}
+                        
                     </div>
                 </div>
 
@@ -68,8 +96,6 @@
                     </div>
                 </div>
 
-                {{/allowedtoedit}}
-            
             </div>
 
             <div id="cardbox-card-in-review" data-cardid="'.$cardid.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
@@ -82,6 +108,17 @@
                     </div>
                 </div>
             </div>
+            {{/allowedtoedit}}
+            
+            {{^allowedtoedit}}
+            </div>
+            <div id="cardbox-card-in-review" data-cardid="'.$cardid.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
+                <div class="col-xl-2"></div>
+                <div class="col-xl-4">{{{questioncontext}}}</div>
+                <div class="col-xl-4" style="padding-left: 0.4%">{{{answercontext}}}</div>
+                <div class="col-xl-2"></div> 
+            </div> 
+            {{/allowedtoedit}}
 
         {{/cards}}
     

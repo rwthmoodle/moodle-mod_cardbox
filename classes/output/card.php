@@ -36,6 +36,7 @@ class cardbox_card implements \renderable, \templatable {
     private $answercontext = null;
     private $seestatus = false;
     private $status;
+    private $howmanyanswersnecessary;
 
     public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
         
@@ -44,6 +45,7 @@ class cardbox_card implements \renderable, \templatable {
         
         $this->cmid = $cmid;
         $this->cardid = $cardid;
+        $answercount = 0;
         
         if ($allowedtoedit) {
             $this->allowedtoedit = true;
@@ -58,6 +60,13 @@ class cardbox_card implements \renderable, \templatable {
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
 
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
+
+        $necessaryanswers = cardbox_get_necessaryanswers($cardid);
+        if ($necessaryanswers === "1") {
+            $this->howmanyanswersnecessary = get_string('oneanswersnecessary', 'cardbox');
+        } else {
+            $this->howmanyanswersnecessary = get_string('allanswersnecessary', 'cardbox');
+        }
 
         $this->cardbox_getcarddeck($cardid, $allowedtoedit);
 
@@ -87,6 +96,7 @@ class cardbox_card implements \renderable, \templatable {
                     $this->question['images'][] = array('imagesrc' => $download_url);
                 } else {
                     $this->answer['images'][] = array('imagesrc' => $download_url);
+                    $answercount++;
                 }
 
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
@@ -98,9 +108,10 @@ class cardbox_card implements \renderable, \templatable {
 
                 $content->content = format_text($content->content);
                 $this->answer['texts'][] = array('text' => $content->content);
+                $answercount++;
             }
         }
-        if (count((array)$this->answer) > 1) {
+        if ($answercount > 1) {
             $this->multipleanswers = true;
         }
 
@@ -130,7 +141,7 @@ class cardbox_card implements \renderable, \templatable {
         if ($this->deck == 0 || $this->deck == null) {
             $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
         } else if ($this->deck == 6) {
-            $this->deckdeckimgurlimg = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
         } else {
             $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
         }
@@ -158,6 +169,7 @@ class cardbox_card implements \renderable, \templatable {
         $data['helpicon'] = $OUTPUT->help_icon('cardposition', 'cardbox');
         $data['deck'] = $this->deck;
         $data['deckimgurl'] = $this->deckimgurl;
+        $data['howmanyanswersnecessary'] = $this->howmanyanswersnecessary;
         return $data;
 
     }

@@ -37,9 +37,6 @@
 
         showFieldsWithInput();
 
-
-
-
         function registerEventListeners() {
 
             var btnimageques = document.getElementById('id_addimage');
@@ -146,6 +143,15 @@
                     anscontext.style.display = 'flex';
                     btnanscontext.innerHTML = M.util.get_string('removecontext', 'cardbox');
                 }
+            }
+
+            if (document.getElementById('id_questioncontext').value != '') {
+                quescontext.style.display = 'flex';
+                btnquescontext.innerHTML = M.util.get_string('removecontext', 'cardbox');
+            }
+            if (document.getElementById('id_answercontext').value != '') {
+                quescontext.style.display = 'flex';
+                btnquescontext.innerHTML = M.util.get_string('removecontext', 'cardbox');
             }
 
         }

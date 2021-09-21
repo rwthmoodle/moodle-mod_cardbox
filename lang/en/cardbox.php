@@ -95,7 +95,9 @@ $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['answer_repeat'] = 'Add another solution';
 /* $string['answer_repeat_help'] = "If the solution consists of several parts, please enter them individually by clicking 'Add another solution'. This enables the program to check answers for completeness. If there are valid alternatives for the solution, please enter all of them in the first input field."; */
-$string['answer_repeat_help'] = 'If you have multiple solutions, please use a separate solution field for each answer. Another solution field can be added by the button "additional solution". To set whether students need to know all answers or only one (in case of alternative answers) please use the dropdown below.';
+$string['answer_repeat_help'] = 'If you have multiple solutions, please use a separate solution field for each answer.<br>
+                                Another solution field can be added by the button "Add another solution".<br>
+                                To set whether students need to know all answers or only one (in case of alternative answers) please use the dropdown below.';
 
 $string['addanswer'] = 'Add another solution';
 $string['savecard'] = 'Save';
@@ -210,6 +212,10 @@ $string['countcardapprove'] = '{&a} cards have been approved and ready for pract
 $string['countcardreject'] = '{&a} cards have been rejected';
 $string['rejectcard'] = 'Reject Card';
 $string['rejectcardinfo'] = 'Do you want to reject the selected {$a} cards? These cards will be deleted and cannot be recovered.';
+/* $string['allanswersnecessary'] = "<b style='float: right; padding-top: 5px'>all answers necessary</b>";
+$string['oneanswersnecessary'] = "<b style='float: right; padding-top: 5px'>one answers necessary</b>"; */
+$string['allanswersnecessary'] = "<b>all answers necessary</b>";
+$string['oneanswersnecessary'] = "<b>one answer necessary</b>";
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';

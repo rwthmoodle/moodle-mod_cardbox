@@ -159,8 +159,6 @@ if ($action === 'addflashcard') {
             // Save the imagedescription if there is any.
             if (!empty($formdata->imagedescription)) {
                 cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_IMAGEDESCRIPTION_INFORMATION, $formdata->imagedescription);
-            } else {
-
             }
         }
 
@@ -314,7 +312,7 @@ if ($action === 'editcard') {
     }
 
     // Pass the data of this card to the card_form for editing.
-    if (empty($entry)) {
+    if (empty($entry)) {  ///////ToDO Überprüfen ob man die If-Anweisung weglassen kann
         $entry = new stdClass();
         $entry->id = $cmid;
         $entry->course = $cm->course;
