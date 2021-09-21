@@ -132,11 +132,14 @@ class mod_cardbox_card_form extends moodleform {
         /****************** end of question **********************/
 
         $infoanswer = get_string('answer_repeat_help', 'cardbox');
-        $mform->addElement('html', "<p style='margin: 1rem'>$infoanswer</p>");
+/*         $mform->addElement('html', "<p style='margin: 1rem'>$infoanswer</p>"); */
 
         for ($i = 1; $i <= 10; $i++) {
             $mform->addElement('editor', "answer$i", get_string('enteranswer', 'cardbox') , 'wrap="virtual" rows="5" cols="150"');
             $mform->setType("answer$i", PARAM_RAW);
+            if ($i === 1) {
+                $mform->addElement('html', "<div class='form-group row fitem' style='margin-bottom: 1.5rem;'><div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'></div><div class='col-md-9 form-inline align-items-start felement'><div style='background-color: #CD1076; color: white; padding: 5px; width: 100%; padding-left: 10px'>$infoanswer</div></div></div>");
+            }
         }
 
         $btnarrayanswer = array();

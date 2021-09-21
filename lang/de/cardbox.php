@@ -97,7 +97,7 @@ $string['answer_repeat'] = 'weitere Lösung';
 //$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
 
 /* $string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>'; */
-$string['answer_repeat_help'] = 'Bei mehreren Lösungen nutzen Sie bitte für jede Antwort ein separates Lösungsfeld. Ein weiteres Lösungsfeld kann durch den Button "weitere Lösung" hinzugefügt werden. Um einzustellen, ob Studierende nun alle Antworten wissen müssen oder nur eine (falls es um Alternativantworten geht) nutzen Sie bitte den Dropdown darunter.';
+$string['answer_repeat_help'] = 'Bei mehreren Lösungen nutzen Sie bitte für jede Antwort ein separates Lösungsfeld.<br> Ein weiteres Lösungsfeld kann durch den Button "weitere Lösung" hinzugefügt werden.<br> Um einzustellen, ob Studierende nun alle Antworten wissen müssen oder nur eine (falls es um Alternativantworten geht) nutzen Sie bitte den Dropdown darunter.';
 
 $string['addanswer'] = 'weitere Lösung';
 $string['savecard'] = 'Speichern';
@@ -211,6 +211,10 @@ $string['countcardapprove'] = '{&a} Karten wurden genehmigt und stehen für die 
 $string['countcardreject'] = '{&a} Karten wurden abgelehnt';
 $string['rejectcard'] = 'Karte ablehnen';
 $string['rejectcardinfo'] = 'Möchten Sie die ausgewählten {$a} Karten ablehnen? Diese Karten werden gelöscht und können nicht wiederhergestellt werden.';
+/* $string['allanswersnecessary'] = "<b style='float: right; padding-top: 5px'>alle Antworten notwendig</b>";
+$string['oneanswersnecessary'] = "<b style='float: right; padding-top: 5px'>eine Antwort notwendig</b>"; */
+$string['allanswersnecessary'] = "<b>alle Antworten notwendig</b>";
+$string['oneanswersnecessary'] = "<b>eine Antwort notwendig</b>";
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';

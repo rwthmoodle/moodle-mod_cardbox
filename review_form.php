@@ -69,7 +69,21 @@ class mod_cardbox_review_form extends moodleform {
             $count = 0;
             $countsuggestedanswers = 0;
             $divadded = false;
+            $necessaryanswers = cardbox_get_necessaryanswers($cardid);
+            if ($necessaryanswers === "1") {
+                $howmanyanswersnecessary = get_string('oneanswersnecessary', 'cardbox');
+            } else {
+                $howmanyanswersnecessary = get_string('allanswersnecessary', 'cardbox');
+            }
+            
             foreach ($cardcontents as $cardcontent) {
+
+                //topicname
+                if ($cardcontent->topicname === null) {
+                    $topicname = get_string('notopic', 'cardbox');;
+                } else {
+                    $topicname = $cardcontent->topicname;
+                }
 
                 // Question Side.
                 if ($cardcontent->cardside == CARDBOX_CARDSIDE_QUESTION) {
@@ -132,10 +146,34 @@ class mod_cardbox_review_form extends moodleform {
             }
             $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$cardid.'" class="row reviewcontent" style="margin-bottom: 0px;">');
 
-            $mform->addElement('html', '<div class="topic-review">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
-                                        $topicname).'</div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;"><div class="cardbox-card-left-side">
-                                        <div class="cardbox-cardside"><div style="height:100%">'.$question.'</div>
-                                        </div></div></div></div>');
+            //Use following when including the deck again!!!!!!!!!!
+
+            /* if ($countsuggestedanswers > 1) {
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 13.5%">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">' . $howmanyanswersnecessary . '
+                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+            } else {
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 13.5%">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">
+                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+            } */
+            
+            
+            if ($countsuggestedanswers > 1) {
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">' . $howmanyanswersnecessary . '
+                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+            } else {
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
+                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">
+                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+            }
 
             if ($countsuggestedanswers > 1) {
                 $mform->addElement('html', '<div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%"><div style="height: 100%">'

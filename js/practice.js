@@ -919,26 +919,26 @@ class Output {
 
             if (evaluation === 'correctandcomplete') {
                 
-                feedbackbox.classList.add('cardbox-success');
+//                feedbackbox.classList.add('cardbox-success');
                 feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
 
 
             } else if (evaluation === 'incomplete') {
 
-                feedbackbox.classList.add('cardbox-warning');
+//                feedbackbox.classList.add('cardbox-warning');
                 feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
 
 
             } else if (evaluation === 'notknown') {
 
-                feedbackbox.classList.add('cardbox-error');
+//                feedbackbox.classList.add('cardbox-error');
                 feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
                 document.getElementById('cardbox-override').disabled = true; 
 
 
             } else {
 
-                feedbackbox.classList.add('cardbox-error');
+//                feedbackbox.classList.add('cardbox-error');
                 feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
             }
 

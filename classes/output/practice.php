@@ -104,11 +104,11 @@ class cardbox_practice implements \renderable, \templatable {
 
             if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
 
-                $this->questioncontext = "<i>" . strip_tags($content->content) . "</i>";
+                $this->questioncontext = strip_tags($content->content);
 
             } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
 
-                $this->answercontext = "<i>" . strip_tags($content->content) . "</i>";
+                $this->answercontext = strip_tags($content->content);
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) { // images
 
