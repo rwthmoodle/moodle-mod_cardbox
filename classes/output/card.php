@@ -131,19 +131,20 @@ class cardbox_card implements \renderable, \templatable {
                 $totalstudent += $carddecktostudent->users;
                 $weightedsum += ($carddecktostudent->cardposition + 1) * $carddecktostudent->users;
             }
-            $this->deck = round($weightedsum / $totalstudent) - 1;
+            $this->deck = round($weightedsum / $totalstudent);
         } else if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
             $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
         } else {
             $this->deck = null;
         }
 
-        if ($this->deck <= 0 || $this->deck == null) {
+        if ($this->deck == 1 || $this->deck == null) {
             $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
-        } else if ($this->deck == 6) {
+        } else if ($this->deck == 7) {
             $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
         } else {
-            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
+            $deck = $this->deck - 1;
+            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$deck.'.svg';
         }
 
     }
