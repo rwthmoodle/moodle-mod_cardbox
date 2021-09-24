@@ -253,6 +253,8 @@ class EventHandling {
 
     registerEventsForSuggestAnswerAutoCheck() {
 
+        document.getElementById('cardbox-suggestanswer-input').focus();
+
         document.getElementById('cardbox-cancel-button').addEventListener('click', function(e) {
 
             // Prevent page reload.
