@@ -113,6 +113,8 @@ class EventHandling {
      */
     registerEventsForQuestionAutoCheck() {
 
+        document.getElementById('cardbox-userinput-1').focus();
+
         document.getElementById('cardbox-submit-answer').addEventListener('click', function(e) {
 
             // Prevent page reload.
