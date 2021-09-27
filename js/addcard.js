@@ -120,6 +120,9 @@
             var quescontext = document.getElementById('fitem_id_questioncontext');
             var btnanscontext = document.getElementById('id_addcontextans');
             var anscontext = document.getElementById('fitem_id_answercontext');
+/*             var image = document.getElementById('id_cardimage_fieldset').getElementsByClassName('filemanager');
+            var sound = document.getElementById('id_cardimage_fieldset').getElementsByClassName('filemanager'); */
+
 
             if (_data != null) {
                 if (_data['showquesimage']) {
@@ -153,6 +156,18 @@
                 quescontext.style.display = 'flex';
                 btnquescontext.innerHTML = M.util.get_string('removecontext', 'cardbox');
             }
+
+            /* if (image[0].style.display === "") {
+                imageques.style.display = 'flex';
+                imagedescription.style.display = 'flex';
+                imagecheckbox.style.display = 'flex';
+                btnimageques.innerHTML = M.util.get_string('removeimage', 'cardbox');
+            }
+
+            if (sound[0].style.display === "") {
+                soundques.style.display = 'flex';
+                btnsoundques.innerHTML = M.util.get_string('removesound', 'cardbox');
+            } */
 
         }
     });
