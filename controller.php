@@ -468,7 +468,7 @@ if ($action === 'editcard') {
         
         if ($mform->is_submitted() && empty($mform->is_validated())) {
             $info = get_string('error:createcard', 'cardbox');
-            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block>" . $info . "</div></span>";
+            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         }
 
         //Javacript information 
