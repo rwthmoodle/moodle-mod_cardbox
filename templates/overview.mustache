@@ -19,7 +19,8 @@
                     <div class="col-xl-4" style="margin-left: 13.5%">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                     <div class="col-xl-4" style="padding-left: 0.4%;"> 
                         <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
-                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
+                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}manager:deckdescription, cardbox, {{deck}}{{/str}}">
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 
@@ -30,7 +31,8 @@
                     <div class="col-xl-4">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                     <div class="col-xl-4" style="padding-left: 0.4%"> 
                         <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
-                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
+                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
+                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}student:deckdescription, cardbox, {{deck}}{{/str}}">
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 

@@ -121,7 +121,7 @@ class cardbox_card implements \renderable, \templatable {
         global $CFG, $DB, $USER;
         if($allowedtoedit){
             $decktostudentcount = $DB->get_records_sql(
-                                'SELECT card, cardposition, count(userid) as users FROM {cardbox_progress}
+                                'SELECT id, card, cardposition, count(userid) as users FROM {cardbox_progress}
                                     where card = :cardid
                                         group by cardposition',
                                             ['cardid' => $cardid]);
@@ -131,20 +131,34 @@ class cardbox_card implements \renderable, \templatable {
                 $totalstudent += $carddecktostudent->users;
                 $weightedsum += ($carddecktostudent->cardposition + 1) * $carddecktostudent->users;
             }
-            $this->deck = round($weightedsum / $totalstudent);
+            if ($totalstudent != 0) {
+                $this->deck = round($weightedsum / $totalstudent);
+            } else {
+                $this->deck = 1;
+            }
         } else if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
             $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
         } else {
             $this->deck = null;
         }
 
-        if ($this->deck == 1 || $this->deck == null) {
-            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
-        } else if ($this->deck == 7) {
-            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+        if($allowedtoedit){
+            if ($this->deck == 1 || $this->deck == null ) {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
+            } else if ($this->deck == 7) {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+            } else {
+                $deck = $this->deck - 1;
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$deck.'.svg';
+            }
         } else {
-            $deck = $this->deck - 1;
-            $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$deck.'.svg';
+            if ($this->deck == 0 || $this->deck == null) {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
+            } else if ($this->deck == 6) {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
+            } else {
+                $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
+            }
         }
 
     }

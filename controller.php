@@ -895,7 +895,9 @@ if ($action === 'overview') {
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
     $offset = $page * $perpage;
-    
+    $PAGE->requires->js_amd_inline("require(['jquery', 'theme_boost/bootstrap/tooltip'], function($){
+        $('[data-toggle=\"tooltip\"]').tooltip();
+    });");
     require_once('model/cardcollection.class.php'); // model.
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
     
