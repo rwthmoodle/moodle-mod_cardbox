@@ -37,7 +37,7 @@ class cardbox_card implements \renderable, \templatable {
     private $seestatus = false;
     private $status;
     private $howmanyanswersnecessary;
-
+    private $decktext;
     public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
         
         require_once('model/cardcollection.class.php');
@@ -144,19 +144,25 @@ class cardbox_card implements \renderable, \templatable {
 
         if($allowedtoedit){
             if ($this->deck == 1 || $this->deck == null ) {
+                $this->decktext = ucfirst(get_string('new', 'cardbox'));
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
             } else if ($this->deck == 7) {
+                $this->decktext = ucfirst(get_string('known', 'cardbox'));
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
             } else {
                 $deck = $this->deck - 1;
+                $this->decktext = $deck;
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$deck.'.svg';
             }
         } else {
             if ($this->deck == 0 || $this->deck == null) {
+                $this->decktext = $this->decktext = ucfirst(get_string('new', 'cardbox'));
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
             } else if ($this->deck == 6) {
+                $this->decktext = ucfirst(get_string('known', 'cardbox'));
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';
             } else {
+                $this->decktext = $this->deck;
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/'.$this->deck.'.svg';
             }
         }
@@ -185,6 +191,7 @@ class cardbox_card implements \renderable, \templatable {
         $data['deck'] = $this->deck;
         $data['deckimgurl'] = $this->deckimgurl;
         $data['howmanyanswersnecessary'] = $this->howmanyanswersnecessary;
+        $data['decktext'] = $this->decktext;
         return $data;
 
     }
