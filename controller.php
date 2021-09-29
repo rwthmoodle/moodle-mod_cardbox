@@ -804,11 +804,11 @@ if ($action === 'review') {
     $cards = $DB->get_records('cardbox_cards', ['cardbox' => $cardbox->id]);
     if (!empty($cards)) {
         list($insql, $inparams) = $DB->get_in_or_equal(array_column($cards, 'id'), SQL_PARAMS_NAMED);
-        $anssuggestions = $DB->get_records_select('cardbox_cardcontents', 'area = :area AND cardside = :cardside AND card ' . $sqlin,
-                array_merge(['area' => CARD_ANSERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
-    foreach ($anssuggestions as $anssuggestion) {
+        $anssuggestions = $DB->get_records_select('cardbox_cardcontents', 'area = :area AND cardside = :cardside AND card ' . $insql,
+            array_merge(['area' => CARD_ANSERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
+        foreach ($anssuggestions as $anssuggestion) {
             if (!in_array($anssuggestion->card, $reviewablecardids)) {
-            array_push($reviewablecardids, $anssuggestion->card);
+                array_push($reviewablecardids, $anssuggestion->card);
             }
         }
     }
