@@ -243,5 +243,5 @@ $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';
 $string['cardposition_help'] = 'Shows which deck this card is in. The higher the number the better the card has already been learned. New cards are not yet in a box. After box 5 cards are considered "mastered" and are no longer practiced.';
 //Overview Tab
-$string['student:deckdescription'] = 'This card lies in Deck {$a} for you';
-$string['manager:deckdescription'] = 'On average, This card lies in Deck {$a} among all students';
+$string['student:deckdescription'] = 'This card lies in deck {$a}';
+$string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';

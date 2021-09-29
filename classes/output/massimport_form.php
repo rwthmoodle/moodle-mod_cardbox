@@ -44,12 +44,12 @@ class massimport_form extends \moodleform {
         $singleurl = new \moodle_url('example_singleans.csv');
         $singlelink = \html_writer::link($singleurl, 'example_singleans.csv');
         $mform->addElement('static', 'examplesinglecsv', get_string('examplesinglecsv', 'cardbox'), $singlelink);
-        $mform->addHelpButton('examplesinglecsv', 'examplesinglecsv', 'cardbox');
+        //$mform->addHelpButton('examplesinglecsv', 'examplesinglecsv', 'cardbox');
 
         $multiurl = new \moodle_url('example_multians.csv');
         $multilink = \html_writer::link($multiurl, 'example_multians.csv');
         $mform->addElement('static', 'examplemulticsv', get_string('examplemulticsv', 'cardbox'), $multilink);
-        $mform->addHelpButton('examplemulticsv', 'examplemulticsv', 'cardbox');
+        //$mform->addHelpButton('examplemulticsv', 'examplemulticsv', 'cardbox');
 
         $mform->addElement('filepicker', 'cardimportfile', get_string('file'));
         $mform->addRule('cardimportfile', null, 'required');
