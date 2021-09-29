@@ -626,7 +626,7 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
             if (array_key_exists($topic, $topiccache)) {
                 $card->topic = $topiccache[$topic];
             } else {
-                if ($topic != null || $topic == "" || $topic != "null" ) {
+                if (!empty($topic) && $topic != "null" ) {
                     if (!$DB->record_exists('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid])) {
                         $card->topic = $DB->insert_record('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid], true);
                     } else {

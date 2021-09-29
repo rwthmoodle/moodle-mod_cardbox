@@ -241,5 +241,5 @@ $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
 $string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten sind in keinem Fach. Nach Fach 5 werden Karten als "gelernt" angesehen und nicht mehr geübt.';
 //Overview Tab
-$string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a} für Sie';
+$string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a}';
 $string['manager:deckdescription'] = 'Im Durchschnitt liegt diese Karte für alle Studierenden in Fach {$a}';

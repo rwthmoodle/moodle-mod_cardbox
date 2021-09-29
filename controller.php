@@ -770,7 +770,7 @@ if ($action === 'massimport') {
                 cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
                 $cir->close();
                 $cir->cleanup();
-                redirect($returnurl, get_string('importsuccess', 'cardbox', $formdata2->count), null, \core\output\notification::NOTIFY_INFO);
+                redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1), null, \core\output\notification::NOTIFY_INFO);
             } else {
                 redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
             }
