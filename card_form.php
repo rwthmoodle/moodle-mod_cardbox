@@ -110,6 +110,7 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('filemanager', 'cardimage', get_string('image', 'cardbox'), null, $options);
 
         $mform->addElement('text', 'imagedescription', get_string('imagedescription', 'cardbox'));
+        $mform->setType('imagedescription', PARAM_TEXT);
 
 
         $label = get_string('imgdescriptionnecessary_label', 'cardbox');
