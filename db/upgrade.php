@@ -566,7 +566,7 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021090600, 'cardbox');
     }
 
-    if ($oldversion < 2021092400) {
+    if ($oldversion < 2021100101) {
 
         // Define field numberofcards to be added to cardbox_statistics.
         $table = new xmldb_table('cardbox_statistics');
@@ -585,7 +585,7 @@ function xmldb_cardbox_upgrade($oldversion) {
         }
 
         // Cardbox savepoint reached.
-        upgrade_mod_savepoint(true, 2021092400, 'cardbox');
+        upgrade_mod_savepoint(true, 2021100101, 'cardbox');
     }
 
     return true;
