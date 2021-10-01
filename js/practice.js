@@ -975,6 +975,7 @@ class Statistics {
         this.countright = 0;
         this.countwrong = 0;
         this.chart = chart;
+        this.starttime = Math.floor(new Date().getTime()/1000.0);
     }
     
     incrementCountRight() {
@@ -999,7 +1000,7 @@ class Statistics {
         $.ajax({
             type: 'POST',
             url: 'action.php',
-            data: {id: cmid, action: 'saveperformance', countright: this.countright, countwrong: this.countwrong, sesskey: M.cfg.sesskey},
+            data: {id: cmid, action: 'saveperformance', countright: this.countright, countwrong: this.countwrong, sesskey: M.cfg.sesskey, starttime: this.starttime},
             success: function(result){
                 result = JSON.parse(result);
             }

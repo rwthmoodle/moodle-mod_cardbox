@@ -655,30 +655,32 @@ if ($action === 'statistics') {
     echo $OUTPUT->heading(format_string($cardbox->name));
     echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
 
-    $info = get_string('info:statisticspage', 'cardbox');
-    $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
-    echo "<span id='nocardsduenotification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . " " . $help . "</span>";
-    
     //echo $OUTPUT->heading("$cardbox->name"); // XXX
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
-
-    // 1. Create a virtual cardbox for this user, i.e. create the model.
-    $select = new cardbox_card_selection_algorithm(null, true);
-    $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select);
-    $boxcount = $cardboxmodel->cardbox_get_status();
-
-    // 2. Create a view controller.
-    $statistics = new cardbox_statistics($cardbox->id); // XXX auch hier das cardboxmodel nutzen.
-    $performance = $statistics->export_for_template($renderer);
-
+    if (has_capability('mod/cardbox:approvecard', $context)) {
+        $ismanager = true;
+        $boxcount = count_cardposition($cardbox->id);
+    } else {
+        $info = get_string('info:statisticspage', 'cardbox');
+        $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
+        echo "<span id='nocardsduenotification' class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . " " . $help . "</span>";    
+        $ismanager = false;
+        // 1. Create a virtual cardbox for this user, i.e. create the model.
+        $select = new cardbox_card_selection_algorithm(null, true);
+        $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select);
+        $boxcount = $cardboxmodel->cardbox_get_status();
+    }
+     // 2. Create a view controller.
+     $statistics = new cardbox_statistics($cardbox->id, $ismanager); // XXX auch hier das cardboxmodel nutzen.
+     $performance = $statistics->export_for_template($renderer);
     // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js"));
-    $params = array($cmid, $boxcount, $performance); // true means: the user checks their own results.
+    $params = array($cmid, $boxcount, $performance, $ismanager); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('displayCharts', $params, true);
 
     // 4. Render the page.

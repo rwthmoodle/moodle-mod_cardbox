@@ -203,6 +203,13 @@ $string['box'] = 'box';
 $string['titleperformancechart'] = 'Past practice sessions';
 $string['performance'] = '% correct';
 
+$string['titlenumberofcards'] = 'Average number of cards per session';
+$string['numberofcards'] = 'Number';
+
+$string['titledurationofasession'] = 'Average duration of a session';
+$string['duration'] = 'Duration (min)';
+
+
 // Review.
 $string['approve'] = 'Approve';
 $string['reject'] = 'Reject';
@@ -220,10 +227,16 @@ $string['oneanswersnecessary'] = "<b>one answer necessary</b>";
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
+$string['strftimedateshortmonthabbr'] = '%d %b';
+
+
 $string['barchartxaxislabel'] = 'Deck';
 $string['barchartyaxislabel'] = 'Card count';
+$string['barchartstatistic1'] = 'Number of cards per deck for all students';
 $string['linegraphxaxislabel'] = 'Date';
-$string['linegraphyaxislabel'] = '% known';
+$string['linegraphyaxislabel_performance'] = '% known';
+$string['linegraphyaxislabel_numbercards'] = 'Number of cards';
+$string['linegraphyaxislabel_duration'] = 'Duration (min)';
 $string['lastpractise'] = 'last practised';
 $string['nopractise'] = 'not practised yet';
 $string['newcard'] = 'new cards';
@@ -245,3 +258,5 @@ $string['cardposition_help'] = 'Shows which deck this card is in. The higher the
 //Overview Tab
 $string['student:deckdescription'] = 'This card lies in deck {$a}';
 $string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';
+$string['manager:repeatdesc'] = 'This card was mastered by students, on average, after {$a} repetitions';
+$string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
