@@ -11,12 +11,13 @@
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
     
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
-    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6 cardbox-selfcheck-question-side">
-        <div>
+    <div id="cardbox-cardcontainer-question" class="col-xs-12 col-md-10 col-lg-8 col-xl-6 cardbox-selfcheck-question-side">
             {{#question}}
                 {{> mod_cardbox/cardside }}
             {{/question}}
-        </div>
+            {{#deck}}
+            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon">
+            {{/deck}}
         <div id="icon-progress" style="float: right">{{icon}}</div>
             
     </div>

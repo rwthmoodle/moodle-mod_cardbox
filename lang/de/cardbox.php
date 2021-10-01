@@ -202,6 +202,13 @@ $string['box'] = 'Fach';
 $string['titleperformancechart'] = 'Vergangene Übungen';
 $string['performance'] = '% gewusst:';
 
+$string['titlenumberofcards'] = 'Durchschnittliche Anzahl von Karten pro Übung';
+$string['numberofcards'] = 'Anzahl';
+
+$string['titledurationofasession'] = 'Durchschnittliche Dauer einer Übung';
+$string['duration'] = 'Dauer (min)';
+
+
 // Review.
 $string['approve'] = 'Freigeben';
 $string['reject'] = 'Ablehnen';
@@ -219,10 +226,16 @@ $string['oneanswersnecessary'] = "<b>eine Antwort notwendig</b>";
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
+$string['strftimedateshortmonthabbr'] = '%d %b';
+
+
 $string['barchartxaxislabel'] = 'Fach';
 $string['barchartyaxislabel'] = 'Kartenzahl';
+$string['barchartstatistic1'] = 'Anzahl der Karten pro Deck für alle Studierenden';
 $string['linegraphxaxislabel'] = 'Datum';
-$string['linegraphyaxislabel'] = '% gewusst';
+$string['linegraphyaxislabel_performance'] = '% gewusst';
+$string['linegraphyaxislabel_numbercards'] = 'Anzahl an Karten';
+$string['linegraphyaxislabel_duration'] = 'Dauer (min)';
 $string['lastpractise'] = 'zuletzt geübt';
 $string['nopractise'] = 'noch nicht geübt';
 $string['newcard'] = 'karten neu';
@@ -243,3 +256,5 @@ $string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese 
 //Overview Tab
 $string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a}';
 $string['manager:deckdescription'] = 'Im Durchschnitt liegt diese Karte für alle Studierenden in Fach {$a}';
+$string['manager:repeatdesc'] = 'Diese Karte wurde von den Studierenden, im Durchschnitt, nach {$a} Wiederholungen gelernt';
+$string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gelernt';

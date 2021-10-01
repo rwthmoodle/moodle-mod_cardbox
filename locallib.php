@@ -443,6 +443,35 @@ function cardbox_card_approved($cardid) {
     }
 }
 
+/**
+ * Function returns how many cards are there in each deck.
+ *
+ * @global obj $DB
+ * @param type $cardboxid
+ */
+function count_cardposition($cardboxid) {
+    global $DB;
+    $decktocardcount = $DB->get_records_sql(
+                        'SELECT cardposition, count(card) AS cardcount
+                        FROM {cardbox_progress}
+                        where card in (select id from {cardbox_cards} where cardbox = :cardboxid) GROUP by cardposition', 
+                        ['cardboxid' => $cardboxid]);
+
+    $resultdata = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
+
+    foreach ($decktocardcount as $eachrecord) {
+        $absavgarr = array();
+        $absavgarr['abs'] = $eachrecord->cardcount;
+        $practisingstudents = $DB->count_records_sql(
+            'SELECT count(distinct userid)
+            FROM {cardbox_progress}
+            where card in (select id from {cardbox_cards} where cardbox = :cardboxid)',
+            ['cardboxid' => $cardboxid]);
+        $absavgarr['avg'] = $eachrecord->cardcount / $practisingstudents;
+        $resultdata[$eachrecord->cardposition] = $absavgarr;
+    }
+    return $resultdata;
+}
  
 /**
  * Function returns 0...1 image item ids belonging to the specified card.
@@ -485,6 +514,17 @@ function cardbox_get_imagedescription($cardid) {
  */
 function cardbox_get_user_date($timestamp) {
     return userdate($timestamp, get_string('strftimedate', 'cardbox'), $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
+}
+
+/**
+ * Function converts the timestamp into a human readable format (D. M),
+ * taking the user's timezone into account.
+ *
+ * @param type $timestamp
+ * @return type
+ */
+function cardbox_get_user_date_short($timestamp) {
+    return userdate($timestamp, get_string('strftimedateshortmonthabbr', 'cardbox'), $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
 }
 
 //function cardbox_get_user_datetime($timestamp) {

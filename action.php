@@ -150,12 +150,15 @@ if ($action === 'saveperformance') {
     
     $countright = required_param('countright', PARAM_INT);
     $countwrong = required_param('countwrong', PARAM_INT);
+    $starttime = required_param('starttime', PARAM_TEXT);
     $percentcorrect = 100*$countright/($countright+$countwrong);
 
     $data = new stdClass();
     $data->userid = $USER->id;
     $data->cardboxid = $cardbox->id;
     $data->timeofpractice = time();
+    $data->numberofcards = $countright + $countwrong;
+    $data->duration = $data->timeofpractice - $starttime;
     $data->percentcorrect = round($percentcorrect, 0, PHP_ROUND_HALF_UP);
     $success = $DB->insert_record('cardbox_statistics', $data);
 

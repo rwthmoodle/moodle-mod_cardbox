@@ -565,6 +565,29 @@ function xmldb_cardbox_upgrade($oldversion) {
         // Cardbox savepoint reached.
         upgrade_mod_savepoint(true, 2021090600, 'cardbox');
     }
+
+    if ($oldversion < 2021092400) {
+
+        // Define field numberofcards to be added to cardbox_statistics.
+        $table = new xmldb_table('cardbox_statistics');
+        $field = new xmldb_field('numberofcards', XMLDB_TYPE_INTEGER, '4', null, null, null, null, 'timeofpractice');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Define field duration to be added to cardbox_statistics.
+        $table = new xmldb_table('cardbox_statistics');
+        $field = new xmldb_field('duration', XMLDB_TYPE_INTEGER, '10', null, null, null, null, 'numberofcards');
+
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021092400, 'cardbox');
+    }
+
     return true;
 
 }

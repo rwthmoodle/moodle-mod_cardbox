@@ -80,7 +80,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     height:30px;
     width: 30px;
 }
-
+.cardbox_card_deck_icon{
+    height:30px;
+    width: 30px;
+}
 .path-mod-cardbox #cardbox-practice {
     margin-top: 30px;
 }
@@ -421,4 +424,18 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .path-mod-cardbox #fitem_id_answer5, .path-mod-cardbox #fitem_id_answer6, .path-mod-cardbox #fitem_id_answer7, 
 .path-mod-cardbox #fitem_id_answer8, .path-mod-cardbox #fitem_id_answer9, .path-mod-cardbox #fitem_id_answer10 {
     display: none;
+}
+
+.card-icon-grid-div {
+    float: right;
+    display: grid;
+    grid-template-columns: auto auto auto;
+}
+.rep-icon-grid-div {
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 10%;
+}
+.common-margin {
+    margin-right: 10px;;
 }

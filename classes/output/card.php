@@ -62,6 +62,7 @@ class cardbox_card implements \renderable, \templatable {
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
 
         $necessaryanswers = cardbox_get_necessaryanswers($cardid);
+        
         if ($necessaryanswers === "1") {
             $this->howmanyanswersnecessary = get_string('oneanswersnecessary', 'cardbox');
         } else {
@@ -69,6 +70,7 @@ class cardbox_card implements \renderable, \templatable {
         }
 
         $this->cardbox_getcarddeck($cardid, $allowedtoedit);
+        $this->getcardreps_ifmastered($cardid, $allowedtoedit);
 
         if (empty($this->topic)) {
             $this->topic = get_string('notopic', 'cardbox');
@@ -117,6 +119,46 @@ class cardbox_card implements \renderable, \templatable {
 
     }
 
+    public function getcardreps_ifmastered(int $cardid, bool $allowedtoedit) {
+        global $DB, $USER;
+        $showreps = "";
+        if ($allowedtoedit){
+            $cardrepssum = $DB->get_records_sql(
+                            'SELECT card, cardposition, SUM(repetitions) as repssum
+                            FROM {cardbox_progress} where
+                            cardposition = :cardposition and
+                            card = :cardid group by card', 
+                            ['cardid' => $cardid, 'cardposition' => 6]);
+            $usercount = $DB->count_records_sql(
+                'SELECT count(distinct userid)
+                            FROM {cardbox_progress} where
+                            cardposition = :cardposition and
+                            card = :cardid',
+                            ['cardposition' => 6, 'cardid' => $cardid]
+            );
+            foreach ($cardrepssum as $record) {
+                if (!empty($usercount)) {
+                    $showreps = $record ->repssum / $usercount;
+                }
+            }
+        } else {
+            $cardrepssum = $DB->get_records_sql(
+                'SELECT card, cardposition, SUM(repetitions) as repssum
+                FROM {cardbox_progress} where
+                cardposition = :cardposition and
+                card = :cardid and userid = :userid group by card',
+                ['cardid' => $cardid, 'cardposition' => 6, 'userid' => $USER->id]);
+            foreach ($cardrepssum as $record) {
+                $showreps = $record ->repssum;
+            }
+        }
+        if ($showreps != "") {
+            $this->reps = true;
+            $this->repsnummer = round($showreps);
+        } else {
+            $this->reps = false;
+        }
+    }
     public function cardbox_getcarddeck(int $cardid, bool $allowedtoedit) {
         global $CFG, $DB, $USER;
         if($allowedtoedit){
@@ -142,7 +184,7 @@ class cardbox_card implements \renderable, \templatable {
             $this->deck = null;
         }
 
-        if($allowedtoedit){
+        if ($allowedtoedit) {
             if ($this->deck == 1 || $this->deck == null ) {
                 $this->decktext = ucfirst(get_string('new', 'cardbox'));
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
@@ -191,6 +233,8 @@ class cardbox_card implements \renderable, \templatable {
         $data['deck'] = $this->deck;
         $data['deckimgurl'] = $this->deckimgurl;
         $data['howmanyanswersnecessary'] = $this->howmanyanswersnecessary;
+        $data['reps'] = $this->reps;
+        $data['repsnummer'] = $this->repsnummer;
         $data['decktext'] = $this->decktext;
         return $data;
 

@@ -18,9 +18,12 @@
 {{!                     <div class="col-xl-2"></div> }}
                     <div class="col-xl-4" style="margin-left: 13.5%">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                     <div class="col-xl-4" style="padding-left: 0.4%;"> 
-                        <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
-                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
-                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}">
+                        <div class="card-icon-grid-div"> <div class="common-margin">{{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}</div>
+                            <div class="rep-icon-grid-div common-margin" data-toggle = "tooltip" title = "{{#str}}manager:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
+                            {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}
+                            </div>
+                            <div class="common-margin"><img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
+                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 
@@ -30,9 +33,12 @@
                     <div class="col-xl-2"></div>
                     <div class="col-xl-4">{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                     <div class="col-xl-4" style="padding-left: 0.4%"> 
-                        <div style="float: right"> {{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}
-                            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
-                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}">
+                        <div class="card-icon-grid-div"> <div class="common-margin">{{#multipleanswers}} {{{howmanyanswersnecessary}}} {{/multipleanswers}}</div>
+                            <div class="rep-icon-grid-div common-margin" data-toggle = "tooltip" title = "{{#str}}student:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
+                            {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}
+                            </div>
+                            <div class="common-margin"><img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
+                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 
