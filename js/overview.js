@@ -64,7 +64,7 @@ function startOverview(Y, __cmid, __topic) { // Wrapper function that is called 
         }
         
         function openCardFormForEditing(cardinoverview) {
-            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinoverview;
+            var goTo = window.location.pathname + '?id=' + __cmid + '&action=editcard&cardid=' + cardinoverview + '&from=overview';
             window.location.href = goTo;
         }
          

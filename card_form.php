@@ -40,7 +40,7 @@ class mod_cardbox_card_form extends moodleform {
      * @param type $action
      * @param array $preselected This param is saved by the constructor in $this->_customdata.
      */
-    function definition($action = null, $preselected = null) {
+    function definition($action = null, $preselected = null, $cardid=0) {
 
         global $CFG, $DB, $USER, $COURSE;
 
@@ -172,7 +172,9 @@ class mod_cardbox_card_form extends moodleform {
         
         $context = context_module::instance($customdata['cmid']);
         
-        if (has_capability('mod/cardbox:approvecard', $context)) {
+        $cardapproved = cardbox_card_approved($customdata['cardid']);
+
+        if (has_capability('mod/cardbox:approvecard', $context) && !$cardapproved) {
             $this->add_action_buttons_for_managers(true);
 
         } else {

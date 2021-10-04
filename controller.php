@@ -291,7 +291,7 @@ if ($action === 'editcard') {
     $answercount = count($answers);
     $necessaryanswers = cardbox_get_necessaryanswers($cardid);
 
-    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id, 'cmid' => $cmid, 'answers' => $necessaryanswers);
+    $customdata = array('topic' => $topic, 'answercount' => $answercount, 'cardboxid' => $cardbox->id, 'cmid' => $cmid, 'answers' => $necessaryanswers, 'cardid' => $cardid, 'from' => $from);
     $mform = new mod_cardbox_card_form($actionurl, $customdata);
 
     $options = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
@@ -336,8 +336,13 @@ if ($action === 'editcard') {
     $mform->set_data($entry);
     
     if ($mform->is_cancelled()) {
+
+        if ($from === "review") {
+            $action = 'review';
+        } else {
+            $action = 'overview';
+        }
         
-        $action = 'review';
 
     // If submitted: get files from filemanager
     } else if ($formdata = $mform->get_data()) {
@@ -487,8 +492,14 @@ if ($action === 'editcard') {
         $PAGE->requires->js_init_call('addCard', $params, true);
         
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
-        echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
-        
+
+/*         $cardapproved = cardbox_card_approved($cardid); */
+        if ($from === "overview") {
+            echo $myrenderer->cardbox_render_tabs($taburl, 'overview', $context);
+        } else {
+            echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
+        }
+
         $mform->display();
 
     }
@@ -939,7 +950,7 @@ if ($action === 'overview') {
         $strings = $stringman->load_component_strings('cardbox', 'en');
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00000"));
         $PAGE->requires->js_init_call('startOverview', array($cmid, $topic));
         
         // 2. Create a view controller.
