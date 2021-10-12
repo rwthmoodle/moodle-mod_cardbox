@@ -236,6 +236,7 @@ $string['linegraphxaxislabel'] = 'Datum';
 $string['linegraphyaxislabel_performance'] = '% gewusst';
 $string['linegraphyaxislabel_numbercards'] = 'Anzahl an Karten';
 $string['linegraphyaxislabel_duration'] = 'Dauer (min)';
+$string['linegraphtooltiplabel_below_threshold'] = 'keine Statistiken, weil <{$a} Teilnehmer/innen in der Woche geübt haben';
 $string['lastpractise'] = 'zuletzt geübt';
 $string['nopractise'] = 'noch nicht geübt';
 $string['newcard'] = 'karten neu';
@@ -258,3 +259,8 @@ $string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a}';
 $string['manager:deckdescription'] = 'Im Durchschnitt liegt diese Karte für alle Studierenden in Fach {$a}';
 $string['manager:repeatdesc'] = 'Diese Karte wurde von den Studierenden, im Durchschnitt, nach {$a} Wiederholungen gelernt';
 $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gelernt';
+
+// Settings.
+$string['statistics_heading'] = 'Statistiken';
+$string['weekly_users_threshold'] = 'Untergrenze Übende pro Woche';
+$string['weekly_users_threshold_desc'] = 'Wie viele Teilnehmende pro Woche mindestens üben müssen, damit Manager für die Woche Statistiken sehen.';

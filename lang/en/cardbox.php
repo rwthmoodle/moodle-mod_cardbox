@@ -237,6 +237,7 @@ $string['linegraphxaxislabel'] = 'Date';
 $string['linegraphyaxislabel_performance'] = '% known';
 $string['linegraphyaxislabel_numbercards'] = 'Number of cards';
 $string['linegraphyaxislabel_duration'] = 'Duration (min)';
+$string['linegraphtooltiplabel_below_threshold'] = 'no statistics because <{$a} users practiced that week';
 $string['lastpractise'] = 'last practised';
 $string['nopractise'] = 'not practised yet';
 $string['newcard'] = 'new cards';
@@ -260,3 +261,8 @@ $string['student:deckdescription'] = 'This card lies in deck {$a}';
 $string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';
 $string['manager:repeatdesc'] = 'This card was mastered by students, on average, after {$a} repetitions';
 $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
+
+// Settings.
+$string['statistics_heading'] = 'Statistics';
+$string['weekly_users_threshold'] = 'Threshold practicers per week';
+$string['weekly_users_threshold_desc'] = 'How many users need to practice per week in order for managers to see statistics for that week.';
