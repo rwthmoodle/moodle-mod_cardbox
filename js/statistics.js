@@ -305,6 +305,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
             datasets: [{
                 label: M.util.get_string('numberofcards', 'cardbox'),
                 data: __performance.numberofcards,
+                tooltiplabels: __performance.tooltips.numberofcards,
                 backgroundColor: '#0066ff', // '#0066ff'
                 borderColor: '#0066ff', // specifies the line color
                 borderCapStyle: 'butt', // no change
@@ -339,6 +340,13 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
                 },
                 legend: {
                     display: false
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return data.datasets[0].tooltiplabels[tooltipItem.index]
+                        }
+                    }
                 },
                 lineTension: 0,
                 elements: {
@@ -391,6 +399,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
             datasets: [{
                 label: M.util.get_string('duration', 'cardbox'),
                 data: __performance.durationofsession,
+                tooltiplabels: __performance.tooltips.durationofsession,
                 backgroundColor: '#0066ff', // '#0066ff'
                 borderColor: '#0066ff', // specifies the line color
                 borderCapStyle: 'butt', // no change
@@ -425,6 +434,13 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
                 },
                 legend: {
                     display: false
+                },
+                tooltips: {
+                    callbacks: {
+                        label: function(tooltipItem, data) {
+                            return data.datasets[0].tooltiplabels[tooltipItem.index]
+                        }
+                    }
                 },
                 lineTension: 0,
                 elements: {

@@ -14,18 +14,13 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package   mod_cardbox
- * @copyright 2019 RWTH Aachen (see README.md)
- * @author    Anna Heynkes
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+defined('MOODLE_INTERNAL') || die;
 
-defined('MOODLE_INTERNAL') || die();
+if ($ADMIN->fulltree) {
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2021101201; // The current module version (Date: YYYYMMDDXX).
-$plugin->release = 'kickoff'; // Rename
-$plugin->requires = 2018120302.05; // Requires this Moodle version.
-$plugin->cron = 0; // Optional. Period for cron to check this module (secs).
-$plugin->maturity = MATURITY_ALPHA; //Optional, goal is: MATURITY_STABLE;
+    $settings->add(new admin_setting_heading('cardbox_statistics_heading', get_string('statistics_heading', 'cardbox'), ''));
+
+    $settings->add(new admin_setting_configtext('weekly_statistics_user_threshold',
+                    get_string('weekly_users_threshold', 'cardbox'),
+                    get_string('weekly_users_threshold_desc', 'cardbox'), 5, PARAM_INT));
+}

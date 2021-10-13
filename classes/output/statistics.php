@@ -35,17 +35,19 @@ class cardbox_statistics implements \renderable, \templatable {
     private $weeks;
     private $numberofcards;
     private $durationofsession;
+    private $tooltips;
 
     public function __construct($cardboxid, $ismanager) {
 
         global $DB, $USER, $CFG;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
-        $this->dates = array(); //new stdClass();
-        $this->performances = array(); //new stdClass();
-        $this->weeks = array(); //new stdClass();
-        $this->numberofcards = array(); //new stdClass();
-        $this->durationofsession = array(); //new stdClass();
+        $this->dates = [];
+        $this->performances = [];
+        $this->weeks = [];
+        $this->numberofcards = [];
+        $this->durationofsession = [];
+        $this->tooltips = new stdClass();
 
         $data = $DB->get_records('cardbox_statistics', array('userid' => $USER->id, 'cardboxid' => $cardboxid), '', 'timeofpractice, percentcorrect');
 
@@ -55,7 +57,7 @@ class cardbox_statistics implements \renderable, \templatable {
         }
         $this->ismanager = $ismanager;
 
-        $data = $DB->get_records('cardbox_statistics', array('cardboxid' => $cardboxid), '', 'timeofpractice, numberofcards, duration');
+        $data = $DB->get_records('cardbox_statistics', array('cardboxid' => $cardboxid), '', 'timeofpractice, numberofcards, duration, userid');
         $endoflastweek = new DateTime();
         $endoflastweek->modify('Monday this week');
         $endoflastweek = $endoflastweek->format('U');
@@ -68,29 +70,38 @@ class cardbox_statistics implements \renderable, \templatable {
             $numberofcards = 0;
             $durationofsession = 0;
             $count = 0;
+            $distinctusers = [];
             foreach ($data as $record) {
                 if ($record->timeofpractice > $i && $record->timeofpractice < $mondayweeklater) {
                     $numberofcards += $record->numberofcards;
                     $durationofsession += $record->duration;
+                    $distinctusers[$record->userid] = true;
                     $count++;
                 }
-
             }
             $this->weeks[] = "" .cardbox_get_user_date_short($i). " - " .cardbox_get_user_date_short($mondayweeklater - 86400);
-            if ($count != 0) {
-                $this->durationofsession[] = round(($durationofsession) / 60 / $count);
-                $this->numberofcards[] = round($numberofcards / $count);
+
+            $statisticsthreshold = get_config('mod_cardbox', 'weekly_statistics_user_threshold');
+            if ($count == 0 || count($distinctusers) < $statisticsthreshold) {
+                $durationofsession = 0;
+                $numberofcards = 0;
             } else {
-                $this->durationofsession[] = 0;
-                $this->numberofcards[] = 0;
+                $durationofsession = round(($durationofsession) / 60 / $count);
+                $numberofcards = round($numberofcards / $count);
             }
+            $this->durationofsession[] = $durationofsession;
+            $this->numberofcards[] = $numberofcards;
+
+            $durationofsessiontooltip = $durationofsession;
+            $numberofcardstooltip = $numberofcards;
+            if (count($distinctusers) < $statisticsthreshold) {
+                $belowthreshold = get_string('linegraphtooltiplabel_below_threshold', 'cardbox', 5);
+                $durationofsessiontooltip = $belowthreshold;
+                $numberofcardstooltip = $belowthreshold;
+            }
+            $this->tooltips->durationofsession[] = $durationofsessiontooltip;
+            $this->tooltips->numberofcards[] = $numberofcardstooltip;
         }
-
-        /* foreach ($data as $record) {
-            $this->numberofcards[] = $record->numberofcards;
-            $this->durationofsession[] = round(($record->duration) / 60);
-        } */
-
     }
 
     public function export_for_template(\renderer_base $output) {
@@ -103,6 +114,7 @@ class cardbox_statistics implements \renderable, \templatable {
         $data['weeks'] = $this->weeks;
         $data['numberofcards'] = $this->numberofcards;
         $data['durationofsession'] = $this->durationofsession;
+        $data['tooltips'] = $this->tooltips;
         return $data;
 
     }
