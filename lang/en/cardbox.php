@@ -264,5 +264,7 @@ $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
 
 // Settings.
 $string['statistics_heading'] = 'Statistics';
-$string['weekly_users_threshold'] = 'Threshold practicers per week';
-$string['weekly_users_threshold_desc'] = 'How many users need to practice per week in order for managers to see statistics for that week.';
+$string['weekly_users_practice_threshold'] = 'Threshold practicers per week';
+$string['weekly_users_practice_threshold_desc'] = 'How many users need to practice per week in order for managers to see statistics for that week.';
+$string['weekly_enrolled_students_threshold'] = 'Threshold enrolled students';
+$string['weekly_enrolled_students_threshold_desc'] = 'How many students need to be enrolled into the course for weekly statistics to be shown for managers.';

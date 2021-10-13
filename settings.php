@@ -20,7 +20,11 @@ if ($ADMIN->fulltree) {
 
     $settings->add(new admin_setting_heading('cardbox_statistics_heading', get_string('statistics_heading', 'cardbox'), ''));
 
-    $settings->add(new admin_setting_configtext('weekly_statistics_user_threshold',
-                    get_string('weekly_users_threshold', 'cardbox'),
-                    get_string('weekly_users_threshold_desc', 'cardbox'), 5, PARAM_INT));
+    $settings->add(new admin_setting_configtext('mod_cardbox/weekly_statistics_user_practice_threshold',
+                    get_string('weekly_users_practice_threshold', 'cardbox'),
+                    get_string('weekly_users_practice_threshold_desc', 'cardbox'), 5, PARAM_INT));
+
+    $settings->add(new admin_setting_configtext('mod_cardbox/weekly_statistics_enrolled_students_threshold',
+                    get_string('weekly_enrolled_students_threshold', 'cardbox'),
+                    get_string('weekly_enrolled_students_threshold_desc', 'cardbox'), 10, PARAM_INT));
 }
