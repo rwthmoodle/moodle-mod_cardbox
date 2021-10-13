@@ -73,9 +73,9 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->addElement('select', 'casesensitive', get_string('casesensitive', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
         $mform->addHelpButton('casesensitive', 'casesensitive', 'cardbox');
 
-        $mform->addElement('select', 'numberofcardssetting', get_string('numberofcardssetting', 'cardbox'), array('0' => get_string('studentschoose', 'cardbox'), '1' => 10, '2' => 20, '3' => 30, '4' => 40, '5' => 50));
+/*         $mform->addElement('select', 'numberofcardssetting', get_string('numberofcardssetting', 'cardbox'), array('0' => get_string('studentschoose', 'cardbox'), '1' => 10, '2' => 20, '3' => 30, '4' => 40, '5' => 50));
         $mform->setDefault('numberofcardssetting', 0);
-        $mform->addHelpButton('numberofcardssetting', 'numberofcardssetting', 'cardbox');
+        $mform->addHelpButton('numberofcardssetting', 'numberofcardssetting', 'cardbox'); */
 
         $this->standard_coursemodule_elements();
 
