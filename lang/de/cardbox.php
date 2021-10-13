@@ -262,5 +262,7 @@ $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gele
 
 // Settings.
 $string['statistics_heading'] = 'Statistiken';
-$string['weekly_users_threshold'] = 'Untergrenze Übende pro Woche';
-$string['weekly_users_threshold_desc'] = 'Wie viele Teilnehmende pro Woche mindestens üben müssen, damit Manager für die Woche Statistiken sehen.';
+$string['weekly_users_practice_threshold'] = 'Untergrenze Übende pro Woche';
+$string['weekly_users_practice_threshold_desc'] = 'Wie viele Teilnehmende pro Woche mindestens üben müssen, damit Manager für die Woche Statistiken sehen.';
+$string['weekly_enrolled_students_threshold'] = 'Untegrenze eingeschriebene Studierende';
+$string['weekly_enrolled_students_threshold_desc'] = 'Wie viele Studierende in den Kurs eingeschrieben sein müssen, damit Manager wöchentliche Statistiken sehen.';

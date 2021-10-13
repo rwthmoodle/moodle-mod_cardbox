@@ -27,9 +27,11 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
     
         if(__ismanager) {
             displayAverageCardsOverDecks();
-            displayNumberOfCardsOverTime();
-            displayDurationOfASessionOverTime();
-
+            if (__performance.displayweeklystats) {
+                // TODO remove placeholders for graphs otherwise
+                displayNumberOfCardsOverTime();
+                displayDurationOfASessionOverTime();
+            }
         } else {
             displayCardboxStatus();
             displayUserPerformanceOverTime();

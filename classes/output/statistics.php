@@ -32,6 +32,7 @@ class cardbox_statistics implements \renderable, \templatable {
     private $dates;
     private $performances;
     private $ismanager;
+    private $displayweeklystats;
     private $weeks;
     private $numberofcards;
     private $durationofsession;
@@ -48,6 +49,8 @@ class cardbox_statistics implements \renderable, \templatable {
         $this->numberofcards = [];
         $this->durationofsession = [];
         $this->tooltips = new stdClass();
+        $this->tooltips->durationofsession = [];
+        $this->tooltips->numberofcards = [];
 
         $data = $DB->get_records('cardbox_statistics', array('userid' => $USER->id, 'cardboxid' => $cardboxid), '', 'timeofpractice, percentcorrect');
 
@@ -56,6 +59,15 @@ class cardbox_statistics implements \renderable, \templatable {
             $this->performances[] = $record->percentcorrect;
         }
         $this->ismanager = $ismanager;
+
+        $enrolledstudentsthreshold = get_config('mod_cardbox', 'weekly_statistics_enrolled_students_threshold');
+        $cm = get_coursemodule_from_instance('cardbox', $cardboxid);
+        $context = context_module::instance($cm->id);
+        $enrolledstudents = get_enrolled_users($context, 'mod/cardbox:practice');
+        $this->displayweeklystats = count($enrolledstudents) >= $enrolledstudentsthreshold;
+        if (!$this->displayweeklystats) {
+            return;
+        }
 
         $data = $DB->get_records('cardbox_statistics', array('cardboxid' => $cardboxid), '', 'timeofpractice, numberofcards, duration, userid');
         $endoflastweek = new DateTime();
@@ -81,8 +93,8 @@ class cardbox_statistics implements \renderable, \templatable {
             }
             $this->weeks[] = "" .cardbox_get_user_date_short($i). " - " .cardbox_get_user_date_short($mondayweeklater - 86400);
 
-            $statisticsthreshold = get_config('mod_cardbox', 'weekly_statistics_user_threshold');
-            if ($count == 0 || count($distinctusers) < $statisticsthreshold) {
+            $practicingusersthreshold = get_config('mod_cardbox', 'weekly_statistics_user_practice_threshold');
+            if ($count == 0 || count($distinctusers) < $practicingusersthreshold) {
                 $durationofsession = 0;
                 $numberofcards = 0;
             } else {
@@ -94,7 +106,7 @@ class cardbox_statistics implements \renderable, \templatable {
 
             $durationofsessiontooltip = $durationofsession;
             $numberofcardstooltip = $numberofcards;
-            if (count($distinctusers) < $statisticsthreshold) {
+            if (count($distinctusers) < $practicingusersthreshold) {
                 $belowthreshold = get_string('linegraphtooltiplabel_below_threshold', 'cardbox', 5);
                 $durationofsessiontooltip = $belowthreshold;
                 $numberofcardstooltip = $belowthreshold;
@@ -111,6 +123,7 @@ class cardbox_statistics implements \renderable, \templatable {
         $data['performances'] = $this->performances;
         $data['ismanager'] = $this->ismanager;
 
+        $data['displayweeklystats'] = $this->displayweeklystats;
         $data['weeks'] = $this->weeks;
         $data['numberofcards'] = $this->numberofcards;
         $data['durationofsession'] = $this->durationofsession;
