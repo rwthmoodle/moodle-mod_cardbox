@@ -248,6 +248,7 @@ $string['no'] = 'No';
 $string['cancel'] = 'Cancel';
 $string['deletecard'] = 'Delete card?';
 $string['deletecardinfo'] = 'The card and the progress of this card will be deleted for all users.';
+$string['delete'] = 'Delete';
 
 
 $string['topicfilter'] = 'Topic ';

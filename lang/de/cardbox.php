@@ -247,6 +247,7 @@ $string['no'] = 'Nein';
 $string['cancel'] = 'Abbrechen';
 $string['deletecard'] = 'Karte löschen?';
 $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte aller User wird gelöscht.';
+$string['delete'] = 'Löschen';
 
 $string['topicfilter'] = 'Thema ';
 $string['noselection'] = 'alle';
