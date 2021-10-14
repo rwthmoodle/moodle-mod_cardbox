@@ -241,6 +241,8 @@ $string['lastpractise'] = 'zuletzt geübt';
 $string['nopractise'] = 'noch nicht geübt';
 $string['newcard'] = 'karten neu';
 $string['knowncard'] = 'karten gelernt';
+$string['averagestudentscompare'] = 'Durschnitt aller Studenten';
+$string['absolutenumberofcards'] = 'Absolute Anzahl von Karten';
 
 $string['yes'] = 'Ja';
 $string['no'] = 'Nein';

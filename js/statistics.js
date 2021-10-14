@@ -21,7 +21,7 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // Wrapper function that is called by controller.php
+function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, __ismanager) { // Wrapper function that is called by controller.php
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
     
@@ -52,7 +52,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
         type: 'bar',
         data: {
             datasets: [{
-                label: 'Absolute number of cards',
+                label: M.util.get_string('absolutenumberofcards', 'cardbox'),
                 backgroundColor: [
                     '#0066ff',
                     '#0066ff',
@@ -131,7 +131,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
 
            datasets: [{
                 label: M.util.get_string('flashcardsdue', 'cardbox'),
-                data: [__boxcount[0], __boxcount[1]['due'], __boxcount[2]['due'], __boxcount[3]['due'], __boxcount[4]['due'], __boxcount[5]['due'], 0],
+                data: [__boxcountstudent[0], __boxcountstudent[1]['due'], __boxcountstudent[2]['due'], __boxcountstudent[3]['due'], __boxcountstudent[4]['due'], __boxcountstudent[5]['due'], 0],
                 backgroundColor: [
                         '#0066ff',
                         '#0066ff',
@@ -140,11 +140,12 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
                         '#0066ff',
                         '#0066ff',
                         '#00b33c'
-                ]
+                ],
+                stack: 'Stack 0'
             },
             {
                 label: M.util.get_string('flashcardsnotdue', 'cardbox'),
-                data: [0, __boxcount[1]['notdue'], __boxcount[2]['notdue'], __boxcount[3]['notdue'], __boxcount[4]['notdue'], __boxcount[5]['notdue'], __boxcount[6]],
+                data: [0, __boxcountstudent[1]['notdue'], __boxcountstudent[2]['notdue'], __boxcountstudent[3]['notdue'], __boxcountstudent[4]['notdue'], __boxcountstudent[5]['notdue'], __boxcountstudent[6]],
                 backgroundColor: [
                         '#99c2ff',
                         '#99c2ff',
@@ -153,8 +154,23 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
                         '#99c2ff',
                         '#99c2ff',
                         '#00b33c'
-                ]
-           }]
+                ],
+                stack: 'Stack 0'
+           },
+           {
+            label: M.util.get_string('averagestudentscompare', 'cardbox'),
+            data: [0['abs'], __boxcount[1]['abs'], __boxcount[2]['abs'], __boxcount[3]['abs'], __boxcount[4]['abs'], __boxcount[5]['abs'], __boxcount[6]['abs']],
+            backgroundColor: [
+                    '#7A6FAC',
+                    '#7A6FAC',
+                    '#7A6FAC',
+                    '#7A6FAC',
+                    '#7A6FAC',
+                    '#7A6FAC',
+                    '#7A6FAC'
+            ],
+            stack: 'Stack 1'
+        }]
 
        };
 
@@ -162,6 +178,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
            type: 'bar',
            data: cardboxdata,
            options: {
+               responsive: true,
                title: {
                    display: true,
                    text: M.util.get_string('titleoverviewchart', 'cardbox'),
@@ -170,7 +187,7 @@ function displayCharts(Y, __cmid, __boxcount, __performance, __ismanager) { // W
                },
                legend: {
                    display: true,
-                   position: 'right'
+                   position: 'top'
                },
                ticks: {
                    beginAtZero: true,
