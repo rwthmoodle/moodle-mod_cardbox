@@ -242,6 +242,8 @@ $string['lastpractise'] = 'last practised';
 $string['nopractise'] = 'not practised yet';
 $string['newcard'] = 'new cards';
 $string['knowncard'] = 'mastered cards';
+$string['averagestudentscompare'] = 'average of all students';
+$string['absolutenumberofcards'] = 'Absolute number of cards';
 
 $string['yes'] = 'Yes';
 $string['no'] = 'No';

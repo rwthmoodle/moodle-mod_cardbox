@@ -669,9 +669,10 @@ if ($action === 'statistics') {
     //echo $OUTPUT->heading("$cardbox->name"); // XXX
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
+    $boxcount = count_cardposition($cardbox->id);
     if (has_capability('mod/cardbox:approvecard', $context)) {
         $ismanager = true;
-        $boxcount = count_cardposition($cardbox->id);
+        $boxcountstudent = null;
     } else {
         $info = get_string('info:statisticspage', 'cardbox');
         $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
@@ -680,7 +681,7 @@ if ($action === 'statistics') {
         // 1. Create a virtual cardbox for this user, i.e. create the model.
         $select = new cardbox_card_selection_algorithm(null, true);
         $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select);
-        $boxcount = $cardboxmodel->cardbox_get_status();
+        $boxcountstudent = $cardboxmodel->cardbox_get_status();
     }
      // 2. Create a view controller.
      $statistics = new cardbox_statistics($cardbox->id, $ismanager); // XXX auch hier das cardboxmodel nutzen.
@@ -691,7 +692,7 @@ if ($action === 'statistics') {
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js?ver=00003"));
-    $params = array($cmid, $boxcount, $performance, $ismanager); // true means: the user checks their own results.
+    $params = array($cmid, $boxcountstudent, $boxcount, $performance, $ismanager); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('displayCharts', $params, true);
 
     // 4. Render the page.
