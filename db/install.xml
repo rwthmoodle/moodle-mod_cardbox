@@ -75,6 +75,7 @@
         <INDEXES>
             <INDEX NAME="userid_card_idx" UNIQUE="false" FIELDS="userid, card"/>
             <INDEX NAME="cardposition_idx" UNIQUE="false" FIELDS="cardposition"/>
+            <INDEX NAME="card_idx" UNIQUE="false" FIELDS="card"/>
         </INDEXES>
 
     </TABLE>

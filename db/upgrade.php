@@ -588,6 +588,15 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021100101, 'cardbox');
     }
 
+    if ($oldversion < 2021101400) {
+        $table = new xmldb_table('cardbox_progress');
+        $index = new xmldb_index('card_idx', XMLDB_INDEX_NOTUNIQUE, ['card']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        upgrade_mod_savepoint(true, 2021101400, 'cardbox');
+    }
+
     return true;
 
 }
