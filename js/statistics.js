@@ -321,29 +321,77 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
             // These labels appear in the legend and in the tooltips when hovering different arcs.
             labels: __performance.weeks,
 
-            datasets: [{
-                label: M.util.get_string('numberofcards', 'cardbox'),
-                data: __performance.numberofcards,
-                tooltiplabels: __performance.tooltips.numberofcards,
-                backgroundColor: '#0066ff', // '#0066ff'
-                borderColor: '#0066ff', // specifies the line color
+            datasets: [
+                {
+                    label: M.util.get_string('numberofcardsmin', 'cardbox'),                     //Min
+                    data: __performance.numberofcardsmin,
+                    tooltiplabels: __performance.tooltips.numberofcards.min,
+                    backgroundColor: '#0066ff', // '#0066ff'
+                    borderColor: '#0066ff', // specifies the line color
+                    borderCapStyle: 'butt', // no change
+                    borderDash: [], // no change
+                    borderDashOffset: 0.0, // no change
+                    borderJoinStyle: 'miter', // no change
+                    pointBorderColor: "#0066ff",
+                    pointBackgroundColor: "#0066ff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "#0066ff",
+                    pointHoverBorderColor: "#0066ff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    spanGaps: false,
+                    fill: false,
+                    lineTension: 0                
+                },
+                {
+                label: M.util.get_string('numberofcardsavg', 'cardbox'),                      //Average
+                data: __performance.numberofcardsavg,
+                tooltiplabels: __performance.tooltips.numberofcards.average,
+                backgroundColor: '#9C9E9F', // '#9C9E9F'
+                borderColor: '#9C9E9F', // specifies the line color
                 borderCapStyle: 'butt', // no change
-                borderDash: [], // no change
+                borderDash: [5, 5], 
                 borderDashOffset: 0.0, // no change
                 borderJoinStyle: 'miter', // no change
-                pointBorderColor: "#0066ff",
-                pointBackgroundColor: "#0066ff",
+                pointBorderColor: "#9C9E9F",
+                pointBackgroundColor: "#9C9E9F",
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: "#0066ff",
-                pointHoverBorderColor: "#0066ff",
+                pointHoverBackgroundColor: "#9C9E9F",
+                pointHoverBorderColor: "#9C9E9F",
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
-            }]
+            },
+            {
+                label: M.util.get_string('numberofcardsmax', 'cardbox'),                      //Max
+                data: __performance.numberofcardsmax,
+                tooltiplabels: __performance.tooltips.numberofcards.max,
+                backgroundColor: '#57AB27', // '#57AB27'
+                borderColor: '#57AB27', // specifies the line color
+                borderCapStyle: 'butt', // no change
+                borderDash: [], // no change
+                borderDashOffset: 0.0, // no change
+                borderJoinStyle: 'miter', // no change
+                pointBorderColor: "#57AB27",
+                pointBackgroundColor: "#57AB27",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "#57AB27",
+                pointHoverBorderColor: "#57AB27",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                spanGaps: false,
+                fill: false,
+                lineTension: 0                
+            }
+        ]
 
         };
 
@@ -358,12 +406,12 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     position: 'top'
                 },
                 legend: {
-                    display: false
+                    display: true
                 },
                 tooltips: {
                     callbacks: {
                         label: function(tooltipItem, data) {
-                            return data.datasets[0].tooltiplabels[tooltipItem.index]
+                            return data.datasets[tooltipItem.datasetIndex].tooltiplabels[tooltipItem.index]
                         }
                     }
                 },
@@ -376,7 +424,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 ticks: {
                     beginAtZero: true,
                     min: 0,
-                    max: 100 // no effect
+/*                     max: 100 // no effect */
                 },
                 scales: {
                     xAxes: [{
@@ -385,9 +433,10 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                             labelString: M.util.get_string('linegraphxaxislabel', 'cardbox'),
                             fontSize: 16
                         },
+                        stacked: true
                     }],
                     yAxes: [{
-                        stacked: true,
+                        stacked: false,
                         scaleLabel: {
                             display: true,
                             labelString: M.util.get_string('linegraphyaxislabel_numbercards', 'cardbox'),
@@ -396,7 +445,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            max: 100,
+/*                             max: 100, */
                             stepSize: 10
                         }
                     }]
@@ -415,29 +464,77 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
             // These labels appear in the legend and in the tooltips when hovering different arcs.
             labels: __performance.weeks,
 
-            datasets: [{
-                label: M.util.get_string('duration', 'cardbox'),
-                data: __performance.durationofsession,
-                tooltiplabels: __performance.tooltips.durationofsession,
-                backgroundColor: '#0066ff', // '#0066ff'
-                borderColor: '#0066ff', // specifies the line color
+            datasets: [
+                {
+                    label: M.util.get_string('durationmin', 'cardbox'),                              //Min
+                    data: __performance.durationofsessionmin,
+                    tooltiplabels: __performance.tooltips.durationofsession.min,
+                    backgroundColor: '#0066ff', // '#0066ff'
+                    borderColor: '#0066ff', // specifies the line color
+                    borderCapStyle: 'butt', // no change
+                    borderDash: [], // no change
+                    borderDashOffset: 0.0, // no change
+                    borderJoinStyle: 'miter', // no change
+                    pointBorderColor: "#0066ff",
+                    pointBackgroundColor: "#0066ff",
+                    pointBorderWidth: 1,
+                    pointHoverRadius: 5,
+                    pointHoverBackgroundColor: "#0066ff",
+                    pointHoverBorderColor: "#0066ff",
+                    pointHoverBorderWidth: 2,
+                    pointRadius: 1,
+                    pointHitRadius: 10,
+                    spanGaps: false,
+                    fill: false,
+                    lineTension: 0                
+                },
+                {
+                label: M.util.get_string('durationavg', 'cardbox'),                             //Average
+                data: __performance.durationofsessionavg,
+                tooltiplabels: __performance.tooltips.durationofsession.average,
+                backgroundColor: '#9C9E9F', // '#9C9E9F'
+                borderColor: '#9C9E9F', // specifies the line color
                 borderCapStyle: 'butt', // no change
-                borderDash: [], // no change
+                borderDash: [5, 5],
                 borderDashOffset: 0.0, // no change
                 borderJoinStyle: 'miter', // no change
-                pointBorderColor: "#0066ff",
-                pointBackgroundColor: "#0066ff",
+                pointBorderColor: "#9C9E9F",
+                pointBackgroundColor: "#9C9E9F",
                 pointBorderWidth: 1,
                 pointHoverRadius: 5,
-                pointHoverBackgroundColor: "#0066ff",
-                pointHoverBorderColor: "#0066ff",
+                pointHoverBackgroundColor: "#9C9E9F",
+                pointHoverBorderColor: "#9C9E9F",
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
-            }]
+            },
+            {
+                label: M.util.get_string('durationmax', 'cardbox'),                                //Max
+                data: __performance.durationofsessionmax,
+                tooltiplabels: __performance.tooltips.durationofsession.max,
+                backgroundColor: '#57AB27', // '#57AB27'
+                borderColor: '#57AB27', // specifies the line color
+                borderCapStyle: 'butt', // no change
+                borderDash: [], // no change
+                borderDashOffset: 0.0, // no change
+                borderJoinStyle: 'miter', // no change
+                pointBorderColor: "#57AB27",
+                pointBackgroundColor: "#57AB27",
+                pointBorderWidth: 1,
+                pointHoverRadius: 5,
+                pointHoverBackgroundColor: "#57AB27",
+                pointHoverBorderColor: "#57AB27",
+                pointHoverBorderWidth: 2,
+                pointRadius: 1,
+                pointHitRadius: 10,
+                spanGaps: false,
+                fill: false,
+                lineTension: 0                
+            }
+        ]
 
         };
 
@@ -452,12 +549,12 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     position: 'top'
                 },
                 legend: {
-                    display: false
+                    display: true
                 },
                 tooltips: {
                     callbacks: {
                         label: function(tooltipItem, data) {
-                            return data.datasets[0].tooltiplabels[tooltipItem.index]
+                            return data.datasets[tooltipItem.datasetIndex].tooltiplabels[tooltipItem.index]
                         }
                     }
                 },
@@ -470,7 +567,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 ticks: {
                     beginAtZero: true,
                     min: 0,
-                    max: 100 // no effect
+/*                     max: 100 // no effect */
                 },
                 scales: {
                     xAxes: [{
@@ -479,9 +576,10 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                             labelString: M.util.get_string('linegraphxaxislabel', 'cardbox'),
                             fontSize: 16
                         },
+                        stacked: true
                     }],
                     yAxes: [{
-                        stacked: true,
+                        stacked: false,
                         scaleLabel: {
                             display: true,
                             labelString: M.util.get_string('linegraphyaxislabel_duration', 'cardbox'),
@@ -490,7 +588,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            max: 100,
+/*                             max: 100, */
                             stepSize: 10
                         }
                     }]

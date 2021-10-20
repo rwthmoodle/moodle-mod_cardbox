@@ -203,11 +203,17 @@ $string['box'] = 'box';
 $string['titleperformancechart'] = 'Past practice sessions';
 $string['performance'] = '% correct';
 
-$string['titlenumberofcards'] = 'Average number of cards per session';
+$string['titlenumberofcards'] = 'Number of cards per session';
 $string['numberofcards'] = 'Number';
+$string['numberofcardsavg'] = 'Average';
+$string['numberofcardsmin'] = 'Minimum';
+$string['numberofcardsmax'] = 'Maximum';
 
-$string['titledurationofasession'] = 'Average duration of a session';
+$string['titledurationofasession'] = 'Duration of a session';
 $string['duration'] = 'Duration (min)';
+$string['durationavg'] = 'Average in min';
+$string['durationmin'] = 'Minimum in min';
+$string['durationmax'] = 'Maximun in min';
 
 
 // Review.

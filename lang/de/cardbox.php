@@ -202,11 +202,17 @@ $string['box'] = 'Fach';
 $string['titleperformancechart'] = 'Vergangene Übungen';
 $string['performance'] = '% gewusst:';
 
-$string['titlenumberofcards'] = 'Durchschnittliche Anzahl von Karten pro Übung';
+$string['titlenumberofcards'] = 'Anzahl an Karten pro Übung';
 $string['numberofcards'] = 'Anzahl';
+$string['numberofcardsavg'] = 'Durschnitt';
+$string['numberofcardsmin'] = 'Minimum';
+$string['numberofcardsmax'] = 'Maximum';
 
-$string['titledurationofasession'] = 'Durchschnittliche Dauer einer Übung';
+$string['titledurationofasession'] = 'Dauer einer Übung';
 $string['duration'] = 'Dauer (min)';
+$string['durationavg'] = 'Durschnitt in min';
+$string['durationmin'] = 'Minimum in min';
+$string['durationmax'] = 'Maximun in min';
 
 
 // Review.
