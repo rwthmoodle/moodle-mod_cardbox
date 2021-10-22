@@ -171,8 +171,11 @@ class mod_cardbox_card_form extends moodleform {
         $mform->setType('question', PARAM_RAW);
         
         $context = context_module::instance($customdata['cmid']);
-        
-        $cardapproved = cardbox_card_approved($customdata['cardid']);
+        if (array_key_exists('cardid', $customdata)) {
+            $cardapproved = cardbox_card_approved($customdata['cardid']);
+        } else {
+            $cardapproved = false;
+        }
 
         if (has_capability('mod/cardbox:approvecard', $context) && !$cardapproved) {
             $this->add_action_buttons_for_managers(true);
