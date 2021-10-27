@@ -159,7 +159,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
            },
            {
             label: M.util.get_string('averagestudentscompare', 'cardbox'),
-            data: [0['abs'], __boxcount[1]['abs'], __boxcount[2]['abs'], __boxcount[3]['abs'], __boxcount[4]['abs'], __boxcount[5]['abs'], __boxcount[6]['abs']],
+            data: [__boxcount[0]['avg'], __boxcount[1]['avg'], __boxcount[2]['avg'], __boxcount[3]['avg'], __boxcount[4]['avg'], __boxcount[5]['avg'], __boxcount[6]['avg']],
             backgroundColor: [
                     '#7A6FAC',
                     '#7A6FAC',
