@@ -94,6 +94,10 @@ class cardbox_statistics implements \renderable, \templatable {
             $count = 0;
             $distinctusers = [];
             foreach ($data as $record) {
+                if ($record->numberofcards === null || $record->duration === null) {
+                    // Do not count unfinished practice sessions.
+                    continue;
+                }
                 if ($record->timeofpractice > $i && $record->timeofpractice < $mondayweeklater) {
                     $numberofcards += $record->numberofcards;
                     $durationofsession += $record->duration;
