@@ -174,7 +174,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
 
        };
 
-       var barChart = new Chart(context, {
+       var barChart1 = new Chart(context, {
            type: 'bar',
            data: cardboxdata,
            options: {
@@ -218,6 +218,11 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 }
            }
        });
+
+        if (!__performance.displayweeklystats) {
+            cardboxdata.datasets.pop();
+            barChart1.update();   
+        }
    }
 
     /**
@@ -341,6 +346,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
+                    pointStyle: 'line',
                     spanGaps: false,
                     fill: false,
                     lineTension: 0                
@@ -364,6 +370,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
+                pointStyle: 'line',
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
@@ -387,6 +394,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
+                pointStyle: 'line',
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
@@ -406,7 +414,9 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     position: 'top'
                 },
                 legend: {
-                    display: true
+                    labels: {
+                        usePointStyle: true,
+                    },
                 },
                 tooltips: {
                     callbacks: {
@@ -484,6 +494,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     pointHoverBorderWidth: 2,
                     pointRadius: 1,
                     pointHitRadius: 10,
+                    pointStyle: 'line',
                     spanGaps: false,
                     fill: false,
                     lineTension: 0                
@@ -507,6 +518,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
+                pointStyle: 'line',
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
@@ -530,6 +542,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
+                pointStyle: 'line',
                 spanGaps: false,
                 fill: false,
                 lineTension: 0                
@@ -549,7 +562,10 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     position: 'top'
                 },
                 legend: {
-                    display: true
+                    display: true,
+                    labels: {
+                        usePointStyle: true,
+                    },
                 },
                 tooltips: {
                     callbacks: {
