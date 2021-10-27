@@ -34,13 +34,14 @@ class cardbox_statistics implements \renderable, \templatable {
     private $ismanager;
     private $displayweeklystats;
     private $weeks;
-    private $numberofcards;
-    private $durationofsession;
+/*     private $numberofcards;
+    private $durationofsession; */
     private $tooltips;
     private $numberofcardsmin;
     private $numberofcardsmax;
     private $durationmin;
     private $durationmax;
+    private $infoenrolledstudentsthreshold;
 
     public function __construct($cardboxid, $ismanager) {
 
@@ -71,6 +72,11 @@ class cardbox_statistics implements \renderable, \templatable {
         $this->ismanager = $ismanager;
 
         $enrolledstudentsthreshold = get_config('mod_cardbox', 'weekly_statistics_enrolled_students_threshold');
+        if ($ismanager) {
+            $this->infoenrolledstudentsthreshold = get_string( 'info:enrolledstudentsthreshold_manager', 'cardbox', $enrolledstudentsthreshold);
+        } else {
+            $this->infoenrolledstudentsthreshold = get_string( 'info:enrolledstudentsthreshold_student', 'cardbox', $enrolledstudentsthreshold);
+        }
         $cm = get_coursemodule_from_instance('cardbox', $cardboxid);
         $context = context_module::instance($cm->id);
         $enrolledstudents = get_enrolled_users($context, 'mod/cardbox:practice');
@@ -172,6 +178,7 @@ class cardbox_statistics implements \renderable, \templatable {
         $data['ismanager'] = $this->ismanager;
 
         $data['displayweeklystats'] = $this->displayweeklystats;
+        $data['infoenrolledstudentsthreshold'] = $this->infoenrolledstudentsthreshold;
         $data['weeks'] = $this->weeks;
         $data['numberofcardsavg'] = $this->numberofcardsavg;
         $data['durationofsessionavg'] = $this->durationofsessionavg;
