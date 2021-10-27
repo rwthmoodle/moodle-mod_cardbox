@@ -112,8 +112,9 @@
             <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
         </KEYS>
         <INDEXES>
-            <INDEX NAME="userid_userid_idx" UNIQUE="false" FIELDS="id, userid"/>
-    </INDEXES>
+            <INDEX NAME="userid_cardboxid_idx" UNIQUE="false" FIELDS="userid, cardboxid"/>
+            <INDEX NAME="cardboxid_idx" UNIQUE="false" FIELDS="cardboxid"/>
+        </INDEXES>
     </TABLE>
   </TABLES>
 </XMLDB>

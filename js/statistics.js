@@ -21,14 +21,22 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, __ismanager) { // Wrapper function that is called by controller.php
+function displayCharts(Y, __params) { // Wrapper function that is called by controller.php
+
+    var __ismanager = __params['ismanager'];
+    if (__ismanager) {
+        var __absoluteboxcount = __params['absoluteboxcount'];
+    } else {
+        var __studentboxcount = __params['studentboxcount'];
+        var __averageboxcount = __params['averageboxcount'];
+    }
+    var __performance = __params['performance'];
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
     
         if(__ismanager) {
-            displayAverageCardsOverDecks();
+            displayAbsoluteCardsOverDecks();
             if (__performance.displayweeklystats) {
-                // TODO remove placeholders for graphs otherwise
                 displayNumberOfCardsOverTime();
                 displayDurationOfASessionOverTime();
             }
@@ -45,9 +53,9 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
     * 
     * @returns {undefined}
     */
-   function displayAverageCardsOverDecks() {
+   function displayAbsoluteCardsOverDecks() {
 
-    var context = document.getElementById("cardbox-statistics-average-over-deck").getContext("2d");
+    var context = document.getElementById("cardbox-statistics-absolute-over-deck").getContext("2d");
     var mixedChart = new Chart(context, {
         type: 'bar',
         data: {
@@ -62,7 +70,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                     '#0066ff',
                     '#00b33c'
             ],
-                data: [__boxcount[0]['abs'], __boxcount[1]['abs'], __boxcount[2]['abs'], __boxcount[3]['abs'], __boxcount[4]['abs'], __boxcount[5]['abs'], __boxcount[6]['abs']]
+                data: [__absoluteboxcount[0], __absoluteboxcount[1], __absoluteboxcount[2], __absoluteboxcount[3], __absoluteboxcount[4], __absoluteboxcount[5], __absoluteboxcount[6]],
             }],
             labels: [
                 M.util.get_string('new', 'cardbox'),
@@ -131,7 +139,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
 
            datasets: [{
                 label: M.util.get_string('flashcardsdue', 'cardbox'),
-                data: [__boxcountstudent[0], __boxcountstudent[1]['due'], __boxcountstudent[2]['due'], __boxcountstudent[3]['due'], __boxcountstudent[4]['due'], __boxcountstudent[5]['due'], 0],
+                data: [__studentboxcount[0], __studentboxcount[1]['due'], __studentboxcount[2]['due'], __studentboxcount[3]['due'], __studentboxcount[4]['due'], __studentboxcount[5]['due'], 0],
                 backgroundColor: [
                         '#0066ff',
                         '#0066ff',
@@ -145,7 +153,7 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
             },
             {
                 label: M.util.get_string('flashcardsnotdue', 'cardbox'),
-                data: [0, __boxcountstudent[1]['notdue'], __boxcountstudent[2]['notdue'], __boxcountstudent[3]['notdue'], __boxcountstudent[4]['notdue'], __boxcountstudent[5]['notdue'], __boxcountstudent[6]],
+                data: [0, __studentboxcount[1]['notdue'], __studentboxcount[2]['notdue'], __studentboxcount[3]['notdue'], __studentboxcount[4]['notdue'], __studentboxcount[5]['notdue'], __studentboxcount[6]],
                 backgroundColor: [
                         '#99c2ff',
                         '#99c2ff',
@@ -156,23 +164,25 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                         '#00b33c'
                 ],
                 stack: 'Stack 0'
-           },
-           {
-            label: M.util.get_string('averagestudentscompare', 'cardbox'),
-            data: [__boxcount[0]['avg'], __boxcount[1]['avg'], __boxcount[2]['avg'], __boxcount[3]['avg'], __boxcount[4]['avg'], __boxcount[5]['avg'], __boxcount[6]['avg']],
-            backgroundColor: [
-                    '#7A6FAC',
-                    '#7A6FAC',
-                    '#7A6FAC',
-                    '#7A6FAC',
-                    '#7A6FAC',
-                    '#7A6FAC',
-                    '#7A6FAC'
-            ],
-            stack: 'Stack 1'
-        }]
-
+           }]
        };
+
+        if (__performance.displayaverageprogress) {
+            cardboxdata.datasets.push({
+                label: M.util.get_string('averagestudentscompare', 'cardbox'),
+                data: [__averageboxcount[0], __averageboxcount[1], __averageboxcount[2], __averageboxcount[3], __averageboxcount[4], __averageboxcount[5], __averageboxcount[6]],
+                backgroundColor: [
+                        '#7A6FAC',
+                        '#7A6FAC',
+                        '#7A6FAC',
+                        '#7A6FAC',
+                        '#7A6FAC',
+                        '#7A6FAC',
+                        '#7A6FAC'
+                ],
+                stack: 'Stack 1'
+            });
+        }
 
        var barChart1 = new Chart(context, {
            type: 'bar',
@@ -218,11 +228,6 @@ function displayCharts(Y, __cmid, __boxcountstudent, __boxcount, __performance, 
                 }
            }
        });
-
-        if (!__performance.displayweeklystats) {
-            cardboxdata.datasets.pop();
-            barChart1.update();   
-        }
    }
 
     /**

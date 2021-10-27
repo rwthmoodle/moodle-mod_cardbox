@@ -29,27 +29,55 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_statistics implements \renderable, \templatable {
 
+    private $ismanager;
+    private $infoenrolledstudentsthreshold;
+
+    // Student stats.
     private $dates;
     private $performances;
-    private $ismanager;
+    private $displayaverageprogress;
+
+    // Manager stats.
     private $displayweeklystats;
     private $weeks;
-/*     private $numberofcards;
-    private $durationofsession; */
     private $tooltips;
     private $numberofcardsmin;
     private $numberofcardsmax;
+    private $numberofcardsavg;
     private $durationmin;
     private $durationmax;
-    private $infoenrolledstudentsthreshold;
+    private $durationofsessionavg;
 
     public function __construct($cardboxid, $ismanager) {
+        $this->ismanager = $ismanager;
+        if ($ismanager) {
+            $this->init_manager($cardboxid);
+        } else {
+            $this->init_student($cardboxid);
+        }
+    }
 
-        global $DB, $USER, $CFG;
+    private function init_student($cardboxid) {
+        global $CFG, $DB, $USER;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
         $this->dates = [];
         $this->performances = [];
+
+        $this->set_enrolled_students_threshold_info(false);
+
+        $this->displayaverageprogress = $this->is_enrolled_students_threshold_reached($cardboxid);
+
+        $data = $DB->get_records('cardbox_statistics', ['userid' => $USER->id, 'cardboxid' => $cardboxid]);
+        foreach ($data as $record) {
+            $this->dates[] = cardbox_get_user_date($record->timeofpractice);
+            $this->performances[] = $record->percentcorrect;
+        }
+    }
+
+    private function init_manager($cardboxid) {
+        global $DB;
+
         $this->weeks = [];
         $this->numberofcardsavg = [];
         $this->durationofsessionavg = [];
@@ -63,29 +91,14 @@ class cardbox_statistics implements \renderable, \templatable {
         $this->tooltips->numberofcards->average = [];
         $this->tooltips->numberofcards->max = [];
 
-        $data = $DB->get_records('cardbox_statistics', array('userid' => $USER->id, 'cardboxid' => $cardboxid), '', 'timeofpractice, percentcorrect');
+        $this->set_enrolled_students_threshold_info(true);
 
-        foreach ($data as $record) {
-            $this->dates[] = cardbox_get_user_date($record->timeofpractice);
-            $this->performances[] = $record->percentcorrect;
-        }
-        $this->ismanager = $ismanager;
-
-        $enrolledstudentsthreshold = get_config('mod_cardbox', 'weekly_statistics_enrolled_students_threshold');
-        if ($ismanager) {
-            $this->infoenrolledstudentsthreshold = get_string( 'info:enrolledstudentsthreshold_manager', 'cardbox', $enrolledstudentsthreshold);
-        } else {
-            $this->infoenrolledstudentsthreshold = get_string( 'info:enrolledstudentsthreshold_student', 'cardbox', $enrolledstudentsthreshold);
-        }
-        $cm = get_coursemodule_from_instance('cardbox', $cardboxid);
-        $context = context_module::instance($cm->id);
-        $enrolledstudents = get_enrolled_users($context, 'mod/cardbox:practice');
-        $this->displayweeklystats = count($enrolledstudents) >= $enrolledstudentsthreshold;
+        $this->displayweeklystats = $this->is_enrolled_students_threshold_reached($cardboxid);
         if (!$this->displayweeklystats) {
             return;
         }
 
-        $data = $DB->get_records('cardbox_statistics', array('cardboxid' => $cardboxid), '', 'timeofpractice, numberofcards, duration, userid');
+        $data = $DB->get_records('cardbox_statistics', ['cardboxid' => $cardboxid]);
         $endoflastweek = new DateTime();
         $endoflastweek->modify('Monday this week');
         $endoflastweek = $endoflastweek->format('U');
@@ -170,23 +183,43 @@ class cardbox_statistics implements \renderable, \templatable {
         }
     }
 
+    private function set_enrolled_students_threshold_info($ismanager) {
+        $enrolledstudentsthreshold = get_config('mod_cardbox', 'weekly_statistics_enrolled_students_threshold');
+        if ($enrolledstudentsthreshold > 0) {
+            $stringid = $ismanager ? 'info:enrolledstudentsthreshold_manager' : 'info:enrolledstudentsthreshold_student';
+            $this->infoenrolledstudentsthreshold = get_string($stringid, 'cardbox', $enrolledstudentsthreshold);
+        } else {
+            $this->infoenrolledstudentsthreshold = false;
+        }
+    }
+
+    public static function is_enrolled_students_threshold_reached($cardboxid) {
+        $cm = get_coursemodule_from_instance('cardbox', $cardboxid);
+        $context = context_module::instance($cm->id);
+        $enrolledstudents = get_enrolled_users($context, 'mod/cardbox:practice');
+        $enrolledstudentsthreshold = get_config('mod_cardbox', 'weekly_statistics_enrolled_students_threshold');
+        return count($enrolledstudents) >= $enrolledstudentsthreshold;
+    }
+
     public function export_for_template(\renderer_base $output) {
 
-        $data = array();
+        $data = [];
+        $data['ismanager'] = $this->ismanager;
+
         $data['dates'] = $this->dates;
         $data['performances'] = $this->performances;
-        $data['ismanager'] = $this->ismanager;
+        $data['displayaverageprogress'] = $this->displayaverageprogress;
 
         $data['displayweeklystats'] = $this->displayweeklystats;
         $data['infoenrolledstudentsthreshold'] = $this->infoenrolledstudentsthreshold;
         $data['weeks'] = $this->weeks;
-        $data['numberofcardsavg'] = $this->numberofcardsavg;
-        $data['durationofsessionavg'] = $this->durationofsessionavg;
         $data['tooltips'] = $this->tooltips;
         $data['numberofcardsmin'] = $this->numberofcardsmin;
         $data['numberofcardsmax'] = $this->numberofcardsmax;
+        $data['numberofcardsavg'] = $this->numberofcardsavg;
         $data['durationofsessionmin'] = $this->durationmin;
         $data['durationofsessionmax'] = $this->durationmax;
+        $data['durationofsessionavg'] = $this->durationofsessionavg;
         return $data;
 
     }

@@ -134,7 +134,6 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
 
         return $cardsperbox;
-
     }
     /**
      * Function retrieves all flashcards that

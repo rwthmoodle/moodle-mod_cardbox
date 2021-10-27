@@ -597,6 +597,30 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021101400, 'cardbox');
     }
 
+    // Remove unused index and add new indices to cardbox_statistics.
+    if ($oldversion < 2021102701) {
+        $table = new xmldb_table('cardbox_statistics');
+
+        // Remove (id, userid) index.
+        $index = new xmldb_index('userid_userid_idx', XMLDB_INDEX_NOTUNIQUE, ['id', 'userid']);
+        if ($dbman->index_exists($table, $index)) {
+            $dbman->drop_index($table, $index);
+        }
+
+        // Add (userid, cardboxid) index.
+        $index = new xmldb_index('userid_cardboxid_idx', XMLDB_INDEX_NOTUNIQUE, ['userid', 'cardboxid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+
+        // Add (cardboxid) index.
+        $index = new xmldb_index('userid_cardboxid_idx', XMLDB_INDEX_NOTUNIQUE, ['cardboxid']);
+        if (!$dbman->index_exists($table, $index)) {
+            $dbman->add_index($table, $index);
+        }
+        upgrade_mod_savepoint(true, 2021102701, 'cardbox');
+    }
+
     return true;
 
 }
