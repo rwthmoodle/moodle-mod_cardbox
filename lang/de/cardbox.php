@@ -21,6 +21,8 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+defined('MOODLE_INTERNAL') || die;
+
 // Meta information
 $string['cardbox'] = 'Karteikasten'; // superfluous?
 $string['modulename'] = 'Karteikasten';
@@ -39,8 +41,8 @@ $string['necessaryanswers_activity_locked_help'] = 'Wenn "Ja" ausgewählt ist, d
 $string['casesensitive'] = 'Groß- und Kleinschreibung beachten';
 $string['casesensitive_help'] = 'Gibt an, ob beim Üben mit automatischer Kontrolle Eingaben, die sich nur in der Groß-/Kleinschreibung von der richtig Antwort unterscheiden, auch als richtig gewertet werden.';
 $string['numberofcardssetting'] = 'Anzahl an zu übenden Karten';
-$string['numberofcardssetting_help'] = 'Gibt an, wie viele Karten die Studenten pro Übeeinheit lernen sollen. Ist "Studenten entscheiden" ausgewählt, so haben sie die freie Wahl.';
-$string['studentschoose'] = 'Studenten entscheiden';
+$string['numberofcardssetting_help'] = 'Gibt an, wie viele Karten die Studierenden pro Übungseinheit lernen sollen. Ist "Studierende entscheiden" ausgewählt, so haben sie die freie Wahl.';
+$string['studentschoose'] = 'Studierende entscheiden';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
 $string['messageprovider:changenotification'] = 'Benachrichtigung über geänderte Lernkarte';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
@@ -204,13 +206,13 @@ $string['performance'] = '% gewusst:';
 
 $string['titlenumberofcards'] = 'Anzahl an Karten pro Übung';
 $string['numberofcards'] = 'Anzahl';
-$string['numberofcardsavg'] = 'Durschnitt';
+$string['numberofcardsavg'] = 'Durchschnitt';
 $string['numberofcardsmin'] = 'Minimum';
 $string['numberofcardsmax'] = 'Maximum';
 
 $string['titledurationofasession'] = 'Dauer einer Übung';
 $string['duration'] = 'Dauer (min)';
-$string['durationavg'] = 'Durschnitt in min';
+$string['durationavg'] = 'Durchschnitt in min';
 $string['durationmin'] = 'Minimum in min';
 $string['durationmax'] = 'Maximun in min';
 
@@ -247,7 +249,7 @@ $string['lastpractise'] = 'zuletzt geübt';
 $string['nopractise'] = 'noch nicht geübt';
 $string['newcard'] = 'karten neu';
 $string['knowncard'] = 'karten gelernt';
-$string['averagestudentscompare'] = 'Durschnitt aller Studenten';
+$string['averagestudentscompare'] = 'Durchschnitt aller Studierenden';
 $string['absolutenumberofcards'] = 'Absolute Anzahl von Karten';
 
 $string['yes'] = 'Ja';
