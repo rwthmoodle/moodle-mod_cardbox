@@ -443,36 +443,38 @@ function cardbox_card_approved($cardid) {
     }
 }
 
-/**
- * Function returns how many cards are there in each deck.
- *
- * @global obj $DB
- * @param type $cardboxid
- */
-function count_cardposition($cardboxid) {
+function get_absolute_cardcounts_per_deck($cardboxid) {
     global $DB;
-    $decktocardcount = $DB->get_records_sql(
+    $cardsperdeck = $DB->get_records_sql(
                         'SELECT cardposition, count(card) AS cardcount
                         FROM {cardbox_progress}
-                        where card in (select id from {cardbox_cards} where cardbox = :cardboxid) GROUP by cardposition', 
+                        where card in (select id from {cardbox_cards} where cardbox = :cardboxid) GROUP by cardposition',
                         ['cardboxid' => $cardboxid]);
+    $cardsperdeck = array_column($cardsperdeck, 'cardcount', 'cardposition');
 
-    $resultdata = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
-
-    foreach ($decktocardcount as $eachrecord) {
-        $absavgarr = array();
-        $absavgarr['abs'] = $eachrecord->cardcount;
-        $practisingstudents = $DB->count_records_sql(
-            'SELECT count(distinct userid)
-            FROM {cardbox_progress}
-            where card in (select id from {cardbox_cards} where cardbox = :cardboxid)',
-            ['cardboxid' => $cardboxid]);
-        $absavgarr['avg'] = $eachrecord->cardcount / $practisingstudents;
-        $resultdata[$eachrecord->cardposition] = $absavgarr;
+    for ($i = 0; $i < 7; ++$i) {
+        if (!array_key_exists($i, $cardsperdeck)) {
+            $cardsperdeck[$i] = 0;
+        }
     }
-    return $resultdata;
+    return $cardsperdeck;
 }
- 
+
+function get_average_cardcounts_per_deck($cardboxid) {
+    global $DB;
+    $absolutes = get_absolute_cardcounts_per_deck($cardboxid);
+    $practisingstudentcount = $DB->count_records_sql(
+                                'SELECT count(distinct userid)
+                                FROM {cardbox_progress}
+                                where card in (select id from {cardbox_cards} where cardbox = :cardboxid)',
+                                ['cardboxid' => $cardboxid]);
+    $averages = [];
+    foreach ($absolutes as $position => $absolute) {
+        $averages[$position] = $absolute / $practisingstudentcount;
+    }
+    return $averages;
+}
+
 /**
  * Function returns 0...1 image item ids belonging to the specified card.
  *
