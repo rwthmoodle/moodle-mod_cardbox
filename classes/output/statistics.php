@@ -143,7 +143,7 @@ class cardbox_statistics implements \renderable, \templatable {
             $durationofsessiontooltipavg = get_string('durationavg', 'cardbox') . ": " . $durationofsession;
             $numberofcardstooltipavg = get_string('numberofcardsavg', 'cardbox') . ": " . $numberofcards;
             if (count($distinctusers) < $practicingusersthreshold) {
-                $belowthreshold = get_string('linegraphtooltiplabel_below_threshold', 'cardbox', 5);
+                $belowthreshold = get_string('linegraphtooltiplabel_below_threshold', 'cardbox', $practicingusersthreshold);
                 $numberofcardstooltipmin = $belowthreshold;
                 $numberofcardstooltipavg = $belowthreshold;
                 $numberofcardstooltipmax = $belowthreshold;
