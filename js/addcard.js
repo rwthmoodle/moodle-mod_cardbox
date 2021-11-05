@@ -56,6 +56,14 @@
                     document.getElementById('fitem_id_answer' + i).style.display = 'flex';
                 }
             }
+
+            document.getElementById('id_topic').onchange = function() {
+                if (document.getElementById('id_topic').value == '0') {
+                    document.getElementById('id_newtopic').classList.add("shown");
+                } else {
+                    document.getElementById('id_newtopic').classList.remove("shown");
+                }
+            }
             
             btnimageques.addEventListener('click', e => {
                 if (imageques.style.display === '') {

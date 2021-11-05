@@ -443,3 +443,11 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .common-margin {
     margin-right: 10px;;
 }
+
+.path-mod-cardbox #id_newtopic {
+    display: none;
+}
+
+.path-mod-cardbox #id_newtopic.shown {
+    display: flex;
+}
