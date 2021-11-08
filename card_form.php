@@ -77,15 +77,12 @@ class mod_cardbox_card_form extends moodleform {
         $choosetopicarray[] =& $mform->createElement('text', 'newtopic', '');
         $mform->addGroup($choosetopicarray, 'choosetopicar', get_string('choosetopic', 'cardbox'), array(' '), false);
         
-/*         $select = $mform->addElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist); */
         if (!empty($customdata['topic'])) {
             $choosetopicarray[0]->setSelected($customdata['topic']);
         }
 
         // Text input field for creating a new topic.
-/*         $mform->addElement('text', 'newtopic', ''); // $mform->addElement('text', 'newtopic', get_string('entertopic', 'cardbox')); */
         $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
-        $mform->hideIf('newtopic', 'topic', 'neq', 0); // You can only enter a new topic name if you choose to.
 
 
         /****************** end of question experiment **********************/

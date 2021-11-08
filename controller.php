@@ -41,7 +41,7 @@ if ($action === 'addflashcard') {
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00000"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00001"));
     $params = array($cmid, 1, null); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('addCard', $params, true);
 
@@ -487,7 +487,7 @@ if ($action === 'editcard') {
         $stringman = get_string_manager();
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00000"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00001"));
         $params = array($cmid, $answercount, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('addCard', $params, true);
         
