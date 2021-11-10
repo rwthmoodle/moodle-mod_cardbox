@@ -96,12 +96,12 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->cardbox = $this->get_new_parentid('cardbox');
-        $data->topic = $this->get_mappingid('topic', $data->topic);
+        /*$data->topic = $this->get_mappingid('topic', $data->topic);
         $data->author = $this->get_mappingid('user', $data->author);
         $data->approvedby = $this->get_mappingid('user', $data->approvedby); // ???
 
         $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->timemodified = $this->apply_date_offset($data->timemodified);
+        $data->timemodified = $this->apply_date_offset($data->timemodified); */
 
         $newitemid = $DB->insert_record('cardbox_cards', $data);
         $this->set_mapping('cardbox_cards', $oldid, $newitemid);
