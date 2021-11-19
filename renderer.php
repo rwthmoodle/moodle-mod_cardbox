@@ -134,4 +134,12 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         $data = $review->export_for_template($this);
         return $this->render_from_template('mod_cardbox/overview', $data);
     }
+    /**
+     * 
+     * @param \array $errorlines : consists of errored rows, no of successfully imported card, url to continue
+     * @return type
+     */
+    public function cardbox_render_errimport(array $errorlines) {
+        return $this->render_from_template('mod_cardbox/errimport', $errorlines);
+    }
 }

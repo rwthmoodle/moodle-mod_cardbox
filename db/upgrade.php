@@ -621,6 +621,13 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2021102701, 'cardbox');
     }
 
+    if ($oldversion < 2021111900) {
+        global $DB;
+        $sql = "UPDATE {cardbox_cardcontents} SET contenttype = 1 WHERE contenttype = 2 and cardside = 1";
+        $DB->execute($sql);
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2021111900, 'cardbox');
+    }
     return true;
 
 }

@@ -704,6 +704,7 @@ if ($action === 'statistics') {
 
 if ($action === 'massimport') {
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'massimport'));
+    //$errorurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'errimport')); 
     $step = optional_param('step', 1, PARAM_INT);
     if (!empty($cancelclicked)) {
         echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $cancelclicked. "</div></span>";
@@ -713,7 +714,6 @@ if ($action === 'massimport') {
         $customdata = array('cardboxid' => $cardbox->id, 'cmid' => $cmid, 'context' => $context);
         $mform = new \mod_cardbox\output\massimport_form(null, $customdata);
         if ($formdata = $mform->get_data()) {
-            $previewrows = optional_param('previewrows', 10, PARAM_INT);
 
             // Store csv content in moodledata/temp for next step.
             $iid = csv_import_reader::get_new_iid('cardbox');
@@ -733,28 +733,29 @@ if ($action === 'massimport') {
             echo "<h2>". get_string('importpreview', 'cardbox')."</h2>";
             $csvcolumns = $cir->get_columns();
             $errorflag = 0; //No error.
-            $exceptions = validate_columns($csvcolumns); // [0] => errors and [1] => warnings
-            if (!empty($exceptions[0])) {
+            $columnexceptions = validate_columns($csvcolumns); // [0] => errors and [1] => warnings
+            if (!empty($columnexceptions[0])) {
                 echo '<div class="alert alert-danger" role="alert">Error(s)<ul>';
-                foreach ($exceptions[0] as $error) {
+                foreach ($columnexceptions[0] as $error) {
                     echo '<li>'.$error.'</li>';
                 }
                 echo '</ul></div>';
             }
-            if (!empty($exceptions[1])) {
+            if (!empty($columnexceptions[1])) {
                 echo '<div class="alert alert-warning" role="alert">Warning(s)<ul>';
-                foreach($exceptions[1] as $warning) {
+                foreach ($columnexceptions[1] as $warning) {
                     echo '<li>'.$warning.'</li>';
                 }
                 echo '</ul></div>';
             }   
-            //print_r($exceptions);
-            if (!empty($exceptions[0])) {
+            //print_r($columnexceptions);
+            if (!empty($columnexceptions[0])) {
                 $errorflag = 1;
             }
-            $importpreviewtable = new \mod_cardbox\output\previewtable($cir, $csvcolumns, $previewrows);
+            $importpreviewtable = new \mod_cardbox\output\previewtable($cir, $csvcolumns);
+            $test = $importpreviewtable->data;
+            $test2 = $test['rows'];
             echo html_writer::tag('div', html_writer::table($importpreviewtable), ['class' => 'flexible-wrap']);
-
             $customdata = ['id' => $cmid, 'cardboxid' => $cardbox->id, 'context' => $context, 'iid' => $iid,
              'step' => 2, 'count' => $readcount, 'error' => $errorflag];
             $mform2 = new \mod_cardbox\output\massimportpreview_form(null, $customdata);
@@ -782,10 +783,20 @@ if ($action === 'massimport') {
                 echo $OUTPUT->header();
                 echo $OUTPUT->heading(format_string($cardbox->name));
                 echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-                cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
+                $errlines = cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
                 $cir->close();
                 $cir->cleanup();
-                redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1), null, \core\output\notification::NOTIFY_INFO);
+                if (!is_null($errlines)) {
+                    //redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1), null, \core\output\notification::NOTIFY_INFO);
+                    $errorlines = array();
+                    $errorlines['rows'] = $errlines;
+                    $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
+                    $errorlines ['continueurl'] = $returnurl->out(false);
+                    $renderer = $PAGE->get_renderer('mod_cardbox');
+                    echo $renderer->cardbox_render_errimport($errorlines);
+                } else {
+                    redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1 ), null, \core\output\notification::NOTIFY_INFO);
+                }
             } else {
                 redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
             }

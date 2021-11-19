@@ -43,11 +43,10 @@ class previewtable extends \html_table {
      * @param int $previewrows
      * @throws \coding_exception
      */
-    public function __construct(\csv_import_reader $cir, array $filecolumns, int $previewrows) {
+    public function __construct(\csv_import_reader $cir, array $filecolumns) {
         parent::__construct();
         $this->cir = $cir;
         $this->filecolumns = $filecolumns;
-        $this->previewrows = $previewrows;
 
         $this->id = "cbxpreview";
         $this->attributes['class'] = 'generaltable';
@@ -57,19 +56,33 @@ class previewtable extends \html_table {
         foreach ($filecolumns as $column) {
             $this->head[] = $column;
         }
+        $this->head[] = ucfirst(get_string('status', 'cardbox'));
     }
 
     protected function read_data() {
         $this->cir->init();
-
         $i = 1; // Always start from 1 since 0 is csv column header.
-        while ($i <= $this->previewrows and $fields = $this->cir->next()) {
+        while ($fields = $this->cir->next()) {
+            $errors = array();
+            $atleastoneanswer = 0;
+            $status = "";
             $rowcols = array();
             $rowcols['line'] = $i;
             foreach ($fields as $key => $field) {
                 $rowcols[$this->filecolumns[$key]] = s(trim($field));
             }
-            
+            $errors = validate_row($atleastoneanswer, $rowcols);
+            if (!empty($errors)) {
+                $errorlines[] = $i;
+                $status = "ERR:";
+                foreach ($errors as $error) {
+                    $status .= $error;
+                }
+            } else {
+                $status = "OK";
+            }
+            $rowcols[get_string('status', 'cardbox')] = $status;
+
             $data[] = $rowcols;
             $i++;
         }
@@ -77,7 +90,7 @@ class previewtable extends \html_table {
             $data[] = array_fill(0, count($fields) + 2, '...');
         }
         $this->cir->close();
-
+        //$data['error'] = $errorlines;
         return $data;
     }
 }
