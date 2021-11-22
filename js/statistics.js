@@ -85,7 +85,9 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
         options: {
             title: {
                 display: true,
-                text: M.util.get_string('barchartstatistic1', 'cardbox')
+                text: M.util.get_string('barchartstatistic1', 'cardbox'),
+                fontSize: 16,
+                position: 'top'
               },
             scales: {
                 xAxes: [{

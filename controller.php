@@ -693,7 +693,7 @@ if ($action === 'statistics') {
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js?ver=00006"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js?ver=00007"));
     $PAGE->requires->js_init_call('displayCharts', [$params], true);
 
     // 4. Render the page.
