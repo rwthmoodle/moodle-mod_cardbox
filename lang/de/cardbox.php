@@ -241,7 +241,7 @@ $string['strftimedateshortmonthabbr'] = '%d %b';
 
 $string['barchartxaxislabel'] = 'Fach';
 $string['barchartyaxislabel'] = 'Kartenzahl';
-$string['barchartstatistic1'] = 'Anzahl der Karten pro Deck für alle Studierenden';
+$string['barchartstatistic1'] = 'Anzahl der Karten pro Fach für alle Studierenden';
 $string['linegraphxaxislabel'] = 'Datum';
 $string['linegraphyaxislabel_performance'] = '% gewusst';
 $string['linegraphyaxislabel_numbercards'] = 'Anzahl an Karten';
