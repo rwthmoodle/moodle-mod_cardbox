@@ -5,6 +5,7 @@ stages:
   - build
   - deploy
   - update
+  - dbupgrade
 
 archive:
     stage: prebuild
@@ -128,6 +129,17 @@ update-t02:
       - testing
     tags:
       - moodle-web-t02
+
+dbupgrade_testing:
+    stage: dbupgrade
+    dependencies:
+      - update-t01
+    script:
+      - sudo -u apache php /var/www/html/moodle/admin/cli/upgrade.php --non-interactive
+    only:
+      - testing
+    tags:
+      - moodle-web-t01
 
 deploy-integration:
     stage: deploy
