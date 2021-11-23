@@ -94,24 +94,22 @@ build:
           - RPMS/x86_64/*.rpm
        expire_in: 1 week
 
-deploy:
+deploy-test:
     stage: deploy
     dependencies:
       - build
     script:
-      - cp RPMS/x86_64/*.rpm /data/repos/moodle-$CI_COMMIT_BRANCH
-      - createrepo /data/repos/moodle-$CI_COMMIT_BRANCH
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-testing
+      - createrepo /data/repos/moodle-testing
     only:
       - testing
-      - integration
-      - production
     tags:
       - git
 
 update-t01:
     stage: update
     dependencies:
-      - deploy
+      - deploy-test
     script:
       - sudo yum clean all
       - sudo yum update moodle-rwth-cardbox --disableexclude=all -y
@@ -123,7 +121,7 @@ update-t01:
 update-t02:
     stage: update
     dependencies:
-      - deploy
+      - deploy-test
     script:
       - sudo yum clean all
       - sudo yum update moodle-rwth-cardbox --disableexclude=all -y
@@ -142,3 +140,27 @@ dbupgrade_testing:
       - testing
     tags:
       - moodle-web-t01
+
+deploy-integration:
+    stage: deploy
+    dependencies:
+      - build
+    script:
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-integration
+      - createrepo /data/repos/moodle-integration
+    only:
+      - integration
+    tags:
+      - git
+ 
+deploy-production:
+    stage: deploy
+    dependencies:
+      - build
+    script:
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-production
+      - createrepo /data/repos/moodle-production
+    only:
+      - production
+    tags:
+      - git
