@@ -1,12 +1,13 @@
 variables:
   GIT_STRATEGY: clone
 stages:
+  - prebuild
   - build
   - deploy
   - update
 
 archive:
-    stage: build
+    stage: prebuild
     script:
       - git archive --format=tar.gz --prefix=cardbox/ HEAD > $CI_PROJECT_DIR/cardbox.tar.gz
     only:
@@ -21,7 +22,7 @@ archive:
       expire_in: 1 week
 
 generate-spec:
-    stage: build
+    stage: prebuild
     script:
       - release=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
       - version=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
