@@ -50,9 +50,9 @@ generate-spec:
         
         
         %install
-        mkdir -p $RPM_BUILD_ROOT
-        install -d %{_builddir} $RPM_BUILD_ROOT/var/www/html/moodle/mod/
-        cp -r %{_builddir}/cardbox $RPM_BUILD_ROOT/var/www/html/moodle/mod
+        mkdir -p \$RPM_BUILD_ROOT
+        install -d %{_builddir} \$RPM_BUILD_ROOT/var/www/html/moodle/mod/
+        cp -r %{_builddir}/cardbox \$RPM_BUILD_ROOT/var/www/html/moodle/mod
         
         %post
         cd /var/www/html/moodle/mod
