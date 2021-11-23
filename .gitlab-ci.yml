@@ -1,0 +1,153 @@
+variables:
+  GIT_STRATEGY: clone
+stages:
+  - build
+  - deploy
+  - update
+
+archive:
+    stage: build
+    script:
+      - git archive --format=tar.gz --prefix=cardbox/ HEAD > $CI_PROJECT_DIR/cardbox.tar.gz
+    only:
+      - testing
+      - integration
+      - production
+    tags:
+      - git
+    artifacts:
+      paths:
+        - cardbox.tar.gz
+      expire_in: 1 week
+
+generate-spec:
+    stage: build
+    script:
+      - release=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
+      - version=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
+      - |
+        cat > $CI_PROJECT_DIR/moodle-rwth-cardbox.spec <<EOF
+        Name:       moodle-rwth-cardbox
+        Version:    $release^$version
+        Release:    1
+        Summary:    RWTH plugin for learning with flashcards.
+        
+        License:    GPL
+        URL:        https://git.rwth-aachen.de/moodle_l2p/cardbox
+        Source0:    cardbox.tar.gz
+        AutoReqProv:     No
+        Requires:    moodle-rwth >= 3.5
+        Provides:    moodle-rwth-rwth_cardbox
+        
+        
+        %description
+        Package to install the Moodle Plugin cardbox.
+        
+        %prep
+        %setup -q -n cardbox
+        
+        
+        %install
+        mkdir -p $RPM_BUILD_ROOT
+        install -d %{_builddir} $RPM_BUILD_ROOT/var/www/html/moodle/mod/
+        cp -r %{_builddir}/cardbox $RPM_BUILD_ROOT/var/www/html/moodle/mod
+        
+        %post
+        cd /var/www/html/moodle/mod
+        chown -R apache: cardbox
+        chmod a-w -R /var/www/html/moodle
+        
+        %files
+        /var/www/html/moodle/mod/cardbox
+        EOF
+    only:
+      - testing
+      - integration
+      - production
+    tags:
+      - git
+    artifacts:
+      paths:
+        - moodle-rwth-cardbox.spec
+      expire_in: 1 week
+
+build:
+    stage: build
+    script:
+      - mkdir SOURCES SPECS
+      - mv cardbox.tar.gz SOURCES
+      - mv moodle-rwth-cardbox.spec SPECS
+      - rpmbuild -ba --define "_topdir `pwd`" SPECS/moodle-rwth-cardbox.spec
+    only:
+      - testing
+      - integration
+      - production
+    tags:
+      - git
+    dependencies:
+      - archive
+      - generate-spec
+    artifacts:
+       paths:
+          - RPMS/x86_64/*.rpm
+       expire_in: 1 week
+
+deploy-test:
+    stage: deploy
+    dependencies:
+      - build
+    script:
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-testing
+      - createrepo /data/repos/moodle-testing
+    only:
+      - testing
+    tags:
+      - git
+
+update-t01:
+    stage: update
+    dependencies:
+      - deploy-test
+    script:
+      - sudo yum clean all
+      - sudo yum update moodle-rwth-cardbox --disableexclude=all -y
+    only:
+      - testing
+    tags:
+      - moodle-web-t01
+
+update-t02:
+    stage: update
+    dependencies:
+      - deploy-test
+    script:
+      - sudo yum clean all
+      - sudo yum update moodle-rwth-cardbox --disableexclude=all -y
+    only:
+      - testing
+    tags:
+      - moodle-web-t02
+
+deploy-integration:
+    stage: deploy
+    dependencies:
+      - build
+    script:
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-integration
+      - createrepo /data/repos/moodle-integration
+    only:
+      - integration
+    tags:
+      - git
+ 
+deploy-production:
+    stage: deploy
+    dependencies:
+      - build
+    script:
+      - cp RPMS/x86_64/*.rpm /data/repos/moodle-production
+      - createrepo /data/repos/moodle-production
+    only:
+      - production
+    tags:
+      - git
