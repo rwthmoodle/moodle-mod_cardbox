@@ -30,8 +30,8 @@ generate-spec:
       - |
         cat > $CI_PROJECT_DIR/moodle-rwth-cardbox.spec <<EOF
         Name:       moodle-rwth-cardbox
-        Version:    $release^$version
-        Release:    1
+        Version:    $release
+        Release:    $version
         Summary:    RWTH plugin for learning with flashcards.
         
         License:    GPL
