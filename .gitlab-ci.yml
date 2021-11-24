@@ -25,13 +25,32 @@ archive:
 generate-spec:
     stage: prebuild
     script:
-      - release=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
-      - version=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
+      # read version.php
+      - version=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
+      - release=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
+      # check repository for existing packages with same version
+      # append new number to version if necessary
+      - packages=($(curl http://moodle-rpms.itc.rwth-aachen.de/moodle-$CI_COMMIT_BRANCH/ | grep -Po ">\Kmoodle-rwth-cardbox-$version-$release[^<]*"))
+      - numpackages=${#packages[@]}
+      - |
+        if [ $numpackages -ne 0 ]
+        then
+          set +e # temporarily disable exit on non-zero exit status (grep returns 1 if nothing found)
+          releasesuffix=$(echo ${packages[$numpackages-2]} | grep -Po "$release\.\K[0-9]+")
+          set -e
+          if [ -z $releasesuffix ]
+          then
+            releasesuffix=.1
+          else
+            releasesuffix=.$( expr $releasesuffix + 1)
+          fi
+        fi
+      # generate spec file
       - |
         cat > $CI_PROJECT_DIR/moodle-rwth-cardbox.spec <<EOF
         Name:       moodle-rwth-cardbox
-        Version:    $release
-        Release:    $version
+        Version:    $version
+        Release:    $release$releasesuffix
         Summary:    RWTH plugin for learning with flashcards.
         
         License:    GPL
