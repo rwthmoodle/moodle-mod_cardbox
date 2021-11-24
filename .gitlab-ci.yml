@@ -94,7 +94,7 @@ build:
           - RPMS/x86_64/*.rpm
        expire_in: 1 week
 
-deploy-test:
+deploy:
     stage: deploy
     dependencies:
       - build
