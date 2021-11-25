@@ -28,29 +28,36 @@ generate-spec:
       # read version.php
       - version=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
       - release=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
-      # check repository for existing packages with same version
-      # append new number to version if necessary
+      # check repository for existing packages with same version and release
       - packages=($(curl http://moodle-rpms.itc.rwth-aachen.de/moodle-$CI_COMMIT_BRANCH/ | grep -Po ">\Kmoodle-rwth-cardbox-$version-$release[^<]*"))
-      - numpackages=${#packages[@]}
+      - maxsubrelease=0
       - |
-        if [ $numpackages -ne 0 ]
-        then
-          set +e # temporarily disable exit on non-zero exit status (grep returns 1 if nothing found)
-          releasesuffix=$(echo ${packages[$numpackages-2]} | grep -Po "$release\.\K[0-9]+")
+        for package in "${packages[@]}"
+        do
+          set +e # temporarily disable exit on non-zero exit status (grep exits with 1 if nothing found)
+          subrelease=$(echo $package | grep -Po "$release\.\K[0-9]+")
           set -e
-          if [ -z $releasesuffix ]
+          if [ -z $subrelease ]
           then
-            releasesuffix=.1
-          else
-            releasesuffix=.$( expr $releasesuffix + 1)
+            subrelease=0
           fi
+          if [ $subrelease -gt $maxsubrelease ]
+          then
+            maxsubrelease=$subrelease
+          fi
+        done
+      # append subrelease number to release if necessary
+      - |
+        if [ ${#packages[@]} -gt 0 ]
+        then
+          release=$release.$( expr $maxsubrelease + 1)
         fi
       # generate spec file
       - |
         cat > $CI_PROJECT_DIR/moodle-rwth-cardbox.spec <<EOF
         Name:       moodle-rwth-cardbox
         Version:    $version
-        Release:    $release$releasesuffix
+        Release:    $release
         Summary:    RWTH plugin for learning with flashcards.
         
         License:    GPL
