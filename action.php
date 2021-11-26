@@ -200,7 +200,7 @@ if ($action === 'savesuggestedanswer') {
     $userinput = required_param('userinput', PARAM_TEXT);
 
     if (!(empty($userinput) || $userinput === "")) {
-        cardbox_save_new_cardcontent($cardid, 1, 2, 3, $userinput);
+        cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_ANSWER, CARDBOX_CONTENTTYPE_TEXT, 3, $userinput);
     }
 
 }
