@@ -29,12 +29,15 @@ generate-spec:
       - version=$(grep -Po "^\s*\\\$plugin->release\s*=\s*['\"].*\K[0-9]+\.[0-9]+(\.[0-9]+)" version.php)
       - release=$(grep -Po "^\s*\\\$plugin->version\s*=\s*\K[0-9]{10}" version.php)
       # check repository for existing packages with same version and release
+      # "set +e" disables exit on non-zero exit status (grep exits with 1 if nothing found)
+      - set +e
       - packages=($(curl http://moodle-rpms.itc.rwth-aachen.de/moodle-$CI_COMMIT_BRANCH/ | grep -Po ">\Kmoodle-rwth-cardbox-$version-$release[^<]*"))
+      - set -e
       - maxsubrelease=0
       - |
         for package in "${packages[@]}"
         do
-          set +e # temporarily disable exit on non-zero exit status (grep exits with 1 if nothing found)
+          set +e
           subrelease=$(echo $package | grep -Po "$release\.\K[0-9]+")
           set -e
           if [ -z $subrelease ]
