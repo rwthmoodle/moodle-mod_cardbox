@@ -73,8 +73,12 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         if (has_capability('mod/cardbox:approvecard', $context)) {
             $level1[] = $this->cardbox_create_tab($baseurl, 'review', 'review');
         }
-        
+
         $level1[] = $this->cardbox_create_tab($baseurl, 'overview', 'overview');
+
+        if (has_capability('mod/cardbox:edittopics', $context)) {
+            $level1[] = $this->cardbox_create_tab($baseurl, 'edittopic', 'edittopic');
+        }
 
         return $this->tabtree($level1, $selected, $inactive);
     }
@@ -141,5 +145,14 @@ class mod_cardbox_renderer extends plugin_renderer_base {
      */
     public function cardbox_render_errimport(array $errorlines) {
         return $this->render_from_template('mod_cardbox/errimport', $errorlines);
+    }
+        /**
+     * 
+     * @param \templatable $edittopics
+     * @return type
+     */
+    public function cardbox_render_topics(\templatable $topics) {
+        $data = $topics->export_for_template($this);
+        return $this->render_from_template('mod_cardbox/topic', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
 }

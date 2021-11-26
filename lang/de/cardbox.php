@@ -62,6 +62,7 @@ $string['statistics'] = 'Fortschritt';
 $string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 $string['massimport'] = 'Karten importieren';
+$string['edittopic'] = 'Themen bearbeiten';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
@@ -272,6 +273,12 @@ $string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a}';
 $string['manager:deckdescription'] = 'Im Durchschnitt liegt diese Karte für alle Studierenden in Fach {$a}';
 $string['manager:repeatdesc'] = 'Diese Karte wurde von den Studierenden, im Durchschnitt, nach {$a} Wiederholungen gelernt';
 $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gelernt';
+
+//Edit topics Tab
+$string['deletetopic'] = 'Thema löschen';
+$string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen? Bei Karten, die diesem Thema zugeordnet waren, wird das Thema dadurch auf "nicht zugeordnet" gesetzt.';
+$string['createtopic'] = 'Hinzufügen';
+$string['existingtopics'] = 'Bereits existierende Themen';
 
 // Settings.
 $string['statistics_heading'] = 'Statistiken';
