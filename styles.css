@@ -105,6 +105,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     padding-right: 0px;;
 }
 
+.path-mod-cardbox #cardbox-topic-in-review{
+    display: flex;
+}
+
 .path-mod-cardbox .reviewcontent,
 .path-mod-cardbox .overviewcontent {
     margin-top: 50px;
@@ -450,4 +454,19 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox #id_newtopic.shown {
     display: flex;
+}
+
+.path-mod-cardbox .cardbox-create-topic-titles {
+    margin-top: 1em;
+    margin-bottom: 0.5em;
+    font-weight: 600;
+}
+
+.path-mod-cardbox #create-new-topic {
+    margin-right: 5px;
+    width: 30em;
+}
+
+.path-mod-cardbox .displaynone {
+    display: none;
 }

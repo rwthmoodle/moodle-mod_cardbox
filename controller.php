@@ -976,3 +976,41 @@ if ($action === 'overview') {
     }
 
 }
+
+/* **************************************************** Edit topics **************************************************** */
+
+if ($action === 'savenewtopic') {
+
+    require_capability('mod/cardbox:edittopics', $context);
+
+    $newtopic = required_param('newtopic', PARAM_TEXT);
+    cardbox_save_new_topic($newtopic, $cardbox->id);
+
+    $action = 'edittopic';
+
+}
+
+/* **************************************************** Edit topics **************************************************** */
+
+if ($action === 'edittopic') {
+
+    require_capability('mod/cardbox:edittopics', $context);
+
+    $page = optional_param('page', 0, PARAM_INT);
+    $perpage = 10;
+    $offset = $page * $perpage;
+
+    require_once($CFG->dirroot . '/mod/cardbox/classes/output/topics.php');
+    $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'edittopic'));
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
+    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+
+    $list = cardbox_get_topics($cardbox->id);
+
+    $topics = new cardbox_topics($list, $offset, /* $context, */ $cmid, $cardbox->id);
+    $PAGE->requires->js_call_amd('mod_cardbox/topics', 'init', array($cmid));
+
+    echo $renderer->cardbox_render_topics($topics);
+}

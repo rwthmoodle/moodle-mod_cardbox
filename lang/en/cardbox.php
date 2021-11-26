@@ -62,6 +62,7 @@ $string['statistics'] = 'Progress';
 $string['overview'] = 'Overview';
 $string['review'] = 'Review';
 $string['massimport'] = 'Import cards';
+$string['edittopic'] = 'Edit topics';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'New card';
@@ -274,6 +275,12 @@ $string['student:deckdescription'] = 'This card lies in deck {$a}';
 $string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';
 $string['manager:repeatdesc'] = 'This card was mastered by students, on average, after {$a} repetitions';
 $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
+
+//Edit topics Tab
+$string['deletetopic'] = 'Delete topic';
+$string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For cards assigned to this topic, this will set the topic to "not assigned".';
+$string['createtopic'] = 'Add';
+$string['existingtopics'] = 'already existing topics';
 
 // Settings.
 $string['statistics_heading'] = 'Statistics';

@@ -23,8 +23,35 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2021112600;
-$plugin->release = '0.5.3';
-$plugin->requires = 2018120302.05;
-$plugin->maturity = MATURITY_RC;
+/**
+ * Description of statistics
+ *
+ */
+class cardbox_topics implements \renderable, \templatable {
+
+    private $topics = array();
+
+    public function __construct($list, $offset, /* $context, */ $cmid, $cardboxid) {
+
+        global $DB, $PAGE;
+
+        $topic = array();
+        foreach ($list as $topicid => $titel) {
+            if ($topicid != -1) {
+                $topic['id'] = $topicid;
+                $topic['titel'] = $titel;
+                $topic['cards'] = $DB->count_records('cardbox_cards', [ "topic" => $topicid, "cardbox" => $cardboxid]);
+                $this->topics[] = $topic;
+            }
+        }
+        $perpage = 10;
+        $renderer = $PAGE->get_renderer('mod_cardbox');
+
+    }
+
+    public function export_for_template(\renderer_base $output) {
+        $data = array();
+        $data['topic'] = $this->topics;
+        return $data;
+    }
+}
