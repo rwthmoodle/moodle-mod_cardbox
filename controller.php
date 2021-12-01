@@ -982,11 +982,12 @@ if ($action === 'overview') {
 if ($action === 'savenewtopic') {
 
     require_capability('mod/cardbox:edittopics', $context);
+    $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'edittopic'));
 
     $newtopic = required_param('newtopic', PARAM_TEXT);
     cardbox_save_new_topic($newtopic, $cardbox->id);
 
-    $action = 'edittopic';
+    redirect($returnurl);
 
 }
 
