@@ -746,27 +746,38 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
 
 function validate_columns(array $filecolumns) {
     $errors = [];
-    $warnings = [];
+    $processed = [];
+    $filecolumns = array_map('strtolower', $filecolumns);
+    if (empty($filecolumns)) {
+        $errors[] = get_string('cannotreadtmpfile', 'error');
+    }
+    if (count($filecolumns) < 2) {
+        $errors[] = get_string('csvfewcolumns', 'error');
+    }
     if (!in_array('ques', $filecolumns)) {
-        $errors[] = 'ERR: Question field missing';
+        $errors[] = 'ERR: '.get_string('qfieldmissing', 'cardbox');
     }
     if (!in_array('ans', $filecolumns) && empty(preg_grep('/^ans[0-9]*$/', $filecolumns))) {
-        $errors[] = 'ERR: Answer field(s) missing';
+        $errors[] = 'ERR: '.get_string('afieldmissing', 'cardbox');;
     }
-    $comparearray = ['ques'];
+    $allowed = ['ques', 'acontext', 'qcontext', 'topic'];
     foreach ($filecolumns as $key => $column) {
         if (starts_with($column, 'ans')) { // Replace with str_starts_with in PHP 8.0.
-            array_push($comparearray, $column);
+            array_push($allowed, $column);
         }
     }
-    $extracolumns = array_diff($filecolumns, $comparearray);
-    $allowed = ['acontext', 'qcontext', 'topic'];
-    foreach ($extracolumns as $column) {
-        if (!in_array($column, $allowed)) {
-            $warnings[] = 'WARN: '.$column.' is not recognised';
+    foreach ($filecolumns as $filecolumn) {
+        if (in_array($filecolumn, $allowed) ) {
+            if (!in_array($filecolumn, $processed)) {
+                array_push($processed, $filecolumn);
+            } else if (in_array($filecolumn, $processed)) {
+                $errors[] = get_string('duplicatefieldname', 'error', $filecolumn);
+            }
+        } else {
+            $errors[] = get_string('invalidfieldname', 'error', $filecolumn);
         }
     }
-    return [$errors, $warnings];
+    return [$errors];
 }
 
 function validate_row(int $atleastoneanswer, array $rowcols) {
