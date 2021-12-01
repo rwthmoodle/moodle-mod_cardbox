@@ -54,10 +54,7 @@ class mod_cardbox_external extends external_api {
             array('topicid' => $topicid)
         );
 
-        $sql = 'SELECT cardboxid FROM {cardbox_topics} WHERE id = :id';
-        $cardboxid = $DB->get_field_sql($sql, ['id' => $params['topicid']]);
-        $sql = 'SELECT id FROM {course_modules} WHERE module = 5 AND instance= :cardboxid';
-        $cmid = $DB->get_field_sql($sql, ['cardboxid' => $cardboxid]);
+        $cmid = self::get_cmid($params['topicid']);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
 
@@ -88,10 +85,7 @@ class mod_cardbox_external extends external_api {
                   'newtopicname' => $newtopicname)
         );
 
-        $sql = 'SELECT cardboxid FROM {cardbox_topics} WHERE id = :id';
-        $cardboxid = $DB->get_field_sql($sql, ['id' => $params['topicid']]);
-        $sql = 'SELECT id FROM {course_modules} WHERE module = 5 AND instance= :cardboxid';
-        $cmid = $DB->get_field_sql($sql, ['cardboxid' => $cardboxid]);
+        $cmid = self::get_cmid($params['topicid']);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
 
@@ -102,5 +96,15 @@ class mod_cardbox_external extends external_api {
 
     public static function renametopic_returns() {
         return null;
+    }
+
+    public static function get_cmid($topicid) {
+        global $DB;
+        $sql = 'SELECT cardboxid FROM {cardbox_topics} WHERE id = :id';
+        $cardboxid = $DB->get_field_sql($sql, ['id' => $topicid]);
+        $sql = 'SELECT id FROM {modules} WHERE name = "cardbox"';
+        $module = $DB->get_field_sql($sql);
+        $sql = 'SELECT id FROM {course_modules} WHERE module = :module AND instance= :cardboxid';
+        return $DB->get_field_sql($sql, ['cardboxid' => $cardboxid, 'module' => $module]);
     }
 }
