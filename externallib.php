@@ -55,7 +55,7 @@ class mod_cardbox_external extends external_api {
         );
 
         $sql = 'SELECT cardboxid FROM {cardbox_topics} WHERE id = :id';
-        $cardboxid = $DB->get_field_sql($sql, ['id' => $topicid]);
+        $cardboxid = $DB->get_field_sql($sql, ['id' => $params['topicid']]);
         $sql = 'SELECT id FROM {course_modules} WHERE module = 5 AND instance= :cardboxid';
         $cmid = $DB->get_field_sql($sql, ['cardboxid' => $cardboxid]);
         $context = context_module::instance($cmid);
@@ -89,7 +89,7 @@ class mod_cardbox_external extends external_api {
         );
 
         $sql = 'SELECT cardboxid FROM {cardbox_topics} WHERE id = :id';
-        $cardboxid = $DB->get_field_sql($sql, ['id' => $topicid]);
+        $cardboxid = $DB->get_field_sql($sql, ['id' => $params['topicid']]);
         $sql = 'SELECT id FROM {course_modules} WHERE module = 5 AND instance= :cardboxid';
         $cmid = $DB->get_field_sql($sql, ['cardboxid' => $cardboxid]);
         $context = context_module::instance($cmid);
