@@ -62,7 +62,7 @@ $string['statistics'] = 'Fortschritt';
 $string['overview'] = 'Übersicht';
 $string['review'] = 'Freigabe';
 $string['massimport'] = 'Karten importieren';
-$string['edittopic'] = 'Themen bearbeiten';
+$string['edittopic'] = 'Themen verwalten';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';

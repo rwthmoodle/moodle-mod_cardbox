@@ -62,7 +62,7 @@ $string['statistics'] = 'Progress';
 $string['overview'] = 'Overview';
 $string['review'] = 'Review';
 $string['massimport'] = 'Import cards';
-$string['edittopic'] = 'Edit topics';
+$string['edittopic'] = 'Manage topics';
 
 // Subpage titles
 $string['titleforaddflashcard'] = 'New card';
