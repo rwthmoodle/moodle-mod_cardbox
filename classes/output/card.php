@@ -101,6 +101,11 @@ class cardbox_card implements \renderable, \templatable {
                     $answercount++;
                 }
 
+            } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION && $content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) {
+
+                $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
+                $this->question['sounds'][] = array('soundsrc' => $downloadurl);
+
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
 
                 $content->content = format_text($content->content);
