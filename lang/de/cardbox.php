@@ -215,9 +215,9 @@ $string['numberofcardsmax'] = 'Maximum';
 
 $string['titledurationofasession'] = 'Dauer einer Übung';
 $string['duration'] = 'Dauer (min)';
-$string['durationavg'] = 'Durchschnitt in min';
-$string['durationmin'] = 'Minimum in min';
-$string['durationmax'] = 'Maximun in min';
+$string['durationavg'] = 'Durchschnitt';
+$string['durationmin'] = 'Minimum';
+$string['durationmax'] = 'Maximun';
 
 
 // Review.
