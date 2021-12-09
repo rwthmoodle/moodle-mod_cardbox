@@ -149,21 +149,21 @@ class cardbox_statistics implements \renderable, \templatable {
                 $this->durationmax[] = 0;
                 $numberofcardstooltipmax = 0;
             } else {
-                $durationofsession = round(($durationofsession) / 60 / $count);
+                $durationofsession = ($durationofsession) / 60 / $count;
                 $numberofcards = round($numberofcards / $count);
                 $numberofcardstooltipmin = get_string('numberofcardsmin', 'cardbox') . ": " . $numberofcardsmin->numberofcards;
                 $this->numberofcardsmin[] = $numberofcardsmin->numberofcards;
                 $numberofcardstooltipmax = get_string('numberofcardsmax', 'cardbox') . ": " . $numberofcardsmax->numberofcards;
                 $this->numberofcardsmax[] = $numberofcardsmax->numberofcards;
-                $durationofsessiontooltipmin = get_string('durationmin', 'cardbox') . ": " . round($numberofcardsmin->duration / 60);
-                $this->durationmin[] = round($numberofcardsmin->duration / 60);
-                $durationofsessiontooltipmax = get_string('durationmax', 'cardbox') . ": " . round($numberofcardsmax->duration / 60);
-                $this->durationmax[] = round($numberofcardsmax->duration / 60);
+                $durationofsessiontooltipmin = get_string('durationmin', 'cardbox') . ": " . format_time($numberofcardsmin->duration);
+                $this->durationmin[] = $numberofcardsmin->duration / 60;
+                $durationofsessiontooltipmax = get_string('durationmax', 'cardbox') . ": " . format_time($numberofcardsmax->duration);
+                $this->durationmax[] = $numberofcardsmax->duration / 60;
             }
             $this->durationofsessionavg[] = $durationofsession;
             $this->numberofcardsavg[] = $numberofcards;
 
-            $durationofsessiontooltipavg = get_string('durationavg', 'cardbox') . ": " . $durationofsession;
+            $durationofsessiontooltipavg = get_string('durationavg', 'cardbox') . ": " . format_time($durationofsession * 60);
             $numberofcardstooltipavg = get_string('numberofcardsavg', 'cardbox') . ": " . $numberofcards;
             if (count($distinctusers) < $practicingusersthreshold) {
                 $belowthreshold = get_string('linegraphtooltiplabel_below_threshold', 'cardbox', $practicingusersthreshold);

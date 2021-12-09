@@ -216,9 +216,9 @@ $string['numberofcardsmax'] = 'Maximum';
 
 $string['titledurationofasession'] = 'Duration of a session';
 $string['duration'] = 'Duration (min)';
-$string['durationavg'] = 'Average in min';
-$string['durationmin'] = 'Minimum in min';
-$string['durationmax'] = 'Maximun in min';
+$string['durationavg'] = 'Average';
+$string['durationmin'] = 'Minimum';
+$string['durationmax'] = 'Maximun';
 
 
 // Review.
