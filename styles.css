@@ -445,7 +445,11 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     grid-gap: 10%;
 }
 .common-margin {
-    margin-right: 10px;;
+    margin-right: 10px;
+    font-size: small;
+}
+.common-margin:last-child {
+    margin-right: 0px;
 }
 
 .path-mod-cardbox #id_newtopic {
@@ -469,4 +473,55 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox .displaynone {
     display: none;
+}
+
+.review-topic{
+    margin-left : 13%;
+}
+.common-margin{
+    font-size: small;
+}
+/*.mul-ans-text{
+    position: absolute;
+    right: 9em;
+    bottom: 1em;
+}*/
+.ques-teil{
+    padding:0px;
+}
+.ans-teil{
+    padding:0px;
+}
+@media (max-width:800px) {
+    .review-topic{
+        margin-left : 1%;
+    }
+    .common-margin{
+        font-size: x-small;
+    }
+    .cardbox-card-right-side-multi{
+        margin-right: 0em;
+        margin-left: 0em;
+    }
+    .ques-teil{
+        padding:0px;
+    }
+    .ans-teil{
+        padding:0px;
+    }
+    .review-button-wrapper{
+        margin-top: 2em;
+    }
+    .cardbox-card-left-side {
+        margin-right: 2%;
+        margin-left: 2%;
+    }
+    .cardbox-card-right-side {
+        margin-right: 2%;
+        margin-left: 2%;
+    }
+    .cardbox-card-right-side-multi {
+        margin-right: 2%;
+        margin-left: 2%;
+    }
 }
