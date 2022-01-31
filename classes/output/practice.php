@@ -104,15 +104,15 @@ class cardbox_practice implements \renderable, \templatable {
 
             if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
 
-                $this->questioncontext = strip_tags($content->content);
+                $this->questioncontext = format_text($content->content);
 
             } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
 
-                $this->answercontext = strip_tags($content->content);
+                $this->answercontext = format_text($content->content);
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) { // images
 
-                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     if ($content->area == CARD_IMAGEDESCRIPTION_INFORMATION) {
                         $this->question['images'][0] += array('imagealt' => $content->content);
@@ -125,7 +125,7 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) { // audio files
 
-                $download_url = cardbox_get_download_url($context, $content->id, $content->content);    
+                $download_url = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     $this->question['sounds'][] = array('soundsrc' => $download_url);
                 } else {
@@ -134,18 +134,18 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
 
-                $content->content = $content->content; // cardbox_format_string($content->content);
+                $content->content = format_text($content->content);
 
-                $this->question['texts'][] = array('text' => strip_tags($content->content), 'puretext' => strip_tags($content->content));
+                $this->question['texts'][] = array('text' => $content->content, 'puretext' => $content->content);
 
             } else {
 
-                $content->content = $content->content; // cardbox_format_string($content->content);
+                $content->content = strip_tags(format_text($content->content));
 
                 if ($content->area === "3") {
                     continue;
                 }
-                $this->answer['texts'][] = array('text' => strip_tags($content->content), 'puretext' => strip_tags($content->content));
+                $this->answer['texts'][] = array('text' => $content->content, 'puretext' => $content->content);
                 $solutioncount++;
                 $this->inputfields[] = array('number' => $solutioncount);
             }
