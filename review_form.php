@@ -215,7 +215,7 @@ class mod_cardbox_review_form extends moodleform {
                 'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
             $acontext = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER,
                 'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
-            $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$cardid.'-contextfelder" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
+            $mform->addElement('html', '<div id="cardbox-card-in-review" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
             <div class="col-xl-4" style="margin-left: 10%; padding-right: 0px; padding-left: 1%;"><div class="cardbox-column" >'.$qcontext.
             '</div></div><div class="col-xl-4" style="padding-left:0.5%;"><div class="cardbox-column" ><div>'.$acontext.'</div></div></div></div>');
 
