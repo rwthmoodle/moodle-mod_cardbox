@@ -49,7 +49,7 @@ class cardbox_practice implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($case, $context, $cardid, $cardsleft) {
+    public function __construct($case, $context, $cardid, $cardsleft, $autocorrection) {
 
         switch ($case) {
             case 1:
@@ -77,11 +77,11 @@ class cardbox_practice implements \renderable, \templatable {
         }
         $this->cardsleft = $cardsleft;
         $this->cardbox_getcarddeck($cardid);
-        $this->cardbox_prepare_cardcontents($context, $cardid);
+        $this->cardbox_prepare_cardcontents($context, $cardid, $autocorrection);
 
     }
     
-    public function cardbox_prepare_cardcontents($context, $cardid) {
+    public function cardbox_prepare_cardcontents($context, $cardid, $autocorrection) {
         
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
@@ -140,7 +140,12 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else {
 
-                $content->content = strip_tags(format_text($content->content));
+                $content->content = format_text($content->content);
+                if ($autocorrection) {
+                    // We want the bare text for answer comparison, no HTML tags.
+                    // Otherwise autocorrection doesn't work.
+                    $content->content = strip_tags($content->content);
+                }
 
                 if ($content->area === "3") {
                     continue;
