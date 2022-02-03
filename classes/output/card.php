@@ -81,11 +81,11 @@ class cardbox_card implements \renderable, \templatable {
 
             if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
 
-                $this->questioncontext = $content->content;
+                $this->questioncontext = format_text($content->content);
 
             } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
 
-                $this->answercontext = $content->content;
+                $this->answercontext = format_text($content->content);
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) {
 
