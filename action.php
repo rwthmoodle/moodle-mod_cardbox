@@ -130,7 +130,7 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $practice = new cardbox_practice($case, $context, $next, $cardsleft);
+        $practice = new cardbox_practice($case, $context, $next, $cardsleft, false);
         $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);
@@ -167,23 +167,6 @@ if ($action === 'saveperformance') {
     } else {
         echo json_encode(['status' => 'success']);
     }
-
-}
-
-/* * ********************** Suggest answer for a specific card *********************** */
-
-if ($action === 'suggestanswer') {
-
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
-
-    $cardid = required_param('cardid', PARAM_INT);
-    $case = optional_param('case', 5, PARAM_INT);
-
-    $renderer = $PAGE->get_renderer('mod_cardbox');
-    $practice = new cardbox_practice($case, $context, $cardid);
-    $newdata = $practice->export_for_template($renderer);
-
-    echo json_encode(['status' => 'success', 'newdata' => $newdata]);
 
 }
 
