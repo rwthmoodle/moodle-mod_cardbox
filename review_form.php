@@ -77,6 +77,7 @@ class mod_cardbox_review_form extends moodleform {
             }
             
             foreach ($cardcontents as $cardcontent) {
+                $cardcontent->content = format_text($cardcontent->content);
 
                 //topicname
                 if ($cardcontent->topicname === null) {
@@ -213,8 +214,10 @@ class mod_cardbox_review_form extends moodleform {
 
             $qcontext = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION,
                 'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
+            $qcontext = format_text($qcontext);
             $acontext = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER,
                 'contenttype' => CARDBOX_CONTENTTYPE_TEXT, 'area' => CARD_CONTEXT_INFORMATION]);
+            $acontext = format_text($acontext);
             $mform->addElement('html', '<div id="cardbox-card-in-review" class="row reviewcontent" style="display: -webkit-box; margin-top: 10px">
             <div class="col-xl-4" style="margin-left: 10%; padding-right: 0px; padding-left: 1%;"><div class="cardbox-column" >'.$qcontext.
             '</div></div><div class="col-xl-4" style="padding-left:0.5%;"><div class="cardbox-column" ><div>'.$acontext.'</div></div></div></div>');
