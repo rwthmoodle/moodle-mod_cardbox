@@ -620,7 +620,7 @@ if ($action === 'practice') {
         } else {
             $case = 1;
         }
-        $practice = new cardbox_practice($case, $context, $selection[0], count($selection));
+        $practice = new cardbox_practice($case, $context, $selection[0], count($selection), !$correction);
         $data = $practice->export_for_template($renderer);
 
         // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
