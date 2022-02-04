@@ -140,7 +140,7 @@ class cardbox_practice implements \renderable, \templatable {
 
             } else {
 
-                $content->content = format_text($content->content);
+                $content->content = format_text($content->content, FORMAT_MOODLE, ['para' => false]);
                 if ($autocorrection) {
                     // We want the bare text for answer comparison, no HTML tags.
                     // Otherwise autocorrection doesn't work.
