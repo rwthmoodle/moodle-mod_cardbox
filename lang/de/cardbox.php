@@ -279,6 +279,7 @@ $string['deletetopic'] = 'Thema löschen';
 $string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen? Bei Karten, die diesem Thema zugeordnet waren, wird das Thema dadurch auf "nicht zugeordnet" gesetzt.';
 $string['createtopic'] = 'Hinzufügen';
 $string['existingtopics'] = 'Bereits existierende Themen';
+$string['notopics'] = 'Es sind noch keine Themen vorhanden';
 
 // Settings.
 $string['statistics_heading'] = 'Statistiken';
