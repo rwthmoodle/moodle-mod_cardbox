@@ -54,11 +54,6 @@ function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper func
             eventhandling.registerEventsForQuestionSelfCheck();
         }
 
-        var bluebox = document.getElementById('nocardsduenotification');
-        if (bluebox !== null) {
-            bluebox.parentNode.removeChild(bluebox);
-        }
-
         /**
          * Function removes any green/red feedback from the top of the page.
          *

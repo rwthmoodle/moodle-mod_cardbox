@@ -598,7 +598,7 @@ if ($action === 'practice') {
         return;
     
     // Inform the user that none of their cards are due for practice right now.
-    } else if (empty($duecardcount)) {
+    } else if (empty($duecardcount) && !$startnow) {
         
         $info_part1 = get_string('info:nocardsdueforpractice', 'cardbox');
         $info_part2 = get_string('help:practiceanyway', 'cardbox');
@@ -628,7 +628,7 @@ if ($action === 'practice') {
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/Chart.bundle.js"));
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00022"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00023"));
         $params = array($cmid, $selection, $case, $data); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 
@@ -639,7 +639,7 @@ if ($action === 'practice') {
 
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/start.php');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js?ver=00004"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/start.js?ver=00005"));
         $PAGE->requires->js_init_call('startOptions', array($cmid, $openmodal), true);
 
 /*         $group = $mform->createElement('group', 'groupname', get_string('label'), $groupitems, null, false);
