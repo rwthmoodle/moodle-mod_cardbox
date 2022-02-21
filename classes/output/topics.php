@@ -52,6 +52,7 @@ class cardbox_topics implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output) {
         $data = array();
         $data['topic'] = $this->topics;
+        $data['notopics'] = empty($this->topics);
         return $data;
     }
 }

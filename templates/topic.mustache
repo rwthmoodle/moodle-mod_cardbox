@@ -6,6 +6,12 @@
         <input id="cardbox-submit-new-topic" type="submit" value="{{# str }} createtopic, cardbox {{/ str }}" class="btn btn-primary">
     </div>
 
+    
+    {{#notopics}}
+    <div class="cardbox-create-topic-titles">{{#str}} notopics, cardbox {{/str}}</div>
+    {{/notopics}}
+
+    {{^notopics}}
     <div class="cardbox-create-topic-titles">{{#str}} existingtopics, cardbox {{/str}}</div>
 
     {{#topic}}
@@ -24,5 +30,8 @@
         </div>
 
     {{/topic}}
+    {{/notopics}}
+    
+    
 
 </div>

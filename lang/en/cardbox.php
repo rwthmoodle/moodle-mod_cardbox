@@ -281,6 +281,7 @@ $string['deletetopic'] = 'Delete topic';
 $string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For cards assigned to this topic, this will set the topic to "not assigned".';
 $string['createtopic'] = 'Add';
 $string['existingtopics'] = 'already existing topics';
+$string['notopics'] = 'there are no topics yet';
 
 // Settings.
 $string['statistics_heading'] = 'Statistics';
