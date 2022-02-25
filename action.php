@@ -105,6 +105,7 @@ if ($action === 'updateandnext') {
     $isrepetition = required_param('isrepetition', PARAM_INT);
     $case = optional_param('case', 1, PARAM_INT);
     $cardsleft = required_param('cardsleft', PARAM_INT);
+    $correction = required_param('mode', PARAM_INT);
 
     $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
     if (empty($dataobject)) {
@@ -130,7 +131,7 @@ if ($action === 'updateandnext') {
     // 2. Get next card and pass it to javascript for rendering.
     if ($next != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        $practice = new cardbox_practice($case, $context, $next, $cardsleft, false);
+        $practice = new cardbox_practice($case, $context, $next, $cardsleft, !$correction);
         $newdata = $practice->export_for_template($renderer);
 
         echo json_encode(['status' => 'success', 'lastposition' => $lastposition, 'newdata' => $newdata]);

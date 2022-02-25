@@ -32,7 +32,7 @@
  * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper function that is called by controller.php.
+function startPractice(Y, __cmid, __selection, __case, __data, __mode) { // Wrapper function that is called by controller.php.
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
 
@@ -44,7 +44,7 @@ function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper func
         var output = new Output(__case, templates, notification);
         var statistics = new Statistics(chart);
 
-        var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case);
+        var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case, __mode);
         var eventhandling = new EventHandling(coordinate);
         coordinate.addEventHandler(eventhandling);
 
@@ -52,6 +52,11 @@ function startPractice(Y, __cmid, __selection, __case, __data) { // Wrapper func
             eventhandling.registerEventsForQuestionAutoCheck();
         } else {
             eventhandling.registerEventsForQuestionSelfCheck();
+        }
+
+        var bluebox = document.getElementById('nocardsduenotification');
+        if (bluebox !== null) {
+            bluebox.parentNode.removeChild(bluebox);
         }
 
         /**
@@ -277,12 +282,13 @@ class EventHandling {
 
 class Coordinate {
 
-        constructor(cmid, evaluate, output, statistics, selection, data, mode) {
+        constructor(cmid, evaluate, output, statistics, selection, data, __case, __mode) {
 
             this.cmid = cmid;
             this.selection = selection;
             this.data = data; // contents of the current flashcard
-            this.case = mode;
+            this.case = __case;
+            this.mode = __mode;
             
             this.cardcount = selection.length;
             this.cardsleft = selection.length;
@@ -416,7 +422,7 @@ class Coordinate {
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
-                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, cardsleft: this.cardsleft}
+                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, cardsleft: this.cardsleft, mode: this.mode}
             }).then(function(data) {
                 var result = JSON.parse(data);
                 
