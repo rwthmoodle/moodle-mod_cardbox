@@ -296,3 +296,4 @@ $string['errormsg'] = 'Die folgenden Linien konnten nicht in Karten importiert w
 $string['status'] = 'Status';
 $string['continue'] = 'Weiter';
 $string['unmatchedanswers'] = 'CSV-Datei erfordert {$a->csvschema} Antworten; nur {$a->actual} gegeben. answers; ';
+$string['emptyimportfile'] = 'Nichts zu importieren - CSV-Datei hat keine Zeilen';
