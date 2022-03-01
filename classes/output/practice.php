@@ -145,6 +145,7 @@ class cardbox_practice implements \renderable, \templatable {
                     // We want the bare text for answer comparison, no HTML tags.
                     // Otherwise autocorrection doesn't work.
                     $content->content = strip_tags($content->content);
+                    $content->content = trim($content->content);
                 }
 
                 if ($content->area === "3") {
