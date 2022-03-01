@@ -792,13 +792,18 @@ if ($action === 'massimport') {
                 if (!empty($errlines)) {
                     //redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1), null, \core\output\notification::NOTIFY_INFO);
                     $errorlines = array();
+                    $errorlines['err'] = true;
                     $errorlines['rows'] = $errlines;
                     $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
                     $errorlines ['continueurl'] = $returnurl->out(false);
                     $renderer = $PAGE->get_renderer('mod_cardbox');
                     echo $renderer->cardbox_render_errimport($errorlines);
                 } else {
-                    redirect($returnurl, get_string('importsuccess', 'cardbox', ($formdata2->count) - 1 ), null, \core\output\notification::NOTIFY_INFO);
+                    $errorlines['err'] = false;
+                    $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
+                    $errorlines ['continueurl'] = $returnurl->out(false);
+                    $renderer = $PAGE->get_renderer('mod_cardbox');
+                    echo $renderer->cardbox_render_errimport($errorlines);
                 }
             } else {
                 redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
