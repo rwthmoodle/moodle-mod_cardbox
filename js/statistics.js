@@ -24,12 +24,13 @@
 function displayCharts(Y, __params) { // Wrapper function that is called by controller.php
 
     var __ismanager = __params['ismanager'];
-    if (__ismanager) {
-        var __absoluteboxcount = __params['absoluteboxcount'];
-    } else {
-        var __studentboxcount = __params['studentboxcount'];
-        var __averageboxcount = __params['averageboxcount'];
-    }
+    
+    const ABSOLUTE_CARDS_OVER_DECK = 1;
+    const CARDBOX_STATUS = 2;
+    const USER_PERFORMANCE_OVER_TIME = 3;
+    const CARDS_OVER_TIME = 4;
+    const SESSION_DURATION = 5;
+
     var __performance = __params['performance'];
 
     require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
@@ -54,7 +55,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
     * @returns {undefined}
     */
    function displayAbsoluteCardsOverDecks() {
-
+    var __absoluteboxcount = __params['absoluteboxcount'];
     var context = document.getElementById("cardbox-statistics-absolute-over-deck").getContext("2d");
     var mixedChart = new Chart(context, {
         type: 'bar',
@@ -107,7 +108,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                     ticks: {
                         beginAtZero: true,
                         min: 0,
-                        stepSize: 10
+                        stepSize: calculateStepSize(ABSOLUTE_CARDS_OVER_DECK),
                     },
                     stacked: true
                 }]
@@ -125,7 +126,8 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
    function displayCardboxStatus() {
 
         var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
-
+        var __studentboxcount = __params['studentboxcount'];
+        var __averageboxcount = __params['averageboxcount'];
         var cardboxdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
@@ -223,7 +225,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                         ticks: {
                             beginAtZero: true,
                             min: 0,
-                            stepSize: 10
+                            stepSize: calculateStepSize(CARDBOX_STATUS),
                         },
                         stacked: true
                     }]
@@ -463,7 +465,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                             beginAtZero: true,
                             min: 0,
 /*                             max: 100, */
-                            stepSize: 10
+                            stepSize: calculateStepSize(CARDS_OVER_TIME)
                         }
                     }]
                 }
@@ -619,6 +621,73 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
             }
         });
 
+    }
+
+    function calculateStepSize(chartname) {
+        switch (chartname) {
+            case ABSOLUTE_CARDS_OVER_DECK:
+                var __absoluteboxcount = __params['absoluteboxcount'];
+                var values = Object.values(__absoluteboxcount);
+                var max = Math.max(...values);
+                var stepsize = compareStepSize(max);
+                break;
+            case CARDBOX_STATUS:
+                var __studentboxcount = __params['studentboxcount'];
+                var __averageboxcount = __params['averageboxcount'];
+                var avgvalues = Object.values(__averageboxcount);
+                var max = Math.max(...avgvalues);
+                if (max < __studentboxcount[0]) {
+                    max = __studentboxcount[0];
+                }
+                for (let i = 1; i <= 6; i++) {
+                    if (__studentboxcount[i]['due'] < __studentboxcount[i]['notdue']) {
+                        if (max < __studentboxcount[i]['notdue']) {
+                            max = __studentboxcount[i]['notdue'] 
+                        }
+                    } else {
+                        if (max < __studentboxcount[i]['due']) {
+                            max = __studentboxcount[i]['due'] 
+                        }
+                    }
+                }
+                var stepsize = compareStepSize(max);
+                break;
+            case USER_PERFORMANCE_OVER_TIME:
+                var stepsize = 10;
+                break;
+            case CARDS_OVER_TIME:
+                var stepsize = compareStepSize(__performance.numberofcardsmax);
+                break;
+            case SESSION_DURATION:
+                var stepsize = compareStepSize(__performance.durationofsessionmax);
+                break;
+        }
+        return stepsize;
+    }
+    function compareStepSize(max) {
+        var stepsize = 10;
+        if (max <= 100) {
+            stepsize = 10;
+        } else if (max <= 200) {
+            stepsize = 20;
+        } else if (max <= 500) {
+            stepsize = 50;
+        } else if (max <= 1000) {
+            stepsize = 100;
+        } else if (max <= 2000) {
+            stepsize = 200;
+        } else if (max <= 5000) {
+            stepsize = 500;
+        } else if (max <= 10000) {
+            stepsize = 1000;
+        } else if (max <= 20000) {
+            stepsize = 2000;
+        } else if (max <= 50000) {
+            stepsize = 5000;
+        } else {
+            stepsize = 10000;
+        }
+        return stepsize;
     }
 
 } // end of displayCharts()
