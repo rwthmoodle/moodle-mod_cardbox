@@ -120,14 +120,9 @@ class mod_cardbox_review_form extends moodleform {
                         }
                         $height = (100 - ($countsuggestedanswers - 1)) / $countsuggestedanswers;
 
-                        $answerapproved = true;
+                        $answerapproved = $cardcontent->area != CARD_ANSERSUGGESTION_INFORMATION;
                         $suggestedanswers = $DB->get_records('cardbox_cardcontents', ['card' => $cardid,
                             'cardside' => CARDBOX_CARDSIDE_ANSWER, 'area' => CARD_ANSERSUGGESTION_INFORMATION], '', 'id, content');
-                        foreach ($suggestedanswers as $suggestedanswer) {
-                            if ($suggestedanswer->content === $cardcontent->content) {
-                                $answerapproved = false;
-                            }
-                        }
                         $class = 'cardbox-cardside-multi';
                         if (!$answerapproved) {
                             $class .= ' suggestion';
