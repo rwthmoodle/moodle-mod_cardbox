@@ -29,7 +29,7 @@ defined('MOODLE_INTERNAL') || die();
  * @author ah105090
  */
 class cardbox_overview implements \renderable, \templatable {
-    
+
     private $topicid;
     private $topics = array();
     private $cards = array();
@@ -43,7 +43,7 @@ class cardbox_overview implements \renderable, \templatable {
         $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
         $this->ismobile = $ismobile;
         $this->topicid = $topicid;
-        
+
         foreach ($topics as $topic) {
             if ($topic->id == $topicid) {
                 $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true);
@@ -54,7 +54,7 @@ class cardbox_overview implements \renderable, \templatable {
 
         $perpage = 10;
         $renderer = $PAGE->get_renderer('mod_cardbox');
-        
+
         if (has_capability('mod/cardbox:approvecard', $context) && !$usedforemail) {
             $allowedtoedit = true;
         } else {
@@ -66,7 +66,7 @@ class cardbox_overview implements \renderable, \templatable {
         } else {
             $seestatus = false;
         }
-        
+
         for ($i = $offset; ($i < count($list) && $i < $offset + $perpage); $i++) {
             $card = new cardbox_card($list[$i], $context, $cmid, $allowedtoedit, $seestatus);
             $this->cards[] = $card->export_for_template($renderer);
@@ -76,7 +76,7 @@ class cardbox_overview implements \renderable, \templatable {
 
     public function export_for_template(\renderer_base $output) {
         $data = array();
-        
+
         if ($this->topicid == -1) {
             $data['nopreference'] = true;
         } else if ($this->topicid == 0) {
@@ -88,5 +88,4 @@ class cardbox_overview implements \renderable, \templatable {
         $data['ismobile'] = $this->ismobile;
         return $data;
     }
-    
 }

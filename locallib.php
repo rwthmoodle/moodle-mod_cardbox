@@ -26,7 +26,7 @@
 define('CARDBOX_EVALUATE_ALL', 0);
 define('CARDBOX_EVALUATE_ONE', 1);
 define('CARD_MAIN_INFORMATION', 0);
-define('CARD_CONTEXT_INFORMATION', 1);  /////////CARDAREA_...
+define('CARD_CONTEXT_INFORMATION', 1);
 define('CARD_IMAGEDESCRIPTION_INFORMATION', 2);
 define('CARD_ANSERSUGGESTION_INFORMATION', 3);
 define('CARDBOX_CARDSIDE_QUESTION', 0);
@@ -34,10 +34,12 @@ define('CARDBOX_CARDSIDE_ANSWER', 1);
 define('CARDBOX_CONTENTTYPE_IMAGE', 0);
 define('CARDBOX_CONTENTTYPE_TEXT', 1);
 define('CARDBOX_CONTENTTYPE_AUDIO', 2);
+define ('LONG_DESCRIPTION', 1);
+define ('SHORT_DESCRIPTION', 0);
 
 /**
  * Function creates a new record in cardbox_topics table.
- * 
+ *
  * @global obj $DB
  * @param string $topicname
  * @return int id of the new topic
@@ -62,7 +64,7 @@ function cardbox_save_new_topic($topicname, $cardboxid) {
  * @return type
  */
 function cardbox_get_topics($cardboxid, $extra = false) {
-    
+
     global $DB;
     $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
     $options = array(-1 => get_string('notopic', 'cardbox'));
@@ -86,7 +88,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null, $necessaryanswers = 0) {
+function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null, $necessaryanswers = 0, $disableautocorrect = 0) {
 
     global $DB, $USER;
 
@@ -104,7 +106,7 @@ function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topi
         $cardrecord->approvedby = null;
     }
     $cardrecord->necessaryanswers = $necessaryanswers;
-
+    $cardrecord->disableautocorrect = $disableautocorrect;
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
     return $cardid;
@@ -126,10 +128,10 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 
 
     $cardcontent = new stdClass();
     $cardcontent->card = $cardid;
-    $cardcontent->cardside = $cardside; // 0 for question page
-    $cardcontent->contenttype = $contenttype; // 0 for image;
-    $cardcontent->area = $area; //0->main, 1->context
-    $cardcontent->content = $name; // $file->get_filename();
+    $cardcontent->cardside = $cardside;
+    $cardcontent->contenttype = $contenttype;
+    $cardcontent->area = $area;
+    $cardcontent->content = $name;
     $itemid = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
 
     return $itemid;
@@ -137,12 +139,11 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $area = 
 }
 
 function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
-    
+
     global $DB;
-    
+
     $existsalready = $DB->record_exists('cardbox_cardcontents', array('card' => $cardid, 'cardside' => $cardside, 'contenttype' => $contenttype));
-    
-    
+
 }
 
 
@@ -154,58 +155,58 @@ function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
  * @param int $topicid
  * @return bool whether or not the update was successful
  */
-function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context, $necessaryanswers) {
+function cardbox_edit_card($cardid, $topicid, $submitbutton = null, $context, $necessaryanswers, $disableautocorrect) {
 
     global $DB, $USER;
-    
+
     $record = new stdClass();
     $record->id = $cardid;
     $record->topic = $topicid;
     $record->timemodified = time();
-    
+
     if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
         $record->approved = 1;
         $record->approvedby = $USER->id;
     }
 
     $record->necessaryanswers = $necessaryanswers;
-
+    $record->disableautocorrect = $disableautocorrect;
     $success = $DB->update_record('cardbox_cards', $record);
-    
+
     if (empty($success)) {
         return false;
     }
-    
+
     $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
-    
+
     return $success;
 
 }
 /**
  * Function deletes a card, its contents and topic.
- * 
+ *
  * @global obj $DB
  * @param int $cardid
  * @return boolean
  */
 function cardbox_delete_card($cardid) {
-    
+
     global $DB;
-    
+
     // Check whether the card exists.
     $card = $DB->get_record('cardbox_cards', array('id' => $cardid), '*', MUST_EXIST);
-    
+
     if (empty($card)) {
         return false;
     }
-    
+
     // Delete its contents.
     $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
-    
+
     if (empty($success)) {
         return false;
     }
-    
+
     // Delete its topic if no other card uses it.
     if (!empty($card->topic)) {
         $count = $DB->count_records('cardbox_cards', array('topic' => $card->topic));
@@ -216,19 +217,19 @@ function cardbox_delete_card($cardid) {
 
     // Delete the card itself.
     return $DB->delete_records('cardbox_cards', array('id' => $cardid));
-    
+
 }
 
 /**
  * This function checks whether there are new cards available in the DB
  * and if so, adds them to the users virtual cardbox system.
- * 
+ *
  * @global obj $DB
  * @global obj $USER
  * @return type
  */
 function cardbox_add_new_cards($cardboxid, $topic) {
-    
+
     global $DB, $USER;
 
     $sql2 = "SELECT c.id"
@@ -261,26 +262,26 @@ function cardbox_add_new_cards($cardboxid, $topic) {
 
 }
 /**
- * 
+ *
  * @param type $context
  * @param type $itemid
  * @param type $filename
  * @return type
  */
 function cardbox_get_download_url($context, $itemid, $filename = null) {
-    
+
     $fs = get_file_storage();
-//    $file = $fs->get_file($context, 'mod_cardbox', 'content', $itemid, '/', $filename);
 
     $files = $fs->get_area_files($context->id, 'mod_cardbox', 'content', $itemid, 'sortorder', false);
-    
-    
+
     foreach ($files as $file) { // find better solution than foreach to get the first and only element.
-        $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(), $file->get_itemid(), $file->get_filepath(), $file->get_filename());
-        $download_url = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() . ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
-        return $download_url;
+        $fileurl = moodle_url::make_pluginfile_url($file->get_contextid(), $file->get_component(), $file->get_filearea(),
+                                                   $file->get_itemid(), $file->get_filepath(), $file->get_filename());
+        $downloadurl = $fileurl->get_port() ? $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path() .
+                           ':' . $fileurl->get_port() : $fileurl->get_scheme() . '://' . $fileurl->get_host() . $fileurl->get_path();
+        return $downloadurl;
     }
-    
+
 }
 /**
  * Function returns the topic of the card, if a topic was selected.
@@ -289,16 +290,16 @@ function cardbox_get_download_url($context, $itemid, $filename = null) {
  * @param int $cardid
  * @return int
  */
-function cardbox_get_topic($cardid) { // XXX opject-oriented with card class?
-    
+function cardbox_get_topic($cardid) {
+
     global $DB;
-    
+
     $topic = $DB->get_field('cardbox_cards', 'topic', array('id' => $cardid), IGNORE_MISSING);
 
     if (empty($topic)) {
-        $topic = -1; // no topic selected.
+        $topic = -1; // No topic selected.
     }
-    
+
     return $topic;
 
 }
@@ -309,7 +310,7 @@ function cardbox_get_topic($cardid) { // XXX opject-oriented with card class?
  * @param int $cardid
  * @return int
  */
-function cardbox_get_necessaryanswers($cardid) { // XXX opject-oriented with card class?    
+function cardbox_get_necessaryanswers($cardid) {
     global $DB;
 
     $necessaryanswers = $DB->get_field('cardbox_cards', 'necessaryanswers', array('id' => $cardid), IGNORE_MISSING);
@@ -374,7 +375,7 @@ function cardbox_get_notapproved_answers($cardid) {
  * @return string or array
  */
 function cardbox_get_questioncontext($cardid) {
- 
+
     global $DB;
     $context = $DB->get_field('cardbox_cardcontents', 'content', ['card' => $cardid, 'cardside' => CARDBOX_CARDSIDE_QUESTION,
      'area' => CARD_CONTEXT_INFORMATION], IGNORE_MISSING);
@@ -529,9 +530,6 @@ function cardbox_get_user_date_short($timestamp) {
     return userdate($timestamp, get_string('strftimedateshortmonthabbr', 'cardbox'), $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
 }
 
-//function cardbox_get_user_datetime($timestamp) {
-//    return userdate($timestamp, $format = '', $timezone = 99, $fixday = true, $fixhour = true); // Method in lib/moodlelib.php
-//}
 /**
  *
  * @param type $timestamp
@@ -543,7 +541,7 @@ function cardbox_get_user_datetime_shortformat($timestamp) {
     return $userdatetime;
 }
 /**
- * 
+ *
  * @param type $carddata
  * @return boolean
  */
@@ -554,29 +552,28 @@ function cardbox_is_card_due($carddata) {
     } else if ($carddata->cardposition > 5) {
         return false;
     }
-    
+
     $now = new DateTime("now");
-    
+
     $spacing = array();
     $spacing[1] = new DateInterval('P1D');
     $spacing[2] = new DateInterval('P3D');
     $spacing[3] = new DateInterval('P7D');
     $spacing[4] = new DateInterval('P16D');
-    $spacing[5] = new DateInterval('P34D');  
-        
+    $spacing[5] = new DateInterval('P34D');
+
     $last = new DateTime("@$carddata->lastpracticed");
     $interval = $spacing[$carddata->cardposition];
     $due = $last->add($interval);
-    
+
     if ($due > $now) {
         return false;
-        
     } else {
         return true;
     }
 }
 /**
- * 
+ *
  * @param type $dataobject
  * @param type $iscorrect
  * @return type
@@ -584,36 +581,34 @@ function cardbox_is_card_due($carddata) {
 function cardbox_update_card_progress($dataobject, $iscorrect) {
 
     global $DB;
-    
+
     // Cards that were answered correctly proceed.
     if ($iscorrect == 1) {
-        
+
         // New cards proceed straight to box two.
         if ($dataobject->cardposition == 0) {
             $dataobject->cardposition = 2;
-
-        // Other cards proceed to the next box.
         } else {
+            // Other cards proceed to the next box.
             $dataobject->cardposition = $dataobject->cardposition + 1;
         }
-    
-    // Cards that were not answered correctly go back to box one or stay there.
     } else {
+        // Cards that were not answered correctly go back to box one or stay there.
         $dataobject->cardposition = 1;
     }
-    
+
     $dataobject->lastpracticed = time();
     $dataobject->repetitions = $dataobject->repetitions + 1;
 
     $success = $DB->update_record('cardbox_progress', $dataobject, false);
-    
+
     return $success;
 }
 
 /**
  * This function sends system and/or email notifications to
  * inform students that an already approved card was edited.
- * 
+ *
  * @param type $cardbox
  */
 function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
@@ -640,21 +635,15 @@ function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
         $message->subject = $sm->get_string('changenotification:subject', 'cardbox', null, $recipient->lang);
         $message->fullmessage = $sm->get_string('changenotification:message', 'cardbox', null, $recipient->lang) . '<br>' . $renderer->cardbox_render_overview($overview);
         $message->fullmessageformat = FORMAT_MARKDOWN;
-        $message->fullmessagehtml = $sm->get_string('changenotification:message', 'cardbox', null, $recipient->lang) . '<br>' . $renderer->cardbox_render_overview($overview); //'<p>' . $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang) . '</p><p>' . $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . '</p><p><em>' . $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
+        $message->fullmessagehtml = $sm->get_string('changenotification:message', 'cardbox', null, $recipient->lang) . '<br>' . $renderer->cardbox_render_overview($overview);
         $message->smallmessage = 'small message';
         $message->notification = 1; // For personal messages '0'. Important: the 1 without '' and 0 with ''.
-        //$message->contexturl = 'http://GalaxyFarFarAway.com';
-        //$message->contexturlname = 'Context name';
-//            $message->replyto = "random@example.com";
-//                $content = array('*' => array('header' => ' test ', 'footer' => ' test ')); // Extra content for specific processor
-//            $message->set_additional_content('email', $content);
         $message->courseid = $cardbox->course;
 
         message_send($message);
 
     }
-    
-    
+
 }
 
 function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $cardboxid) {
@@ -696,21 +685,25 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
             $card->approved = '1';
             $card->approvedby = $USER->id;
             $card->necessaryanswers = '0';
+            if ($disableautocorrect = array_search('acdisable', $columns)) {
+                $card->disableautocorrect = trim($line[$disableautocorrect]);
+            } else {
+                $card->disableautocorrect = '0';
+            }
             $cardid = $DB->insert_record('cardbox_cards', $card, true); // New row in cardbox_cards table created.
             $cardcontent = new stdClass;
             foreach ($line as $key => $value) {
                 $value = trim($value);
                 if ($value !== "") {
-                    // Common to all content
+                    // Common to all content.
                     $cardcontent->card = $cardid;
                     $cardcontent->contenttype = CARDBOX_CONTENTTYPE_TEXT;
                     $cardcontent->content = '<p>'.$value.'</p>';
-                    //}
-                        // Based on which info it is, create DB records
-                        // ques : This is the main question
-                        // ans : This is the main answer. Multiple answer not supported yet
-                        // qcontext: This is the context info for question
-                        // acontext: This is the context info for answer
+                    // Based on which info it is, create DB records
+                    // ques : This is the main question
+                    // ans : This is the main answer. Multiple answer not supported yet
+                    // qcontext: This is the context info for question
+                    // acontext: This is the context info for answer
                     $columnname = $columns[$key];
                     if ($columnname == 'ques') {
                         $cardcontent->cardside = CARDBOX_CARDSIDE_QUESTION;
@@ -744,7 +737,7 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
     return $errorlines;
 }
 
-function validate_columns(array $filecolumns) {
+function validate_columns(array $filecolumns, int $descriptiontype) {
     $errors = [];
     $processed = [];
     $filecolumns = array_map('strtolower', $filecolumns);
@@ -758,9 +751,17 @@ function validate_columns(array $filecolumns) {
         $errors[] = 'ERR: '.get_string('qfieldmissing', 'cardbox');
     }
     if (!in_array('ans', $filecolumns) && empty(preg_grep('/^ans[0-9]*$/', $filecolumns))) {
-        $errors[] = 'ERR: '.get_string('afieldmissing', 'cardbox');;
+        $errors[] = 'ERR: '.get_string('afieldmissing', 'cardbox');
     }
-    $allowed = ['ques', 'acontext', 'qcontext', 'topic'];
+    $allowed = ['ques', 'ans', 'acontext', 'qcontext', 'topic', 'acdisable'];
+    $allowedwithmeaning = [
+        'ques' => get_string('ques', 'cardbox'),
+        'ans' => get_string('ans', 'cardbox'),
+        'acontext' => get_string('acontext', 'cardbox'),
+        'qcontext' => get_string('qcontext', 'cardbox'),
+        'topic' => get_string('topic', 'cardbox'),
+        'acdisable' => get_string('acdisable', 'cardbox'),
+    ];
     foreach ($filecolumns as $key => $column) {
         if (starts_with($column, 'ans')) { // Replace with str_starts_with in PHP 8.0.
             array_push($allowed, $column);
@@ -774,7 +775,17 @@ function validate_columns(array $filecolumns) {
                 $errors[] = get_string('duplicatefieldname', 'error', $filecolumn);
             }
         } else {
-            $errors[] = get_string('invalidfieldname', 'error', $filecolumn);
+            if ($descriptiontype == LONG_DESCRIPTION) {
+                $errstr = get_string('invalidfieldname', 'error', $filecolumn).'<br> '.get_string('allowedcolumns', 'cardbox').'<ul>';
+                foreach ($allowedwithmeaning as $shortname => $meaning) {
+                    $errstr .= '<li><b>'.$shortname.'</b> => '.$meaning.'</li>';
+                }
+                $errstr .= '</ul>';
+                $errors[] = $errstr;
+            } else {
+                $errors[] = get_string('invalidfieldname', 'error', $filecolumn);
+            }
+
         }
     }
     return [$errors];
@@ -795,9 +806,7 @@ function validate_row(int $atleastoneanswer, array $rowcols) {
     }
     if ($atleastoneanswer == 0) {
         $errors[] = get_string('amissing', 'cardbox');
-    } /*else if ($atleastoneanswer != count($matches)) {
-        $errors[] = get_string('unmatchedanswers', 'cardbox', ['csvschema' => count($matches), 'actual' => $atleastoneanswer]);
-    }*/
+    }
     return $errors;
 }
 

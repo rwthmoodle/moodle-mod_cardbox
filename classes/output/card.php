@@ -39,14 +39,15 @@ class cardbox_card implements \renderable, \templatable {
     private $howmanyanswersnecessary;
     private $decktext;
     public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
-        
+
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
-        
+
+        global $CFG;
         $this->cmid = $cmid;
         $this->cardid = $cardid;
         $answercount = 0;
-        
+
         if ($allowedtoedit) {
             $this->allowedtoedit = true;
         }
@@ -62,11 +63,13 @@ class cardbox_card implements \renderable, \templatable {
         $this->topic = cardbox_cardcollection::cardbox_get_topic($cardid);
 
         $necessaryanswers = cardbox_get_necessaryanswers($cardid);
-        
+
         if ($necessaryanswers === "1") {
-            $this->howmanyanswersnecessary = get_string('oneanswersnecessary', 'cardbox');
+            $this->allansnecessary = false;
+            $this->howmanyanswersnecessary = get_string("oneanswersnecessary", "cardbox");
         } else {
-            $this->howmanyanswersnecessary = get_string('allanswersnecessary', 'cardbox');
+            $this->allansnecessary = true;
+            $this->howmanyanswersnecessary = get_string("allanswersnecessary", "cardbox");
         }
 
         $this->cardbox_getcarddeck($cardid, $allowedtoedit);
@@ -79,25 +82,27 @@ class cardbox_card implements \renderable, \templatable {
         $fs = get_file_storage();
         foreach ($contents as $content) {
 
-            if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
+            if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) {
+                // Check if there is context for the question.
 
                 $this->questioncontext = format_text($content->content);
 
-            } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
+            } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) {
+                // Check if there is context for the answer.
 
                 $this->answercontext = format_text($content->content);
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) {
 
-                $download_url = cardbox_get_download_url($context, $content->id, $content->content);
+                $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     if ($content->area == CARD_IMAGEDESCRIPTION_INFORMATION) {
                         $this->question['images'][0] += array('imagealt' => $content->content);
                         continue;
                     }
-                    $this->question['images'][] = array('imagesrc' => $download_url);
+                    $this->question['images'][] = array('imagesrc' => $downloadurl);
                 } else {
-                    $this->answer['images'][] = array('imagesrc' => $download_url);
+                    $this->answer['images'][] = array('imagesrc' => $downloadurl);
                     $answercount++;
                 }
 
@@ -123,16 +128,15 @@ class cardbox_card implements \renderable, \templatable {
         }
 
     }
-
     public function getcardreps_ifmastered(int $cardid, bool $allowedtoedit) {
         global $DB, $USER;
         $showreps = "";
-        if ($allowedtoedit){
+        if ($allowedtoedit) {
             $cardrepssum = $DB->get_records_sql(
                             'SELECT card, cardposition, SUM(repetitions) as repssum
                             FROM {cardbox_progress} where
                             cardposition = :cardposition and
-                            card = :cardid group by card', 
+                            card = :cardid group by card',
                             ['cardid' => $cardid, 'cardposition' => 6]);
             $usercount = $DB->count_records_sql(
                 'SELECT count(distinct userid)
@@ -143,7 +147,7 @@ class cardbox_card implements \renderable, \templatable {
             );
             foreach ($cardrepssum as $record) {
                 if (!empty($usercount)) {
-                    $showreps = $record ->repssum / $usercount;
+                    $showreps = $record->repssum / $usercount;
                 }
             }
         } else {
@@ -154,7 +158,7 @@ class cardbox_card implements \renderable, \templatable {
                 card = :cardid and userid = :userid group by card',
                 ['cardid' => $cardid, 'cardposition' => 6, 'userid' => $USER->id]);
             foreach ($cardrepssum as $record) {
-                $showreps = $record ->repssum;
+                $showreps = $record->repssum;
             }
         }
         if ($showreps != "") {
@@ -166,7 +170,15 @@ class cardbox_card implements \renderable, \templatable {
     }
     public function cardbox_getcarddeck(int $cardid, bool $allowedtoedit) {
         global $CFG, $DB, $USER;
-        if($allowedtoedit){
+        $acval = $DB->get_field('cardbox_cards', 'disableautocorrect', ['id' => $cardid]);
+        if ($acval == 1) {
+            $this->disableautocorrect = true;
+            $this->acimgurl = get_string("autocorrecticon", "cardbox");
+        } else {
+            $this->disableautocorrect = false;
+        }
+
+        if ($allowedtoedit) {
             $decktostudentcount = $DB->get_records_sql(
                                 'SELECT id, card, cardposition, count(userid) as users FROM {cardbox_progress}
                                     where card = :cardid
@@ -241,6 +253,9 @@ class cardbox_card implements \renderable, \templatable {
         $data['reps'] = $this->reps;
         $data['repsnummer'] = $this->repsnummer;
         $data['decktext'] = $this->decktext;
+        $data['acimgurl'] = $this->acimgurl;
+        $data['disableautocorrect'] = $this->disableautocorrect;
+        $data['allansnecessary'] = $this->allansnecessary;
         return $data;
 
     }

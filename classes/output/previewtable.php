@@ -16,7 +16,7 @@
 
 namespace mod_cardbox\output;
 
-/**
+/*
  * @package   mod_cardbox
  * @copyright 2021 ITCenter RWTH Aachen (see README.md)
  * @author    Amrita Deb
@@ -24,6 +24,8 @@ namespace mod_cardbox\output;
  */
 
 defined('MOODLE_INTERNAL') || die();
+define ('LONG_DESCRIPTION', 1);
+define ('SHORT_DESCRIPTION', 0);
 
 class previewtable extends \html_table {
     /** @var \csv_import_reader  */
@@ -51,7 +53,7 @@ class previewtable extends \html_table {
         $this->id = "cbxpreview";
         $this->attributes['class'] = 'generaltable';
         $this->head = array();
-        $this->data = $this->read_data();
+        $this->data = $this->read_data($filecolumns);
         $this->head[] = get_string('uucsvline', 'tool_uploaduser');
         foreach ($filecolumns as $column) {
             $this->head[] = $column;
@@ -59,7 +61,7 @@ class previewtable extends \html_table {
         $this->head[] = ucfirst(get_string('status', 'cardbox'));
     }
 
-    protected function read_data() {
+    protected function read_data(array $filecolumns) {
         $this->cir->init();
         $i = 1; // Always start from 1 since 0 is csv column header.
         while ($fields = $this->cir->next()) {
@@ -72,10 +74,17 @@ class previewtable extends \html_table {
                 $rowcols[$this->filecolumns[$key]] = s(trim($field));
             }
             $errors = validate_row($atleastoneanswer, $rowcols);
+            $columnexceptions = validate_columns($filecolumns, SHORT_DESCRIPTION);
             if (!empty($errors)) {
                 $errorlines[] = $i;
                 $status = "ERR:";
                 foreach ($errors as $error) {
+                    $status .= $error;
+                }
+            } else if (!empty($columnexceptions[0])) {
+                $errorlines[] = $i;
+                $status = "ERR:";
+                foreach ($columnexceptions[0] as $error) {
                     $status .= $error;
                 }
             } else {
@@ -90,7 +99,6 @@ class previewtable extends \html_table {
             $data[] = array_fill(0, count($fields) + 2, '...');
         }
         $this->cir->close();
-        //$data['error'] = $errorlines;
         return $data;
     }
 }

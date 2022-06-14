@@ -116,7 +116,6 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->card = $this->get_new_parentid('cardbox_cards');
-        //$data->contenttype = $this->get_mappingid('contenttype', $data->contenttype);
 
         $newitemid = $DB->insert_record('cardbox_cardcontents', $data);
         $this->set_mapping('cardbox_cardcontents', $oldid, $newitemid, true);
@@ -154,7 +153,6 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
     protected function after_execute() {
         // Add cardbox related files, no need to match by itemname (just internally handled context).
         $this->add_related_files('mod_cardbox', 'intro', null);
-        $this->add_related_files('mod_cardbox', 'content', 'cardbox_cardcontents'); // cardimage or content?
-        
+        $this->add_related_files('mod_cardbox', 'content', 'cardbox_cardcontents'); // Cardimage or content?.
     }
 }

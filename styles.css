@@ -79,10 +79,12 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .cardbox_card_deck_icon{
     height:30px;
     width: 30px;
+    margin-bottom: 1%;
+    padding-bottom: 2px;
 }
-.cardbox_card_deck_icon{
-    height:30px;
-    width: 30px;
+.cardbox_autocorrect_icon{
+    height: 1.6em;
+    margin-left:2%;
 }
 .path-mod-cardbox #cardbox-practice {
     margin-top: 30px;
@@ -308,8 +310,34 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     margin-left: 10%;
     margin-right: 22%;
 }
+@media (max-width: 600px) {
+    .review-button {
+        margin-top: 10%;
+    }
+    .cardbox-qside {
+        margin-right:1%;
+        margin-left: 1%;
+    }
+    .cardbox-aside {
+        margin-right:1%;
+        margin-left: 1%;
+        margin-top: 10%;
+    }
+    .context-column{
+        text-align: center;
+        font-style: italic;
+    }
+    .common-margin {
+        font-size: 0.7rem;
+    }
+    .edit-topic {
+        margin-left: 0%;
+    }
+}
 @media (max-width: 323px) {
-
+    .review-button {
+        margin-top: 10%;
+    }
     .path-mod-cardbox #cardbox-feedback-wrapper, .path-mod-cardbox #cardbox-feedback, .path-mod-cardbox #cardbox-proceed-buttons {
         padding: 0em !important;
     }
@@ -318,7 +346,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 /* col-sm Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-
+    .review-button {
+        margin-top: 10%;
+    }
     .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
         font-size: 1.2rem !important;
     }
@@ -349,17 +379,25 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
         padding-left: 2em;
         padding-right: 2em;
     }
+    .edit-topic {
+        margin-left: 13.5%;
+    }
+
     
 }
 
 /* col-lg Large devices (laptops/desktops, 992px and up) */
 @media (min-width: 992px) {
-
+    .edit-topic {
+        margin-left: 13.5%;
+    }
 }
 
 /* col-xl Extra large devices (large laptops and desktops, 1200px and up) */
 @media (min-width: 1200px) {
-
+    .edit-topic {
+        margin-left: 13.5%;
+    }
 }
 
 @media only screen and (min-width: 1062px) {
@@ -437,7 +475,14 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .card-icon-grid-div {
     float: right;
     display: grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 1px;
+}
+.review-icon-grid-div {
+    float: right;
+    display: grid;
+    grid-template-columns: auto auto;
+    grid-gap: 1px;
 }
 .rep-icon-grid-div {
     display: grid;
@@ -486,6 +531,12 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     right: 9em;
     bottom: 1em;
 }*/
+.anscount_icon{
+    height: 1.75em;
+}
+.autocorrect_icon{
+    height: 1.6em;
+}
 .ques-teil{
     padding:0px;
 }
@@ -530,3 +581,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .cardbox-card-text p {
     display: inline-block;
 }
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }

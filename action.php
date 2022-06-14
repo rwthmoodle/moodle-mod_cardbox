@@ -14,7 +14,7 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/** 
+/**
  * In this file, incoming AJAX request from  practice.js are handled.
  *
  * @package   mod_cardbox
@@ -29,7 +29,7 @@ require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 $cmid = required_param('id', PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'cardbox');
-$cardbox = $DB->get_record('cardbox', array('id'=> $cm->instance), '*', MUST_EXIST);
+$cardbox = $DB->get_record('cardbox', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
 require_sesskey();
@@ -39,10 +39,10 @@ $context = context_module::instance($cmid);
 $action = required_param('action', PARAM_ALPHA); // ...'$action' determines what is to be done; see below.
 
 if ($action === 'review') {
-    
+
     global $DB;
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
-    
+
     $cardid = required_param('cardid', PARAM_INT);
     $newstatus = required_param('status', PARAM_TEXT);
     $nextcard = optional_param('nextcard', 0, PARAM_INT);
@@ -50,7 +50,7 @@ if ($action === 'review') {
     $dataobject = new stdClass();
     $dataobject->id = $cardid;
     switch($newstatus) {
-        
+
         case 'approve':
             $dataobject->approved = '1';
             $dataobject->approvedby = $USER->id;
@@ -58,26 +58,27 @@ if ($action === 'review') {
             $success = $DB->update_record('cardbox_cards', $dataobject, false);
             $success = $DB->update_record('cardbox_contents', $dataobject, false);
             break;
-        
+
         case 'reject':
             $cardapproved = cardbox_card_approved($cardid);
             if ($cardapproved) {
-                $success = $DB->delete_records('cardbox_contents', array('card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION));
+                $success = $DB->delete_records('cardbox_contents',
+                                            array('card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION));
             } else {
                 $success = cardbox_delete_card($cardid);
             }
             break;
-        
+
         case 'skip':
             $success = 1;
             break;
-        
+
     }
-    
+
     if (empty($success)) {
-        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]); // XXX check double string entries.
+        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]);
     }
-    
+
     if ($nextcard != 0) {
         $renderer = $PAGE->get_renderer('mod_cardbox');
         $review = new cardbox_review($context, null, $nextcard);
@@ -107,25 +108,25 @@ if ($action === 'updateandnext') {
     $cardsleft = required_param('cardsleft', PARAM_INT);
     $correction = required_param('mode', PARAM_INT);
 
-    $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields='*', MUST_EXIST);
+    $dataobject = $DB->get_record('cardbox_progress', array('userid' => $USER->id, 'card' => $cardid), $fields = '*', MUST_EXIST);
     if (empty($dataobject)) {
         echo json_encode(['status' => 'error', 'reason' => 'nocardboxentryfound']);
     }
     $lastposition = $dataobject->cardposition;
-    
+
     $cardisdue = cardbox_is_card_due($dataobject);
-    
+
     // 1. Update the card entry in the DB if
-    //    a) this is the first time the card was answered in this session and
-    //    b) the card is (over)due and/or was answered incorrectly.
+    // a) this is the first time the card was answered in this session and
+    // b) the card is (over)due and/or was answered incorrectly.
     if ($isrepetition == 0 && ($cardisdue == true || $iscorrect == 0) ) {
-            
+
         $success = cardbox_update_card_progress($dataobject, $iscorrect);
-        
+
         if (empty($success)) {
             echo json_encode(['status' => 'error', 'reason' => 'failedtoupdate']);
         }
-        
+
     }
 
     // 2. Get next card and pass it to javascript for rendering.
@@ -139,20 +140,19 @@ if ($action === 'updateandnext') {
     } else {
         echo json_encode(['status' => 'finished', 'lastposition' => $lastposition]);
     }
-    
 
 }
 
 /* * ********************** Save performance at the end of a practice session *********************** */
 
 if ($action === 'saveperformance') {
-    
+
     global $DB, $USER;
-    
+
     $countright = required_param('countright', PARAM_INT);
     $countwrong = required_param('countwrong', PARAM_INT);
     $starttime = required_param('starttime', PARAM_TEXT);
-    $percentcorrect = 100*$countright/($countright+$countwrong);
+    $percentcorrect = 100 * $countright / ($countright + $countwrong);
 
     $data = new stdClass();
     $data->userid = $USER->id;
@@ -179,7 +179,6 @@ if ($action === 'savesuggestedanswer') {
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
 
     $cardid = required_param('cardid', PARAM_INT);
-//    $iscorrect = required_param('iscorrect', PARAM_INT);
     $case = optional_param('case', 1, PARAM_INT);
     $userinput = required_param('userinput', PARAM_TEXT);
 

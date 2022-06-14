@@ -22,7 +22,11 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+define ('QUESTION_SELFCHECK', 1);
+define ('QUESTION_AUTOCHECK', 2);
+define ('ANSWER_SELFCHECK', 3);
+define ('ANSWER_AUTOCHECK', 4);
+define('SUGGEST_ANSWER', 5);
 class cardbox_practice implements \renderable, \templatable {
 
     private $topic;
@@ -49,40 +53,58 @@ class cardbox_practice implements \renderable, \templatable {
      * @param type $context
      * @param obj $cardbox
      */
-    public function __construct($case, $context, $cardid, $cardsleft, $autocorrection) {
-
+    public function __construct($case, $context, $cardid, $cardsleft, $disableautocorrect) {
+        global $DB;
         switch ($case) {
-            case 1:
-                $this->case1 = true;
-                $this->case = 1;
+            case QUESTION_SELFCHECK:
+                $casename = 'case'.QUESTION_SELFCHECK;
+                $this->$casename = true;
+                $this->case = QUESTION_SELFCHECK;
                 break;
-            case 2:
-                $this->case2 = true;
-                $this->case = 2;
+            case QUESTION_AUTOCHECK:
+                $cardstatus = $DB->get_record('cardbox_cards', array('id' => $cardid));
+                if ($cardstatus->disableautocorrect) {
+                    $casename = 'case'.QUESTION_SELFCHECK;
+                    $this->$casename = true;
+                    $this->case = QUESTION_SELFCHECK;
+                } else {
+                    $casename = 'case'.QUESTION_AUTOCHECK;
+                    $this->$casename = true;
+                    $this->case = QUESTION_AUTOCHECK;
+                }
                 break;
-            case 3:
-                $this->case3 = true;
-                $this->case = 3;
+            case ANSWER_SELFCHECK:
+                $casename = 'case'.ANSWER_SELFCHECK;
+                $this->$casename = true;
+                $this->case = ANSWER_SELFCHECK;
                 break;
-            case 4:
-                $this->case4 = true;
-                $this->case = 4;
+            case ANSWER_AUTOCHECK:
+                $cardstatus = $DB->get_record('cardbox_cards', array('id' => $cardid));
+                if ($cardstatus->disableautocorrect) {
+                    $casename = 'case'.ANSWER_SELFCHECK;
+                    $this->$casename = true;
+                    $this->case = ANSWER_SELFCHECK;
+                } else {
+                    $casename = 'case'.ANSWER_AUTOCHECK;
+                    $this->$casename = true;
+                    $this->case = ANSWER_AUTOCHECK;
+                }
                 break;
-            case 5:
-                $this->case5 = true;
-                $this->case = 5;
+            case SUGGEST_ANSWER:
+                $casename = 'case'.SUGGEST_ANSWER;
+                $this->$casename = true;
+                $this->case = SUGGEST_ANSWER;
                 break;
             default:
                 // TODO Error handling.
         }
         $this->cardsleft = $cardsleft;
         $this->cardbox_getcarddeck($cardid);
-        $this->cardbox_prepare_cardcontents($context, $cardid, $autocorrection);
+        $this->cardbox_prepare_cardcontents($context, $cardid, $disableautocorrect);
 
     }
-    
-    public function cardbox_prepare_cardcontents($context, $cardid, $autocorrection) {
-        
+    public function cardbox_prepare_cardcontents($context, $cardid, $disableautocorrect) {
+
         global $CFG, $DB;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
         require_once('model/cardbox.class.php');
@@ -102,34 +124,34 @@ class cardbox_practice implements \renderable, \templatable {
         $solutioncount = 0;
         foreach ($contents as $content) {
 
-            if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) { //check if there is context for the question
-
+            if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_QUESTION) {
+                // Check for question context.
                 $this->questioncontext = format_text($content->content);
 
-            } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) { //check if there is context for the answer
-
+            } else if ($content->area == CARD_CONTEXT_INFORMATION && $content->cardside == CARDBOX_CARDSIDE_ANSWER) {
+                // Check for answer context.
                 $this->answercontext = format_text($content->content);
 
-            } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) { // images
+            } else if ($content->contenttype == CARDBOX_CONTENTTYPE_IMAGE) { // Check for images.
 
-                $download_url = cardbox_get_download_url($context, $content->id, $content->content);
+                $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     if ($content->area == CARD_IMAGEDESCRIPTION_INFORMATION) {
                         $this->question['images'][0] += array('imagealt' => $content->content);
                         continue;
                     }
-                    $this->question['images'][] = array('imagesrc' => $download_url);
+                    $this->question['images'][] = array('imagesrc' => $downloadurl);
                 } else {
-                    $this->answer['images'][] = array('imagesrc' => $download_url);
+                    $this->answer['images'][] = array('imagesrc' => $downloadurl);
                 }
 
             } else if ($content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) { // audio files
 
-                $download_url = cardbox_get_download_url($context, $content->id, $content->content);
+                $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
-                    $this->question['sounds'][] = array('soundsrc' => $download_url);
+                    $this->question['sounds'][] = array('soundsrc' => $downloadurl);
                 } else {
-                    $this->answer['sounds'][] = array('soundsrc' => $download_url);
+                    $this->answer['sounds'][] = array('soundsrc' => $downloadurl);
                 }
 
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
@@ -141,7 +163,7 @@ class cardbox_practice implements \renderable, \templatable {
             } else {
 
                 $content->content = format_text($content->content, FORMAT_MOODLE, ['para' => false]);
-                if ($autocorrection) {
+                if ($disableautocorrect) {
                     // We want the bare text for answer comparison, no HTML tags.
                     // Otherwise autocorrection doesn't work.
                     $content->content = strip_tags($content->content);
@@ -166,7 +188,7 @@ class cardbox_practice implements \renderable, \templatable {
         global $CFG, $DB, $USER;
         if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
             $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
-            if ($this->deck == 0){
+            if ($this->deck == 0) {
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
             } else if ($this->deck == 6) {
                 $this->deckdeckimgurlimg = $CFG->wwwroot . '/mod/cardbox/pix/mastered.svg';

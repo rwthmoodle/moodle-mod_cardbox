@@ -17,7 +17,7 @@
 /**
  * When a course renders its page layout and activities it generates the links to
  * view them using the view.php script, so the links will look like
- * <wwwrootofyoursite>/mod/cardbox/view.php?id=4, where 4 is the course module id. 
+ * <wwwrootofyoursite>/mod/cardbox/view.php?id=4, where 4 is the course module id.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
@@ -28,11 +28,11 @@
 require('../../config.php');
 require_once('lib.php');
 require_once('locallib.php');
- 
+
 $cmid = required_param('id', PARAM_INT);
 
 list ($course, $cm) = get_course_and_cm_from_cmid($cmid, 'cardbox');
-$cardbox = $DB->get_record('cardbox', array('id'=> $cm->instance), '*', MUST_EXIST);
+$cardbox = $DB->get_record('cardbox', array('id' => $cm->instance), '*', MUST_EXIST);
 
 require_login($course, true, $cm);
 
@@ -48,7 +48,7 @@ if (has_capability('mod/cardbox:practice', $context)) { // for students and othe
 } else if (has_capability('mod/cardbox:approvecard', $context)) {
     $action = optional_param('action', 'review', PARAM_ALPHA);
 
-} else { // for guests.
+} else { // For guests.
     $action = optional_param('action', 'addflashcard', PARAM_ALPHA);
 }
 
@@ -56,17 +56,8 @@ $taburl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid));
 
 $myrenderer = $PAGE->get_renderer('mod_cardbox');
 
-//pdfannotator_render_tabs(moodle_url $baseurl, $selected = null, $pdfannotatorname, $context, $inactive = null)
-//cardbox_create_tab(moodle_url $baseurl, $namekey = null, $action, $cardboxname = null, $nameargs = null)
-
-//echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
-
-// The revision attribute's existance is demanded by moodle for versioning and could be saved in the pdfannotator table in the future.
-// Note, however, that we forbid file replacement in order to prevent a change of meaning in other people's comments.
 $cardbox->revision = 1;
 
-//require_once($CFG->dirroot . '/mod/cardbox/styles.css');
 require_once($CFG->dirroot . '/mod/cardbox/controller.php');
 
-// Display left-side navigation, blocks to the right as well as the actual footer.
 echo $OUTPUT->footer();

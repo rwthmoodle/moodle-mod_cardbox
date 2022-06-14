@@ -97,12 +97,16 @@ $string['answerimage'] = 'Answer image';
 $string['answersound'] = 'Answer sound';
 $string['enteranswer'] = 'Solution';
 $string['answer_repeat'] = 'Add another solution';
-/* $string['answer_repeat_help'] = "If the solution consists of several parts, please enter them individually by clicking 'Add another solution'. This enables the program to check answers for completeness. If there are valid alternatives for the solution, please enter all of them in the first input field."; */
+$string['autocorrectlocked'] = 'Disable Automatic Check';
+$string['autocorrecticon'] = 'Self Check only';
+$string['autocorrecticon_help'] = 'Answer cannot be typed in while practising in Automatic Check mode. In the Automatic check mode, the learning card will then still be displayed, but only as a self-check.';
+$string['autocorrectlocked_help'] = 'Activate this checkbox if the answer of the learning card is not to be typed in while practicing in "Automcatic check" mode. In the "Automatic check" mode, the learning card will then still be displayed, but only as a self-check. This option is especially useful for learning cards whose answers are not suitable for manual input (e.g. definitions), but should still be practiced together with other learning cards whose answers are entered manually.';
 $string['answer_repeat_help'] = 'If you have multiple solutions, please use a separate solution field for each answer.<br>
                                 Another solution field can be added by the button "Add another solution".<br>
                                 To set whether students need to know all answers or only one (in case of alternative answers) please use the dropdown below.';
 
 $string['addanswer'] = 'Add another solution';
+$string['autocorrectlocked'] = 'Disable Automatic Check';
 $string['savecard'] = 'Save';
 $string['saveandaccept'] = 'Save and accept';
 
@@ -112,7 +116,6 @@ $string['success:addandapprovenewcard'] = 'The card was created and approved for
 $string['success:approve'] = 'The card was approved and is now free to use.';
 $string['success:edit'] = 'The card was edited.';
 $string['success:reject'] = 'The card was deleted.';
-//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
@@ -127,6 +130,13 @@ $string['examplemulticsv_help'] = 'Example text file for cards having multiple a
 $string['cancelimport'] = 'Import was cancelled';
 $string['importpreview'] = 'Import cards preview';
 $string['importsuccess'] = '{$a} cards imported successfully';
+$string['allowedcolumns'] = '<br><p>Allowed column names are:</p>';
+$string['ques'] = 'Column name for question';
+$string['ans'] = 'Column name for answer';
+$string['qcontext'] = 'Column name for question context';
+$string['acontext'] = 'Column name for answer context';
+$string['topic'] = 'Column name for topic';
+$string['acdisable'] = 'Column name to disable Automatic Check for a card. Yes = 1; No = 0.';
 
 // Info notifications
 $string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
@@ -230,10 +240,11 @@ $string['countcardapprove'] = '{&a} cards have been approved and ready for pract
 $string['countcardreject'] = '{&a} cards have been rejected';
 $string['rejectcard'] = 'Reject Card';
 $string['rejectcardinfo'] = 'Do you want to reject the selected {$a} cards? These cards will be deleted and cannot be recovered.';
-/* $string['allanswersnecessary'] = "<b style='float: right; padding-top: 5px'>all answers necessary</b>";
-$string['oneanswersnecessary'] = "<b style='float: right; padding-top: 5px'>one answers necessary</b>"; */
-$string['allanswersnecessary'] = "<b>all answers necessary</b>";
-$string['oneanswersnecessary'] = "<b>one answer necessary</b>";
+
+$string['allanswersnecessary'] = "All";
+$string['oneanswersnecessary'] = "One";
+$string['allanswersnecessary_help'] = "<b>all answers necessary</b>";
+$string['oneanswersnecessary_help'] = "<b>one answer necessary</b>";
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
@@ -270,13 +281,16 @@ $string['noselection'] = 'all';
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';
 $string['cardposition_help'] = 'Shows which deck this card is in. The higher the number the better the card has already been learned. New cards are not yet in a box. After box 5 cards are considered "mastered" and are no longer practiced.';
-//Overview Tab
+
+// Overview Tab.
 $string['student:deckdescription'] = 'This card lies in deck {$a}';
 $string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';
 $string['manager:repeatdesc'] = 'This card was mastered by students, on average, after {$a} repetitions';
 $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
+$string['allans'] = 'All answers are necessary';
+$string['oneans'] = 'Only one answer is necessary';
 
-//Edit topics Tab
+// Edit topics Tab.
 $string['deletetopic'] = 'Delete topic';
 $string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For cards assigned to this topic, this will set the topic to "not assigned".';
 $string['createtopic'] = 'Add';
@@ -293,7 +307,7 @@ $string['qmissing'] = 'Question missing.';
 $string['qfieldmissing'] = 'Question field missing.';
 $string['amissing'] = 'Answer missing.';
 $string['afieldmissing'] = 'Answer field missing.';
-$string ['successmsg'] = ' card(s) have been imported successfully.';
+$string['successmsg'] = ' card(s) have been imported successfully.';
 $string['errormsg'] = 'The below lines could not be imported into cards';
 $string['status'] = 'status';
 $string['continue'] = 'Continue';

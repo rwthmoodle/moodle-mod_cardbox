@@ -35,7 +35,7 @@ defined('MOODLE_INTERNAL') || die;
  * Define the complete pdfannotator structure for backup, with file and id annotations
  */
 class backup_cardbox_activity_structure_step extends backup_activity_structure_step {
-    
+
     /**
      * There are three main things that the method must do:
      * 1. Create a set of backup_nested_element instances that describe the required data of your plugin
@@ -51,10 +51,11 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0. :(
 
         // 2. Define each element separately.
-        $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'autocorrection', 'necessaryanswers', 'necessaryanswerslocked', 'timecreated', 'timemodified'));
+        $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'autocorrection',
+                                                    'necessaryanswers', 'necessaryanswerslocked', 'timecreated', 'timemodified'));
 
         $cards = new backup_nested_element('cards');
-        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved', 'approvedby', 'necessaryanswers'));
+        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved', 'approvedby', 'necessaryanswers', 'disableautocorrect'));
 
         $cardcontents = new backup_nested_element('cardcontents');
         $cardcontent = new backup_nested_element('cardcontent', array('id'), array('card', 'cardside', 'contenttype', 'area', 'content'));
@@ -71,7 +72,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
             $statistic = new backup_nested_element('statistic', array('id'), array('userid', 'cardboxid', 'timeofpractice', 'percentcorrect'));
         }
 
-        // 3. Build the tree (mind the right order!)       
+        // 3. Build the tree (mind the right order!)
         $cardbox->add_child($topics);
         $topics->add_child($topic);
 
@@ -116,7 +117,6 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $card->annotate_ids('user', 'approvedby');
 
         $cardcontent->annotate_ids('card', 'card');
-        //$cardcontent->annotate_ids('contenttype', 'contenttype');
 
         if ($userinfo != 0) {
 
@@ -132,5 +132,4 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         // 7. Return the root element (pdfannotator), wrapped into standard activity structure.
         return $this->prepare_activity_structure($cardbox);
     }
-
 }

@@ -25,17 +25,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->dirroot.'/course/moodleform_mod.php');
 require_once($CFG->dirroot.'/mod/cardbox/lib.php');
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
- 
+
 class mod_cardbox_mod_form extends moodleform_mod {
- 
-    function definition() {
+
+    public function definition() {
         global $CFG, $DB, $OUTPUT, $USER, $COURSE;
- 
+
         $mform =& $this->_form;
         $config = get_config('mod_cardbox');
 
@@ -45,7 +45,7 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $mform->addElement('hidden', 'idCourse', $COURSE->id);
         $mform->setType('idCourse', PARAM_INT);
 
-        $mform->addElement('text', 'name', get_string('cardboxname', 'cardbox'), array('size'=>'64'));
+        $mform->addElement('text', 'name', get_string('cardboxname', 'cardbox'), array('size' => '64'));
         $mform->setType('name', PARAM_TEXT);
         $mform->addRule('name', null, 'required', null, 'client');
         $mform->addRule('name', get_string('maximumchars', '', 255), 'maxlength', 255, 'client');
@@ -58,24 +58,30 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
 
-        $mform->addElement('advcheckbox', 'autocorrection', get_string('setting_autocorrection', 'cardbox'), get_string('setting_autocorrection_label', 'cardbox'), null, array(0, 1));
+        $mform->addElement('advcheckbox', 'autocorrection', get_string('setting_autocorrection', 'cardbox'),
+                    get_string('setting_autocorrection_label', 'cardbox'), null, array(0, 1));
         $mform->setType('autocorrection', PARAM_BOOL);
         $mform->setDefault('autocorrection', 1);
         $mform->addHelpButton('autocorrection', 'setting_autocorrection', 'cardbox');
 
-        $mform->addElement('select', 'necessaryanswers', get_string('necessaryanswers_activity', 'cardbox'), array('0' => get_string('necessaryanswers_all', 'cardbox'), '1' => get_string('necessaryanswers_one', 'cardbox')));
+        $mform->addElement('select', 'necessaryanswers', get_string('necessaryanswers_activity', 'cardbox'),
+                  array(
+                      '0' => get_string('necessaryanswers_all', 'cardbox'),
+                      '1' => get_string('necessaryanswers_one', 'cardbox')));
         $mform->setDefault('necessaryanswers', CARDBOX_EVALUATE_ALL);
         $mform->addHelpButton('necessaryanswers', 'necessaryanswers_activity', 'cardbox');
 
-        $mform->addElement('select', 'necessaryanswerslocked', get_string('necessaryanswers_activity_locked', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
+        $mform->addElement('select', 'necessaryanswerslocked', get_string('necessaryanswers_activity_locked', 'cardbox'),
+                  array(
+                      '0' => get_string('yes', 'cardbox'),
+                      '1' => get_string('no', 'cardbox')));
         $mform->addHelpButton('necessaryanswerslocked', 'necessaryanswers_activity_locked', 'cardbox');
 
-        $mform->addElement('select', 'casesensitive', get_string('casesensitive', 'cardbox'), array('0' => get_string('yes', 'cardbox'), '1' => get_string('no', 'cardbox')));
+        $mform->addElement('select', 'casesensitive', get_string('casesensitive', 'cardbox'),
+                  array(
+                      '0' => get_string('yes', 'cardbox'),
+                      '1' => get_string('no', 'cardbox')));
         $mform->addHelpButton('casesensitive', 'casesensitive', 'cardbox');
-
-/*         $mform->addElement('select', 'numberofcardssetting', get_string('numberofcardssetting', 'cardbox'), array('0' => get_string('studentschoose', 'cardbox'), '1' => 10, '2' => 20, '3' => 30, '4' => 40, '5' => 50));
-        $mform->setDefault('numberofcardssetting', 0);
-        $mform->addHelpButton('numberofcardssetting', 'numberofcardssetting', 'cardbox'); */
 
         $this->standard_coursemodule_elements();
 

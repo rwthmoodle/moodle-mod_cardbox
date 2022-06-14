@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 interface cardbox_card_selection_interface {
-    
+
     public function cardbox_select_cards_for_practice($cards = null);
-    
+
 }

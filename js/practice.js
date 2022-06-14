@@ -20,7 +20,15 @@
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
+const Ques_Selfcheck = 1;
+const Ques_Autocheck = 2;
+const Ans_Selfcheck  = 3;
+const Ans_Autocheck  = 4;
+const Suggest_Ans    = 5;
+const EnableAutocorrect   = 0;
+const Disable_Autocorrect = 1;
+const Case_Autocheck = 2;
+const Case_SelfCheck = 1;
 /**
  * This script controlls the behaviour of the page during practice.
  *
@@ -32,10 +40,10 @@
  * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
  * @returns {undefined}
  */
-function startPractice(Y, __cmid, __selection, __case, __data, __mode) { // Wrapper function that is called by controller.php.
+function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals) { // Wrapper function that is called by controller.php.
 
     require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
-
+        
         /*********** 1. Variables and Calls ***********/
 
         removeNotifications();
@@ -44,11 +52,32 @@ function startPractice(Y, __cmid, __selection, __case, __data, __mode) { // Wrap
         var output = new Output(__case, templates, notification);
         var statistics = new Statistics(chart);
 
-        var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case, __mode);
+        var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case, __mode, __disableacvals);
         var eventhandling = new EventHandling(coordinate);
         coordinate.addEventHandler(eventhandling);
+        var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
+        if (__case == Case_SelfCheck) {
+            var quescase = Ques_Selfcheck;
+        } else {
+            if (acval.length == 1) {
+                var disableautocorrect = acval[0].split('_')[1];
+                if (disableautocorrect == Disable_Autocorrect) {
+                    var quescase = Ques_Selfcheck;
+                } else {
+                    var quescase = Ques_Autocheck;
+                }
+            }
+        }
+        
+        function checkacvalue(acval) {
+            if (acval.split('_')[0] == this) {
+                var val_arr = acval.split('_');
+                return val_arr[1];
+            }
 
-        if (__case % 2 == 0) {
+        }
+
+        if (quescase == Ques_Autocheck) {
             eventhandling.registerEventsForQuestionAutoCheck();
         } else {
             eventhandling.registerEventsForQuestionSelfCheck();
@@ -198,16 +227,6 @@ class EventHandling {
 
         }.bind(this));
 
-        document.getElementById('cardbox-suggestanswer').addEventListener('click', function(e) {
-
-            // Prevent page reload.
-            e.preventDefault();
-
-            // Notify controller of this click event.
-            this.controller.reactTo('suggest-answer');
-
-        }.bind(this));
-
     }
     /**
      * 
@@ -282,7 +301,7 @@ class EventHandling {
 
 class Coordinate {
 
-        constructor(cmid, evaluate, output, statistics, selection, data, __case, __mode) {
+    constructor(cmid, evaluate, output, statistics, selection, data, __case, __mode, __disableacvals) {
 
             this.cmid = cmid;
             this.selection = selection;
@@ -310,7 +329,7 @@ class Coordinate {
             this.evaluate = evaluate;
             this.output = output;
             this.statistics = statistics;
-            
+            this.acvals = __disableacvals;
         }
 
         addEventHandler(eventhandling) {
@@ -384,7 +403,7 @@ class Coordinate {
 
                 case 'savesuggestedanswer':
 
-                    if (this.case === 1) {
+                    if (this.case === Ques_Selfcheck) {
                         var iscorrect = false;     
                     } else {
                         if (this.evaluate.isCardCorrect()) {
@@ -439,11 +458,11 @@ class Coordinate {
         suggestAnswer(data) {
 
 
-            data['case1'] = false;
-            data['case2'] = false;
-            data['case3'] = false;
-            data['case4'] = false;
-            data['case5'] = true;
+            data['case'.concat(Ques_Selfcheck)] = false;
+            data['case'.concat(Ques_Autocheck)] = false;
+            data['case'.concat(Ans_Selfcheck)] = false;
+            data['case'.concat(Ans_Autocheck)] = false;
+            data['case'.concat(Suggest_Ans)] = true;
 
             this.output.renderSuggestAnswerTemplate(this.eventhandling, data);
 
@@ -511,10 +530,39 @@ class Coordinate {
                 } else {
                     this.cardId = this.next;
                 }
+                var acval = this.acvals.filter(checkacvalue, this.cardId);
+                if (this.case !== Case_SelfCheck) {
+                    if (acval.length == 1) {
+                        var disableautocorrect = acval[0].split('_')[1]    ;
+                    }
+                }
+                
 /*                 newdata['selectionsize'] = this.cardcount; */
                 newdata['cardsleft'] = this.cardsleft;
+                if (newdata['case'.concat(this.case)] == false) {
+                    if (this.case == Ques_Selfcheck) {
+                        newdata['case'.concat(Ques_Selfcheck)] = true;
+                        newdata['case'.concat(Ques_Autocheck)] = false;
+                    } else {
+                        if (disableautocorrect == Disable_Autocorrect) {
+                            newdata['case'.concat(Ques_Selfcheck)] = true;
+                            newdata['case'.concat(Ques_Autocheck)] = false;
+                        } else {
+                            newdata['case'.concat(Ques_Selfcheck)] = false;
+                            newdata['case'.concat(Ques_Autocheck)] = true;
+                        }
+                    }
+                }
                 //this.output.renderNewQuestion(this.eventhandling).bind(this);
+                
                 this.output.renderNewQuestion(this.eventhandling, newdata);
+            }
+            function checkacvalue(acval) {
+                if (acval.split('_')[0] == this) {
+                    var val_arr = acval.split('_');
+                    return val_arr[1];
+                }
+
             }
         }
         /**
@@ -822,10 +870,26 @@ class Output {
                                 templates.replaceNodeContents('#cardbox-practice', html, js);
                             }).then(function () {
                                     // Register event listeners for the newly rendered partial.
-                                    if (mode % 2 == 0) {    
-                                        eventhandling.registerEventsForQuestionAutoCheck();
+                                    if (eventhandling.controller.case == Case_Autocheck) { 
+                                        var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);   
+                                        if (acval.length == 1) {
+                                            var disableautocorrect = acval[0].split('_')[1];
+                                        }
+
+                                        if (disableautocorrect == Disable_Autocorrect) {
+                                            eventhandling.registerEventsForQuestionSelfCheck();
+                                        } else {
+                                            eventhandling.registerEventsForQuestionAutoCheck();
+                                        }
                                     } else {
                                         eventhandling.registerEventsForQuestionSelfCheck();
+                                    }
+                                    function checkacvalue(acval) {
+                                        if (acval.split('_')[0] == this) {
+                                            var val_arr = acval.split('_');
+                                            return val_arr[1];
+                                        }
+                        
                                     }
                             }); // Add a catch.
         })(this.templates, data, this.case);
@@ -855,8 +919,27 @@ class Output {
      * @returns {undefined}
      */
     renderAnswer(evaluate, eventhandling, data = null) {
+        var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
+        if (eventhandling.controller.case == Case_SelfCheck) {
+            var quescase = Ques_Selfcheck;
+        } else {
+            if (acval.length == 1) {
+                var disableautocorrect = acval[0].split('_')[1]    ;
+                if (disableautocorrect == Disable_Autocorrect) {
+                    var quescase = Ques_Selfcheck;
+                } else {
+                    var quescase = Ques_Autocheck;
+                }
+            }
+        }
+        function checkacvalue(acval) {
+            if (acval.split('_')[0] == this) {
+                var val_arr = acval.split('_');
+                return val_arr[1];
+            }
 
-        if (this.case % 2 == 0) { // If the user is in auto-check mode.
+        }
+        if (quescase == Ques_Autocheck || quescase == Ans_Autocheck) { // If the user is in auto-check mode.
             
             var evaluation = evaluate.getEvaluation();
             var considercardcorrect = evaluate.isCardCorrect();
@@ -878,8 +961,8 @@ class Output {
                 newdata['answer']['texts'] = solutionstodisplay;
             }
 
-            newdata['case2'] = false;
-            newdata['case4'] = true;
+            newdata['case'.concat(Ques_Autocheck)] = false;
+            newdata['case'.concat(Ans_Autocheck)] = true;
             
             if (considercardcorrect) {
                 /* if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
@@ -904,8 +987,9 @@ class Output {
         } else { // If the user checks their own answers.
          
             var newdata = data;
-            newdata['case1'] = false;
-            newdata['case3'] = true;
+            newdata['case'.concat(Ques_Selfcheck)] = false;
+            newdata['case'.concat(Ans_Selfcheck)] = true;
+
             
         }
         
@@ -915,7 +999,28 @@ class Output {
                                 templates.replaceNodeContents('#cardbox-practice', html, js);
                             })
                             .then(function () {
-                                if (mode % 2 == 0) {
+                                var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
+                                if (eventhandling.controller.case == Case_SelfCheck) {
+                                    var quescase = Ques_Selfcheck;
+                                } else {
+                                    if (acval.length == 1) {
+                                        var disableautocorrect = acval[0].split('_')[1]    ;
+                                        if (disableautocorrect == Disable_Autocorrect) {
+                                            var quescase = Ques_Selfcheck;
+                                        } else {
+                                            var quescase = Ques_Autocheck;
+                                        }
+                                    }
+                                }
+                                
+                                function checkacvalue(acval) {
+                                    if (acval.split('_')[0] == this) {
+                                        var val_arr = acval.split('_');
+                                        return val_arr[1];
+                                    }
+
+                                }
+                                if (quescase == Ans_Autocheck || quescase == Ques_Autocheck) {
                                     giveFeedback(evaluation);
                                     // Register event listeners for the newly rendered partial.
                                     eventhandling.registerEventsForAnswerAutoCheck();

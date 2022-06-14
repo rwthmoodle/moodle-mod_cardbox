@@ -16,7 +16,7 @@
 
 /**
  * Defines backup_cardbox_activity_task
- * 
+ *
  * Moodle creates backups of courses or their parts by executing a so called backup plan.
  * The backup plan consists of a set of backup tasks and finally each backup task consists
  * of one or more backup steps. This file provides the activity task class.
@@ -55,11 +55,11 @@ class backup_cardbox_activity_task extends backup_activity_task {
      * This is the place where you define the task as a sequence of steps to execute.
      */
     protected function define_my_steps() {
-        
+
         $this->add_step(new backup_cardbox_activity_structure_step('cardbox_structure', 'cardbox.xml'));
-        
+
     }
-    
+
     /**
      * Encodes URLs to the index.php and view.php scripts
      *
@@ -76,7 +76,7 @@ class backup_cardbox_activity_task extends backup_activity_task {
      * @param string $content some HTML text that eventually contains URLs to the activity instance scripts
      * @return string the content with the URLs encoded
      */
-    static public function encode_content_links($content) {
+    public static function encode_content_links($content) {
 
         global $CFG, $DB;
 

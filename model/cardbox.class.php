@@ -17,24 +17,23 @@
 defined('MOODLE_INTERNAL') || die();
 
 /**
- * 
+ *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-class cardbox_cardboxmodel { // use this class as a templatable as well?
-
+class cardbox_cardboxmodel {
     private $id;
     private $flashcards;
     private $boxes = array(0 => array(), 1 => array(), 2 => array(), 3 => array(), 4 => array(), 5 => array(), 6 => array());
     private $selectionalgorithm;
     private $sortingalgorithm;
-    
+
     public function __construct($cardboxid, cardbox_card_selection_interface $selectionalgorithm = null, cardbox_card_sorting_interface $sortingalgorithm = null, $topic=-1) {
-        
+
         $this->id = $cardboxid;
-        
+
         // 1. Add any new cards to the user's cardbox system (represented by the cardbox_progress table).
         cardbox_add_new_cards($cardboxid, $topic);
 
@@ -57,7 +56,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
             return count($this->flashcards);
         }
     }
-    
+
     public function cardbox_count_due_cards() {
         $due = 0;
         foreach ($this->flashcards as $card) {
@@ -67,7 +66,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
         }
         return $due;
     }
-    
+
     public function cardbox_count_mastered_cards() {
         return count($this->boxes[6]);
     }
@@ -77,25 +76,25 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @return array of ints
      */
     public function cardbox_get_card_selection($amountcards = 0) {
-        
+
         $selection = array();
-        
+
         // Select 21 flashcards for a practice session.
         if (!empty($this->flashcards) && !empty($this->selectionalgorithm)) {
-            
+
             // Delegate card selection to the selection algorithm instance.
             $cards = $this->selectionalgorithm->cardbox_select_cards_for_practice($this->flashcards);
-            
+
         } else {
             return null;
         }
-        
+
         // Sort the selected cards.
         if (!empty($cards) && !empty($this->sortingalgorithm)) {
             // Delegate card sorting to the sorting algorithm instance.
             $cards = $this->sortingalgorithm->cardbox_sort_cards_for_practice($cards);
         }
-        
+
         // Return the ids of the cards.
         if ($amountcards === 0) {
             foreach ($cards as $card) {
@@ -110,7 +109,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
                 }
             }
         }
-        
+
         return $selection;
     }
 
@@ -123,12 +122,12 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
     public function cardbox_get_status() {
 
         $now = new DateTime("now");
-        
+
         $cardsperbox = [];
-        
+
         $cardsperbox[0] = count($this->boxes[0]);
         $cardsperbox[6] = count($this->boxes[6]);
-        
+
         for ($i = 1; $i <= 5; $i++) {
             $cardsperbox[$i] = $this->selectionalgorithm->cardbox_count_due_and_not_due($this->boxes[$i], $now);
         }
@@ -183,7 +182,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @param type $cardid
      * @return type
      */
-    static function cardbox_get_card_contents($cardid) { // TODO: exception handling.
+    public static function cardbox_get_card_contents($cardid) {
 
         global $DB;
         $contents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
@@ -197,7 +196,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @param type $b
      * @return int
      */
-    static function cardbox_compare_cardcontenttypes($a, $b) {
+    public static function cardbox_compare_cardcontenttypes($a, $b) {
 
         if ($a->cardside == $b->cardside) {
 
@@ -219,7 +218,7 @@ class cardbox_cardboxmodel { // use this class as a templatable as well?
      * @param type $cardid
      * @return type
      */
-    static function cardbox_get_casesensitive($cardid) {
+    public static function cardbox_get_casesensitive($cardid) {
         global $DB;
 
         $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardid), IGNORE_MISSING);

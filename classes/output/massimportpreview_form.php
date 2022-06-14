@@ -30,7 +30,7 @@ require_once($CFG->dirroot . '/user/editlib.php');
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class massimportpreview_form extends \moodleform {
-    function definition ($action = null, $preselected = null) {
+    public function definition ($action = null, $preselected = null) {
         $mform = $this->_form;
         $data = $this->_customdata;
 
@@ -44,21 +44,20 @@ class massimportpreview_form extends \moodleform {
         $mform->setType('action', PARAM_ALPHANUM);
         $mform->setDefault('action', 'massimport');
 
-        $mform->addElement('hidden', 'step'); 
+        $mform->addElement('hidden', 'step');
         $mform->setType('step', PARAM_INT);
 
-        $mform->addElement('hidden', 'iid'); 
+        $mform->addElement('hidden', 'iid');
         $mform->setType('iid', PARAM_INT);
 
-        $mform->addElement('hidden', 'count'); 
+        $mform->addElement('hidden', 'count');
         $mform->setType('count', PARAM_INT);
 
-        $mform->addElement('hidden', 'error'); 
+        $mform->addElement('hidden', 'error');
         $mform->setType('error', PARAM_INT);
 
-        //$this->add_action_buttons(true, get_string('massimport', 'cardbox'));
         $reviewbtngrp = array();
-        if($data['error'] == 0){
+        if ($data['error'] == 0) {
             $reviewbtngrp[] =& $mform->createElement('submit', 'importbtn', get_string('massimport', 'cardbox'));
         }
         $reviewbtngrp[] =& $mform->createElement('submit', 'rejectbtn', get_string('cancel', 'cardbox'));

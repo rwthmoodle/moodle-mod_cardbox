@@ -16,7 +16,7 @@
 
 /**
  * This page is used by Moodle when listing all the instances of the cardbox module
- * that are in a particular course with the course id being passed to this script. 
+ * that are in a particular course with the course id being passed to this script.
  *
  * @package   mod_cardbox
  * @copyright 2019 RWTH Aachen (see README.md)
@@ -28,8 +28,8 @@ require_once('../../config.php');
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 require_once('model/cardcollection.class.php'); // model.
 
-// For this type of page this is the course id. 
-$id = required_param('id', PARAM_INT); // Course ID
+// For this type of page this is the course id.
+$id = required_param('id', PARAM_INT); // Course ID.
 
 $courseid = $DB->get_record('course', array('id' => $id), '*', MUST_EXIST);
 $course = get_course($courseid->id);
@@ -49,11 +49,6 @@ $context = context_course::instance($course->id);
 
 require_capability('mod/cardbox:view', $context);
 
-
-/*$collection = new cardbox_cardcollection($cardbox->id, $topic, true);
-$list = $collection->cardbox_get_card_list();
-$overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic);*/
-
 $strplural = get_string('modulenameplural', 'cardbox');
 $usesections = course_format_uses_sections($course->format);
 $modinfo = get_fast_modinfo($course);
@@ -68,11 +63,13 @@ $html .= '<th class="header-c2" scope="col"> '.ucfirst(get_string('barchartyaxis
 if (!has_capability('mod/cardbox:practice', $context)) {
     $html .= '</tr></thead><tbody>';
 } else {
-$html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('lastpractise', 'cardbox')).'</th>';
-$html .= '<th class="header-c4" scope="col">'.ucfirst(get_string('newcard', 'cardbox')).'</th>';
-$html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('knowncard', 'cardbox')).'</th>';
-$html .= '<th class="header-c5" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.get_string('flashcardsdue', 'cardbox')).'</th>';
-$html .= '<th class="header-c6" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.get_string('flashcardsnotdue', 'cardbox')).'</th></tr></thead><tbody>';
+    $html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('lastpractise', 'cardbox')).'</th>';
+    $html .= '<th class="header-c4" scope="col">'.ucfirst(get_string('newcard', 'cardbox')).'</th>';
+    $html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('knowncard', 'cardbox')).'</th>';
+    $html .= '<th class="header-c5" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
+            get_string('flashcardsdue', 'cardbox')).'</th>';
+    $html .= '<th class="header-c6" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
+            get_string('flashcardsnotdue', 'cardbox')).'</th></tr></thead><tbody>';
 }
 foreach ($modinfo->instances['cardbox'] as $cm) {
     if (!$cm->uservisible) {
@@ -80,67 +77,67 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
     }
     $sectionname = '';
     if ($usesections && $cm->sectionnum >= 0) {
-        $sectionname = get_section_name($course, $sections[$cm->sectionnum]); //gives the section name where the cardbox is
-            if ($DB->record_exists('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1'])) {
-                // If cardbox activity has cards
-                $html .= '<tr>';
-                // Row begins with section and cardbox activity name.
-                $html .= '<td class="cell-c0" >'.$sectionname.'</td>';
-                $html .= '<td class="cell-c1 " >
-                          <a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.$cm->get_formatted_name().'</a></td>';
-                // Number of cards in the cardbox.
-                $cardcount = $DB->count_records('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1']);
-                $html .= '<td class="cell-c2" >'.$cardcount.'</td>';
-                if (has_capability('mod/cardbox:practice', $context)) {
-                    // Last Practised column.
-                    $lastpractised = $DB->get_records_sql('SELECT max(lastpracticed) as lstprac
-                FROM {cardbox_progress} cbp
-                WHERE cbp.card in (SELECT id from {cardbox_cards} cc
-                                    WHERE cc.cardbox = :cardbox and approved = :approved)
-                                    AND cbp.userid = :userid',
-                                    ['cardbox' => $cm->instance, 'userid' => $USER->id, 'approved' => '1']);
-                    if (implode(',', array_keys($lastpractised)) == '') {
-                        $html .= '<td class="cell-c3">'.get_string('nopractise', 'cardbox').'</td>';
-                    } else {
-                        $html .= '<td class="cell-c3">'.userdate(implode(',', array_keys($lastpractised)),
-                                                                            get_string('strftimerecent')).'</td>';
-                    }
-                    // Card Status columns.
-                    $due = 0;
-                    $notdue = 0;
-                    require_once('model/cardbox.class.php');
-                    require_once('model/card_selection_algorithm.php');
-                    $select = new cardbox_card_selection_algorithm(null, true);
-                    $cardboxmodel = new cardbox_cardboxmodel($cm->instance, $select);
-                    $boxcount = $cardboxmodel->cardbox_get_status();
-                    // New cards.
-                    $html .= '<td class="cell-c4">'.$boxcount[0].'</td>';
-                    // Mastered cards.
-                    $html .= '<td class="cell-c5">'.$boxcount[6].'</td>';
-                    // Due  and Not Due cards.
-                    for ($i = 1; $i <= 5; $i++) {
-                        $due += $boxcount[$i]['due'];
-                        $notdue += $boxcount[$i]['notdue'];
-                    }
-                    $html .= '<td class="cell-c6">'.$due.'</td>';
-                    $html .= '<td class="cell-c7">'.$notdue.'</td>';
-                }else{
-
+        $sectionname = get_section_name($course, $sections[$cm->sectionnum]); // Gives the section name where the cardbox is.
+        if ($DB->record_exists('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1'])) {
+            // If cardbox activity has cards.
+            $html .= '<tr>';
+            // Row begins with section and cardbox activity name.
+            $html .= '<td class="cell-c0" >'.$sectionname.'</td>';
+            $html .= '<td class="cell-c1 " >
+                        <a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.$cm->get_formatted_name().'</a></td>';
+            // Number of cards in the cardbox.
+            $cardcount = $DB->count_records('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1']);
+            $html .= '<td class="cell-c2" >'.$cardcount.'</td>';
+            if (has_capability('mod/cardbox:practice', $context)) {
+                // Last Practised column.
+                $lastpractised = $DB->get_records_sql('SELECT max(lastpracticed) as lstprac
+            FROM {cardbox_progress} cbp
+            WHERE cbp.card in (SELECT id from {cardbox_cards} cc
+                                WHERE cc.cardbox = :cardbox and approved = :approved)
+                                AND cbp.userid = :userid',
+                                ['cardbox' => $cm->instance, 'userid' => $USER->id, 'approved' => '1']);
+                if (implode(',', array_keys($lastpractised)) == '') {
+                    $html .= '<td class="cell-c3">'.get_string('nopractise', 'cardbox').'</td>';
+                } else {
+                    $html .= '<td class="cell-c3">'.userdate(implode(',', array_keys($lastpractised)),
+                                                                        get_string('strftimerecent')).'</td>';
+                }
+                // Card Status columns.
+                $due = 0;
+                $notdue = 0;
+                require_once('model/cardbox.class.php');
+                require_once('model/card_selection_algorithm.php');
+                $select = new cardbox_card_selection_algorithm(null, true);
+                $cardboxmodel = new cardbox_cardboxmodel($cm->instance, $select);
+                $boxcount = $cardboxmodel->cardbox_get_status();
+                // New cards.
+                $html .= '<td class="cell-c4">'.$boxcount[0].'</td>';
+                // Mastered cards.
+                $html .= '<td class="cell-c5">'.$boxcount[6].'</td>';
+                // Due  and Not Due cards.
+                for ($i = 1; $i <= 5; $i++) {
+                    $due += $boxcount[$i]['due'];
+                    $notdue += $boxcount[$i]['notdue'];
+                }
+                $html .= '<td class="cell-c6">'.$due.'</td>';
+                $html .= '<td class="cell-c7">'.$notdue.'</td>';
+            } else {
+                echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>Something went wrong </span>";
+            }
+        } else {
+            $html .= '<tr>';
+            $html .= '<td class="cell-c0">'.$sectionname.'</td>';
+            $html .= '<td class="cell-c1"><a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.
+            $cm->get_formatted_name().'</a></td>';
+            if (has_capability('mod/cardbox:practice', $context)) {
+                for ($i = 2; $i <= 7; $i++) {
+                    $html .= '<td class="cell-c'.$i.'">--</td>';
                 }
             } else {
-                $html .= '<tr>';
-                $html .= '<td class="cell-c0">'.$sectionname.'</td>';
-                $html .= '<td class="cell-c1"><a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.
-                $cm->get_formatted_name().'</a></td>';
-                if (has_capability('mod/cardbox:practice', $context)) {
-                    for ($i = 2; $i <= 7; $i++) {
-                        $html .= '<td class="cell-c'.$i.'">--</td>';
-                    }
-                } else {
-                    $html .= '<td class="cell-c2">--</td>';
-                }
-                $html .= '</tr>';
+                $html .= '<td class="cell-c2">--</td>';
             }
+            $html .= '</tr>';
+        }
     }
 }
 

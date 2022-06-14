@@ -29,7 +29,7 @@ require_once($CFG->libdir.'/formslib.php'); // moodleform is defined in formslib
 require_once($CFG->dirroot . '/user/editlib.php');
 
 class massimport_form extends \moodleform {
-    function definition () {
+    public function definition () {
         $mform = $this->_form;
         $cbxdata = $this->_customdata;
 
@@ -44,16 +44,14 @@ class massimport_form extends \moodleform {
         $singleurl = new \moodle_url('example_singleans.csv');
         $singlelink = \html_writer::link($singleurl, 'example_singleans.csv');
         $mform->addElement('static', 'examplesinglecsv', get_string('examplesinglecsv', 'cardbox'), $singlelink);
-        //$mform->addHelpButton('examplesinglecsv', 'examplesinglecsv', 'cardbox');
 
         $multiurl = new \moodle_url('example_multians.csv');
         $multilink = \html_writer::link($multiurl, 'example_multians.csv');
         $mform->addElement('static', 'examplemulticsv', get_string('examplemulticsv', 'cardbox'), $multilink);
-        //$mform->addHelpButton('examplemulticsv', 'examplemulticsv', 'cardbox');
 
         $mform->addElement('filepicker', 'cardimportfile', get_string('file'));
         $mform->addRule('cardimportfile', null, 'required');
-        
+
         $choices = \csv_import_reader::get_delimiter_list();
         $mform->addElement('select', 'delimiter_name', get_string('csvdelimiter', 'tool_uploaduser'), $choices);
         if (array_key_exists('cfg', $choices)) {

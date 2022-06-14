@@ -23,8 +23,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 interface cardbox_card_sorting_interface {
-    
+
     public function cardbox_sort_cards_for_practice($cardselection);
-    
+
 }
 

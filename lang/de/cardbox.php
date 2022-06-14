@@ -65,9 +65,9 @@ $string['massimport'] = 'Karten importieren';
 $string['edittopic'] = 'Themen verwalten';
 
 // Subpage titles
-$string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';//'Neue Karte';
+$string['titleforaddflashcard'] = 'Legen Sie mithilfe des Formulars eine neue Lernkarte an.';
 $string['titleforpractice'] = 'Üben';
-$string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.'; //'Karte überprüfen';
+$string['titleforreview'] = 'Hier können Sie die von den Kursteilnehmer/innen angelegten Karten zum Lernen freigeben, sie bearbeiten oder löschen.';
 $string['titleforcardedit'] = 'Karte bearbeiten';
 $string['intro:overview'] = 'Die Übersicht umfasst alle bereits freigegebenen Karten.';
 
@@ -97,12 +97,14 @@ $string['sound'] = 'Tonaufnahme zur Frage';
 $string['answersound'] = 'Tonaufnahme zur Lösung';
 $string['enteranswer'] = 'Lösungstext';
 $string['answer_repeat'] = 'weitere Lösung';
-//$string['answer_repeat_help'] = 'Besteht die Lösung aus mehreren Teilen, so klicken Sie bitte auf "weitere Lösung", um diese einzeln einzugeben. Nur so kann das Programm prüfen, ob ein Nutzer die Antwort vollständig kennt. Handelt es sich dagegen um alternative Lösungsvorschläge, so benutzen sie bitte nur das erste Eingabefeld.';
-
-/* $string['answer_repeat_help'] = '<b>Bei mehreren Lösungen</b><ul><li><b>Alternative Lösungen</b><br>Müssen die Studierenden nur <em>eine</em> Lösung kennen, nutzen Sie bitte das Lösungsfeld und klicken Sie nicht auf "weitere Lösung".</li><li><b>Mehrteilige Lösungen</b><br>Müssen alle Teillösungen gekannt werden, so geben Sie diese bitte einzeln per Klick auf "weitere Lösung" ein.</li></ul>'; */
+$string['autocorrectlocked'] = 'Karte für automatische Kontrollen nicht anzeigen';
+$string['autocorrecticon'] = 'Nur Selbstkontrolle';
+$string['autocorrecticon_help'] = 'Die Antwort kann für diese Karte nicht eingegeben werden, wenn im Modus Automatische Kontrolle geübt wird. Im Modus Automatische Kontrolle wird diese Karte dann immer noch angezeigt, aber nur als Selbstkontrolle.';
 $string['answer_repeat_help'] = 'Bei mehreren Lösungen nutzen Sie bitte für jede Antwort ein separates Lösungsfeld.<br> Ein weiteres Lösungsfeld kann durch den Button "weitere Lösung" hinzugefügt werden.<br> Um einzustellen, ob Studierende nun alle Antworten wissen müssen oder nur eine (falls es um Alternativantworten geht) nutzen Sie bitte den Dropdown darunter.';
 
 $string['addanswer'] = 'weitere Lösung';
+$string['autocorrectlocked'] = 'Automatische Kontrolle deaktivieren';
+$string['autocorrectlocked_help'] = 'Aktivieren Sie diese Checkbox, wenn trotz Wahl des Übungsmodus „Automatische Kontrolle“ die Antwort der Lernkarte nicht eingetippt werden soll. Im Modus „Automatische Kontrolle“ wird die Lernkarte dann weiterhin angezeigt, jedoch nur als Selbstkontrolle. Diese Option bietet sich insbesondere für Lernkarten an, deren Antworten sich nicht zur manuellen Eingabe eignen (z.B. Definitionen), jedoch trotzdem zusammen mit weiteren Lernkarten geübt werden sollen, deren Antworten manuell eingebeben werden.';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
 
@@ -112,7 +114,6 @@ $string['success:addandapprovenewcard'] = 'Die Lernkarte wurde erstellt und für
 $string['success:approve'] = 'Die Karte wurde zum Lernen freigegeben.';
 $string['success:edit'] = 'Die Karte wurde erfolgreich bearbeitet.';
 $string['success:reject'] = 'Die Karte wurde gelöscht.';
-//$string['success:skip'] = '.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
@@ -126,6 +127,13 @@ $string['examplemulticsv_help'] = 'Beispieltextdatei für Karten mit mehreren An
 $string['cancelimport'] = 'Import wurde storniert';
 $string['importpreview'] = 'Preview der Importkarten';
 $string['importsuccess'] = '{$a} Karten erfolgreich importiert';
+$string['allowedcolumns'] = '<br><p>Erlaubte Spaltennamen sind:</p>';
+$string['ques'] = 'Spaltenname für Frage';
+$string['ans'] = 'Spaltenname für Antwort';
+$string['qcontext'] = 'Spaltenname für Fragekontext';
+$string['acontext'] = 'Spaltenname für Antwortkontext';
+$string['topic'] = 'Spaltenname für Thema';
+$string['acdisable'] = 'Spaltenname zur Deaktivierung der automatischen Kontrolle für eine Karte. Ja = 1; Nein = 0.';
 
 // Info notifications
 $string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
@@ -229,11 +237,11 @@ $string['countcardapprove'] = '{&a} Karten wurden genehmigt und stehen für die 
 $string['countcardreject'] = '{&a} Karten wurden abgelehnt';
 $string['rejectcard'] = 'Karte ablehnen';
 $string['rejectcardinfo'] = 'Möchten Sie die ausgewählten {$a} Karten ablehnen? Diese Karten werden gelöscht und können nicht wiederhergestellt werden.';
-/* $string['allanswersnecessary'] = "<b style='float: right; padding-top: 5px'>alle Antworten notwendig</b>";
-$string['oneanswersnecessary'] = "<b style='float: right; padding-top: 5px'>eine Antwort notwendig</b>"; */
-$string['allanswersnecessary'] = "<b>alle Antworten notwendig</b>";
-$string['oneanswersnecessary'] = "<b>eine Antwort notwendig</b>";
 
+$string['allanswersnecessary'] = "Alle";
+$string['oneanswersnecessary'] = "Nur Eine";
+$string['allanswersnecessary_help'] = "<b>Alle Antworten notwendig</b>";
+$string['oneanswersnecessary_help'] = "<b>Nue eine Antwort notwendig</b>";
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
@@ -268,13 +276,13 @@ $string['noselection'] = 'alle';
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
 $string['cardposition_help'] = 'Hier wird angezeigt, in welchem Fach sich diese Karte befindet. Je höher die Nummer, desto besser ist die Karte bereits gelernt. Neue Karten sind in keinem Fach. Nach Fach 5 werden Karten als "gelernt" angesehen und nicht mehr geübt.';
-//Overview Tab
+// Overview Tab.
 $string['student:deckdescription'] = 'Diese Karte liegt in Fach {$a}';
 $string['manager:deckdescription'] = 'Im Durchschnitt liegt diese Karte für alle Studierenden in Fach {$a}';
 $string['manager:repeatdesc'] = 'Diese Karte wurde von den Studierenden, im Durchschnitt, nach {$a} Wiederholungen gelernt';
 $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gelernt';
 
-//Edit topics Tab
+// Edit topics Tab.
 $string['deletetopic'] = 'Thema löschen';
 $string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen? Bei Karten, die diesem Thema zugeordnet waren, wird das Thema dadurch auf "nicht zugeordnet" gesetzt.';
 $string['createtopic'] = 'Hinzufügen';
@@ -291,7 +299,7 @@ $string['qmissing'] = 'Frage fehlt.';
 $string['qfieldmissing'] = 'Fragenfeld fehlt';
 $string['amissing'] = 'Antwort fehlt.';
 $string['afieldmissing'] = 'Antwortfeld fehlt.';
-$string ['successmsg'] = ' Karte(n) wurde(n) erfolgreich importiert.';
+$string['successmsg'] = ' Karte(n) wurde(n) erfolgreich importiert.';
 $string['errormsg'] = 'Die folgenden Linien konnten nicht in Karten importiert werden';
 $string['status'] = 'Status';
 $string['continue'] = 'Weiter';

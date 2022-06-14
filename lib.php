@@ -23,12 +23,14 @@
 
 function cardbox_supports($feature) {
     switch($feature) {
-        case FEATURE_MOD_INTRO:               return true;
-//        case FEATURE_COMPLETION_TRACKS_VIEWS: return true;
-        case FEATURE_BACKUP_MOODLE2:          return true;
-        case FEATURE_SHOW_DESCRIPTION:        return true;
-
-        default: return null;
+        case FEATURE_MOD_INTRO:
+            return true;
+        case FEATURE_BACKUP_MOODLE2:
+            return true;
+        case FEATURE_SHOW_DESCRIPTION:
+            return true;
+        default:
+            return null;
     }
 }
 
@@ -44,7 +46,6 @@ function cardbox_supports($feature) {
 function cardbox_add_instance($data, $mform) {
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
-//    require_once("$CFG->dirroot/mod/cardbox/locallib.php");
     $cmid = $data->coursemodule;
     $data->timecreated = time();
     $data->timemodified = time();
@@ -69,10 +70,9 @@ function cardbox_add_instance($data, $mform) {
  * @param type $cardbox
  */
 function cardbox_update_instance($cardbox) {
-    
+
     global $CFG, $DB;
     require_once("$CFG->libdir/resourcelib.php");
-//    require_once("$CFG->dirroot/mod/cardbox/locallib.php");
     $cardbox->timemodified = time();
     $cardbox->id = $cardbox->instance;
     $cardbox->revision++;
@@ -85,7 +85,7 @@ function cardbox_update_instance($cardbox) {
     \core_completion\api::update_completion_date_event($cardbox->coursemodule, 'cardbox', $cardbox->id, $completiontimeexpected);
 
     return true;
-    
+
 }
 /**
  * The cardbox__delete_instance function is passed the id of your module which you can use
@@ -96,23 +96,17 @@ function cardbox_update_instance($cardbox) {
 function cardbox_delete_instance($cardboxinstanceid) {
 
     global $DB;
-   
+
     if (!$cardbox = $DB->get_record('cardbox', array('id' => $cardboxinstanceid))) {
         return false;
     }
     if (!$cm = get_coursemodule_from_instance('cardbox', $cardboxinstanceid)) {
         return false;
     }
-    if (!$course = $DB->get_record('course', array('id'=>$cm->course))) {
+    if (!$course = $DB->get_record('course', array('id' => $cm->course))) {
         return false;
     }
 
-//    $context = context_module::instance($cm->id);
-//
-//    // Is this really necessary for cardbox?
-//    $fs = get_file_storage();
-//    $fs->delete_area_files($context->id);    
-   
     \core_completion\api::update_completion_date_event($cm->id, 'cardbox', $cardboxinstanceid, null);
 
     // 1.1 Get all the cards of this cardbox.
@@ -161,75 +155,6 @@ function cardbox_set_display_options($data) {
     $data->displayoptions = serialize($displayoptions);
 }
 
-/**
- * Serves the cardbox files.
- *
- * @package  mod_cardbox
- * @category files
- * @param stdClass $course course object
- * @param stdClass $cm course module object
- * @param stdClass $context context object
- * @param string $filearea file area
- * @param array $args extra arguments
- * @param bool $forcedownload whether or not to force download
- * @param array $options additional options affecting the file serving
- * @return bool false if file not found, does not return if found - just send the file
- */
-//function cardbox_pluginfile($course, $cm, $context, $filearea, $args, $forcedownload, array $options = array()) {
-//    global $CFG, $DB;
-//    require_once("$CFG->libdir/resourcelib.php");
-//
-//    if ($context->contextlevel != CONTEXT_MODULE) {
-//        return false;
-//    }
-//
-//    require_course_login($course, true, $cm);
-//    if (!has_capability('mod/cardbox:view', $context)) {
-//        return false;
-//    }
-//
-//    if ($filearea !== 'content') { // content
-//        // Intro is handled automatically in pluginfile.php.
-//        return false;
-//    }
-//
-//    array_shift($args); // Ignore revision - designed to prevent caching problems only.
-//
-//    $fs = get_file_storage();
-//    $relativepath = implode('/', $args);
-//    $fullpath = rtrim("/$context->id/mod_cardbox/$filearea/0/$relativepath", '/');
-//    do {
-//        if (!$file = $fs->get_file_by_hash(sha1($fullpath))) {
-//            if ($fs->get_file_by_hash(sha1("$fullpath/."))) {
-//                if ($file = $fs->get_file_by_hash(sha1("$fullpath/index.htm"))) {
-//                    break;
-//                }
-//                if ($file = $fs->get_file_by_hash(sha1("$fullpath/index.html"))) {
-//                    break;
-//                }
-//                if ($file = $fs->get_file_by_hash(sha1("$fullpath/Default.htm"))) {
-//                    break;
-//                }
-//            }
-//            $cardbox = $DB->get_record('cardbox', array('id' => $cm->instance), 'id, legacyfiles', MUST_EXIST);
-//            if ($cardbox->legacyfiles != RESOURCELIB_LEGACYFILES_ACTIVE) {
-//                return false;
-//            }
-//            if (!$file = resourcelib_try_file_migration('/' . $relativepath, $cm->id, $cm->course, 'mod_cardbox', 'content', 0)) { // image statt content
-//                return false;
-//            }
-//            // File migrate - update flag.
-//            $cardbox->legacyfileslast = time();
-//            $DB->update_record('cardbox', $cardbox);
-//        }
-//    } while (false);
-//
-//    // Should we apply filters?
-//    // $mimetype = $file->get_mimetype();
-//    $filter = 0;
-//    // Finally send the file.
-//    send_stored_file($file, null, $filter, $forcedownload, $options);
-//}
 
 /**
  * Serve the files from the MYPLUGIN file areas
@@ -247,7 +172,7 @@ function mod_cardbox_pluginfile($course, $cm, $context, $filearea, $args, $force
     global $DB;
     // 1. Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
     if ($context->contextlevel != CONTEXT_MODULE) {
-        return false; 
+        return false;
     }
     // 2. Make sure the filearea is one of those used by the plugin.
     if ($filearea != 'content') {
@@ -255,20 +180,16 @@ function mod_cardbox_pluginfile($course, $cm, $context, $filearea, $args, $force
     }
     // 3. Make sure the user is logged in and has access to the module (plugins that are not course modules should leave out the 'cm' part).
     // Disabled, so that students can see images in changenotification emails:
-    //require_login($course, true, $cm);
-    
+
     // 4. Check the relevant capabilities - these may vary depending on the filearea being accessed.
     if (!has_capability('mod/cardbox:view', $context)) {
         return false;
     }
     // 5. Leave this line out if you set the itemid to null in make_pluginfile_url (set $itemid to 0 instead).
     $itemid = (int)array_shift($args); // The first item in the $args array.
-//    if ($itemid != 0) {
-//        return false;
-//    }
-//    / Use the itemid to retrieve any relevant data records and perform any security checks to see if the
+    // Use the itemid to retrieve any relevant data records and perform any security checks to see if the
     // user really does have access to the file in question.
-    
+
     // 6. Extract the filename / filepath from the $args array.
     $filename = array_pop($args);
     if (empty($args)) {
@@ -282,7 +203,6 @@ function mod_cardbox_pluginfile($course, $cm, $context, $filearea, $args, $force
     if (!$file) {
         return false; // The file does not exist.
     }
-    // 8. We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering. 
-    send_stored_file($file, 86400, 0, $forcedownload, $options); 
-//    send_stored_file($file, 0, 0, true, $options); // download MUST be forced - security!
+    // 8. We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
+    send_stored_file($file, 86400, 0, $forcedownload, $options);
 }

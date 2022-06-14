@@ -23,13 +23,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
+defined('MOODLE_INTERNAL') || die();
+
+define ('ENABLE_AUTOCORRECT', 0);
+define ('DISABLE_AUTOCORRECT', 1);
 
 require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class mod_cardbox_review_form extends moodleform {
-    function definition($action = null, $preselected = null) {
+    public function definition($action = null, $preselected = null) {
         global $CFG, $DB, $USER, $COURSE;
         $mform = $this->_form;
         $customdata = $this->_customdata;
@@ -53,7 +56,7 @@ class mod_cardbox_review_form extends moodleform {
         foreach ($customdata['cardlist'] as $cardid) {
 
             $cardcontents = $DB->get_records_sql(
-                'SELECT mcc.id, mcc.card, mcc.cardside, mcc.contenttype, mcc.content, mcc.area,
+                'SELECT mcc.id, mcc.card, mcc.cardside, mcc.contenttype, mcc.content, mcc.area, mcc2.disableautocorrect,
                     (SELECT topicname from {cardbox_topics} where id = mcc2.topic) AS topicname
                     FROM {cardbox_cardcontents} mcc join {cardbox_cards} mcc2 on mcc.card = mcc2.id
                         where mcc.card = :cardid and area in (:areamain, :areasugg) order by topicname',
@@ -71,15 +74,20 @@ class mod_cardbox_review_form extends moodleform {
             $divadded = false;
             $necessaryanswers = cardbox_get_necessaryanswers($cardid);
             if ($necessaryanswers === "1") {
-                $howmanyanswersnecessary = get_string('oneanswersnecessary', 'cardbox');
+
+                $howmanyanswersnecessary = '<span class="badge badge-dark" data-toggle = "tooltip" title = "'.
+                                           get_string("oneans", "cardbox").'">'.
+                                           get_string("oneanswersnecessary", "cardbox").'</span>';
+
             } else {
-                $howmanyanswersnecessary = get_string('allanswersnecessary', 'cardbox');
+                $howmanyanswersnecessary = '<span class="badge badge-dark" data-toggle = "tooltip" title = "'.
+                                           get_string("allans", "cardbox").'">'.
+                                           get_string("allanswersnecessary", "cardbox").'</span>';
             }
-            
+
             foreach ($cardcontents as $cardcontent) {
                 $cardcontent->content = format_text($cardcontent->content);
 
-                //topicname
                 if ($cardcontent->topicname === null) {
                     $topicname = get_string('notopic', 'cardbox');;
                 } else {
@@ -104,7 +112,7 @@ class mod_cardbox_review_form extends moodleform {
                                           </audio>';
                         break;
                         default:
-                            print_r('ERROR!');
+                            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>Something went wrong </span>";
                     }
                 } else {
                     $countapprovedanswers = $DB->count_records('cardbox_cardcontents',
@@ -142,33 +150,23 @@ class mod_cardbox_review_form extends moodleform {
             }
             $mform->addElement('html', '<div id="cardbox-card-in-review" data-cardid="'.$cardid.'" class="row reviewcontent" style="margin-bottom: 0px;">');
 
-            //Use following when including the deck again!!!!!!!!!!
+            if ($cardcontent->disableautocorrect == DISABLE_AUTOCORRECT) {
+                $acimgurl = '<span class="badge badge-secondary" data-toggle = "tooltip" title = "'.get_string("autocorrecticon_help", "cardbox").'">'.
+                            get_string("autocorrecticon", "cardbox"). '</span>';
 
-            /* if ($countsuggestedanswers > 1) {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 13.5%">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
-                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">' . $howmanyanswersnecessary . '
-                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
-                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
-                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
             } else {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 13.5%">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
-                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">
-                    <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" style="margin-bottom: 10px">
-                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
-                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
-            } */
-            
-            
+                $acimgurl = '';
+            }
             if ($countsuggestedanswers > 1) {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
-                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">' . $howmanyanswersnecessary . '
-                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
-                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
+                                   $topicname).'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$howmanyanswersnecessary.
+                                   $acimgurl. '</div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                                   <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
             } else {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '. $topicname).'</div>
-                    <div class="col-xl-4" style="padding-left: 0.4%;"><div style="float: right">
-                    </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
-                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
+                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
+                $topicname).'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$acimgurl.'
+                </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
+                <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
             }
 
             if ($countsuggestedanswers > 1) {
@@ -195,7 +193,7 @@ class mod_cardbox_review_form extends moodleform {
                         }
                         break;
                     } else {
-                        $mform->addElement('html', '<div style ="height:'.($height-1).'%"></div>');
+                        $mform->addElement('html', '<div style ="height:'.($height - 1).'%"></div>');
                         $countapprovedanswers--;
                     }
                 }

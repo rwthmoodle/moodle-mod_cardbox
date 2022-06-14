@@ -23,9 +23,10 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die(); //  It must be included from a Moodle page.
-
-require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
+defined('MOODLE_INTERNAL') || die(); // It must be included from a Moodle page.
+define ('ALLOW_AUTOCORRECTION_FOR_ENTIRE_CARDBOX', 1);
+define ('AUTOCORRECTION_NOT_ALLOWED_FOR_ENTIRE_CARDBOX', 0);
+require_once("$CFG->libdir/formslib.php");
 require_once('locallib.php');
 
 class mod_cardbox_card_form extends moodleform {
@@ -40,7 +41,7 @@ class mod_cardbox_card_form extends moodleform {
      * @param type $action
      * @param array $preselected This param is saved by the constructor in $this->_customdata.
      */
-    function definition($action = null, $preselected = null, $cardid=0) {
+    public function definition($action = null, $preselected = null, $cardid=0) {
 
         global $CFG, $DB, $USER, $COURSE;
 
@@ -54,36 +55,35 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('hidden', 'course'); // Course id.
         $mform->setType('course', PARAM_INT);
-        
+
         $mform->addElement('hidden', 'action');
         $mform->setType('action', PARAM_ALPHANUM);
-        
+
         $mform->addElement('hidden', 'from');
         $mform->setType('from', PARAM_ALPHA);
 
         $mform->addElement('hidden', 'cardid');
         $mform->setType('cardid', PARAM_INT);
         $mform->setDefault('cardid', 0);
-        
+
         $mform->addElement('hidden', 'next');
         $mform->setType('next', PARAM_INT);
         $mform->setDefault('next', 0);
 
         // Get topics to choose from when creating a new card.
         $topiclist = cardbox_get_topics($customdata['cardboxid'], true);
-        
+
         $choosetopicarray = array();
         $choosetopicarray[] =& $mform->createElement('select', 'topic', get_string('choosetopic', 'cardbox'), $topiclist);
         $choosetopicarray[] =& $mform->createElement('text', 'newtopic', '');
         $mform->addGroup($choosetopicarray, 'choosetopicar', get_string('choosetopic', 'cardbox'), array(' '), false);
-        
+
         if (!empty($customdata['topic'])) {
             $choosetopicarray[0]->setSelected($customdata['topic']);
         }
 
         // Text input field for creating a new topic.
         $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
-
 
         /****************** end of question experiment **********************/
 
@@ -100,7 +100,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $options = array();
         $options['accepted_types'] = array('.bmp', '.gif', '.jpeg', '.jpg', '.png', '.svg');
-/*         $options['accepted_types'] = array('.bmp, .gif, .jpeg, .jpg, .png, .svg'); */
+
         $options['maxbytes'] = 0;
         $options['maxfiles'] = 1;
         $options['mainfile'] = true;
@@ -108,7 +108,6 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('text', 'imagedescription', get_string('imagedescription', 'cardbox'));
         $mform->setType('imagedescription', PARAM_TEXT);
-
 
         $label = get_string('imgdescriptionnecessary_label', 'cardbox');
         $imagedescriptionarray = array();
@@ -130,13 +129,14 @@ class mod_cardbox_card_form extends moodleform {
         /****************** end of question **********************/
 
         $infoanswer = get_string('answer_repeat_help', 'cardbox');
-/*         $mform->addElement('html', "<p style='margin: 1rem'>$infoanswer</p>"); */
 
         for ($i = 1; $i <= 10; $i++) {
             $mform->addElement('editor', "answer$i", get_string('enteranswer', 'cardbox') , 'wrap="virtual" rows="5" cols="150"');
             $mform->setType("answer$i", PARAM_RAW);
             if ($i === 1) {
-                $mform->addElement('html', "<div class='form-group row fitem' style='margin-bottom: 1.5rem;'><div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'></div><div class='col-md-9 form-inline align-items-start felement'><div style='background-color: #CD1076; color: white; padding: 5px; width: 100%; padding-left: 10px'>$infoanswer</div></div></div>");
+                $mform->addElement('html', "<div class='form-group row fitem' style='margin-bottom: 1.5rem;'><div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'></div>
+                <div class='col-md-9 form-inline align-items-start felement'><div style='background-color: #CD1076; color: white; padding: 5px; width: 100%; padding-left: 10px'>".
+                $infoanswer."</div></div></div>");
             }
         }
 
@@ -159,14 +159,22 @@ class mod_cardbox_card_form extends moodleform {
             }
             $select->setSelected($necessaryanswers);
         }
-
         /****************** answercontext **********************/
 
-/*         $mform->addElement('button', 'addcontextans', get_string('addcontext', 'cardbox'));
- */
         $mform->addElement('editor', 'answercontext', get_string('entercontextanswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
-        
+
+        /****************** Disable Auto check setting ****************** */
+        if ($customdata['allowautocorrection'] == ALLOW_AUTOCORRECTION_FOR_ENTIRE_CARDBOX) {
+            $mform->addElement('checkbox', 'disableautocorrect', get_string('autocorrectlocked', 'cardbox'));
+            $mform->addHelpButton('disableautocorrect', 'autocorrectlocked', 'cardbox');
+            $mform->setDefault('disableautocorrect', 0);
+        } else {
+            $mform->addElement('checkbox', 'disableautocorrect', get_string('autocorrectlocked', 'cardbox'));
+            $mform->addHelpButton('disableautocorrect', 'autocorrectlocked', 'cardbox');
+            $mform->setDefault('disableautocorrect', 0);
+        }
+
         $context = context_module::instance($customdata['cmid']);
         if (array_key_exists('cardid', $customdata)) {
             $cardapproved = cardbox_card_approved($customdata['cardid']);
@@ -190,7 +198,7 @@ class mod_cardbox_card_form extends moodleform {
      * @param type $submitlabel
      * @param type $submit2label
      */
-    function add_action_buttons_for_managers($cancel=true, $submitlabel=null, $submit2label=null) {
+    public function add_action_buttons_for_managers($cancel=true, $submitlabel=null, $submit2label=null) {
         if (is_null($submitlabel)) {
             $submitlabel = get_string('saveandaccept', 'cardbox');
         }
@@ -201,7 +209,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform = $this->_form;
 
-        // elements in a row need a group
+        // Elements in a row need a group.
         $buttonarray = array();
 
         if ($submit2label !== false) {
@@ -221,8 +229,7 @@ class mod_cardbox_card_form extends moodleform {
         $mform->closeHeaderBefore('buttonar');
     }
 
-    
-    
+
     /**
      * This function checks whether the user entered text, an image and/or an audio file
      * for a question.
@@ -232,7 +239,7 @@ class mod_cardbox_card_form extends moodleform {
      * @param type $files
      * @return type
      */
-    function validation($data, $files) {
+    public function validation($data, $files) {
 
         global $USER;
 
@@ -240,7 +247,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $question = $data['question'];
         $questiontext = $question['text'];
-        
+
         $fs = get_file_storage();
         $usercontext = context_user::instance($USER->id);
 
@@ -249,7 +256,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $draftitemid2 = $data['cardsound'];
         $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
-        
+
         $answer = $data['answer1'];
         $answertext = $answer['text'];
 

@@ -32,19 +32,19 @@ class cardbox_start implements \renderable, \templatable {
     private $topics;
     private $autocorrectionoption = false;
     private $amountcards;
-    
+
     public function __construct($autocorrection, $cardboxid) {
-        
+
         $this->cardbox_prepare_topics_to_study($cardboxid);
-        
+
         if ($autocorrection == 1) {
             $this->autocorrectionoption = true;
         }
 
         $this->cardbox_define_amount_of_cards_to_study();
-        
+
     }
-    
+
     /**
      * Function includes the list of topics in the practice options modal.
      * The user can then choose to prioritise one of the topics in the
@@ -53,7 +53,7 @@ class cardbox_start implements \renderable, \templatable {
      * @global type $CFG
      */
     public function cardbox_prepare_topics_to_study($cardboxid) {
-        
+
         global $CFG;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
@@ -102,7 +102,6 @@ class cardbox_start implements \renderable, \templatable {
         $data['choicestopics'] = $this->choicestopics;
         $data['helpbuttonpracticeall'] = $OUTPUT->help_icon('practiceall', 'cardbox');
         $data['amountcards'] = $this->amountcards;
-
         return $data;
 
     }

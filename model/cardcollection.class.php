@@ -32,18 +32,18 @@ class cardbox_cardcollection {
 
         global $DB;
         $this->cardbox = $cardboxid;
-        
+
         $approved = '0';
         if ($getall) {
             $approved = '1';
         }
-        
+
         if (is_null($topic) || $topic == -1) { // no topic preference.
             $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ?', array($cardboxid, $approved));
-                        
+
         } else if ($topic == 0) { // only cards without a topic.
             $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ? AND topic IS NULL', array($cardboxid, $approved));
-            
+
         } else { // a specific topic preference.
             $this->flashcards = $DB->get_fieldset_select('cardbox_cards', 'id', 'cardbox = ? AND approved = ? AND topic = ?', array($cardboxid, $approved, $topic));
         }
@@ -58,52 +58,40 @@ class cardbox_cardcollection {
     public function cardbox_get_card_list($offset = null) {
 
         if (!empty($offset)) {
-            
+            echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>Something went wrong </span>";
         } else {
             return $this->flashcards;
         }
-        
+
     }
-    
+
     public function cardbox_get_first_cardid() {
         return $this->flashcards[0];
     }
 
-//    public function cardbox_get_card_for_review($cardid) {
-//
-//        global $DB;
-//
-//        $sql = "SELECT c.id, t.topicname "
-//                . "FROM {cardbox_cards} c "
-//                . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
-//                . "WHERE c.cardbox = ? AND approvedby IS NULL";
-//
-//        return $DB->get_record_sql($sql, array($this->cardbox, $cardid), MUST_EXIST);
-//    }
-
     public function cardbox_get_cardcontents_initial() {
         return self::cardbox_get_cardcontents($this->flashcards[0]);
     }
-    
-    static function cardbox_get_cardcontents($cardid) {
+
+    public static function cardbox_get_cardcontents($cardid) {
         global $DB;
         $cardcontents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid, 'area' => CARD_MAIN_INFORMATION));
         $cardcontexts = $DB->get_records('cardbox_cardcontents', array('card' => $cardid, 'area' => CARD_CONTEXT_INFORMATION));
         return array_merge($cardcontents, $cardcontexts);
     }
     /**
-     * 
+     *
      * @global type $DB
      * @param type $cardid
      * @return type
      */
-    static function cardbox_get_topic($cardid) { // XXX move to locallib
+    public static function cardbox_get_topic($cardid) {
         global $DB;
         $sql = "SELECT t.topicname "
                 . "FROM {cardbox_cards} c "
                 . "LEFT JOIN {cardbox_topics} t ON c.topic = t.id "
                 . "WHERE c.id = ?";
-        return $DB->get_field_sql($sql, array($cardid), $strictness=IGNORE_MISSING);
+        return $DB->get_field_sql($sql, array($cardid), $strictness = IGNORE_MISSING);
     }
 
     /**
@@ -112,7 +100,7 @@ class cardbox_cardcollection {
      * @param type $cardid
      * @return type
      */
-    static function cardbox_get_necessaryanswerslocked($cardid) {
+    public static function cardbox_get_necessaryanswerslocked($cardid) {
         global $DB;
 
         $cardboxid = $DB->get_field('cardbox_cards', 'cardbox', array('id' => $cardid), IGNORE_MISSING);

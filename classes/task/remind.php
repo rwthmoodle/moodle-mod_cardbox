@@ -43,7 +43,7 @@ class remind extends \core\task\scheduled_task {
                 . "LEFT JOIN {course} co ON cm.course = co.id "
                 . "WHERE m.name = ?";
 
-        $cardboxes =  $DB->get_records_sql($sql, array('cardbox'));
+        $cardboxes = $DB->get_records_sql($sql, array('cardbox'));
 
         foreach ($cardboxes as $cardbox) {
 
@@ -62,16 +62,16 @@ class remind extends \core\task\scheduled_task {
                 $message->userfrom = core_user::get_noreply_user();
                 $message->userto = $recipient;
                 $message->subject = $sm->get_string('remindersubject', 'cardbox', null, $recipient->lang);
-                $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang). ' ' . $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . ' ' . $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang);
+                $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).' '.
+                                        $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . ' ' .
+                                        $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang);
                 $message->fullmessageformat = FORMAT_MARKDOWN;
-                $message->fullmessagehtml = '<p>' . $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang) . '</p><p>' . $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . '</p><p><em>' . $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
+                $message->fullmessagehtml = '<p>'.
+                        $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).
+                        '</p><p>'.$sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang).
+                '</p><p><em>'.$sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
                 $message->smallmessage = 'small message';
-                $message->notification = 1; // For personal messages '0'. Important: the 1 without '' and 0 with ''.
-                //$message->contexturl = 'http://GalaxyFarFarAway.com';
-                //$message->contexturlname = 'Context name';
-    //            $message->replyto = "random@example.com";
-//                $content = array('*' => array('header' => ' test ', 'footer' => ' test ')); // Extra content for specific processor
-    //            $message->set_additional_content('email', $content);
+                $message->notification = 1;
                 $message->courseid = $cardbox->courseid;
 
                 message_send($message);
@@ -79,7 +79,7 @@ class remind extends \core\task\scheduled_task {
             }
 
         }
-        
+
     }
 
     /**

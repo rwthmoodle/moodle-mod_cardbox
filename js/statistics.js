@@ -666,7 +666,9 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
     }
     function compareStepSize(max) {
         var stepsize = 10;
-        if (max <= 100) {
+        if (max <= 10) {
+            stepsize = 1;
+        } else if (max <= 100) {
             stepsize = 10;
         } else if (max <= 200) {
             stepsize = 20;

@@ -65,10 +65,8 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         if (has_capability('mod/cardbox:approvecard', $context)) {
             $level1[] = $this->cardbox_create_tab($baseurl, 'massimport', 'massimport');
         }
-//      if (has_capability('mod/cardbox:practice', $context)) { // Commented out for the test phase so that teachers can see what students see.
-            $level1[] = $this->cardbox_create_tab($baseurl, 'practice', 'practice');
-            $level1[] = $this->cardbox_create_tab($baseurl, 'statistics', 'statistics');
-//      }
+        $level1[] = $this->cardbox_create_tab($baseurl, 'practice', 'practice');
+        $level1[] = $this->cardbox_create_tab($baseurl, 'statistics', 'statistics');
 
         if (has_capability('mod/cardbox:approvecard', $context)) {
             $level1[] = $this->cardbox_create_tab($baseurl, 'review', 'review');
@@ -83,7 +81,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->tabtree($level1, $selected, $inactive);
     }
     /**
-     * 
+     *
      * @param \templatable $studyview
      * @return type
      */
@@ -92,7 +90,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->render_from_template('mod_cardbox/studyview', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
     /**
-     * 
+     *
      * @param \templatable $practice
      * @return type
      */
@@ -112,7 +110,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->render_from_template('mod_cardbox/practice_start', $data);
     }
     /**
-     * 
+     *
      * @param \templatable $review
      * @return type
      */
@@ -121,7 +119,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->render_from_template('mod_cardbox/statistics', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
     /**
-     * 
+     *
      * @param \templatable $review
      * @return type
      */
@@ -130,7 +128,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->render_from_template('mod_cardbox/review', $data); // 1. Param specifies the template, 2. param the data to pass into it.
     }
     /**
-     * 
+     *
      * @param \templatable $review
      * @return type
      */
@@ -139,15 +137,15 @@ class mod_cardbox_renderer extends plugin_renderer_base {
         return $this->render_from_template('mod_cardbox/overview', $data);
     }
     /**
-     * 
+     *
      * @param \array $errorlines : consists of errored rows, no of successfully imported card, url to continue
      * @return type
      */
     public function cardbox_render_errimport(array $errorlines) {
         return $this->render_from_template('mod_cardbox/errimport', $errorlines);
     }
-        /**
-     * 
+    /**
+     *
      * @param \templatable $edittopics
      * @return type
      */
