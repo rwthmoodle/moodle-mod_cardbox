@@ -1,0 +1,5 @@
+ques,qcontext,ans1,ans2,acontext,topic,acdisable
+Question with multi answers 1?,Context related to Question with multi answers1,Q1 MultiAnswer1,Q1 MultiAnswer2,Context related to MultiAnswer Q1,topic1,0
+Question with multi answers 2?,Context related to Question with multi answers2,Q2 MultiAnswer1,Q2 MultiAnswer2,Context related to MultiAnswer Q2,topic2,1
+Question with multi answers 3?,Context related to Question with multi answers3,Q3 MultiAnswer1,Q3 MultiAnswer2,Context related to MultiAnswer Q3,topic1,0
+Question with multi answers 4?,Context related to Question with multi answers4,Q4 MultiAnswer1,Q4 MultiAnswer2,Context related to MultiAnswer Q4,null,1

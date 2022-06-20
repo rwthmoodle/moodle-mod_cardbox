@@ -1,0 +1,27 @@
+<div class="cardbox-card">
+
+    {{#frontimages}}
+        <div class="cardbox-image container-fluid">
+            <img src='{{frontimagesrc}}' class='img-fluid mx-auto d-block'>
+        </div>
+    {{/frontimages}}
+
+    {{#fronttexts}}
+        <div class="cardbox-text text-center">
+            <h3>{{{fronttext}}}</h3>
+        </div>
+    {{/fronttexts}}
+
+    {{#backimages}}
+        <div class="cardbox-image cardbox-back hidden">
+            <img src='{{backimagesrc}}' class='img-fluid mx-auto d-block'>
+        </div>
+    {{/backimages}}
+
+    {{#backtexts}}
+        <div class="cardbox-text cardbox-back text-center hidden">
+            <h3>{{{backtext}}}</h3>
+        </div>
+    {{/backtexts}}
+
+</div>

@@ -1,0 +1,22 @@
+{{^ismanager}}
+<div class="row cardbox-statistics">
+
+    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4"><canvas id="cardbox-statistics-cardboxstatus" class="cardbox-card-left-side" width="100" height="100"></canvas></div>
+    <!--<div class="col-sm-2"></div>-->
+    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4"><canvas id="cardbox-statistics-progress-over-time" class="cardbox-card-right-side" width="100" height="100"></canvas></div>
+    <div class="hidden-xs col-lg-1 col-xl-2"></div>
+</div>
+{{/ismanager}}
+{{#ismanager}}
+<div class="row new-cardbox-statistics">
+    <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4"><canvas id="cardbox-statistics-absolute-over-deck" class="cardbox-card-right-side" width="100" height="100"></canvas></div>
+    {{#displayweeklystats}}
+        <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4"><canvas id="cardbox-statistics-number-of-cards" class="cardbox-card-left-side" width="100" height="100"></canvas></div>
+        <div class="col-xs-12 col-sm-6 col-lg-5 col-xl-4"><canvas id="cardbox-statistics-duration-of-a-session" class="cardbox-card-right-side" width="100" height="100"></canvas></div>
+    {{/displayweeklystats}}
+</div>
+{{/ismanager}}
+{{#infoenrolledstudentsthreshold}}
+<div class="alert alert-info alert-block fade in" role="alert" style="margin-top: 1rem">{{{infoenrolledstudentsthreshold}}}</div>
+{{/infoenrolledstudentsthreshold}}

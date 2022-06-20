@@ -1,0 +1,28 @@
+<div class="alert alert-success" role="alert">
+    {{successfullyimported}} {{#str}}successmsg, mod_cardbox{{/str}}
+</div>
+{{#err}}
+<div class="alert alert-danger" role="alert">
+    {{#str}}errormsg, mod_cardbox{{/str}}
+</div>
+<br>
+<table class="table" >
+    <thead>
+        <tr>
+            <th> {{#str}} uucsvline, tool_uploaduser {{/str}}</th>
+            <th>{{#str}}status, mod_cardbox{{/str}}</th>
+        </tr>
+    </thead>
+    <tbody>
+    {{#rows}}
+    <tr>
+    <td>{{line}}</td>
+    <td>{{status}}</td>
+    </tr>
+    {{/rows}}
+    </tbody>
+</table>
+{{/err}}
+<br>
+
+<div><a href="{{continueurl}}" class="btn btn-secondary">{{#str}}continue, mod_cardbox{{/str}}</a></div>

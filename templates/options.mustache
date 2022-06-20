@@ -1,0 +1,63 @@
+<div class="modal-dialog" style="max-width: 400px">
+    <div class="modal-content">
+
+        <div class="modal-header">
+          <h4 class="modal-title">{{# str }} titleforchoosesettings, cardbox {{/ str }}</h4>
+          <button id="cardbox-close-settings" type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+
+        <div class="modal-body cardbox-options">
+
+            <div class="item a goldenleft">{{# str }} choosecorrectionmode, cardbox {{/ str }}</div>
+            <div class="item b goldenrigth">
+                <form id="cardbox-form" class="felement">
+                    <input type="radio" id="cardbox-autocorrection" name="correctionmode" value="0" class="form-check-input" {{#autoenabled}}checked{{/autoenabled}} {{#autodisabled}}disabled{{/autodisabled}}> {{# str }} autocorrection, cardbox {{/ str }}<br>
+                    <input type="radio" id="cardbox-selfcorrection" name="correctionmode" value="1" class="form-check-input" {{#autodisabled}}checked{{/autodisabled}}>{{# str }} selfcorrection, cardbox {{/ str }}
+                </form>
+            </div>
+
+            <div class="item c goldenleft" id="cardbox-onlyonetopic-select">{{# str }} onlyonetopic, cardbox {{/ str }}</div>
+            <div class="item d goldenrigth" id="cardbox-onlyonetopic-choices">
+                <select id="cardbox-onlyonetopic" name="onlyonetopic" class="custom-select">
+                    {{#choicestopics}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/choicestopics}}
+                </select>
+            </div>
+
+            <div class="item e goldenleft" id="cardbox-topic-description">{{# str }} weightopic, cardbox {{/ str }}</div>
+            <div class="item f goldenrigth" id="cardbox-topic-select">
+                <select id="cardbox-topic" name="topic" class="custom-select">
+                    {{#topics}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/topics}}
+                </select>
+            </div>
+            
+            <div id="cardbox-practiceall-select" class="item g goldenleft">{{# str }} practiceall, cardbox {{/ str }}&nbsp; {{{helpbuttonpracticeall}}}</div>
+            <div id="cardbox-practiceall-choices" class="item h goldenrigth">
+                <form id="cardbox-form-practiceall" class="felement">
+                    <input type="radio" id="cardbox-practiceall-yes" name="practiceall" value="0" class="form-check-input"> {{# str }} yes, cardbox {{/ str }}<br>
+                    <input type="radio" id="cardbox-practiceall-no" name="practiceall" value="1" class="form-check-input" checked>{{# str }} no, cardbox {{/ str }}
+                </form>
+
+            </div>
+
+            <div class="item i goldenleft" id="cardbox-amount-cards">{{# str }} maxnumbercardspractice, cardbox {{/ str }}</div>
+            <div class="item j goldenrigth" id="cardbox-amount-cards-select">
+                <select id="cardbox-amountcards" name="amount-cards" class="custom-select">
+                    {{#amountcards}}
+                        <option value="{{value}}">{{label}}</option>
+                    {{/amountcards}}
+                </select>
+            </div>
+
+        </div>
+
+        <div class="modal-footer">
+          <button id="cardbox-apply-settings" type="button" class="btn btn-primary">{{# str }} beginpractice, cardbox {{/ str }}</button>
+          <button id="cardbox-cancel-settings" type="button" class="btn btn-secondary" data-dismiss="modal">{{# str }} cancel, cardbox {{/ str }}</button>
+        </div>
+
+    </div>
+</div>

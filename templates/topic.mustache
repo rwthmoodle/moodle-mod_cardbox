@@ -1,0 +1,37 @@
+<div id="cardbox-topics">         
+
+    <div class="cardbox-create-topic-titles">{{#str}} addnewtopic, cardbox {{/str}}</div>
+    <div class="col-xs-6" style="display: flex"> 
+        <input id="create-new-topic" type="text" class="form-control">
+        <input id="cardbox-submit-new-topic" type="submit" value="{{# str }} createtopic, cardbox {{/ str }}" class="btn btn-primary">
+    </div>
+
+    
+    {{#notopics}}
+    <div class="cardbox-create-topic-titles">{{#str}} notopics, cardbox {{/str}}</div>
+    {{/notopics}}
+
+    {{^notopics}}
+    <div class="cardbox-create-topic-titles">{{#str}} existingtopics, cardbox {{/str}}</div>
+
+    {{#topic}}
+
+        <div class="col-xs-2" style="margin-bottom: 1rem">
+            <div id="cardbox-topic-in-review" data-topicid="{{id}}" data-titel="{{{titel}}}">
+                <div id="cardbox-topic-{{id}}">
+                    <div id="topictitel-{{id}}" style="display: inline">{{{titel}}}</div> ({{cards}} {{# str }} flashcards, cardbox {{/ str }})
+                    <button id="cardbox-edit-topics-{{id}}" type="button" class="quickediticon visibleifjs cardbox-edittopics-edit-button" title="{{# str }} edit, cardbox {{/ str }}" style="background-color: transparent;"><i class="icon fa fa-pencil fa-fw"></i></button>
+                    <button id="cardbox-delete-topics-{{id}}" type="button" class="quickediticon visibleifjs cardbox-edittopics-delete-button" title="{{# str }} delete, cardbox {{/ str }}" style="background-color: transparent;"><i class="icon fa fa-trash fa-fw"></i></button>
+                </div>
+                <div id="cardbox-topic-rename-{{id}}" class="displaynone">
+                    <input id='cardbox-changedtopic-{{id}}' type='text'  name='changedname' class='form-control' autofocus>
+                </div>
+            </div>
+        </div>
+
+    {{/topic}}
+    {{/notopics}}
+    
+    
+
+</div>

@@ -1,0 +1,40 @@
+<div id="cardbox-practice-content" class="row">
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <br>
+
+    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
+        {{# str }} suggestanswer_label, cardbox {{/ str }}
+        <br>
+        {{#question}}
+            {{> mod_cardbox/cardside }}
+        {{/question}}
+    </div>
+   <div class="hidden-xs col-md-1 col-lg-2 col-xl-3">
+    </div>
+
+</div>
+
+<div id="cardbox-practice-user-interaction" class="row">
+
+    {{#contextquestionavailable}}
+
+    <div class="hidden-xs col-lg-1 col-xl-2 col-xl-3"></div>
+        <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6" >{{{contextquestion}}}</div>
+    <div class="hidden-xs col-lg-1 col-xl-2 col-xl-3"></div>
+
+    {{/contextquestionavailable}}
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3 cardbox-userinput"></div>
+    <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
+        <form id="cardbox-inputform" autocomplete="off">
+{{!             {{#inputfields}}
+                <input id="cardbox-suggestanswer-input" type="text" name="answer" class="form-control cardbox-userinput">
+{{!             {{/inputfields}}
+            <button id="cardbox-savesuggestedanswer" type="button" class="btn btn-primary">{{# str }} suggestanswer_send, cardbox {{/ str }}</button>
+            <button id="cardbox-cancel-button" type="button" class="btn btn-secondary">{{# str }} cancel, cardbox {{/ str }}</button>
+        </form>
+    </div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+
+</div>

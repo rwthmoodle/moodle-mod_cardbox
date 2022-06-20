@@ -1,0 +1,55 @@
+<div id="cardbox-practice-content" class="row">
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6" style="margin-bottom: 10px">
+        <button id="cardbox-end-session" type="button" class="btn btn-secondary">{{# str }} endpractice, cardbox {{/ str }}</button>
+    </div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6">{{topic}}</div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div id="cardbox-cardcontainer-question" class="col-xs-12 col-md-10 col-lg-8 col-xl-6 cardbox-selfcheck-question-side">
+            {{#question}}
+                {{> mod_cardbox/cardside }}
+            {{/question}}
+            {{#deck}}
+            <img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon">
+            {{/deck}}
+        <div id="icon-progress" style="float: right">{{icon}}</div>
+            
+    </div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3">
+    <!--<button id="cardbox-see-options" type="button" class="btn btn-primary" data-toggle="modal" data-target="#cardboxPracticeSettings">{{# str }} options, cardbox {{/ str }}</button>-->
+    </div>
+
+</div>
+
+
+<div id="cardbox-practice-user-interaction" class="row">
+
+    {{#contextquestionavailable}}
+
+    <div class="hidden-xs col-lg-1 col-xl-2 col-xl-3"></div>
+        <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6">{{{contextquestion}}}</div>
+    <div class="hidden-xs col-lg-1 col-xl-2 col-xl-3"></div>
+
+    {{/contextquestionavailable}}
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
+        <form id="cardbox-inputform">
+            <input id="cardbox-check-answer" type="submit" value="{{# str }} checkanswer, cardbox {{/ str }}" class="btn btn-primary">
+        </form>
+    </div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+    <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6"> 
+        <div style="float: right; margin-top: 15px">{{# str }} cardsleft, cardbox {{/ str }} {{cardsleft}}</div>
+    </div>
+    <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
+
+</div>

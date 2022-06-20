@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="mod/cardbox/db" VERSION="20181017" COMMENT="XMLDB file for Moodle mod/cardbox"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="cardbox" COMMENT="Defines cardbox">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="course" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="name" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+        <FIELD NAME="intro" TYPE="text" NOTNULL="false" SEQUENCE="false"/>
+        <FIELD NAME="introformat" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="autocorrection" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="1" SEQUENCE="false"/>
+        <FIELD NAME="necessaryanswers" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="necessaryanswerslocked" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="casesensitive" TYPE="int" LENGTH="4" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="Primary key for cardbox"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course_idx" UNIQUE="false" FIELDS="course"/>
+      </INDEXES>
+    </TABLE>
+    <TABLE NAME="cardbox_topics" COMMENT="Default comment for the table, please edit me">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="topicname" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="cardboxid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="cardboxid_idx" UNIQUE="false" FIELDS="cardboxid"/>
+            <INDEX NAME="topicname_idx" UNIQUE="false" FIELDS="topicname"/>
+        </INDEXES>
+    </TABLE>
+    <TABLE NAME="cardbox_cards" COMMENT="Save meta information about each flashcard">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="cardbox" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="topic" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+            <FIELD NAME="author" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="timecreated" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="timemodified" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+            <FIELD NAME="approved" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            <FIELD NAME="approvedby" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+            <FIELD NAME="necessaryanswers" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+            <FIELD NAME="disableautocorrect" TYPE="int" LENGTH="2" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="cardbox_idx" UNIQUE="false" FIELDS="cardbox"/>
+            <INDEX NAME="topic_idx" UNIQUE="false" FIELDS="topic"/>
+            <INDEX NAME="cardboxapproved_idx" UNIQUE="false" FIELDS="cardbox, approved"/>
+        </INDEXES>
+    </TABLE>
+    <TABLE NAME="cardbox_progress" COMMENT="traces the progress of cards through the boxes for each user">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="card" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="cardposition" TYPE="int" LENGTH="2" NOTNULL="false" SEQUENCE="false"/>
+            <FIELD NAME="lastpracticed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false"/>
+            <FIELD NAME="repetitions" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="userid_card_idx" UNIQUE="false" FIELDS="userid, card"/>
+            <INDEX NAME="cardposition_idx" UNIQUE="false" FIELDS="cardposition"/>
+            <INDEX NAME="card_idx" UNIQUE="false" FIELDS="card"/>
+        </INDEXES>
+
+    </TABLE>
+    <TABLE NAME="cardbox_cardcontents" COMMENT="saves card content such as prompts, questions, answers and images">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="card" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="cardside" TYPE="int" LENGTH="2" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="contenttype" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="area" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="content" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="card_contenttype_idx" UNIQUE="false" FIELDS="card, contenttype"/>
+            <INDEX NAME="card_idx" UNIQUE="false" FIELDS="card"/>
+            <INDEX NAME="cardside_idx" UNIQUE="false" FIELDS="cardside"/>
+            <INDEX NAME="contenttype_idx" UNIQUE="false" FIELDS="contenttype"/>
+        </INDEXES>
+    </TABLE>
+    <TABLE NAME="cardbox_statistics" COMMENT="This table tracks the users' performance over time.">
+        <FIELDS>
+            <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+            <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="cardboxid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="timeofpractice" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="numberofcards" TYPE="int" LENGTH="4" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false"/>
+            <FIELD NAME="percentcorrect" TYPE="int" LENGTH="4" NOTNULL="true" SEQUENCE="false"/>
+        </FIELDS>
+        <KEYS>
+            <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        </KEYS>
+        <INDEXES>
+            <INDEX NAME="userid_cardboxid_idx" UNIQUE="false" FIELDS="userid, cardboxid"/>
+            <INDEX NAME="cardboxid_idx" UNIQUE="false" FIELDS="cardboxid"/>
+        </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
+
