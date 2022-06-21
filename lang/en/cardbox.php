@@ -243,8 +243,8 @@ $string['rejectcardinfo'] = 'Do you want to reject the selected {$a} cards? Thes
 
 $string['allanswersnecessary'] = "All";
 $string['oneanswersnecessary'] = "One";
-$string['allanswersnecessary_help'] = "<b>all answers necessary</b>";
-$string['oneanswersnecessary_help'] = "<b>one answer necessary</b>";
+$string['allanswersnecessary_help'] = "all answers necessary";
+$string['oneanswersnecessary_help'] = "one answer necessary";
 
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
@@ -287,8 +287,6 @@ $string['student:deckdescription'] = 'This card lies in deck {$a}';
 $string['manager:deckdescription'] = 'On average, this card lies in deck {$a} among all students';
 $string['manager:repeatdesc'] = 'This card was mastered by students, on average, after {$a} repetitions';
 $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
-$string['allans'] = 'All answers are necessary';
-$string['oneans'] = 'Only one answer is necessary';
 
 // Edit topics Tab.
 $string['deletetopic'] = 'Delete topic';

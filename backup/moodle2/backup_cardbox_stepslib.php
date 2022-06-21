@@ -55,7 +55,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
                                                     'necessaryanswers', 'necessaryanswerslocked', 'timecreated', 'timemodified'));
 
         $cards = new backup_nested_element('cards');
-        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved', 'approvedby', 'necessaryanswers'));
+        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved', 'approvedby', 'necessaryanswers', 'disableautocorrect'));
 
         $cardcontents = new backup_nested_element('cardcontents');
         $cardcontent = new backup_nested_element('cardcontent', array('id'), array('card', 'cardside', 'contenttype', 'area', 'content'));

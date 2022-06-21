@@ -227,16 +227,6 @@ class EventHandling {
 
         }.bind(this));
 
-        document.getElementById('cardbox-suggestanswer').addEventListener('click', function(e) {
-
-            // Prevent page reload.
-            e.preventDefault();
-
-            // Notify controller of this click event.
-            this.controller.reactTo('suggest-answer');
-
-        }.bind(this));
-
     }
     /**
      * 

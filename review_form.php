@@ -76,12 +76,12 @@ class mod_cardbox_review_form extends moodleform {
             if ($necessaryanswers === "1") {
 
                 $howmanyanswersnecessary = '<span class="badge badge-dark" data-toggle = "tooltip" title = "'.
-                                           get_string("oneans", "cardbox").'">'.
+                                           get_string("oneanswersnecessary_help", "cardbox").'">'.
                                            get_string("oneanswersnecessary", "cardbox").'</span>';
 
             } else {
                 $howmanyanswersnecessary = '<span class="badge badge-dark" data-toggle = "tooltip" title = "'.
-                                           get_string("allans", "cardbox").'">'.
+                                           get_string("allanswersnecessary_help", "cardbox").'">'.
                                            get_string("allanswersnecessary", "cardbox").'</span>';
             }
 

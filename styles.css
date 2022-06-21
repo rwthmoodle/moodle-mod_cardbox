@@ -1,64 +1,58 @@
 .path-mod-cardbox button {
-    border: none !important;
+    border: none;
 }
-
-.path-mod-cardbox .cardbox-studyview {
-
-}
-
-/*.path-mod-cardbox #cardbox-see-options {
-    display: none;
-}*/
 
 #cardbox-cardcontainer-question {
-    /*padding: 30px;*/
     display: grid;
     grid-template-columns: 90% 10%;
 }
 
-
-.path-mod-cardbox .cardbox-card {
-    /*margin: 0 auto;
-    /*max-width: 700px;
-    border: 0.5px solid !important;
-    border-color: #cccccc !important;
-    padding-bottom: 15px;*/
+td.cell-c0,
+td.cell-c1,
+td.cell-c2,
+td.cell-c3,
+td.cell-c4,
+td.cell-c5,
+td.cell-c6,
+td.cell-c7 {
+    text-align: center;
 }
-td.cell-c0, td.cell-c1, td.cell-c2, td.cell-c3, td.cell-c4, td.cell-c5,  td.cell-c6, td.cell-c7 {
-    text-align:center;
-}
-th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-c5, th.header-c6, th.header-c7{
-    text-align:center;
-}
-
-.path-mod-cardbox .cardbox-text {
-    
+th.header-c0,
+th.header-c1,
+th.header-c2,
+th.header-c3,
+th.header-c4,
+th.header-c5,
+th.header-c6,
+th.header-c7 {
+    text-align: center;
 }
 
 .path-mod-cardbox .img-fluid {
     max-width: 100%;
     max-height: 600px;
-    
+
 }
 
-.path-mod-cardbox #cardbox-userinput, .path-mod-cardbox .cardbox-userinput {
+.path-mod-cardbox #cardbox-userinput,
+.path-mod-cardbox .cardbox-userinput {
     margin-top: 10px;
     margin-bottom: 15px;
 }
 
 .path-mod-cardbox .cardbox-input-color-correct {
-    border-color: #2ab300!important;
+    border-color: #2ab300;
     border: solid;
     margin-bottom: 5px;
 }
 
 .path-mod-cardbox .cardbox-input-color-incorrect {
-    border-color: #ac0303!important;
+    border-color: #ac0303;
     border: solid;
     margin-bottom: 5px;
 }
 
-.path-mod-cardbox .hidden {    
+.path-mod-cardbox .hidden {
     display: none;
 }
 
@@ -76,15 +70,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     float: right;
     width: fit-content;
 }
-.cardbox_card_deck_icon{
-    height:30px;
+.cardbox_card_deck_icon {
+    height: 30px;
     width: 30px;
     margin-bottom: 1%;
     padding-bottom: 2px;
 }
-.cardbox_autocorrect_icon{
+.cardbox_autocorrect_icon {
     height: 1.6em;
-    margin-left:2%;
+    margin-left: 2%;
 }
 .path-mod-cardbox #cardbox-practice {
     margin-top: 30px;
@@ -96,18 +90,13 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     min-height: 2em;
 }
 
-/* .path-mod-cardbox #cardbox-answer-text .cardbox-card-text {
-    font-size: .9375rem!important;
-    font-weight: bold;
-} */
-
 .path-mod-cardbox #review-button-wrapper {
     text-align: center;
     max-width: fit-content;
-    padding-right: 0px;;
+    padding-right: 0px;
 }
 
-.path-mod-cardbox #cardbox-topic-in-review{
+.path-mod-cardbox #cardbox-topic-in-review {
     display: flex;
 }
 
@@ -116,22 +105,18 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     margin-top: 50px;
     margin-bottom: 30px;
     display: flex;
-    justify-content: center
+    justify-content: center;
 }
 
-.topic-review, .topic-overview {
+.topic-review,
+.topic-overview {
     margin-bottom: 10px;
-/*     width: 100%;
-    margin-left: 11%;
-    margin-right: 24%; */
 }
 
 .path-mod-cardbox .cardbox-review-button,
-.path-mod-cardbox .cardbox-overview-button-edit, 
+.path-mod-cardbox .cardbox-overview-button-edit,
 .path-mod-cardbox .cardbox-overview-button-delete {
     border-radius: 0px;
-    /*margin-left: 1em;
-    margin-left: 1em;*/
 }
 
 .path-mod-cardbox .cardbox-statistics {
@@ -141,7 +126,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 /************************** Practice: modal with practice options *****************************************************/
 
 .path-mod-cardbox .modal {
-    background-color: rgb(0,0,0); /* Fallback color */
+    /*background-color: rgb(0, 0, 0); /* Fallback color */
     background-color: rgba(32, 32, 32, 0.75); /* Black w/ opacity */
 }
 
@@ -200,12 +185,12 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 
 .path-mod-cardbox .item.g {
     grid-area: G;
-/*     margin-bottom: 0em; */
+    /*margin-bottom: 0em; */
 }
 
 .path-mod-cardbox .item.h {
     grid-area: H;
-/*     margin-bottom: 0em; */
+    /* margin-bottom: 0em; */
     margin-left: 20px;
 }
 
@@ -228,14 +213,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 /* Extra small devices (portrait phones, less than 576px)
  No media query for `xs` since this is the default in Bootstrap*/
 
-.path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-text {
-    font-size: 16px !important;
+.path-mod-cardbox .cardbox-card-text,
+.path-mod-cardbox .cardbox-text {
+    font-size: 16px;
 }
-#review-div{
+#review-div {
     display: none;
 }
 
-.sticky-review-arr{
+.sticky-review-arr {
     position: fixed;
     bottom: 50%;
     left: 80%;
@@ -243,10 +229,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     width: 400px;
 }
 
-.cardbox-card-context{
+.cardbox-card-context {
     font-size: 0.9375rem;
     margin-bottom: 1%;
-    height:10%;
+    height: 10%;
 }
 
 .path-mod-cardbox .cardbox-selfcheck-question-side {
@@ -254,38 +240,39 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 .path-mod-cardbox .cardbox-column {
-    padding-left: 0em !important;
-    padding-right: 0em !important;
+    padding-left: 0em;
+    padding-right: 0em;
 }
 
 .path-mod-cardbox .cardbox-context-overview {
-    margin-left: 16% !important;
-    margin-right: 16% !important;
+    margin-left: 16%;
+    margin-right: 16%;
     margin-bottom: 1em;
     padding: 10px;
 }
 
 .path-mod-cardbox .cardbox-context-practice {
-    margin-left: 25% !important;
-    margin-right: 25% !important;
+    margin-left: 25%;
+    margin-right: 25%;
     padding: 10px;
-    margin-top: 1em, 
+    margin-top: 1em;
 }
 
-.path-mod-cardbox .cardbox-card-left-side, .path-mod-cardbox .cardbox-card-right-side {
+.path-mod-cardbox .cardbox-card-left-side,
+.path-mod-cardbox .cardbox-card-right-side {
     border: 1px solid #e6e6e6;
     border-radius: 3px;
-/*     margin-bottom: 2em; */
+    /* margin-bottom: 2em; */
     padding: 1em;
     height: 100%;
 }
 .cardbox-card-right-side-multi {
     border-radius: 3px;
-/*     margin-bottom: 2em; */
+    /* margin-bottom: 2em; */
     margin-right: 1em;
     margin-left: 0.2em;
     height: 100%;
-    display:grid;
+    display: grid;
 }
 .cardbox-cardside-multi {
     border: 1px solid #e6e6e6;
@@ -299,31 +286,32 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     border-color: mediumvioletred;
     border-style: solid;
 }
-.checkbox-card{
+.checkbox-card {
     margin-left: 2%;
 }
-.kontext-grid{
+.kontext-grid {
     display: grid;
-    grid-template-columns: 33.33% 33.33% ;
+    grid-template-columns: 33.33% 33.33%;
     justify-content: center;
     grid-gap: 2.3%;
     margin-left: 10%;
     margin-right: 22%;
 }
+
 @media (max-width: 600px) {
     .review-button {
         margin-top: 10%;
     }
     .cardbox-qside {
-        margin-right:1%;
+        margin-right: 1%;
         margin-left: 1%;
     }
     .cardbox-aside {
-        margin-right:1%;
+        margin-right: 1%;
         margin-left: 1%;
         margin-top: 10%;
     }
-    .context-column{
+    .context-column {
         text-align: center;
         font-style: italic;
     }
@@ -334,12 +322,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
         margin-left: 0%;
     }
 }
+
 @media (max-width: 323px) {
     .review-button {
         margin-top: 10%;
     }
-    .path-mod-cardbox #cardbox-feedback-wrapper, .path-mod-cardbox #cardbox-feedback, .path-mod-cardbox #cardbox-proceed-buttons {
-        padding: 0em !important;
+    .path-mod-cardbox #cardbox-feedback-wrapper,
+    .path-mod-cardbox #cardbox-feedback,
+    .path-mod-cardbox #cardbox-proceed-buttons {
+        padding: 0em;
     }
 
 }
@@ -349,8 +340,9 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     .review-button {
         margin-top: 10%;
     }
-    .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
-        font-size: 1.2rem !important;
+    .path-mod-cardbox .cardbox-card-text,
+    .path-mod-cardbox .cardbox-image {
+        font-size: 1.2rem;
     }
 
     .path-mod-cardbox .cardbox-card-left-side {
@@ -358,7 +350,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
         margin-left: 1em;
         padding: 2em;
     }
-    
+
     .path-mod-cardbox .cardbox-card-right-side {
         margin-right: 1em;
         margin-left: 0.2em;
@@ -366,15 +358,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     }
 
     .path-mod-cardbox .cardbox-feedback {
-        padding-left: 0 !important;
-        padding-right: 0 !important;
+        padding-left: 0;
+        padding-right: 0;
     }
 
 }
 
 /* Medium devices (landscape tablets, 768px and up) */
 @media (min-width: 768px) {
-    
+
     .path-mod-cardbox .cardbox-feedback {
         padding-left: 2em;
         padding-right: 2em;
@@ -383,7 +375,7 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
         margin-left: 13.5%;
     }
 
-    
+
 }
 
 /* col-lg Large devices (laptops/desktops, 992px and up) */
@@ -401,18 +393,19 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 }
 
 @media only screen and (min-width: 1062px) {
-    .path-mod-cardbox .cardbox-card-text, .path-mod-cardbox .cardbox-image {
-        font-size: 1.4rem !important;
+    .path-mod-cardbox .cardbox-card-text,
+    .path-mod-cardbox .cardbox-image {
+        font-size: 1.4rem;
     }
 }
 
 .path-mod-cardbox #cardbox-feedback {
-/*     font-size: 16px; */
-/*     padding-top: 0.2em; */
+    /* font-size: 16px; */
+    /* padding-top: 0.2em; */
     margin-top: 4%;
     font-weight: 700;
-/*     margin-bottom: 1%; */
-/*     font-size: 1.4rem!important; */
+    /* margin-bottom: 1%; */
+    /* font-size: 1.4rem!important; */
 }
 
 .path-mod-cardbox .cardbox-feedback {
@@ -423,32 +416,30 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     padding-right: 2em;*/
 }
 
-.path-mod-cardbox #cardbox-proceed-buttons {
-    /*padding-left: 2em;*/
-}
 
-.path-mod-cardbox #cardbox-suggestanswer, .path-mod-cardbox #cardbox-cancel-button,
+.path-mod-cardbox #cardbox-suggestanswer,
+.path-mod-cardbox #cardbox-cancel-button,
 .path-mod-cardbox #cardbox-mark-as-incorrect {
     margin-right: 0.5em;
 }
 
 .path-mod-cardbox .cardbox-success {
-/*     background-color: #8dc060;
+    /* background-color: #8dc060;
     border-color: #8dc060; */
-    color: #2ab300!important;
+    color: #2ab300;
 }
 
 .path-mod-cardbox .cardbox-warning {
-/*     background-color: #fff059;
+    /*     background-color: #fff059;
     border-color: #fff059;
- */    color: #b1a415;
+    */    color: #b1a415;
 }
 
 .path-mod-cardbox .cardbox-error {
-/*     background-color: #cc071e;
+    /*     background-color: #cc071e;
     border-color: #cc071e;
     color: white; */
-    color: #ac0303!important;
+    color: #ac0303;
 }
 
 .path-mod-cardbox #id_addcontextques,
@@ -466,9 +457,15 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
 .path-mod-cardbox #fitem_id_questioncontext,
 .path-mod-cardbox #fitem_id_answercontext,
 .path-mod-cardbox #fgroup_id_imgdescriptionar,
-.path-mod-cardbox #fitem_id_answer2, .path-mod-cardbox #fitem_id_answer3, .path-mod-cardbox #fitem_id_answer4, 
-.path-mod-cardbox #fitem_id_answer5, .path-mod-cardbox #fitem_id_answer6, .path-mod-cardbox #fitem_id_answer7, 
-.path-mod-cardbox #fitem_id_answer8, .path-mod-cardbox #fitem_id_answer9, .path-mod-cardbox #fitem_id_answer10 {
+.path-mod-cardbox #fitem_id_answer2,
+.path-mod-cardbox #fitem_id_answer3,
+.path-mod-cardbox #fitem_id_answer4,
+.path-mod-cardbox #fitem_id_answer5,
+.path-mod-cardbox #fitem_id_answer6,
+.path-mod-cardbox #fitem_id_answer7,
+.path-mod-cardbox #fitem_id_answer8,
+.path-mod-cardbox #fitem_id_answer9,
+.path-mod-cardbox #fitem_id_answer10 {
     display: none;
 }
 
@@ -520,10 +517,10 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     display: none;
 }
 
-.review-topic{
-    margin-left : 13%;
+.review-topic {
+    margin-left: 13%;
 }
-.common-margin{
+.common-margin {
     font-size: small;
 }
 /*.mul-ans-text{
@@ -531,36 +528,37 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     right: 9em;
     bottom: 1em;
 }*/
-.anscount_icon{
+.anscount_icon {
     height: 1.75em;
 }
-.autocorrect_icon{
+.autocorrect_icon {
     height: 1.6em;
 }
-.ques-teil{
-    padding:0px;
+.ques-teil {
+    padding: 0px;
 }
-.ans-teil{
-    padding:0px;
+.ans-teil {
+    padding: 0px;
 }
-@media (max-width:800px) {
-    .review-topic{
-        margin-left : 1%;
+
+@media (max-width: 800px) {
+    .review-topic {
+        margin-left: 1%;
     }
-    .common-margin{
+    .common-margin {
         font-size: x-small;
     }
-    .cardbox-card-right-side-multi{
+    .cardbox-card-right-side-multi {
         margin-right: 0em;
         margin-left: 0em;
     }
-    .ques-teil{
-        padding:0px;
+    .ques-teil {
+        padding: 0px;
     }
-    .ans-teil{
-        padding:0px;
+    .ans-teil {
+        padding: 0px;
     }
-    .review-button-wrapper{
+    .review-button-wrapper {
         margin-top: 2em;
     }
     .cardbox-card-left-side {
@@ -586,4 +584,4 @@ th.header-c0, th.header-c1, th.header-c2, th.header-c3, th.header-c4, th.header-
     position: relative;
     display: inline-block;
     border-bottom: 1px dotted black;
-  }
+}
