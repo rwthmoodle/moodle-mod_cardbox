@@ -240,8 +240,8 @@ $string['rejectcardinfo'] = 'Möchten Sie die ausgewählten {$a} Karten ablehnen
 
 $string['allanswersnecessary'] = "Alle";
 $string['oneanswersnecessary'] = "Nur Eine";
-$string['allanswersnecessary_help'] = "<b>Alle Antworten notwendig</b>";
-$string['oneanswersnecessary_help'] = "<b>Nue eine Antwort notwendig</b>";
+$string['allanswersnecessary_help'] = "Alle Antworten notwendig";
+$string['oneanswersnecessary_help'] = "Nue eine Antwort notwendig";
 // Statistics
 $string['strftimedate'] = '%d. %B %Y';
 $string['strftimedatetime'] = '%d. %b %Y, %H:%M';
