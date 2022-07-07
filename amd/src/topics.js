@@ -24,6 +24,10 @@ export const init = (cmid) => {
         registerEventListeners(cmid);
 };
 
+/**
+ * Function to register and defines event listeners
+ * @param {int} cmid
+ */
 function registerEventListeners(cmid) {
 
     const deletebtns = document.querySelectorAll('#cardbox-topics .cardbox-edittopics-delete-button');
@@ -51,7 +55,12 @@ function registerEventListeners(cmid) {
         savenewtopic(cmid);
     });
 }
-
+/**
+ * Function to delete a topic from Cardbox instance
+ * @param {int} cmid
+ * @param {int} topicid
+ * @param {string} topictitel
+ */
 function deletetopic(cmid, topicid, topictitel) {
     getStrings([
         {key: 'deletetopic', component: 'cardbox'},
@@ -74,7 +83,12 @@ function deletetopic(cmid, topicid, topictitel) {
         });
     }).catch(Notification.exception);
 }
-
+/**
+ * Function to edit an existing topic from the cardbox instance
+ * @param {int} cmid
+ * @param {int} topicid
+ * @param {string} topictitel
+ */
 function edittopic(cmid, topicid, topictitel) {
 
     document.getElementById("cardbox-topic-"+topicid).classList.add('displaynone');
@@ -112,7 +126,10 @@ function edittopic(cmid, topicid, topictitel) {
     });
 
 }
-
+/**
+ * Function to save new topic to the cardbox instance
+ * @param {int} cmid
+ */
 function savenewtopic (cmid) {
     var newtopic = document.getElementById("create-new-topic").value;
     if (newtopic != "") {
