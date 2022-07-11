@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die;
 
 // Meta information
 $string['cardbox'] = 'Card Box';
+$string['activityname'] = 'Cardbox activity';
 $string['modulename'] = 'Card Box';
 $string['modulename_help'] = '<p>This activity allows you to create flashcards for vocabulary, technical terms, formulae, etc. that you want to remember. You can study with the cards as you would do with a card box.</p><p>Cards can be created by every participant, but are only used for practice if a teacher has accepted them.</p>';
 $string['pluginname'] = 'Card Box';

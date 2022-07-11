@@ -38,7 +38,7 @@ require_login($course, true, $cm);
 
 $context = context_module::instance($cm->id);
 
-$PAGE->set_title('Cardbox activity');
+$PAGE->set_title(get_string('activityname', 'cardbox'));
 $PAGE->set_heading($course->fullname); // Set course name for display.
 
 // Go to (default) page.

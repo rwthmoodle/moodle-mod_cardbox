@@ -744,7 +744,7 @@ if ($action === 'massimport') {
                 echo "<h2>". get_string('importpreview', 'cardbox')."</h2>";
                 $csvcolumns = $cir->get_columns();
                 $errorflag = 0; // No error.
-                $columnexceptions = validate_columns($csvcolumns, LONG_DESCRIPTION);
+                $columnexceptions = cardbox_import_validate_columns($csvcolumns, LONG_DESCRIPTION);
                 if (!empty($columnexceptions[0])) {
                     echo '<div class="alert alert-danger" role="alert">Error(s)<ul>';
                     foreach ($columnexceptions[0] as $error) {
