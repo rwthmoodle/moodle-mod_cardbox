@@ -33,7 +33,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
 
     var __performance = __params['performance'];
 
-    require(['jquery', 'core/templates', 'chartjs'], function ($, templates, chart) {
+    require(['jquery', 'core/templates', 'core/chartjs'], function ($, templates, chart) {
     
         if(__ismanager) {
             displayAbsoluteCardsOverDecks();

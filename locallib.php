@@ -660,7 +660,7 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
         foreach ($line as $key => $field) {
             $rowcols[$columns[$key]] = s(trim($field));
         }
-        $errors = validate_row($atleastoneanswer, $rowcols);
+        $errors = cardbox_import_validate_row($atleastoneanswer, $rowcols);
         if (empty($errors)) {
             $card = new stdClass;
             $card->topic = null;
@@ -737,7 +737,7 @@ function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $card
     return $errorlines;
 }
 
-function validate_columns(array $filecolumns, int $descriptiontype) {
+function cardbox_import_validate_columns(array $filecolumns, int $descriptiontype) {
     $errors = [];
     $processed = [];
     $filecolumns = array_map('strtolower', $filecolumns);
@@ -763,7 +763,7 @@ function validate_columns(array $filecolumns, int $descriptiontype) {
         'acdisable' => get_string('acdisable', 'cardbox'),
     ];
     foreach ($filecolumns as $key => $column) {
-        if (starts_with($column, 'ans')) { // Replace with str_starts_with in PHP 8.0.
+        if (cardbox_string_starts_with($column, 'ans')) { // Replace with str_starts_with in PHP 8.0.
             array_push($allowed, $column);
         }
     }
@@ -791,7 +791,7 @@ function validate_columns(array $filecolumns, int $descriptiontype) {
     return [$errors];
 }
 
-function validate_row(int $atleastoneanswer, array $rowcols) {
+function cardbox_import_validate_row(int $atleastoneanswer, array $rowcols) {
     $matches  = preg_grep ('/^ans[0-9]*$/', array_keys($rowcols));
     $errors = array();
     foreach ($matches as $match) {
@@ -810,6 +810,6 @@ function validate_row(int $atleastoneanswer, array $rowcols) {
     return $errors;
 }
 
-function starts_with($fullvalue, $searchvalue) {
+function cardbox_string_starts_with($fullvalue, $searchvalue) {
     return substr_compare($fullvalue, $searchvalue, 0, strlen($searchvalue)) === 0;
 }
