@@ -42,7 +42,7 @@ const Case_SelfCheck = 1;
  */
 function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals) { // Wrapper function that is called by controller.php.
 
-    require(['jquery', 'core/templates', 'core/notification', 'chartjs'], function ($, templates, notification, chart) {
+    require(['jquery', 'core/templates', 'core/notification', 'core/chartjs'], function ($, templates, notification, chart) {
         
         /*********** 1. Variables and Calls ***********/
 

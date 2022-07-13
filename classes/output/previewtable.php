@@ -73,8 +73,8 @@ class previewtable extends \html_table {
             foreach ($fields as $key => $field) {
                 $rowcols[$this->filecolumns[$key]] = s(trim($field));
             }
-            $errors = validate_row($atleastoneanswer, $rowcols);
-            $columnexceptions = validate_columns($filecolumns, SHORT_DESCRIPTION);
+            $errors = cardbox_import_validate_row($atleastoneanswer, $rowcols);
+            $columnexceptions = cardbox_import_validate_columns($filecolumns, SHORT_DESCRIPTION);
             if (!empty($errors)) {
                 $errorlines[] = $i;
                 $status = "ERR:";
