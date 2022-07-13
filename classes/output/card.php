@@ -22,7 +22,7 @@
  */
 
 defined('MOODLE_INTERNAL') || die();
-
+define ('MASTERED_POSITION', 6);
 class cardbox_card implements \renderable, \templatable {
 
     private $cmid;
@@ -133,17 +133,17 @@ class cardbox_card implements \renderable, \templatable {
         $showreps = "";
         if ($allowedtoedit) {
             $cardrepssum = $DB->get_records_sql(
-                            'SELECT card, cardposition, SUM(repetitions) as repssum
+                            'SELECT SUM(repetitions) as repssum
                             FROM {cardbox_progress} where
                             cardposition = :cardposition and
-                            card = :cardid group by card',
-                            ['cardid' => $cardid, 'cardposition' => 6]);
+                            card = :cardid',
+                            ['cardid' => $cardid, 'cardposition' => MASTERED_POSITION]);
             $usercount = $DB->count_records_sql(
                 'SELECT count(distinct userid)
                             FROM {cardbox_progress} where
                             cardposition = :cardposition and
                             card = :cardid',
-                            ['cardposition' => 6, 'cardid' => $cardid]
+                            ['cardposition' => MASTERED_POSITION, 'cardid' => $cardid]
             );
             foreach ($cardrepssum as $record) {
                 if (!empty($usercount)) {
@@ -152,11 +152,11 @@ class cardbox_card implements \renderable, \templatable {
             }
         } else {
             $cardrepssum = $DB->get_records_sql(
-                'SELECT card, cardposition, SUM(repetitions) as repssum
+                'SELECT SUM(repetitions) as repssum
                 FROM {cardbox_progress} where
                 cardposition = :cardposition and
                 card = :cardid and userid = :userid group by card',
-                ['cardid' => $cardid, 'cardposition' => 6, 'userid' => $USER->id]);
+                ['cardid' => $cardid, 'cardposition' => MASTERED_POSITION, 'userid' => $USER->id]);
             foreach ($cardrepssum as $record) {
                 $showreps = $record->repssum;
             }
@@ -180,10 +180,10 @@ class cardbox_card implements \renderable, \templatable {
 
         if ($allowedtoedit) {
             $decktostudentcount = $DB->get_records_sql(
-                                'SELECT id, card, cardposition, count(userid) as users FROM {cardbox_progress}
-                                    where card = :cardid
-                                        group by cardposition',
-                                            ['cardid' => $cardid]);
+                'SELECT cardposition, count(userid) as users FROM {cardbox_progress}
+                    where card = :cardid
+                        group by cardposition',
+                            ['cardid' => $cardid]);
             $totalstudent = 0;
             $weightedsum = 0;
             foreach ($decktostudentcount as $carddecktostudent) {
