@@ -2,29 +2,12 @@
     border: none;
 }
 
-#cardbox-cardcontainer-question {
+.path-mod-cardbox #cardbox-cardcontainer-question {
     display: grid;
     grid-template-columns: 90% 10%;
 }
 
-td.cell-c0,
-td.cell-c1,
-td.cell-c2,
-td.cell-c3,
-td.cell-c4,
-td.cell-c5,
-td.cell-c6,
-td.cell-c7 {
-    text-align: center;
-}
-th.header-c0,
-th.header-c1,
-th.header-c2,
-th.header-c3,
-th.header-c4,
-th.header-c5,
-th.header-c6,
-th.header-c7 {
+.path-mod-cardbox .cbx-center-align {
     text-align: center;
 }
 
@@ -70,13 +53,13 @@ th.header-c7 {
     float: right;
     width: fit-content;
 }
-.cardbox_card_deck_icon {
+.path-mod-cardbox .cardbox_card_deck_icon {
     height: 30px;
     width: 30px;
     margin-bottom: 1%;
     padding-bottom: 2px;
 }
-.cardbox_autocorrect_icon {
+.path-mod-cardbox .cardbox_autocorrect_icon {
     height: 1.6em;
     margin-left: 2%;
 }
@@ -108,8 +91,8 @@ th.header-c7 {
     justify-content: center;
 }
 
-.topic-review,
-.topic-overview {
+.path-mod-cardbox .topic-review,
+.path-mod-cardbox .topic-overview {
     margin-bottom: 10px;
 }
 
@@ -130,13 +113,14 @@ th.header-c7 {
     background-color: rgba(32, 32, 32, 0.75); /* Black w/ opacity */
 }
 
+.path-mod-cardbox .modal-content {
+    -webkit-overflow-scrolling: initial !important;
+}
 .path-mod-cardbox .modal-body .cardbox-options .row {
     margin-bottom: 1.5em;
 }
 
 .path-mod-cardbox .cardbox-options {
-    width: 100%;
-    height: 100%;
     display: grid;
     grid-template-columns: 45% 55%;
     /*grid-template-rows: 33% 33% 34%;/*61.8% 38.2%;*/
@@ -152,11 +136,7 @@ th.header-c7 {
 
 .path-mod-cardbox .item {
     display: flex;
-    /*justify-content: left;
-    align-items: left;*/
     align-self: center;
-    height: 100%;
-    width: 100%;
     box-sizing: border-box;
 }
 .path-mod-cardbox .item.a {
@@ -217,11 +197,12 @@ th.header-c7 {
 .path-mod-cardbox .cardbox-text {
     font-size: 16px;
 }
-#review-div {
+.path-mod-cardbox #review-div {
     display: none;
+    margin-left: 95rem;
 }
 
-.sticky-review-arr {
+.path-mod-cardbox .sticky-review-arr {
     position: fixed;
     bottom: 50%;
     left: 80%;
@@ -229,7 +210,7 @@ th.header-c7 {
     width: 400px;
 }
 
-.cardbox-card-context {
+.path-mod-cardbox .cardbox-card-context {
     font-size: 0.9375rem;
     margin-bottom: 1%;
     height: 10%;
@@ -266,7 +247,7 @@ th.header-c7 {
     padding: 1em;
     height: 100%;
 }
-.cardbox-card-right-side-multi {
+.path-mod-cardbox .cardbox-card-right-side-multi {
     border-radius: 3px;
     /* margin-bottom: 2em; */
     margin-right: 1em;
@@ -274,22 +255,22 @@ th.header-c7 {
     height: 100%;
     display: grid;
 }
-.cardbox-cardside-multi {
+.path-mod-cardbox .cardbox-cardside-multi {
     border: 1px solid #e6e6e6;
     padding: 1em;
     margin-bottom: 1%;
 }
-.cardbox-cardside-multi:last-child {
+.path-mod-cardbox .cardbox-cardside-multi:last-child {
     margin-bottom: 0;
 }
-.cardbox-cardside-multi.suggestion {
+.path-mod-cardbox .cardbox-cardside-multi.suggestion {
     border-color: mediumvioletred;
     border-style: solid;
 }
-.checkbox-card {
+.path-mod-cardbox .checkbox-card {
     margin-left: 2%;
 }
-.kontext-grid {
+.path-mod-cardbox .kontext-grid {
     display: grid;
     grid-template-columns: 33.33% 33.33%;
     justify-content: center;
@@ -299,32 +280,32 @@ th.header-c7 {
 }
 
 @media (max-width: 600px) {
-    .review-button {
+    .path-mod-cardbox .review-button {
         margin-top: 10%;
     }
-    .cardbox-qside {
+    .path-mod-cardbox .cardbox-qside {
         margin-right: 1%;
         margin-left: 1%;
     }
-    .cardbox-aside {
+    .path-mod-cardbox .cardbox-aside {
         margin-right: 1%;
         margin-left: 1%;
         margin-top: 10%;
     }
-    .context-column {
+    .path-mod-cardbox .context-column {
         text-align: center;
         font-style: italic;
     }
-    .common-margin {
+    .path-mod-cardbox .common-margin {
         font-size: 0.7rem;
     }
-    .edit-topic {
+    .path-mod-cardbox .edit-topic {
         margin-left: 0%;
     }
 }
 
 @media (max-width: 323px) {
-    .review-button {
+    .path-mod-cardbox .review-button {
         margin-top: 10%;
     }
     .path-mod-cardbox #cardbox-feedback-wrapper,
@@ -337,7 +318,7 @@ th.header-c7 {
 
 /* col-sm Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
-    .review-button {
+    .path-mod-cardbox .review-button {
         margin-top: 10%;
     }
     .path-mod-cardbox .cardbox-card-text,
@@ -371,7 +352,7 @@ th.header-c7 {
         padding-left: 2em;
         padding-right: 2em;
     }
-    .edit-topic {
+    .path-mod-cardbox .edit-topic {
         margin-left: 13.5%;
     }
 
@@ -380,14 +361,14 @@ th.header-c7 {
 
 /* col-lg Large devices (laptops/desktops, 992px and up) */
 @media (min-width: 992px) {
-    .edit-topic {
+    .path-mod-cardbox .edit-topic {
         margin-left: 13.5%;
     }
 }
 
 /* col-xl Extra large devices (large laptops and desktops, 1200px and up) */
 @media (min-width: 1200px) {
-    .edit-topic {
+    .path-mod-cardbox .edit-topic {
         margin-left: 13.5%;
     }
 }
@@ -469,28 +450,28 @@ th.header-c7 {
     display: none;
 }
 
-.card-icon-grid-div {
+.path-mod-cardbox .card-icon-grid-div {
     float: right;
     display: grid;
     grid-template-columns: auto auto auto auto;
     grid-gap: 1px;
 }
-.review-icon-grid-div {
+.path-mod-cardbox .review-icon-grid-div {
     float: right;
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 1px;
 }
-.rep-icon-grid-div {
+.path-mod-cardbox .rep-icon-grid-div {
     display: grid;
     grid-template-columns: auto auto;
     grid-gap: 10%;
 }
-.common-margin {
+.path-mod-cardbox .common-margin {
     margin-right: 10px;
     font-size: small;
 }
-.common-margin:last-child {
+.path-mod-cardbox .common-margin:last-child {
     margin-right: 0px;
 }
 
@@ -517,10 +498,10 @@ th.header-c7 {
     display: none;
 }
 
-.review-topic {
+.path-mod-cardbox .review-topic {
     margin-left: 13%;
 }
-.common-margin {
+.path-mod-cardbox .common-margin {
     font-size: small;
 }
 /*.mul-ans-text{
@@ -528,60 +509,54 @@ th.header-c7 {
     right: 9em;
     bottom: 1em;
 }*/
-.anscount_icon {
+.path-mod-cardbox .anscount_icon {
     height: 1.75em;
 }
-.autocorrect_icon {
+.path-mod-cardbox .autocorrect_icon {
     height: 1.6em;
 }
-.ques-teil {
+.path-mod-cardbox .ques-teil {
     padding: 0px;
 }
-.ans-teil {
+.path-mod-cardbox .ans-teil {
     padding: 0px;
 }
 
 @media (max-width: 800px) {
-    .review-topic {
+    .path-mod-cardbox .review-topic {
         margin-left: 1%;
     }
-    .common-margin {
+    .path-mod-cardbox .common-margin {
         font-size: x-small;
     }
-    .cardbox-card-right-side-multi {
+    .path-mod-cardbox .cardbox-card-right-side-multi {
         margin-right: 0em;
         margin-left: 0em;
     }
-    .ques-teil {
+    .path-mod-cardbox .ques-teil {
         padding: 0px;
     }
-    .ans-teil {
+    .path-mod-cardbox .ans-teil {
         padding: 0px;
     }
-    .review-button-wrapper {
+    .path-mod-cardbox .review-button-wrapper {
         margin-top: 2em;
     }
-    .cardbox-card-left-side {
+    .path-mod-cardbox .cardbox-card-left-side {
         margin-right: 2%;
         margin-left: 2%;
     }
-    .cardbox-card-right-side {
+    .path-mod-cardbox .cardbox-card-right-side {
         margin-right: 2%;
         margin-left: 2%;
     }
-    .cardbox-card-right-side-multi {
+    .path-mod-cardbox .cardbox-card-right-side-multi {
         margin-right: 2%;
         margin-left: 2%;
     }
 }
 
 /* Fix display of multiple answers containing formulas in self check practice. */
-.cardbox-card-text p {
+.path-mod-cardbox .cardbox-card-text p {
     display: inline-block;
-}
-
-.tooltip {
-    position: relative;
-    display: inline-block;
-    border-bottom: 1px dotted black;
 }

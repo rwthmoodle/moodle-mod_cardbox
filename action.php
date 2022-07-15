@@ -38,60 +38,6 @@ $context = context_module::instance($cmid);
 
 $action = required_param('action', PARAM_ALPHA); // ...'$action' determines what is to be done; see below.
 
-if ($action === 'review') {
-
-    global $DB;
-    require_once($CFG->dirroot . '/mod/cardbox/classes/output/review.php');
-
-    $cardid = required_param('cardid', PARAM_INT);
-    $newstatus = required_param('status', PARAM_TEXT);
-    $nextcard = optional_param('nextcard', 0, PARAM_INT);
-
-    $dataobject = new stdClass();
-    $dataobject->id = $cardid;
-    switch($newstatus) {
-
-        case 'approve':
-            $dataobject->approved = '1';
-            $dataobject->approvedby = $USER->id;
-            $dataobject->area = CARD_MAIN_INFORMATION;
-            $success = $DB->update_record('cardbox_cards', $dataobject, false);
-            $success = $DB->update_record('cardbox_contents', $dataobject, false);
-            break;
-
-        case 'reject':
-            $cardapproved = cardbox_card_approved($cardid);
-            if ($cardapproved) {
-                $success = $DB->delete_records('cardbox_contents',
-                                            array('card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION));
-            } else {
-                $success = cardbox_delete_card($cardid);
-            }
-            break;
-
-        case 'skip':
-            $success = 1;
-            break;
-
-    }
-
-    if (empty($success)) {
-        echo json_encode(['status' => 'error', 'reason' => get_string('error:updateafterreview', 'cardbox')]);
-    }
-
-    if ($nextcard != 0) {
-        $renderer = $PAGE->get_renderer('mod_cardbox');
-        $review = new cardbox_review($context, null, $nextcard);
-        $newdata = $review->export_for_template($renderer);
-
-        echo json_encode(['status' => 'success', 'finished' => 0, 'newdata' => $newdata]);
-
-    } else {
-
-        echo json_encode(['status' => 'success', 'finished' => 1]);
-    }
-
-}
 
 /* * ********************** move card to the next box and return next card *********************** */
 

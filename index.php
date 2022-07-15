@@ -57,18 +57,18 @@ if ($usesections) {
     $sections = $modinfo->get_section_info_all();
 }
 $html = '<table class="generaltable" width="90%" cellspacing="1" cellpadding="5" text-align="center" ><thead>' . "\n";
-$html .= '<tr><th class="header-c0" scope="col">'.get_string('choosetopic', 'cardbox').'</th>';
-$html .= '<th class="header-c1" scope="col">' . get_string('modulename', 'cardbox') . '</th>';
-$html .= '<th class="header-c2" scope="col"> '.ucfirst(get_string('barchartyaxislabel', 'cardbox')).' </th>';
+$html .= '<tr><th class="header-c0  cbx-center-align" scope="col">'.get_string('choosetopic', 'cardbox').'</th>';
+$html .= '<th class="header-c1  cbx-center-align" scope="col">' . get_string('modulename', 'cardbox') . '</th>';
+$html .= '<th class="header-c2  cbx-center-align" scope="col"> '.ucfirst(get_string('barchartyaxislabel', 'cardbox')).' </th>';
 if (!has_capability('mod/cardbox:practice', $context)) {
     $html .= '</tr></thead><tbody>';
 } else {
-    $html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('lastpractise', 'cardbox')).'</th>';
-    $html .= '<th class="header-c4" scope="col">'.ucfirst(get_string('newcard', 'cardbox')).'</th>';
-    $html .= '<th class="header-c3" scope="col">'.ucfirst(get_string('knowncard', 'cardbox')).'</th>';
-    $html .= '<th class="header-c5" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
+    $html .= '<th class="header-c3  cbx-center-align" scope="col">'.ucfirst(get_string('lastpractise', 'cardbox')).'</th>';
+    $html .= '<th class="header-c4  cbx-center-align" scope="col">'.ucfirst(get_string('newcard', 'cardbox')).'</th>';
+    $html .= '<th class="header-c3  cbx-center-align" scope="col">'.ucfirst(get_string('knowncard', 'cardbox')).'</th>';
+    $html .= '<th class="header-c5  cbx-center-align" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
             get_string('flashcardsdue', 'cardbox')).'</th>';
-    $html .= '<th class="header-c6" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
+    $html .= '<th class="header-c6  cbx-center-align" scope="col">'.ucfirst(get_string('flashcards', 'cardbox').' '.
             get_string('flashcardsnotdue', 'cardbox')).'</th></tr></thead><tbody>';
 }
 foreach ($modinfo->instances['cardbox'] as $cm) {
@@ -82,12 +82,12 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
             // If cardbox activity has cards.
             $html .= '<tr>';
             // Row begins with section and cardbox activity name.
-            $html .= '<td class="cell-c0" >'.$sectionname.'</td>';
-            $html .= '<td class="cell-c1 " >
+            $html .= '<td class="cell-c0  cbx-center-align" >'.$sectionname.'</td>';
+            $html .= '<td class="cell-c1  cbx-center-align" >
                         <a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.$cm->get_formatted_name().'</a></td>';
             // Number of cards in the cardbox.
             $cardcount = $DB->count_records('cardbox_cards', ['cardbox' => $cm->instance, 'approved' => '1']);
-            $html .= '<td class="cell-c2" >'.$cardcount.'</td>';
+            $html .= '<td class="cell-c2  cbx-center-align" >'.$cardcount.'</td>';
             if (has_capability('mod/cardbox:practice', $context)) {
                 // Last Practised column.
                 $lastpractised = $DB->get_records_sql('SELECT max(lastpracticed) as lstprac
@@ -97,9 +97,9 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                                 AND cbp.userid = :userid',
                                 ['cardbox' => $cm->instance, 'userid' => $USER->id, 'approved' => '1']);
                 if (implode(',', array_keys($lastpractised)) == '') {
-                    $html .= '<td class="cell-c3">'.get_string('nopractise', 'cardbox').'</td>';
+                    $html .= '<td class="cell-c3  cbx-center-align">'.get_string('nopractise', 'cardbox').'</td>';
                 } else {
-                    $html .= '<td class="cell-c3">'.userdate(implode(',', array_keys($lastpractised)),
+                    $html .= '<td class="cell-c3  cbx-center-align">'.userdate(implode(',', array_keys($lastpractised)),
                                                                         get_string('strftimerecent')).'</td>';
                 }
                 // Card Status columns.
@@ -111,30 +111,30 @@ foreach ($modinfo->instances['cardbox'] as $cm) {
                 $cardboxmodel = new cardbox_cardboxmodel($cm->instance, $select);
                 $boxcount = $cardboxmodel->cardbox_get_status();
                 // New cards.
-                $html .= '<td class="cell-c4">'.$boxcount[0].'</td>';
+                $html .= '<td class="cell-c4  cbx-center-align">'.$boxcount[0].'</td>';
                 // Mastered cards.
-                $html .= '<td class="cell-c5">'.$boxcount[6].'</td>';
+                $html .= '<td class="cell-c5  cbx-center-align">'.$boxcount[6].'</td>';
                 // Due  and Not Due cards.
                 for ($i = 1; $i <= 5; $i++) {
                     $due += $boxcount[$i]['due'];
                     $notdue += $boxcount[$i]['notdue'];
                 }
-                $html .= '<td class="cell-c6">'.$due.'</td>';
-                $html .= '<td class="cell-c7">'.$notdue.'</td>';
+                $html .= '<td class="cell-c6  cbx-center-align">'.$due.'</td>';
+                $html .= '<td class="cell-c7  cbx-center-align">'.$notdue.'</td>';
             } else {
                 echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>Something went wrong </span>";
             }
         } else {
             $html .= '<tr>';
-            $html .= '<td class="cell-c0">'.$sectionname.'</td>';
-            $html .= '<td class="cell-c1"><a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.
+            $html .= '<td class="cell-c0  cbx-center-align">'.$sectionname.'</td>';
+            $html .= '<td class="cell-c1  cbx-center-align"><a href="'.$CFG->wwwroot.'/mod/cardbox/view.php?id='.$cm->id.'">'.
             $cm->get_formatted_name().'</a></td>';
             if (has_capability('mod/cardbox:practice', $context)) {
                 for ($i = 2; $i <= 7; $i++) {
-                    $html .= '<td class="cell-c'.$i.'">--</td>';
+                    $html .= '<td class="cell-c'.$i.'  cbx-center-align">--</td>';
                 }
             } else {
-                $html .= '<td class="cell-c2">--</td>';
+                $html .= '<td class="cell-c2  cbx-center-align">--</td>';
             }
             $html .= '</tr>';
         }
