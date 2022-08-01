@@ -633,23 +633,18 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                 break;
             case CARDBOX_STATUS:
                 var __studentboxcount = __params['studentboxcount'];
-                var __averageboxcount = __params['averageboxcount'];
-                var avgvalues = Object.values(__averageboxcount);
-                var max = Math.max(...avgvalues);
-                if (max < __studentboxcount[0]) {
-                    max = __studentboxcount[0];
+                var max = __studentboxcount[0];
+                for (let i = 1; i < 6; i++) {
+                    max = Math.max(max, __studentboxcount[i]['due'], __studentboxcount[i]['notdue']);
                 }
-                for (let i = 1; i <= 6; i++) {
-                    if (__studentboxcount[i]['due'] < __studentboxcount[i]['notdue']) {
-                        if (max < __studentboxcount[i]['notdue']) {
-                            max = __studentboxcount[i]['notdue'] 
-                        }
-                    } else {
-                        if (max < __studentboxcount[i]['due']) {
-                            max = __studentboxcount[i]['due'] 
-                        }
-                    }
+                max = Math.max(max, __studentboxcount[6]);
+
+                if (__params.hasOwnProperty('averageboxcount')) {
+                    var __averageboxcount = __params['averageboxcount'];
+                    var avgvalues = Object.values(__averageboxcount);
+                    max = Math.max(max, ...avgvalues);
                 }
+
                 var stepsize = compareStepSize(max);
                 break;
             case USER_PERFORMANCE_OVER_TIME:
