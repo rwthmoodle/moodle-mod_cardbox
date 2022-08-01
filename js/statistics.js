@@ -127,7 +127,6 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
 
         var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
         var __studentboxcount = __params['studentboxcount'];
-        var __averageboxcount = __params['averageboxcount'];
         var cardboxdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
@@ -172,6 +171,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
        };
 
         if (__performance.displayaverageprogress) {
+            var __averageboxcount = __params['averageboxcount'];
             cardboxdata.datasets.push({
                 label: M.util.get_string('averagestudentscompare', 'cardbox'),
                 data: [__averageboxcount[0], __averageboxcount[1], __averageboxcount[2], __averageboxcount[3], __averageboxcount[4], __averageboxcount[5], __averageboxcount[6]],
@@ -639,7 +639,8 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                 }
                 max = Math.max(max, __studentboxcount[6]);
 
-                if (__params.hasOwnProperty('averageboxcount')) {
+                var __performance = __params['performance'];
+                if (__performance.displayaverageprogress) {
                     var __averageboxcount = __params['averageboxcount'];
                     var avgvalues = Object.values(__averageboxcount);
                     max = Math.max(max, ...avgvalues);
