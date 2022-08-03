@@ -169,19 +169,38 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                             when cc2.contenttype = 0 THEN 'IMAGE'
                             when cc2.contenttype = 1 THEN 'TEXT'
                             when cc2.contenttype = 2 THEN 'AUDIO'
-                        end as Contentype,
+                        end as contenttype,
                         CASE
                             when cc2.area = 0 then 'Main Info'
                             when cc2.area = 1 then 'Context Info'
                             when cc2.area = 2 then 'Image Description'
                             when cc2.area = 3 then 'Answer Suggestion'
-                        end as InfoType,
+                        end as infotype,
                         cc2.content
                     FROM {cardbox_cards} cc1
                     JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
                     where cc1.author = :authorid
                     and cc1.cardbox = :cardboxid";
-            $usercreatedcards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
+            $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
+            $q1count = 0;
+            $oldcard = 0;
+            foreach ($query1cards as $query1card) {
+                if (!empty($query1card->topic)) {
+                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
+                } else {
+                    $topicname = null;
+                }
+                $usercreatedcards[$q1count] = (object) [
+                    'cardid' => $query1card->card,
+                    'topic' => $topicname,
+                    'timecreated' => transform::datetime($query1card->timecreated),
+                    'timemodified' => transform::datetime($query1card->timemodified),
+                    'cardside' => $query1card->cardside,
+                    'contenttype' => $query1card->contenttype,
+                    'infotype' => $query1card->infotype,
+                    'content' => $query1card->content
+                ];
+            }
 
             // Get all cards with contents approved by the user.
             $sql2 = "SELECT cc2.id, cc2.card,
@@ -208,21 +227,59 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
                     where cc1.approvedby = :approver
                     and cc1.cardbox = :cardboxid";
-            $userapprovedcards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
+            $query2cards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
+            $q2count = 0;
+            foreach ($query2cards as $query2card) {
+                $q2count++;
+                if (!empty($query1card->topic)) {
+                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
+                } else {
+                    $topicname = null;
+                }
+                $userapprovedcards[$q2count] = (object) [
+                    'cardid' => $query2card->card,
+                    'topic' => $topicname,
+                    'timecreated' => transform::datetime($query2card->timecreated),
+                    'timemodified' => transform::datetime($query2card->timemodified),
+                    'cardside' => $query2card->cardside,
+                    'contenttype' => $query2card->contenttype,
+                    'infotype' => $query2card->infotype,
+                    'content' => $query2card->content
+                ];
+            }
 
             // Get user progress for the cardbox.
             $sql3 = "SELECT card, cardposition, lastpracticed, repetitions
                         from {cardbox_progress}
                             where card in (select id from {cardbox_cards} where cardbox = :cardboxid)
                                 and userid = :userid";
-            $userprogress = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            $query3cards = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($query3cards as $query3card) {
+                $key = 'Card '.$query3card->card;
+                $userprogress[$key] = (object) [
+                    'deck' => $query3card->cardposition,
+                    'lastpracticed' => transform::datetime($query3card->lastpracticed),
+                    'repetitions' => $query3card->repetitions
+                ];
+            }
 
             // Get user stats for entire cardbox.
             $sql4 = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
                         from {cardbox_statistics}
                         where userid = :userid
                         and cardboxid = :cardboxid";
-            $userstats = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            $query4cards = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($query4cards as $query4card) {
+                $key = 'Cardbox '.$query4card->cardboxid;
+                $cbxname = $DB->get_field('cardbox', 'name', array('id' => $query4card->cardboxid));
+                $userstats[$key] = (object) [
+                    'cardboxname' => $cbxname,
+                    'timeofpractice' => transform::datetime($query4card->timeofpractice),
+                    'numberofcards' => $query4card->numberofcards,
+                    'duration' => $query4card->duration,
+                    'percentcorrect' => $query4card->percentcorrect
+                ];
+            }
 
             $cardbox->usercreatedcards = $usercreatedcards;
             $cardbox->userapprovedcards = $userapprovedcards;
@@ -258,11 +315,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid]);
         foreach ($listofcards as $cardid) {
             // Delete user progress for this cardbox instance
-            $DB->delete_records('cardbox_progress', ['card' => $cardid]);
+            $DB->delete_records('cardbox_progress', ['card' => $cardid->id]);
 
             // Remove author and approver details from cards. The card on a whole doesnt get deleted.
             $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid));
-            $DB->set_field('cardbox_cards', 'approvedby', null, array('cardbox' => $instanceid));
+            $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid));
         }
 
     }
@@ -285,13 +342,16 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             $instanceid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid], MUST_EXIST);
             // Delete all statistics for the user in this cardbox instance.
             $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid, 'userid' => $userid]);
-            $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid]);
-            foreach ($listofcards as $cardid) {
-                // Delete user progress for this cardbox instance
-                $DB->delete_records('cardbox_progress', ['card' => $cardid, 'userid' => $userid]);
-                // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-                $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid));
-                $DB->set_field('cardbox_cards', 'approvedby', null, array('cardbox' => $instanceid));
+            // Delete user progress for this cardbox instance
+            $DB->delete_records('cardbox_progress', ['userid' => $userid]);
+            // Remove author and approver details from cards. The card on a whole doesnt get deleted.
+            $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'author' => $userid]);
+            foreach ($usercreatedcards as $usercreatedcard) {
+                $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid, 'id' => $usercreatedcard->id));
+            }
+            $userapprovedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'approvedby' => $userid]);
+            foreach ($userapprovedcards as $userapprovedcard) {
+                $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid, 'id' => $userapprovedcard->id));
             }
         }
     }

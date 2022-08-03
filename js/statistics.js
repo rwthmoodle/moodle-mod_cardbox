@@ -127,7 +127,6 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
 
         var context = document.getElementById("cardbox-statistics-cardboxstatus").getContext("2d");
         var __studentboxcount = __params['studentboxcount'];
-        var __averageboxcount = __params['averageboxcount'];
         var cardboxdata = {
 
            // These labels appear in the legend and in the tooltips when hovering different arcs.
@@ -172,6 +171,7 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
        };
 
         if (__performance.displayaverageprogress) {
+            var __averageboxcount = __params['averageboxcount'];
             cardboxdata.datasets.push({
                 label: M.util.get_string('averagestudentscompare', 'cardbox'),
                 data: [__averageboxcount[0], __averageboxcount[1], __averageboxcount[2], __averageboxcount[3], __averageboxcount[4], __averageboxcount[5], __averageboxcount[6]],
@@ -633,23 +633,19 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                 break;
             case CARDBOX_STATUS:
                 var __studentboxcount = __params['studentboxcount'];
-                var __averageboxcount = __params['averageboxcount'];
-                var avgvalues = Object.values(__averageboxcount);
-                var max = Math.max(...avgvalues);
-                if (max < __studentboxcount[0]) {
-                    max = __studentboxcount[0];
+                var max = __studentboxcount[0];
+                for (let i = 1; i < 6; i++) {
+                    max = Math.max(max, __studentboxcount[i]['due'], __studentboxcount[i]['notdue']);
                 }
-                for (let i = 1; i <= 6; i++) {
-                    if (__studentboxcount[i]['due'] < __studentboxcount[i]['notdue']) {
-                        if (max < __studentboxcount[i]['notdue']) {
-                            max = __studentboxcount[i]['notdue'] 
-                        }
-                    } else {
-                        if (max < __studentboxcount[i]['due']) {
-                            max = __studentboxcount[i]['due'] 
-                        }
-                    }
+                max = Math.max(max, __studentboxcount[6]);
+
+                var __performance = __params['performance'];
+                if (__performance.displayaverageprogress) {
+                    var __averageboxcount = __params['averageboxcount'];
+                    var avgvalues = Object.values(__averageboxcount);
+                    max = Math.max(max, ...avgvalues);
                 }
+
                 var stepsize = compareStepSize(max);
                 break;
             case USER_PERFORMANCE_OVER_TIME:
