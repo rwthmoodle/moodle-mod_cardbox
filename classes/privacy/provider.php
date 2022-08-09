@@ -183,8 +183,8 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     and cc1.cardbox = :cardboxid";
             $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
             $q1count = 0;
-            $oldcard = 0;
             foreach ($query1cards as $query1card) {
+                $q1count++;
                 if (!empty($query1card->topic)) {
                     $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
                 } else {
