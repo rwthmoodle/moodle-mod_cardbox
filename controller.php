@@ -38,6 +38,7 @@ if (!isset($action)) {
 
 if ($action === 'addflashcard') {
 
+    require_capability('mod/cardbox:submitcard', $context);
     require_once('card_form.php');
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'addflashcard'));
     $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'practice'));
@@ -269,6 +270,7 @@ if ($action === 'addflashcard') {
 if ($action === 'editcard') {
 
     require_capability('mod/cardbox:approvecard', $context);
+    require_capability('mod/cardbox:submitcard', $context);
 
     require_once('card_form.php');
 
