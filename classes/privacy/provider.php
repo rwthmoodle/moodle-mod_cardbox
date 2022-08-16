@@ -99,6 +99,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             'userid1' => $userid,
             'userid2' => $userid,
             'userid3' => $userid,
+            'userid4' => $userid,
         ];
 
         $sql = "SELECT DISTINCT c.id
@@ -112,8 +113,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      WHERE (
                         cbxs.userid = :userid1 OR
                         cbxc.author = :userid2 OR
-                        cbxp.userid = :userid3
-                     )"; // Check for approved by
+                        cbxc.approvedby = :userid3 OR
+                        cbxp.userid = :userid4
+                     )";
         $contextlist->add_from_sql($sql, $params);
 
         return $contextlist;
@@ -134,8 +136,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         if (empty($contextlist)) {
             return;
         }
-
-
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $sql = "SELECT
                     c.id AS contextid,
@@ -314,7 +314,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 
         $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid]);
         foreach ($listofcards as $cardid) {
-            // Delete user progress for this cardbox instance
+            // Delete user progress for this cardbox instance.
             $DB->delete_records('cardbox_progress', ['card' => $cardid->id]);
 
             // Remove author and approver details from cards. The card on a whole doesnt get deleted.
@@ -342,7 +342,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             $instanceid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid], MUST_EXIST);
             // Delete all statistics for the user in this cardbox instance.
             $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid, 'userid' => $userid]);
-            // Delete user progress for this cardbox instance
+            // Delete user progress for this cardbox instance.
             $DB->delete_records('cardbox_progress', ['userid' => $userid]);
             // Remove author and approver details from cards. The card on a whole doesnt get deleted.
             $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'author' => $userid]);

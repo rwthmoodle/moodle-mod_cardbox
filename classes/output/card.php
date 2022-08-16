@@ -196,7 +196,8 @@ class cardbox_card implements \renderable, \templatable {
                 $this->deck = 1;
             }
         } else if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
-            $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
+            $this->deck = $DB->get_field('cardbox_progress', 'cardposition',
+                                         ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
         } else {
             $this->deck = null;
         }
