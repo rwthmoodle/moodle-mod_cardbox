@@ -83,13 +83,14 @@ class mod_cardbox_card_form extends moodleform {
         }
 
         // Text input field for creating a new topic.
-        $mform->setType('newtopic', PARAM_CLEANHTML); // supports ä, ö, ü, ...
+        $mform->setType('newtopic', PARAM_CLEANHTML); // Supports german letters ä, ö, ü.
 
         /****************** end of question experiment **********************/
 
         /****************** question **********************/
 
-        $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'),
+                           'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
         $btnarrayquestion = array();
@@ -123,7 +124,8 @@ class mod_cardbox_card_form extends moodleform {
         $mform->addElement('filemanager', 'cardsound', get_string('sound', 'cardbox'), null, $audiooptions);
 
         /****************** questioncontext **********************/
-        $mform->addElement('editor', 'questioncontext', get_string('entercontextquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->addElement('editor', 'questioncontext', get_string('entercontextquestion', 'cardbox'),
+                           'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
         /****************** end of question **********************/
@@ -131,11 +133,15 @@ class mod_cardbox_card_form extends moodleform {
         $infoanswer = get_string('answer_repeat_help', 'cardbox');
 
         for ($i = 1; $i <= 10; $i++) {
-            $mform->addElement('editor', "answer$i", get_string('enteranswer', 'cardbox') , 'wrap="virtual" rows="5" cols="150"');
+            $mform->addElement('editor', "answer$i", get_string('enteranswer', 'cardbox') ,
+                               'wrap="virtual" rows="5" cols="150"');
             $mform->setType("answer$i", PARAM_RAW);
             if ($i === 1) {
-                $mform->addElement('html', "<div class='form-group row fitem' style='margin-bottom: 1.5rem;'><div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'></div>
-                <div class='col-md-9 form-inline align-items-start felement'><div style='background-color: #CD1076; color: white; padding: 5px; width: 100%; padding-left: 10px'>".
+                $mform->addElement('html',
+                "<div class='form-group row fitem' style='margin-bottom: 1.5rem;'>
+                <div class='col-md-3 col-form-label d-flex pb-0 pr-md-0'></div>
+                <div class='col-md-9 form-inline align-items-start felement'>
+                <div style='background-color: #CD1076; color: white; padding: 5px; width: 100%; padding-left: 10px'>".
                 $infoanswer."</div></div></div>");
             }
         }
@@ -145,14 +151,16 @@ class mod_cardbox_card_form extends moodleform {
         $btnarrayanswer[] =& $mform->createElement('button', 'addcontextans', get_string('addcontext', 'cardbox'));
         $mform->addGroup($btnarrayanswer, 'buttonar', '', array(' '), false);
 
-        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked',
+                                                 array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         if ($necessaryanswerslocked === "0") {
             $aoptions = [
                 '0' => get_string('necessaryanswers_all', 'cardbox'),
                 '1' => get_string('necessaryanswers_one', 'cardbox')
             ];
             $select = $mform->addElement('select', 'answers', get_string('necessaryanswers_card', 'cardbox'), $aoptions);
-            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers',
+                                               array('id' => $customdata['cardboxid']), IGNORE_MISSING);
 
             if (!empty($customdata['answers']) && $customdata['answers'] != $necessaryanswers) {
                 $necessaryanswers = $customdata['answers'];
@@ -161,7 +169,8 @@ class mod_cardbox_card_form extends moodleform {
         }
         /****************** answercontext **********************/
 
-        $mform->addElement('editor', 'answercontext', get_string('entercontextanswer', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
+        $mform->addElement('editor', 'answercontext', get_string('entercontextanswer', 'cardbox'),
+                           'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
 
         /****************** Disable Auto check setting ****************** */

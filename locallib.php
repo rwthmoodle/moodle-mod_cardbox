@@ -444,7 +444,7 @@ function cardbox_card_approved($cardid) {
     }
 }
 
-function get_absolute_cardcounts_per_deck($cardboxid) {
+function cardbox_get_absolute_cardcounts_per_deck($cardboxid) {
     global $DB;
     $cardsperdeck = $DB->get_records_sql(
                         'SELECT cardposition, count(card) AS cardcount
@@ -461,9 +461,9 @@ function get_absolute_cardcounts_per_deck($cardboxid) {
     return $cardsperdeck;
 }
 
-function get_average_cardcounts_per_deck($cardboxid) {
+function cardbox_get_average_cardcounts_per_deck($cardboxid) {
     global $DB;
-    $absolutes = get_absolute_cardcounts_per_deck($cardboxid);
+    $absolutes = cardbox_get_absolute_cardcounts_per_deck($cardboxid);
     $practisingstudentcount = $DB->count_records_sql(
                                 'SELECT count(distinct userid)
                                 FROM {cardbox_progress}

@@ -155,9 +155,11 @@ class cardbox_statistics implements \renderable, \templatable {
                 $this->numberofcardsmin[] = $numberofcardsmin->numberofcards;
                 $numberofcardstooltipmax = get_string('numberofcardsmax', 'cardbox') . ": " . $numberofcardsmax->numberofcards;
                 $this->numberofcardsmax[] = $numberofcardsmax->numberofcards;
-                $durationofsessiontooltipmin = get_string('durationmin', 'cardbox') . ": " . format_time($numberofcardsmin->duration);
+                $durationofsessiontooltipmin = get_string('durationmin', 'cardbox') . ": " .
+                                               format_time($numberofcardsmin->duration);
                 $this->durationmin[] = $numberofcardsmin->duration / 60;
-                $durationofsessiontooltipmax = get_string('durationmax', 'cardbox') . ": " . format_time($numberofcardsmax->duration);
+                $durationofsessiontooltipmax = get_string('durationmax', 'cardbox') . ": " .
+                                               format_time($numberofcardsmax->duration);
                 $this->durationmax[] = $numberofcardsmax->duration / 60;
             }
             $this->durationofsessionavg[] = $durationofsession;

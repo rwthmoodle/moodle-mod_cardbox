@@ -54,9 +54,6 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
             $paths[] = new restore_path_element('cardbox_statistics', '/activity/cardbox/statistics/statistic');
             $paths[] = new restore_path_element('cardbox_progress', '/activity/cardbox/cards/card/progress/singleprogress');
         }
-
-        // $paths[] = new restore_path_element('cardbox_contenttype', '/activity/cardbox/annotations/annotation/commentsarchive/commentarchive');
-
         // Return the paths wrapped into standard activity structure.
         return $this->prepare_activity_structure($paths);
     }
@@ -96,12 +93,6 @@ class restore_cardbox_activity_structure_step extends restore_activity_structure
         $oldid = $data->id;
 
         $data->cardbox = $this->get_new_parentid('cardbox');
-        /*$data->topic = $this->get_mappingid('topic', $data->topic);
-        $data->author = $this->get_mappingid('user', $data->author);
-        $data->approvedby = $this->get_mappingid('user', $data->approvedby); // ???
-
-        $data->timecreated = $this->apply_date_offset($data->timecreated);
-        $data->timemodified = $this->apply_date_offset($data->timemodified); */
 
         $newitemid = $DB->insert_record('cardbox_cards', $data);
         $this->set_mapping('cardbox_cards', $oldid, $newitemid);

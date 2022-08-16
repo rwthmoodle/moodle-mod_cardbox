@@ -48,17 +48,19 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
     protected function define_structure(): \backup_nested_element {
 
         // 1. To know if we are including userinfo.
-        $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0. :(
+        $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0.
 
         // 2. Define each element separately.
         $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'autocorrection',
                                                     'necessaryanswers', 'necessaryanswerslocked', 'timecreated', 'timemodified'));
 
         $cards = new backup_nested_element('cards');
-        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved', 'approvedby', 'necessaryanswers', 'disableautocorrect'));
+        $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved',
+                                                                     'approvedby', 'necessaryanswers', 'disableautocorrect'));
 
         $cardcontents = new backup_nested_element('cardcontents');
-        $cardcontent = new backup_nested_element('cardcontent', array('id'), array('card', 'cardside', 'contenttype', 'area', 'content'));
+        $cardcontent = new backup_nested_element('cardcontent', array('id'),
+                                                                array('card', 'cardside', 'contenttype', 'area', 'content'));
 
         $topics = new backup_nested_element('topics');
         $topic = new backup_nested_element('topic', array('id'), array('topicname', 'cardboxid'));
@@ -66,10 +68,12 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         if ($userinfo != 0) {
 
             $progress = new backup_nested_element('progress');
-            $singleprogress = new backup_nested_element('singleprogress', array('id'), array('userid', 'card', 'cardposition', 'lastpracticed', 'repetitions'));
+            $singleprogress = new backup_nested_element('singleprogress', array('id'),
+                                                        array('userid', 'card', 'cardposition', 'lastpracticed', 'repetitions'));
 
             $statistics = new backup_nested_element('statistics');
-            $statistic = new backup_nested_element('statistic', array('id'), array('userid', 'cardboxid', 'timeofpractice', 'percentcorrect'));
+            $statistic = new backup_nested_element('statistic', array('id'),
+                                                    array('userid', 'cardboxid', 'timeofpractice', 'percentcorrect'));
         }
 
         // 3. Build the tree (mind the right order!)
@@ -127,7 +131,7 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
 
         // 6. Define file area annotations (vgl. resource activity).
         $cardbox->annotate_files('mod_cardbox', 'intro', null); // This file area does not have an itemid.
-        $cardcontent->annotate_files('mod_cardbox', 'content', null); // By content->id
+        $cardcontent->annotate_files('mod_cardbox', 'content', null); // By content->id.
 
         // 7. Return the root element (pdfannotator), wrapped into standard activity structure.
         return $this->prepare_activity_structure($cardbox);
