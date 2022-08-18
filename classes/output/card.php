@@ -38,6 +38,8 @@ class cardbox_card implements \renderable, \templatable {
     private $status;
     private $howmanyanswersnecessary;
     private $decktext;
+    private $repsnummer;
+    private $acimgurl;
     public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
 
         require_once('model/cardcollection.class.php');

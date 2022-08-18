@@ -33,18 +33,12 @@ function startOverview(Y, __cmid, __topic) { // Wrapper function that is called 
 
     require(['jquery', 'core/notification'], function ($, notification) {
         var topicfilter = document.getElementById('cardbox-overview-topicfilter');
-        
         topicfilter.onchange = function() {
 
             var select = this.options[this.selectedIndex];        
             var topicid = select['value'];
             window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid;
 
-        }
-        if (screen.width >800) {
-            window.history.replaceState({}, "", window.location.pathname + '?id=' + __cmid + '&action=overview');
-        } else {
-            window.history.replaceState({}, "", window.location.pathname + '?id=' + __cmid + '&action=overview&ismob=1');
         }
         const editbtns = document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit');
         editbtns.forEach(btn => {
