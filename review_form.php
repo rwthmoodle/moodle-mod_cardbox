@@ -25,8 +25,6 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-define ('ENABLE_AUTOCORRECT', 0);
-define ('DISABLE_AUTOCORRECT', 1);
 
 require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
