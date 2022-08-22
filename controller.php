@@ -24,8 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 define ('ENABLE_AUTOCORRECT', 0);
 define ('DISABLE_AUTOCORRECT', 1);
-define ('LONG_DESCRIPTION', 1);
-define ('SHORT_DESCRIPTION', 0);
+
 
 
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
@@ -125,15 +124,15 @@ if ($action === 'addflashcard') {
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
-            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->question['text']);
+            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, $formdata->question['text'], CARD_MAIN_INFORMATION);
         }
         // Save the text of the answer/s.
 
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
             if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION,
-                                            $formdata->{$answer}['text']);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
+                                            $formdata->{$answer}['text'], CARD_MAIN_INFORMATION);
             }
         }
 
@@ -145,8 +144,8 @@ if ($action === 'addflashcard') {
 
         // Save the questioncontext text if there is any.
         if (!empty($formdata->answercontext['text'])) {
-            cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_CONTEXT_INFORMATION,
-                                         $formdata->answercontext['text']);
+            cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
+                                         $formdata->answercontext['text'], CARD_CONTEXT_INFORMATION);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -162,8 +161,8 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_MAIN_INFORMATION,
-                                                           $file->get_filename());
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                                           $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -171,8 +170,8 @@ if ($action === 'addflashcard') {
             }
             // Save the imagedescription if there is any.
             if (!empty($formdata->imagedescription)) {
-                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_IMAGEDESCRIPTION_INFORMATION,
-                                             $formdata->imagedescription);
+                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                             $formdata->imagedescription, CARD_IMAGEDESCRIPTION_INFORMATION);
             }
         }
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -188,8 +187,8 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemidaudio, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemidaudio = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_AUDIO, CARD_MAIN_INFORMATION,
-                                                                $file->get_filename());
+                    $itemidaudio = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_AUDIO,
+                                                                $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemidaudio, $context->id, $component, $filearea, $itemidaudio, $options);
                     break;
@@ -210,8 +209,8 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid3, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid3 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_IMAGE, CARD_MAIN_INFORMATION,
-                                                            $file->get_filename());
+                    $itemid3 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_IMAGE,
+                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid3, $context->id, $component, $filearea, $itemid3, $options);
                     break;
@@ -231,8 +230,8 @@ if ($action === 'addflashcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid4, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid4 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_AUDIO, CARD_MAIN_INFORMATION,
-                                                            $file->get_filename());
+                    $itemid4 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_AUDIO,
+                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid4, $context->id, $component, $filearea, $itemid4, $options);
                     break;
@@ -396,32 +395,32 @@ if ($action === 'editcard') {
         }
 
         // Update the entry in cardbox_cards table and delete the original content items.
-        $success = cardbox_edit_card($cardid, $topicid, $submitbutton, $context, $necessaryanswers, $disableautocorrect);
+        $success = cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $submitbutton);
 
         // TODO: Fehlerbehandlung.
 
         // Save the question text if there is any.
         if (!empty($formdata->question)) {
-            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION, $formdata->question['text']);
+            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, $formdata->question['text'], CARD_MAIN_INFORMATION);
         }
         // Save the text of the answer/s.
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
             if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_MAIN_INFORMATION,
-                                             $formdata->{$answer}['text']);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
+                                             $formdata->{$answer}['text'], CARD_MAIN_INFORMATION);
             }
         }
 
         // Save the questioncontext text if there is any.
         if (!empty($formdata->questioncontext['text'])) {
-            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, CARD_CONTEXT_INFORMATION,
-                                         $formdata->questioncontext['text']);
+            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT,
+                                         $formdata->questioncontext['text'], CARD_CONTEXT_INFORMATION);
         }
         // Save the answercontext text of the answer/s.
         if (!empty($formdata->answercontext['text'])) {
-            cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, CARD_CONTEXT_INFORMATION,
-                                         $formdata->answercontext['text']);
+            cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
+                                         $formdata->answercontext['text'], CARD_CONTEXT_INFORMATION);
         }
 
         // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
@@ -436,7 +435,8 @@ if ($action === 'editcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_MAIN_INFORMATION, $file->get_filename());
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                                           $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -444,7 +444,8 @@ if ($action === 'editcard') {
             }
             // Save the imagedescription if there is any.
             if (!empty($formdata->imagedescription)) {
-                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, CARD_IMAGEDESCRIPTION_INFORMATION, $formdata->imagedescription);
+                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                             $formdata->imagedescription, CARD_IMAGEDESCRIPTION_INFORMATION);
             }
         }
 
@@ -460,8 +461,8 @@ if ($action === 'editcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid2 = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_AUDIO, CARD_MAIN_INFORMATION,
-                                                            $file->get_filename());
+                    $itemid2 = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_AUDIO,
+                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid2, $context->id, $component, $filearea, $itemid2, $options);
                     break;
@@ -683,7 +684,7 @@ if ($action === 'statistics') {
     $params = [];
     $params['ismanager'] = $ismanager = has_capability('mod/cardbox:approvecard', $context);
     if ($ismanager) {
-        $params['absoluteboxcount'] = get_absolute_cardcounts_per_deck($cardbox->id);
+        $params['absoluteboxcount'] = cardbox_get_absolute_cardcounts_per_deck($cardbox->id);
     } else {
         $info = get_string('info:statisticspage', 'cardbox');
         $help = $OUTPUT->help_icon('help:whenarecardsdue', 'cardbox');
@@ -694,7 +695,7 @@ if ($action === 'statistics') {
         $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select);
         $params['studentboxcount'] = $cardboxmodel->cardbox_get_status();
         if (cardbox_statistics::is_enrolled_students_threshold_reached($cardbox->id)) {
-            $params['averageboxcount'] = get_average_cardcounts_per_deck($cardbox->id);
+            $params['averageboxcount'] = cardbox_get_average_cardcounts_per_deck($cardbox->id);
         }
     }
     // 2. Create a view controller.
@@ -848,7 +849,7 @@ if ($action === 'review') {
     if (!empty($cards)) {
         list($insql, $inparams) = $DB->get_in_or_equal(array_column($cards, 'id'), SQL_PARAMS_NAMED);
         $anssuggestions = $DB->get_records_select('cardbox_cardcontents', 'area = :area AND cardside = :cardside AND card ' . $insql,
-            array_merge(['area' => CARD_ANSERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
+            array_merge(['area' => CARD_ANSWERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
         foreach ($anssuggestions as $anssuggestion) {
             if (!in_array($anssuggestion->card, $reviewablecardids)) {
                 array_push($reviewablecardids, $anssuggestion->card);
@@ -977,14 +978,8 @@ if ($action === 'overview') {
 
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00000"));
         $PAGE->requires->js_init_call('startOverview', array($cmid, $topic));
-        if ($_GET["ismob"] == '1') {
-            $ismob = true;
-        } else {
-            $ismob = false;
-        }
-        $ismob = $_GET["ismob"];
         // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, $ismob);
+        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic);
 
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');

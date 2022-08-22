@@ -34,14 +34,13 @@ class cardbox_overview implements \renderable, \templatable {
     private $topics = array();
     private $cards = array();
 
-    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $ismobile, $usedforemail = false) {
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false) {
 
         require_once('card.php');
 
         global $DB, $PAGE;
 
         $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
-        $this->ismobile = $ismobile;
         $this->topicid = $topicid;
 
         foreach ($topics as $topic) {
@@ -85,7 +84,6 @@ class cardbox_overview implements \renderable, \templatable {
 
         $data['topics'] = $this->topics;
         $data['cards'] = $this->cards;
-        $data['ismobile'] = $this->ismobile;
         return $data;
     }
 }
