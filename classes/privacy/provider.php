@@ -135,7 +135,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             return;
         }
 
-
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $sql = "SELECT
                     c.id AS contextid,
