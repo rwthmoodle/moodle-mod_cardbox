@@ -113,8 +113,12 @@ if ($action === 'addflashcard') {
         } else {
             $necessaryanswers = CARDBOX_EVALUATE_ALL;
         }
-        if ($formdata->disableautocorrect == DISABLE_AUTOCORRECT) {
-            $disableautocorrect = true;
+        if (isset($formdata->disableautocorrect)) {
+            if ($formdata->disableautocorrect == DISABLE_AUTOCORRECT) {
+                $disableautocorrect = true;
+            } else {
+                $disableautocorrect = false;
+            }
         } else {
             $disableautocorrect = false;
         }
@@ -387,8 +391,12 @@ if ($action === 'editcard') {
         } else {
             $necessaryanswers = CARDBOX_EVALUATE_ALL;
         }
-        if ($formdata->disableautocorrect == DISABLE_AUTOCORRECT) {
-            $disableautocorrect = true;
+        if (isset($formdata->disableautocorrect)) {
+            if ($formdata->disableautocorrect == DISABLE_AUTOCORRECT) {
+                $disableautocorrect = true;
+            } else {
+                $disableautocorrect = false;
+            }
         } else {
             $disableautocorrect = false;
         }
