@@ -37,7 +37,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
      * @param string $nameargs
      * @return tabobject
      */
-    private function cardbox_create_tab(moodle_url $baseurl, $namekey = null, $action, $cardboxname = null, $nameargs = null) {
+    private function cardbox_create_tab(moodle_url $baseurl, $action, $namekey = null, $cardboxname = null, $nameargs = null) {
         $taburl = new moodle_url($baseurl, array('action' => $action));
         $tabname = get_string($namekey, 'cardbox', $nameargs);
         if ($cardboxname) {
@@ -57,7 +57,7 @@ class mod_cardbox_renderer extends plugin_renderer_base {
      * @param type $inactive
      * @return type
      */
-    public function cardbox_render_tabs(moodle_url $baseurl, $selected = null, $context, $inactive = null) {
+    public function cardbox_render_tabs(moodle_url $baseurl, $context, $selected = null, $inactive = null) {
 
         global $USER;
 
