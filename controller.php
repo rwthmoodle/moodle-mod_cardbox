@@ -258,7 +258,7 @@ if ($action === 'addflashcard') {
             echo "<span class='notification alert alert-danger alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         }
         echo $OUTPUT->heading(format_string($cardbox->name));
-        echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+        echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
         $mform->display();
     }
 
@@ -511,9 +511,9 @@ if ($action === 'editcard') {
         echo $OUTPUT->heading(get_string('titleforcardedit', 'cardbox'));
 
         if ($from === "overview") {
-            echo $myrenderer->cardbox_render_tabs($taburl, 'overview', $context);
+            echo $myrenderer->cardbox_render_tabs($taburl, $context, 'overview');
         } else {
-            echo $myrenderer->cardbox_render_tabs($taburl, 'review', $context);
+            echo $myrenderer->cardbox_render_tabs($taburl, $context, 'review');
         }
 
         $mform->display();
@@ -576,7 +576,7 @@ if ($action === 'practice') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
 
@@ -680,7 +680,7 @@ if ($action === 'statistics') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'statistics'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
 
 
     $renderer = $PAGE->get_renderer('mod_cardbox');
@@ -746,7 +746,7 @@ if ($action === 'massimport') {
                 $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'massimport'));
                 echo $OUTPUT->header();
                 echo $OUTPUT->heading(format_string($cardbox->name));
-                echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+                echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
                 echo "<h2>". get_string('importpreview', 'cardbox')."</h2>";
                 $csvcolumns = $cir->get_columns();
                 $errorflag = 0; // No error.
@@ -783,7 +783,7 @@ if ($action === 'massimport') {
             $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
             echo $OUTPUT->header();
             echo $OUTPUT->heading(format_string($cardbox->name));
-            echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+            echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
             $mform->display();
         }
     } else if ($step == 2) {
@@ -801,7 +801,7 @@ if ($action === 'massimport') {
                 $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
                 echo $OUTPUT->header();
                 echo $OUTPUT->heading(format_string($cardbox->name));
-                echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+                echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
                 $errlines = cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
                 $cir->close();
                 $cir->cleanup();
@@ -834,7 +834,7 @@ if ($action === 'review') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'review'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
     $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
 
     require_once('model/cardcollection.class.php');
@@ -954,7 +954,7 @@ if ($action === 'overview') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading("$cardbox->name");
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id, $topic, true);
@@ -1019,7 +1019,7 @@ if ($action === 'edittopic') {
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'edittopic'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
-    echo $myrenderer->cardbox_render_tabs($taburl, $action, $context);
+    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
     $renderer = $PAGE->get_renderer('mod_cardbox');
 
     $list = cardbox_get_topics($cardbox->id);
