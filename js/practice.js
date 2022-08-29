@@ -478,8 +478,12 @@ class Coordinate {
                 data: {id: this.cmid, action: 'savesuggestedanswer', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, userinput: userinput}
             }).then(function(iscorrect) {
 
-                this.proceed(iscorrect);
-
+                if(iscorrect) {
+                    this.proceed(1);
+                } else {
+                    var quescase = Ques_Autocheck;
+                    this.proceed(0);
+                }
             }.bind(this, iscorrect));
         }
 
@@ -897,6 +901,15 @@ class Output {
     }
 
     renderSuggestAnswerTemplate(eventhandling, data) {
+        
+        var length = data.answer.texts.length;
+        if (length < 2) {
+            var uiinputonobj = data.userinputitems[0];
+            var ui = uiinputonobj.userinput;
+            if (ui !== " ") {
+                data['suggestedansinput'] = ui;
+            }
+        }
 
         (function (templates, data) {
                     templates.render('mod_cardbox/practice', data)
