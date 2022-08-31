@@ -3,6 +3,10 @@ moodle-mod_cardbox
 
 Changes
 -------
+### 2022083000 v1.0.2
+
+* New Version, new release
+* Code cleanup
 
 ### 2022082900
 
