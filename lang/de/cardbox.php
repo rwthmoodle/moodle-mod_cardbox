@@ -25,6 +25,7 @@ defined('MOODLE_INTERNAL') || die;
 
 // Meta information
 $string['cardbox'] = 'Karteikasten'; // superfluous?
+$string['activityname'] = 'Karteikasten-Aktivität';
 $string['modulename'] = 'Karteikasten';
 $string['modulename_help'] = '<p>Mit dieser Aktivität können Lernkarten erstellt und nach dem Karteikasten-Prinzip geübt werden. Besonders geeignet ist der Karteikasten für Vokabeln, Fachbegriffe und Formeln.</p><p>Alle Teilnehmer/innen können Lernkarten für den gesamten Kurs erstellen. Die Lernkarten werden jedoch erst übernommen, nachdem ein/e Dozent/in sie freigegeben hat.</p>';
 $string['pluginname'] = 'Karteikasten';
