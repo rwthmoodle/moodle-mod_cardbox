@@ -123,7 +123,7 @@ if ($action === 'addflashcard') {
             $disableautocorrect = false;
         }
         // Create a new entry in cardbox_cards table.
-        $cardid = cardbox_save_new_card($cardbox->id, $submitbutton, $context, $topicid, $necessaryanswers, $disableautocorrect);
+        $cardid = cardbox_save_new_card($cardbox->id, $context, $submitbutton, $topicid, $necessaryanswers, $disableautocorrect);
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
@@ -777,8 +777,6 @@ if ($action === 'massimport') {
                     $errorflag = 1;
                 }
                 $importpreviewtable = new \mod_cardbox\output\previewtable($cir, $csvcolumns);
-                $test = $importpreviewtable->data;
-                $test2 = $test['rows'];
                 echo html_writer::tag('div', html_writer::table($importpreviewtable), ['class' => 'flexible-wrap']);
                 $customdata = ['id' => $cmid, 'cardboxid' => $cardbox->id, 'context' => $context, 'iid' => $iid,
                 'step' => 2, 'count' => $readcount, 'error' => $errorflag];
@@ -800,8 +798,6 @@ if ($action === 'massimport') {
         $mform2 = new \mod_cardbox\output\massimportpreview_form(null, []);
         if ($formdata2 = $mform2->get_data()) {
             $btn = preg_grep('/btn/', array_keys(get_object_vars($formdata2)));
-            $test = array_values($btn);
-            $test2 = array_values($btn)[0];
             $btnfunc = substr(array_values($btn)[0], 0, -3);
             if (($btnfunc) == 'import') {
                 $cir = new csv_import_reader($iid, 'cardbox');
