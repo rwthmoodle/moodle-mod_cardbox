@@ -88,7 +88,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $submitbutton = null, $context, $topicid = null, $necessaryanswers = 0, $disableautocorrect = 0) {
+function cardbox_save_new_card($cardboxid, $context, $submitbutton = null, $topicid = null, $necessaryanswers = 0, $disableautocorrect = 0) {
 
     global $DB, $USER;
 

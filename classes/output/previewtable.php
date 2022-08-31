@@ -24,8 +24,6 @@ namespace mod_cardbox\output;
  */
 
 defined('MOODLE_INTERNAL') || die();
-define ('LONG_DESCRIPTION', 1);
-define ('SHORT_DESCRIPTION', 0);
 
 class previewtable extends \html_table {
     /** @var \csv_import_reader  */
