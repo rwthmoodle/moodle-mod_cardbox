@@ -190,7 +190,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 } else {
                     $topicname = null;
                 }
-                $usercreatedcards[$q1count] = (object) [
+                $usercreatedcards[$q1count++] = (object) [
                     'cardid' => $query1card->card,
                     'topic' => $topicname,
                     'timecreated' => transform::datetime($query1card->timecreated),
