@@ -106,6 +106,10 @@
     margin-top: 3em;
 }
 
+.path-mod-cardbox .topic {
+    text-transform: uppercase;
+}
+
 /************************** Practice: modal with practice options *****************************************************/
 
 .path-mod-cardbox .modal {

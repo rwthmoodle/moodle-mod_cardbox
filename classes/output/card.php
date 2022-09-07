@@ -237,7 +237,7 @@ class cardbox_card implements \renderable, \templatable {
         $data = array();
         $data['cmid'] = $this->cmid;
         $data['cardid'] = $this->cardid;
-        $data['topic'] = strtoupper($this->topic);
+        $data['topic'] = $this->topic;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
         $data['multipleanswers'] = $this->multipleanswers;
