@@ -306,3 +306,13 @@ $string['status'] = 'Status';
 $string['continue'] = 'Weiter';
 $string['unmatchedanswers'] = 'CSV-Datei erfordert {$a->csvschema} Antworten; nur {$a->actual} gegeben. answers; ';
 $string['emptyimportfile'] = 'Nichts zu importieren - CSV-Datei hat keine Zeilen';
+
+// Capabilities definitions.
+$string['cardbox:approvecard'] = 'Karte genehmigen';
+$string['cardbox:deletecard'] = 'Karte löschen';
+$string['cardbox:edittopics'] = 'Themen bearbeiten';
+$string['cardbox:seestatus'] = 'Status sehen';
+$string['cardbox:submitcard'] = 'Karte abgeben';
+$string['cardbox:view'] = 'Karte ansehen';
+$string['cardbox:addinstance'] = 'Eine neue Cardbox hinzufügen';
+$string['cardbox:practice'] = 'Karten üben';
