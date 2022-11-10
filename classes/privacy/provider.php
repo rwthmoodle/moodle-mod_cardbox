@@ -159,30 +159,30 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         foreach ($cardboxes as $cardbox) {
             $context = \context::instance_by_id($cardbox->contextid);
             // Get all cards with contents created by the user.
-            $sql1 = "SELECT cc2.id, cc2.card,
-                        (select topicname from {cardbox_topics} where id = cc1.topic) as topic,
+            $sql1 = "SELECT cc.id, cc.card,
+                        (select topicname from {cardbox_topics} where id = c.topic) as topic,
                         timecreated,
                         timemodified,
                         case
-                            when cc2.cardside = 0 then 'Question'
-                            when cc2.cardside = 1 then 'Answer'
+                            when cc.cardside = 0 then 'Question'
+                            when cc.cardside = 1 then 'Answer'
                         end as cardside,
                         case
-                            when cc2.contenttype = 0 THEN 'Image'
-                            when cc2.contenttype = 1 THEN 'Text'
-                            when cc2.contenttype = 2 THEN 'Audio'
+                            when cc.contenttype = 0 THEN 'Image'
+                            when cc.contenttype = 1 THEN 'Text'
+                            when cc.contenttype = 2 THEN 'Audio'
                         end as contenttype,
                         CASE
-                            when cc2.area = 0 then 'Main Info'
-                            when cc2.area = 1 then 'Context Info'
-                            when cc2.area = 2 then 'Image Description'
-                            when cc2.area = 3 then 'Answer Suggestion'
+                            when cc.area = 0 then 'Main Info'
+                            when cc.area = 1 then 'Context Info'
+                            when cc.area = 2 then 'Image Description'
+                            when cc.area = 3 then 'Answer Suggestion'
                         end as infotype,
-                        cc2.content
-                    FROM {cardbox_cards} cc1
-                    JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
-                    where cc1.author = :authorid
-                    and cc1.cardbox = :cardboxid";
+                        cc.content
+                    FROM {cardbox_cards} c
+                    JOIN {cardbox_cardcontents} cc on c.id = cc.card
+                    where c.author = :authorid
+                    and c.cardbox = :cardboxid";
             $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
             $q1count = 0;
             $oldcard = 0;
@@ -201,30 +201,30 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             }
 
             // Get all cards with contents approved by the user.
-            $sql2 = "SELECT cc2.id, cc2.card,
-                        (select topicname from {cardbox_topics} where id = cc1.topic) as topic,
+            $sql2 = "SELECT cc.id, cc.card,
+                        (select topicname from {cardbox_topics} where id = c.topic) as topic,
                         timecreated,
                         timemodified,
                         case
-                            when cc2.cardside = 0 then 'Question'
-                            when cc2.cardside = 1 then 'Answer'
+                            when cc.cardside = 0 then 'Question'
+                            when cc.cardside = 1 then 'Answer'
                         end as cardside,
                         case
-                            when cc2.contenttype = 0 THEN 'Image'
-                            when cc2.contenttype = 1 THEN 'Text'
-                            when cc2.contenttype = 2 THEN 'Audio'
+                            when cc.contenttype = 0 THEN 'Image'
+                            when cc.contenttype = 1 THEN 'Text'
+                            when cc.contenttype = 2 THEN 'Audio'
                         end as Contentype,
                         CASE
-                            when cc2.area = 0 then 'Main Info'
-                            when cc2.area = 1 then 'Context Info'
-                            when cc2.area = 2 then 'Image Description'
-                            when cc2.area = 3 then 'Answer Suggestion'
+                            when cc.area = 0 then 'Main Info'
+                            when cc.area = 1 then 'Context Info'
+                            when cc.area = 2 then 'Image Description'
+                            when cc.area = 3 then 'Answer Suggestion'
                         end as InfoType,
-                        cc2.content
-                    FROM {cardbox_cards} cc1
-                    JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
-                    where cc1.approvedby = :approver
-                    and cc1.cardbox = :cardboxid";
+                        cc.content
+                    FROM {cardbox_cards} c
+                    JOIN {cardbox_cardcontents} cc on c.id = cc.card
+                    where c.approvedby = :approver
+                    and c.cardbox = :cardboxid";
             $query2cards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
             $q2count = 0;
             foreach ($query2cards as $query2card) {
