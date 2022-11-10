@@ -28,9 +28,7 @@ namespace mod_cardbox\privacy;
 defined('MOODLE_INTERNAL') || die();
 
 use \core_privacy\local\request\approved_contextlist;
-use \core_privacy\local\request\deletion_criteria;
 use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper as request_helper;
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 
@@ -114,7 +112,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 LEFT JOIN  {cardbox_statistics} cbxs ON cbx.id = cbxs.cardboxid AND cbxs.userid = :userid1
                 LEFT JOIN  {cardbox_cards} cbxc ON cbx.id = cbxc.cardbox AND (cbxc.author = :userid2 OR cbxc.approvedby = :userid3)
                 LEFT JOIN  {cardbox_progress} cbxp ON cbxc.id = cbxp.card AND cbxp.userid = :userid4
-                     WHERE (
+                WHERE (
                     cbxs.userid = :userid5 OR
                     cbxc.author = :userid6 OR
                     cbxc.approvedby = :userid7 OR
@@ -158,6 +156,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $cardboxes = $DB->get_recordset_sql($sql, $params);
         foreach ($cardboxes as $cardbox) {
             $context = \context::instance_by_id($cardbox->contextid);
+
             // Get all cards with contents created by the user.
             $sql = "SELECT cc.id, cc.card,
                         (SELECT topicname FROM {cardbox_topics} WHERE id = c.topic) AS topic,
@@ -183,9 +182,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.author = :authorid
                         AND c.cardbox = :cardboxid";
-            $createdcards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
+            $cards = $DB->get_records_sql($sql1, ['authorid' => $userid, 'cardboxid' => $cardbox->id]);
             $usercreatedcards = [];
-            foreach ($createdcards as $c) {
+            foreach ($cards as $c) {
                 $usercreatedcards[] = (object) [
                     'cardid' => $c->card,
                     'topic' => $c->topic,
@@ -223,9 +222,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.approvedby = :approver
                         AND c.cardbox = :cardboxid";
-            $approvedcards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
+            $cards = $DB->get_records_sql($sql2, ['approver' => $userid, 'cardboxid' => $cardbox->id]);
             $userapprovedcards = [];
-            foreach ($approvedcards as $c) {
+            foreach ($cards as $c) {
                 $userapprovedcards[] = (object) [
                     'cardid' => $c->card,
                     'topic' => $c->topic,
@@ -243,7 +242,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      FROM {cardbox_progress}
                      WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
                          AND userid = :userid";
-            $progresses = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            $progresses = $DB->get_records_sql($sql3, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
             foreach ($progresses as $p) {
                 $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
@@ -258,10 +257,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      FROM {cardbox_statistics}
                      WHERE userid = :userid
                          AND cardboxid = :cardboxid";
-            $statistics = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            $statistics = $DB->get_records_sql($sql4, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
             foreach ($statistics as $s) {
                 $key = 'Cardbox '.$s->cardboxid;
-                $cbxname = $DB->get_field('cardbox', 'name', array('id' => $s->cardboxid));
+                $cbxname = $DB->get_field('cardbox', 'name', ['id' => $s->cardboxid]);
                 $userstats[$key] = (object) [
                     'cardboxname' => $cbxname,
                     'timeofpractice' => transform::datetime($s->timeofpractice),
@@ -288,7 +287,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
-
         if ($context->contextlevel != CONTEXT_MODULE) {
             return;
         }
@@ -296,20 +294,21 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         if ($cardboxid === false) {
             return;
         }
+
         // Delete all statistics for this cardbox instance.
         $DB->delete_records('cardbox_statistics', ['cardboxid' => $cardboxid]);
 
+        // Delete user progress for this cardbox instance.
         $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid]);
         foreach ($listofcards as $cardid) {
-            // Delete user progress for this cardbox instance
             $DB->delete_records('cardbox_progress', ['card' => $cardid->id]);
-
-            // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-            $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $cardboxid));
-            $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $cardboxid));
         }
 
+        // Remove author and approver details from cards. The card on a whole doesnt get deleted.
+        $DB->set_field('cardbox_cards', 'author', 0, ['cardbox' => $cardboxid]);
+        $DB->set_field('cardbox_cards', 'approvedby', 0, ['cardbox' => $cardboxid]);
     }
+
     /**
      *
      * Delete personal data for the user in a list of contexts.
@@ -318,10 +317,6 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
-
-        if (empty($contextlist->count())) {
-            return;
-        }
         $userid = $contextlist->get_user()->id;
 
         foreach ($contextlist->get_contexts() as $context) {
