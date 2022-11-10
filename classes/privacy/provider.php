@@ -188,14 +188,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             $oldcard = 0;
             foreach ($query1cards as $query1card) {
 
-                if (!empty($query1card->topic)) {
-                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
-                } else {
-                    $topicname = null;
-                }
                 $usercreatedcards[$q1count++] = (object) [
                     'cardid' => $query1card->card,
-                    'topic' => $topicname,
+                    'topic' => $query1card->topic,
                     'timecreated' => transform::datetime($query1card->timecreated),
                     'timemodified' => transform::datetime($query1card->timemodified),
                     'cardside' => $query1card->cardside,
@@ -234,14 +229,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             $q2count = 0;
             foreach ($query2cards as $query2card) {
                 $q2count++;
-                if (!empty($query1card->topic)) {
-                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
-                } else {
-                    $topicname = null;
-                }
                 $userapprovedcards[$q2count] = (object) [
                     'cardid' => $query2card->card,
-                    'topic' => $topicname,
+                    'topic' => $query2card->topic,
                     'timecreated' => transform::datetime($query2card->timecreated),
                     'timemodified' => transform::datetime($query2card->timemodified),
                     'cardside' => $query2card->cardside,
