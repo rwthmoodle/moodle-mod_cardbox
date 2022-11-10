@@ -305,24 +305,21 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         if ($context->contextlevel != CONTEXT_MODULE) {
             return;
         }
-
-        $instanceid = $context->instanceid;
-
-        $cm = get_coursemodule_from_id('cardbox', $instanceid);
-        if (!$cm) {
+        $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid]);
+        if ($cardboxid === false) {
             return;
         }
         // Delete all statistics for this cardbox instance.
-        $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid]);
+        $DB->delete_records('cardbox_statistics', ['cardboxid' => $cardboxid]);
 
-        $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid]);
+        $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid]);
         foreach ($listofcards as $cardid) {
             // Delete user progress for this cardbox instance
             $DB->delete_records('cardbox_progress', ['card' => $cardid->id]);
 
             // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-            $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid));
-            $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid));
+            $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $cardboxid));
+            $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $cardboxid));
         }
 
     }
