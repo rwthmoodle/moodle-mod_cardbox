@@ -184,6 +184,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     WHERE c.author = :authorid
                         AND c.cardbox = :cardboxid";
             $createdcards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
+            $usercreatedcards = [];
             foreach ($createdcards as $c) {
                 $usercreatedcards[] = (object) [
                     'cardid' => $c->card,
@@ -223,6 +224,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     WHERE c.approvedby = :approver
                         AND c.cardbox = :cardboxid";
             $approvedcards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
+            $userapprovedcards = [];
             foreach ($approvedcards as $c) {
                 $userapprovedcards[] = (object) [
                     'cardid' => $c->card,
