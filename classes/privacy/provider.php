@@ -164,13 +164,13 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                         timecreated,
                         timemodified,
                         case
-                            when cc2.cardside = 0 then 'QUESTION'
-                            when cc2.cardside = 1 then 'ANSWER'
+                            when cc2.cardside = 0 then 'Question'
+                            when cc2.cardside = 1 then 'Answer'
                         end as cardside,
                         case
-                            when cc2.contenttype = 0 THEN 'IMAGE'
-                            when cc2.contenttype = 1 THEN 'TEXT'
-                            when cc2.contenttype = 2 THEN 'AUDIO'
+                            when cc2.contenttype = 0 THEN 'Image'
+                            when cc2.contenttype = 1 THEN 'Text'
+                            when cc2.contenttype = 2 THEN 'Audio'
                         end as contenttype,
                         CASE
                             when cc2.area = 0 then 'Main Info'
@@ -206,13 +206,13 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                         timecreated,
                         timemodified,
                         case
-                            when cc2.cardside = 0 then 'QUESTION'
-                            when cc2.cardside = 1 then 'ANSWER'
+                            when cc2.cardside = 0 then 'Question'
+                            when cc2.cardside = 1 then 'Answer'
                         end as cardside,
                         case
-                            when cc2.contenttype = 0 THEN 'IMAGE'
-                            when cc2.contenttype = 1 THEN 'TEXT'
-                            when cc2.contenttype = 2 THEN 'AUDIO'
+                            when cc2.contenttype = 0 THEN 'Image'
+                            when cc2.contenttype = 1 THEN 'Text'
+                            when cc2.contenttype = 2 THEN 'Audio'
                         end as Contentype,
                         CASE
                             when cc2.area = 0 then 'Main Info'
