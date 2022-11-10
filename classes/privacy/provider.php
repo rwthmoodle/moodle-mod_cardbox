@@ -183,20 +183,17 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.author = :authorid
                         AND c.cardbox = :cardboxid";
-            $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
-            $q1count = 0;
-            $oldcard = 0;
-            foreach ($query1cards as $query1card) {
-
-                $usercreatedcards[$q1count++] = (object) [
-                    'cardid' => $query1card->card,
-                    'topic' => $query1card->topic,
-                    'timecreated' => transform::datetime($query1card->timecreated),
-                    'timemodified' => transform::datetime($query1card->timemodified),
-                    'cardside' => $query1card->cardside,
-                    'contenttype' => $query1card->contenttype,
-                    'infotype' => $query1card->infotype,
-                    'content' => $query1card->content
+            $createdcards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($createdcards as $c) {
+                $usercreatedcards[] = (object) [
+                    'cardid' => $c->card,
+                    'topic' => $c->topic,
+                    'timecreated' => transform::datetime($c->timecreated),
+                    'timemodified' => transform::datetime($c->timemodified),
+                    'cardside' => $c->cardside,
+                    'contenttype' => $c->contenttype,
+                    'infotype' => $c->infotype,
+                    'content' => $c->content
                 ];
             }
 
@@ -225,19 +222,17 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.approvedby = :approver
                         AND c.cardbox = :cardboxid";
-            $query2cards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
-            $q2count = 0;
-            foreach ($query2cards as $query2card) {
-                $q2count++;
-                $userapprovedcards[$q2count] = (object) [
-                    'cardid' => $query2card->card,
-                    'topic' => $query2card->topic,
-                    'timecreated' => transform::datetime($query2card->timecreated),
-                    'timemodified' => transform::datetime($query2card->timemodified),
-                    'cardside' => $query2card->cardside,
-                    'contenttype' => $query2card->contenttype,
-                    'infotype' => $query2card->infotype,
-                    'content' => $query2card->content
+            $approvedcards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($approvedcards as $c) {
+                $userapprovedcards[] = (object) [
+                    'cardid' => $c->card,
+                    'topic' => $c->topic,
+                    'timecreated' => transform::datetime($c->timecreated),
+                    'timemodified' => transform::datetime($c->timemodified),
+                    'cardside' => $c->cardside,
+                    'contenttype' => $c->contenttype,
+                    'infotype' => $c->infotype,
+                    'content' => $c->content
                 ];
             }
 
@@ -246,13 +241,13 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      FROM {cardbox_progress}
                      WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
                          AND userid = :userid";
-            $query3cards = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
-            foreach ($query3cards as $query3card) {
-                $key = 'Card '.$query3card->card;
+            $progresses = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($progresses as $p) {
+                $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
-                    'deck' => $query3card->cardposition,
-                    'lastpracticed' => transform::datetime($query3card->lastpracticed),
-                    'repetitions' => $query3card->repetitions
+                    'deck' => $p->cardposition,
+                    'lastpracticed' => transform::datetime($p->lastpracticed),
+                    'repetitions' => $p->repetitions
                 ];
             }
 
@@ -261,16 +256,16 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      FROM {cardbox_statistics}
                      WHERE userid = :userid
                          AND cardboxid = :cardboxid";
-            $query4cards = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
-            foreach ($query4cards as $query4card) {
-                $key = 'Cardbox '.$query4card->cardboxid;
-                $cbxname = $DB->get_field('cardbox', 'name', array('id' => $query4card->cardboxid));
+            $statistics = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
+            foreach ($statistics as $s) {
+                $key = 'Cardbox '.$s->cardboxid;
+                $cbxname = $DB->get_field('cardbox', 'name', array('id' => $s->cardboxid));
                 $userstats[$key] = (object) [
                     'cardboxname' => $cbxname,
-                    'timeofpractice' => transform::datetime($query4card->timeofpractice),
-                    'numberofcards' => $query4card->numberofcards,
-                    'duration' => $query4card->duration,
-                    'percentcorrect' => $query4card->percentcorrect
+                    'timeofpractice' => transform::datetime($s->timeofpractice),
+                    'numberofcards' => $s->numberofcards,
+                    'duration' => $s->duration,
+                    'percentcorrect' => $s->percentcorrect
                 ];
             }
 
