@@ -159,30 +159,30 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         foreach ($cardboxes as $cardbox) {
             $context = \context::instance_by_id($cardbox->contextid);
             // Get all cards with contents created by the user.
-            $sql1 = "SELECT cc.id, cc.card,
-                        (select topicname from {cardbox_topics} where id = c.topic) as topic,
+            $sql = "SELECT cc.id, cc.card,
+                        (SELECT topicname FROM {cardbox_topics} WHERE id = c.topic) AS topic,
                         timecreated,
                         timemodified,
-                        case
-                            when cc.cardside = 0 then 'Question'
-                            when cc.cardside = 1 then 'Answer'
-                        end as cardside,
-                        case
-                            when cc.contenttype = 0 THEN 'Image'
-                            when cc.contenttype = 1 THEN 'Text'
-                            when cc.contenttype = 2 THEN 'Audio'
-                        end as contenttype,
                         CASE
-                            when cc.area = 0 then 'Main Info'
-                            when cc.area = 1 then 'Context Info'
-                            when cc.area = 2 then 'Image Description'
-                            when cc.area = 3 then 'Answer Suggestion'
-                        end as infotype,
+                            WHEN cc.cardside = 0 THEN 'Question'
+                            WHEN cc.cardside = 1 THEN 'Answer'
+                        END AS cardside,
+                        CASE
+                            WHEN cc.contenttype = 0 THEN 'Image'
+                            WHEN cc.contenttype = 1 THEN 'Text'
+                            WHEN cc.contenttype = 2 THEN 'Audio'
+                        END AS contenttype,
+                        CASE
+                            WHEN cc.area = 0 THEN 'Main Info'
+                            WHEN cc.area = 1 THEN 'Context Info'
+                            WHEN cc.area = 2 THEN 'Image Description'
+                            WHEN cc.area = 3 THEN 'Answer Suggestion'
+                        END AS infotype,
                         cc.content
                     FROM {cardbox_cards} c
-                    JOIN {cardbox_cardcontents} cc on c.id = cc.card
-                    where c.author = :authorid
-                    and c.cardbox = :cardboxid";
+                    JOIN {cardbox_cardcontents} cc ON c.id = cc.card
+                    WHERE c.author = :authorid
+                        AND c.cardbox = :cardboxid";
             $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
             $q1count = 0;
             $oldcard = 0;
@@ -201,30 +201,30 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             }
 
             // Get all cards with contents approved by the user.
-            $sql2 = "SELECT cc.id, cc.card,
-                        (select topicname from {cardbox_topics} where id = c.topic) as topic,
+            $sql = "SELECT cc.id, cc.card,
+                        (SELECT topicname FROM {cardbox_topics} WHERE id = c.topic) AS topic,
                         timecreated,
                         timemodified,
-                        case
-                            when cc.cardside = 0 then 'Question'
-                            when cc.cardside = 1 then 'Answer'
-                        end as cardside,
-                        case
-                            when cc.contenttype = 0 THEN 'Image'
-                            when cc.contenttype = 1 THEN 'Text'
-                            when cc.contenttype = 2 THEN 'Audio'
-                        end as Contentype,
                         CASE
-                            when cc.area = 0 then 'Main Info'
-                            when cc.area = 1 then 'Context Info'
-                            when cc.area = 2 then 'Image Description'
-                            when cc.area = 3 then 'Answer Suggestion'
-                        end as InfoType,
+                            WHEN cc.cardside = 0 THEN 'Question'
+                            WHEN cc.cardside = 1 THEN 'Answer'
+                        END AS cardside,
+                        CASE
+                            WHEN cc.contenttype = 0 THEN 'Image'
+                            WHEN cc.contenttype = 1 THEN 'Text'
+                            WHEN cc.contenttype = 2 THEN 'Audio'
+                        END AS Contentype,
+                        CASE
+                            WHEN cc.area = 0 THEN 'Main Info'
+                            WHEN cc.area = 1 THEN 'Context Info'
+                            WHEN cc.area = 2 THEN 'Image Description'
+                            WHEN cc.area = 3 THEN 'Answer Suggestion'
+                        END AS InfoType,
                         cc.content
                     FROM {cardbox_cards} c
-                    JOIN {cardbox_cardcontents} cc on c.id = cc.card
-                    where c.approvedby = :approver
-                    and c.cardbox = :cardboxid";
+                    JOIN {cardbox_cardcontents} cc ON c.id = cc.card
+                    WHERE c.approvedby = :approver
+                        AND c.cardbox = :cardboxid";
             $query2cards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
             $q2count = 0;
             foreach ($query2cards as $query2card) {
@@ -243,9 +243,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 
             // Get user progress for the cardbox.
             $sql3 = "SELECT card, cardposition, lastpracticed, repetitions
-                        from {cardbox_progress}
-                            where card in (select id from {cardbox_cards} where cardbox = :cardboxid)
-                                and userid = :userid";
+                     FROM {cardbox_progress}
+                     WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
+                         AND userid = :userid";
             $query3cards = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
             foreach ($query3cards as $query3card) {
                 $key = 'Card '.$query3card->card;
@@ -258,9 +258,9 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 
             // Get user stats for entire cardbox.
             $sql4 = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
-                        from {cardbox_statistics}
-                        where userid = :userid
-                        and cardboxid = :cardboxid";
+                     FROM {cardbox_statistics}
+                     WHERE userid = :userid
+                         AND cardboxid = :cardboxid";
             $query4cards = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
             foreach ($query4cards as $query4card) {
                 $key = 'Cardbox '.$query4card->cardboxid;
