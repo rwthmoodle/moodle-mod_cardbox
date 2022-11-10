@@ -154,14 +154,10 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 WHERE c.id {$contextsql}";
         $params = ['modname' => 'cardbox'];
         $params = array_merge($params, $contextparams);
-        // Keep a mapping of cardboxid to contextid.
-        $mappings = [];
 
         $cardboxes = $DB->get_recordset_sql($sql, $params);
         foreach ($cardboxes as $cardbox) {
-            $mappings[$cardbox->id] = $cardbox->contextid;
-
-            $context = \context::instance_by_id($mappings[$cardbox->id]);
+            $context = \context::instance_by_id($cardbox->contextid);
             // Get all cards with contents created by the user.
             $sql1 = "SELECT cc2.id, cc2.card,
                         (select topicname from {cardbox_topics} where id = cc1.topic) as topic,
