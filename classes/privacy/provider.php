@@ -149,14 +149,15 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     cbx.name AS cardboxname
                 FROM {context} c
                 JOIN {course_modules} cm ON cm.id = c.instanceid
+                JOIN {modules} m ON m.id = cm.module AND m.name = :modname
                 JOIN {cardbox} cbx ON cbx.id = cm.instance
-                WHERE (
-                    c.id {$contextsql}
-                )";
+                WHERE c.id {$contextsql}";
+        $params = ['modname' => 'cardbox'];
+        $params = array_merge($params, $contextparams);
         // Keep a mapping of cardboxid to contextid.
         $mappings = [];
 
-        $cardboxes = $DB->get_recordset_sql($sql, $contextparams);
+        $cardboxes = $DB->get_recordset_sql($sql, $params);
         foreach ($cardboxes as $cardbox) {
             $mappings[$cardbox->id] = $cardbox->contextid;
 
