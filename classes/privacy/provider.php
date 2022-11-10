@@ -341,20 +341,25 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         $userid = $contextlist->get_user()->id;
 
         foreach ($contextlist->get_contexts() as $context) {
-
-            $instanceid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid], MUST_EXIST);
-            // Delete all statistics for the user in this cardbox instance.
-            $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid, 'userid' => $userid]);
-            // Delete user progress for this cardbox instance
-            $DB->delete_records('cardbox_progress', ['userid' => $userid]);
-            // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-            $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'author' => $userid]);
-            foreach ($usercreatedcards as $usercreatedcard) {
-                $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid, 'id' => $usercreatedcard->id));
+            $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid]);
+            if ($cardboxid === false) {
+                continue;
             }
-            $userapprovedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'approvedby' => $userid]);
-            foreach ($userapprovedcards as $userapprovedcard) {
-                $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid, 'id' => $userapprovedcard->id));
+
+            // Delete all statistics for the user in this cardbox instance.
+            $DB->delete_records('cardbox_statistics', ['cardboxid' => $cardboxid, 'userid' => $userid]);
+
+            // Delete user progress for this cardbox instance.
+            $DB->delete_records('cardbox_progress', ['userid' => $userid]);
+
+            // Remove author and approver details from cards. The card on a whole doesnt get deleted.
+            $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid, 'author' => $userid]);
+            foreach ($usercreatedcards as $card) {
+                $DB->set_field('cardbox_cards', 'author', 0, ['cardbox' => $cardboxid, 'id' => $card->id]);
+            }
+            $userapprovedcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid, 'approvedby' => $userid]);
+            foreach ($userapprovedcards as $card) {
+                $DB->set_field('cardbox_cards', 'approvedby', 0, ['cardbox' => $cardboxid, 'id' => $card->id]);
             }
         }
     }
