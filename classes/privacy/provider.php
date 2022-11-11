@@ -182,7 +182,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.author = :authorid
                         AND c.cardbox = :cardboxid";
-            $cards = $DB->get_records_sql($sql1, ['authorid' => $userid, 'cardboxid' => $cardbox->id]);
+            $cards = $DB->get_records_sql($sql, ['authorid' => $userid, 'cardboxid' => $cardbox->id]);
             $usercreatedcards = [];
             foreach ($cards as $c) {
                 $usercreatedcards[] = (object) [
@@ -222,7 +222,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     JOIN {cardbox_cardcontents} cc ON c.id = cc.card
                     WHERE c.approvedby = :approver
                         AND c.cardbox = :cardboxid";
-            $cards = $DB->get_records_sql($sql2, ['approver' => $userid, 'cardboxid' => $cardbox->id]);
+            $cards = $DB->get_records_sql($sql, ['approver' => $userid, 'cardboxid' => $cardbox->id]);
             $userapprovedcards = [];
             foreach ($cards as $c) {
                 $userapprovedcards[] = (object) [
@@ -238,11 +238,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             }
 
             // Get user progress for the cardbox.
-            $sql3 = "SELECT card, cardposition, lastpracticed, repetitions
+            $sql = "SELECT card, cardposition, lastpracticed, repetitions
                      FROM {cardbox_progress}
                      WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
                          AND userid = :userid";
-            $progresses = $DB->get_records_sql($sql3, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $progresses = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
             foreach ($progresses as $p) {
                 $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
@@ -253,11 +253,11 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             }
 
             // Get user stats for entire cardbox.
-            $sql4 = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
+            $sql = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
                      FROM {cardbox_statistics}
                      WHERE userid = :userid
                          AND cardboxid = :cardboxid";
-            $statistics = $DB->get_records_sql($sql4, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $statistics = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
             foreach ($statistics as $s) {
                 $key = 'Cardbox '.$s->cardboxid;
                 $cbxname = $DB->get_field('cardbox', 'name', ['id' => $s->cardboxid]);
