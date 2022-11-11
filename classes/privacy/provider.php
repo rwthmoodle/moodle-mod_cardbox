@@ -106,12 +106,12 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
 
         $sql = "SELECT DISTINCT c.id
                 FROM {context} c
-                INNER JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                INNER JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                INNER JOIN {cardbox} cbx ON cbx.id = cm.instance
-                LEFT JOIN  {cardbox_statistics} cbxs ON cbx.id = cbxs.cardboxid AND cbxs.userid = :userid1
-                LEFT JOIN  {cardbox_cards} cbxc ON cbx.id = cbxc.cardbox
-                LEFT JOIN  {cardbox_progress} cbxp ON cbxc.id = cbxp.card AND cbxp.userid = :userid4
+                JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+                JOIN {modules} m ON m.id = cm.module AND m.name = :modname
+                JOIN {cardbox} cbx ON cbx.id = cm.instance
+                LEFT JOIN {cardbox_statistics} cbxs ON cbx.id = cbxs.cardboxid AND cbxs.userid = :userid1
+                LEFT JOIN {cardbox_cards} cbxc ON cbx.id = cbxc.cardbox
+                LEFT JOIN {cardbox_progress} cbxp ON cbxc.id = cbxp.card AND cbxp.userid = :userid4
                 WHERE (
                     cbxs.userid = :userid5 OR
                     cbxc.author = :userid6 OR
