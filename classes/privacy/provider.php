@@ -189,7 +189,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     'cardid' => $c->card,
                     'topic' => $c->topic,
                     'timecreated' => transform::datetime($c->timecreated),
-                    'timemodified' => transform::datetime($c->timemodified),
+                    'timemodified' => $c->timemodified ? transform::datetime($c->timemodified) : 'Never',
                     'cardside' => $c->cardside,
                     'contenttype' => $c->contenttype,
                     'infotype' => $c->infotype,
@@ -229,7 +229,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     'cardid' => $c->card,
                     'topic' => $c->topic,
                     'timecreated' => transform::datetime($c->timecreated),
-                    'timemodified' => transform::datetime($c->timemodified),
+                    'timemodified' => $c->timemodified ? transform::datetime($c->timemodified) : 'Never',
                     'cardside' => $c->cardside,
                     'contenttype' => $c->contenttype,
                     'infotype' => $c->infotype,
@@ -247,7 +247,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                 $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
                     'deck' => $p->cardposition,
-                    'lastpracticed' => transform::datetime($p->lastpracticed),
+                    'lastpracticed' => $p->lastpracticed ? transform::datetime($p->lastpracticed) : 'Never',
                     'repetitions' => $p->repetitions
                 ];
             }
