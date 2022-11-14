@@ -243,6 +243,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
                          AND userid = :userid";
             $progresses = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $userprogress = [];
             foreach ($progresses as $p) {
                 $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
@@ -258,6 +259,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                      WHERE userid = :userid
                          AND cardboxid = :cardboxid";
             $statistics = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $userstats = [];
             foreach ($statistics as $s) {
                 $key = 'Cardbox '.$s->cardboxid;
                 $cbxname = $DB->get_field('cardbox', 'name', ['id' => $s->cardboxid]);
