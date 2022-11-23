@@ -62,12 +62,12 @@ class remind extends \core\task\scheduled_task {
                 $message->userfrom = core_user::get_noreply_user();
                 $message->userto = $recipient;
                 $message->subject = $sm->get_string('remindersubject', 'cardbox', null, $recipient->lang);
-                $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).' '.
+                $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->firstname, $recipient->lang).' '.
                                         $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . ' ' .
                                         $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang);
                 $message->fullmessageformat = FORMAT_MARKDOWN;
                 $message->fullmessagehtml = '<p>'.
-                        $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).
+                        $sm->get_string('remindergreeting', 'cardbox', $recipient->firstname, $recipient->lang).
                         '</p><p>'.$sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang).
                 '</p><p><em>'.$sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
                 $message->smallmessage = 'small message';
