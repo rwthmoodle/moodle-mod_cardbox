@@ -115,7 +115,7 @@ class cardbox_practice implements \renderable, \templatable {
         if ($topic === 0 || $topic == "NULL") {
             $this->topic = "";
         } else {
-            $this->topic = strtoupper($DB->get_field('cardbox_topics', 'topicname', array('id' => $topic)));
+            $this->topic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic));
         }
 
         $this->casesensitive = cardbox_cardboxmodel::cardbox_get_casesensitive($cardid);

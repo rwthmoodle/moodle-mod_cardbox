@@ -156,13 +156,13 @@ class mod_cardbox_review_form extends moodleform {
                 $acimgurl = '';
             }
             if ($countsuggestedanswers > 1) {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
-                                   $topicname).'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$howmanyanswersnecessary.
+                $mform->addElement('html', '<div class="col-xl-4 topic" style="margin-left: 3%; margin-bottom: 10px">'. get_string('choosetopic', 'cardbox').': '.
+                                   $topicname.'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$howmanyanswersnecessary.
                                    $acimgurl. '</div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
                                    <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
             } else {
-                $mform->addElement('html', '<div class="col-xl-4" style="margin-left: 3%; margin-bottom: 10px">'. strtoupper(get_string('choosetopic', 'cardbox').': '.
-                $topicname).'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$acimgurl.'
+                $mform->addElement('html', '<div class="col-xl-4 topic" style="margin-left: 3%; margin-bottom: 10px">'. get_string('choosetopic', 'cardbox').': '.
+                $topicname.'</div><div class="col-xl-4" style="padding-left: 0.4%;"><div class="review-icon-grid-div">'.$acimgurl.'
                 </div></div><div class="col-xl-2"></div><div class="col-xl-4" style="padding:0px;"><div class="cardbox-column" style="height: 100%;">
                 <div class="cardbox-card-left-side"><div class="cardbox-cardside"><div style="height:100%">'.$question.'</div></div></div></div></div>');
             }
