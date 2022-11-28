@@ -3,6 +3,14 @@ moodle-mod_cardbox
 
 Changes
 -------
+### v1.0.3
+
+* remove redundant chartbundle link
+* Improved Privacy API
+* Define minimum size of feedback graph
+* Fix upper case letters for topic names
+* Missing capability strings defined
+* Context location moved for better continuous readability experience
 ### 2022083000 v1.0.2
 
 * New Version, new release
