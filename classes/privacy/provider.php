@@ -28,9 +28,7 @@ namespace mod_cardbox\privacy;
 defined('MOODLE_INTERNAL') || die();
 
 use \core_privacy\local\request\approved_contextlist;
-use \core_privacy\local\request\deletion_criteria;
 use \core_privacy\local\request\writer;
-use \core_privacy\local\request\helper as request_helper;
 use \core_privacy\local\metadata\collection;
 use \core_privacy\local\request\transform;
 
@@ -100,22 +98,26 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
             'userid2' => $userid,
             'userid3' => $userid,
             'userid4' => $userid,
+            'userid5' => $userid,
+            'userid6' => $userid,
+            'userid7' => $userid,
+            'userid8' => $userid,
         ];
 
         $sql = "SELECT DISTINCT c.id
                 FROM {context} c
-                INNER JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
-                INNER JOIN {modules} m ON m.id = cm.module AND m.name = :modname
-                INNER JOIN {cardbox} cbx ON cbx.id = cm.instance
-                LEFT JOIN  {cardbox_statistics} cbxs ON cbx.id = cbxs.cardboxid
-                LEFT JOIN  {cardbox_cards} cbxc ON cbx.id = cbxc.cardbox
-                LEFT JOIN  {cardbox_progress} cbxp ON cbxc.id = cbxp.card
-                     WHERE (
-                        cbxs.userid = :userid1 OR
-                        cbxc.author = :userid2 OR
-                        cbxc.approvedby = :userid3 OR
-                        cbxp.userid = :userid4
-                     )";
+                JOIN {course_modules} cm ON cm.id = c.instanceid AND c.contextlevel = :contextlevel
+                JOIN {modules} m ON m.id = cm.module AND m.name = :modname
+                JOIN {cardbox} cbx ON cbx.id = cm.instance
+                LEFT JOIN {cardbox_statistics} cbxs ON cbx.id = cbxs.cardboxid AND cbxs.userid = :userid1
+                LEFT JOIN {cardbox_cards} cbxc ON cbx.id = cbxc.cardbox
+                LEFT JOIN {cardbox_progress} cbxp ON cbxc.id = cbxp.card AND cbxp.userid = :userid4
+                WHERE (
+                    cbxs.userid = :userid5 OR
+                    cbxc.author = :userid6 OR
+                    cbxc.approvedby = :userid7 OR
+                    cbxp.userid = :userid8
+                )";
         $contextlist->add_from_sql($sql, $params);
 
         return $contextlist;
@@ -136,6 +138,7 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
         if (empty($contextlist)) {
             return;
         }
+
         list($contextsql, $contextparams) = $DB->get_in_or_equal($contextlist->get_contextids(), SQL_PARAMS_NAMED);
         $sql = "SELECT
                     c.id AS contextid,
@@ -144,140 +147,128 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
                     cbx.name AS cardboxname
                 FROM {context} c
                 JOIN {course_modules} cm ON cm.id = c.instanceid
+                JOIN {modules} m ON m.id = cm.module AND m.name = :modname
                 JOIN {cardbox} cbx ON cbx.id = cm.instance
-                WHERE (
-                    c.id {$contextsql}
-                )";
-        // Keep a mapping of cardboxid to contextid.
-        $mappings = [];
+                WHERE c.id {$contextsql}";
+        $params = ['modname' => 'cardbox'];
+        $params = array_merge($params, $contextparams);
 
-        $cardboxes = $DB->get_recordset_sql($sql, $contextparams);
+        $cardboxes = $DB->get_recordset_sql($sql, $params);
         foreach ($cardboxes as $cardbox) {
-            $mappings[$cardbox->id] = $cardbox->contextid;
+            $context = \context::instance_by_id($cardbox->contextid);
 
-            $context = \context::instance_by_id($mappings[$cardbox->id]);
             // Get all cards with contents created by the user.
-            $sql1 = "SELECT cc2.id, cc2.card,
-                        (select topicname from {cardbox_topics} where id = cc1.topic) as topic,
+            $sql = "SELECT cc.id, cc.card,
+                        (SELECT topicname FROM {cardbox_topics} WHERE id = c.topic) AS topic,
                         timecreated,
                         timemodified,
-                        case
-                            when cc2.cardside = 0 then 'QUESTION'
-                            when cc2.cardside = 1 then 'ANSWER'
-                        end as cardside,
-                        case
-                            when cc2.contenttype = 0 THEN 'IMAGE'
-                            when cc2.contenttype = 1 THEN 'TEXT'
-                            when cc2.contenttype = 2 THEN 'AUDIO'
-                        end as contenttype,
                         CASE
-                            when cc2.area = 0 then 'Main Info'
-                            when cc2.area = 1 then 'Context Info'
-                            when cc2.area = 2 then 'Image Description'
-                            when cc2.area = 3 then 'Answer Suggestion'
-                        end as infotype,
-                        cc2.content
-                    FROM {cardbox_cards} cc1
-                    JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
-                    where cc1.author = :authorid
-                    and cc1.cardbox = :cardboxid";
-            $query1cards = $DB->get_records_sql($sql1, array('authorid' => $userid, 'cardboxid' => $cardbox->id));
-            $q1count = 0;
-            foreach ($query1cards as $query1card) {
-                $q1count++;
-                if (!empty($query1card->topic)) {
-                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
-                } else {
-                    $topicname = null;
-                }
-                $usercreatedcards[$q1count] = (object) [
-                    'cardid' => $query1card->card,
-                    'topic' => $topicname,
-                    'timecreated' => transform::datetime($query1card->timecreated),
-                    'timemodified' => transform::datetime($query1card->timemodified),
-                    'cardside' => $query1card->cardside,
-                    'contenttype' => $query1card->contenttype,
-                    'infotype' => $query1card->infotype,
-                    'content' => $query1card->content
+                            WHEN cc.cardside = 0 THEN 'Question'
+                            WHEN cc.cardside = 1 THEN 'Answer'
+                        END AS cardside,
+                        CASE
+                            WHEN cc.contenttype = 0 THEN 'Image'
+                            WHEN cc.contenttype = 1 THEN 'Text'
+                            WHEN cc.contenttype = 2 THEN 'Audio'
+                        END AS contenttype,
+                        CASE
+                            WHEN cc.area = 0 THEN 'Main Info'
+                            WHEN cc.area = 1 THEN 'Context Info'
+                            WHEN cc.area = 2 THEN 'Image Description'
+                            WHEN cc.area = 3 THEN 'Answer Suggestion'
+                        END AS infotype,
+                        cc.content
+                    FROM {cardbox_cards} c
+                    JOIN {cardbox_cardcontents} cc ON c.id = cc.card
+                    WHERE c.author = :authorid
+                        AND c.cardbox = :cardboxid";
+            $cards = $DB->get_records_sql($sql, ['authorid' => $userid, 'cardboxid' => $cardbox->id]);
+            $usercreatedcards = [];
+            foreach ($cards as $c) {
+                $usercreatedcards[] = (object) [
+                    'cardid' => $c->card,
+                    'topic' => $c->topic,
+                    'timecreated' => transform::datetime($c->timecreated),
+                    'timemodified' => $c->timemodified ? transform::datetime($c->timemodified) : 'Never',
+                    'cardside' => $c->cardside,
+                    'contenttype' => $c->contenttype,
+                    'infotype' => $c->infotype,
+                    'content' => $c->content
                 ];
             }
 
             // Get all cards with contents approved by the user.
-            $sql2 = "SELECT cc2.id, cc2.card,
-                        (select topicname from {cardbox_topics} where id = cc1.topic) as topic,
+            $sql = "SELECT cc.id, cc.card,
+                        (SELECT topicname FROM {cardbox_topics} WHERE id = c.topic) AS topic,
                         timecreated,
                         timemodified,
-                        case
-                            when cc2.cardside = 0 then 'QUESTION'
-                            when cc2.cardside = 1 then 'ANSWER'
-                        end as cardside,
-                        case
-                            when cc2.contenttype = 0 THEN 'IMAGE'
-                            when cc2.contenttype = 1 THEN 'TEXT'
-                            when cc2.contenttype = 2 THEN 'AUDIO'
-                        end as Contentype,
                         CASE
-                            when cc2.area = 0 then 'Main Info'
-                            when cc2.area = 1 then 'Context Info'
-                            when cc2.area = 2 then 'Image Description'
-                            when cc2.area = 3 then 'Answer Suggestion'
-                        end as InfoType,
-                        cc2.content
-                    FROM {cardbox_cards} cc1
-                    JOIN {cardbox_cardcontents} cc2 on cc1.id = cc2.card
-                    where cc1.approvedby = :approver
-                    and cc1.cardbox = :cardboxid";
-            $query2cards = $DB->get_records_sql($sql2, array('approver' => $userid, 'cardboxid' => $cardbox->id));
-            $q2count = 0;
-            foreach ($query2cards as $query2card) {
-                $q2count++;
-                if (!empty($query1card->topic)) {
-                    $topicname = $DB->get_field('cardbox_topics', 'topicname', array('id' => $query1card->topic));
-                } else {
-                    $topicname = null;
-                }
-                $userapprovedcards[$q2count] = (object) [
-                    'cardid' => $query2card->card,
-                    'topic' => $topicname,
-                    'timecreated' => transform::datetime($query2card->timecreated),
-                    'timemodified' => transform::datetime($query2card->timemodified),
-                    'cardside' => $query2card->cardside,
-                    'contenttype' => $query2card->contenttype,
-                    'infotype' => $query2card->infotype,
-                    'content' => $query2card->content
+                            WHEN cc.cardside = 0 THEN 'Question'
+                            WHEN cc.cardside = 1 THEN 'Answer'
+                        END AS cardside,
+                        CASE
+                            WHEN cc.contenttype = 0 THEN 'Image'
+                            WHEN cc.contenttype = 1 THEN 'Text'
+                            WHEN cc.contenttype = 2 THEN 'Audio'
+                        END AS Contentype,
+                        CASE
+                            WHEN cc.area = 0 THEN 'Main Info'
+                            WHEN cc.area = 1 THEN 'Context Info'
+                            WHEN cc.area = 2 THEN 'Image Description'
+                            WHEN cc.area = 3 THEN 'Answer Suggestion'
+                        END AS InfoType,
+                        cc.content
+                    FROM {cardbox_cards} c
+                    JOIN {cardbox_cardcontents} cc ON c.id = cc.card
+                    WHERE c.approvedby = :approver
+                        AND c.cardbox = :cardboxid";
+            $cards = $DB->get_records_sql($sql, ['approver' => $userid, 'cardboxid' => $cardbox->id]);
+            $userapprovedcards = [];
+            foreach ($cards as $c) {
+                $userapprovedcards[] = (object) [
+                    'cardid' => $c->card,
+                    'topic' => $c->topic,
+                    'timecreated' => transform::datetime($c->timecreated),
+                    'timemodified' => $c->timemodified ? transform::datetime($c->timemodified) : 'Never',
+                    'cardside' => $c->cardside,
+                    'contenttype' => $c->contenttype,
+                    'infotype' => $c->infotype,
+                    'content' => $c->content
                 ];
             }
 
             // Get user progress for the cardbox.
-            $sql3 = "SELECT card, cardposition, lastpracticed, repetitions
-                        from {cardbox_progress}
-                            where card in (select id from {cardbox_cards} where cardbox = :cardboxid)
-                                and userid = :userid";
-            $query3cards = $DB->get_records_sql($sql3, array('userid' => $userid, 'cardboxid' => $cardbox->id));
-            foreach ($query3cards as $query3card) {
-                $key = 'Card '.$query3card->card;
+            $sql = "SELECT card, cardposition, lastpracticed, repetitions
+                     FROM {cardbox_progress}
+                     WHERE card IN (SELECT id FROM {cardbox_cards} WHERE cardbox = :cardboxid)
+                         AND userid = :userid";
+            $progresses = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $userprogress = [];
+            foreach ($progresses as $p) {
+                $key = 'Card '.$p->card;
                 $userprogress[$key] = (object) [
-                    'deck' => $query3card->cardposition,
-                    'lastpracticed' => transform::datetime($query3card->lastpracticed),
-                    'repetitions' => $query3card->repetitions
+                    'deck' => $p->cardposition,
+                    'lastpracticed' => $p->lastpracticed ? transform::datetime($p->lastpracticed) : 'Never',
+                    'repetitions' => $p->repetitions
                 ];
             }
 
             // Get user stats for entire cardbox.
-            $sql4 = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
-                        from {cardbox_statistics}
-                        where userid = :userid
-                        and cardboxid = :cardboxid";
-            $query4cards = $DB->get_records_sql($sql4, array('userid' => $userid, 'cardboxid' => $cardbox->id));
-            foreach ($query4cards as $query4card) {
-                $key = 'Cardbox '.$query4card->cardboxid;
-                $cbxname = $DB->get_field('cardbox', 'name', array('id' => $query4card->cardboxid));
+            $sql = "SELECT cardboxid, timeofpractice, numberofcards, duration, percentcorrect
+                     FROM {cardbox_statistics}
+                     WHERE userid = :userid
+                         AND cardboxid = :cardboxid";
+            $statistics = $DB->get_records_sql($sql, ['userid' => $userid, 'cardboxid' => $cardbox->id]);
+            $userstats = [];
+            foreach ($statistics as $s) {
+                $key = 'Cardbox '.$s->cardboxid;
+                $cbxname = $DB->get_field('cardbox', 'name', ['id' => $s->cardboxid]);
                 $userstats[$key] = (object) [
                     'cardboxname' => $cbxname,
-                    'timeofpractice' => transform::datetime($query4card->timeofpractice),
-                    'numberofcards' => $query4card->numberofcards,
-                    'duration' => $query4card->duration,
-                    'percentcorrect' => $query4card->percentcorrect
+                    'timeofpractice' => transform::datetime($s->timeofpractice),
+                    'numberofcards' => $s->numberofcards,
+                    'duration' => $s->duration,
+                    'percentcorrect' => $s->percentcorrect
                 ];
             }
 
@@ -298,31 +289,28 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      */
     public static function delete_data_for_all_users_in_context(\context $context) {
         global $DB;
-
         if ($context->contextlevel != CONTEXT_MODULE) {
             return;
         }
-
-        $instanceid = $context->instanceid;
-
-        $cm = get_coursemodule_from_id('cardbox', $instanceid);
-        if (!$cm) {
+        $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid]);
+        if ($cardboxid === false) {
             return;
         }
+
         // Delete all statistics for this cardbox instance.
-        $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid]);
+        $DB->delete_records('cardbox_statistics', ['cardboxid' => $cardboxid]);
 
-        $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid]);
+        // Delete user progress for this cardbox instance.
+        $listofcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid]);
         foreach ($listofcards as $cardid) {
-            // Delete user progress for this cardbox instance.
             $DB->delete_records('cardbox_progress', ['card' => $cardid->id]);
-
-            // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-            $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid));
-            $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid));
         }
 
+        // Remove author and approver details from cards. The card on a whole doesnt get deleted.
+        $DB->set_field('cardbox_cards', 'author', 0, ['cardbox' => $cardboxid]);
+        $DB->set_field('cardbox_cards', 'approvedby', 0, ['cardbox' => $cardboxid]);
     }
+
     /**
      *
      * Delete personal data for the user in a list of contexts.
@@ -331,27 +319,28 @@ class provider implements \core_privacy\local\metadata\provider, \core_privacy\l
      */
     public static function delete_data_for_user(approved_contextlist $contextlist) {
         global $DB;
-
-        if (empty($contextlist->count())) {
-            return;
-        }
         $userid = $contextlist->get_user()->id;
 
         foreach ($contextlist->get_contexts() as $context) {
+            $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid]);
+            if ($cardboxid === false) {
+                continue;
+            }
 
-            $instanceid = $DB->get_field('course_modules', 'instance', ['id' => $context->instanceid], MUST_EXIST);
             // Delete all statistics for the user in this cardbox instance.
-            $DB->delete_records('cardbox_statistics', ['cardboxid' => $instanceid, 'userid' => $userid]);
+            $DB->delete_records('cardbox_statistics', ['cardboxid' => $cardboxid, 'userid' => $userid]);
+
             // Delete user progress for this cardbox instance.
             $DB->delete_records('cardbox_progress', ['userid' => $userid]);
+
             // Remove author and approver details from cards. The card on a whole doesnt get deleted.
-            $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'author' => $userid]);
-            foreach ($usercreatedcards as $usercreatedcard) {
-                $DB->set_field('cardbox_cards', 'author', 0, array('cardbox' => $instanceid, 'id' => $usercreatedcard->id));
+            $usercreatedcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid, 'author' => $userid]);
+            foreach ($usercreatedcards as $card) {
+                $DB->set_field('cardbox_cards', 'author', 0, ['cardbox' => $cardboxid, 'id' => $card->id]);
             }
-            $userapprovedcards = $DB->get_records('cardbox_cards', ['cardbox' => $instanceid, 'approvedby' => $userid]);
-            foreach ($userapprovedcards as $userapprovedcard) {
-                $DB->set_field('cardbox_cards', 'approvedby', 0, array('cardbox' => $instanceid, 'id' => $userapprovedcard->id));
+            $userapprovedcards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid, 'approvedby' => $userid]);
+            foreach ($userapprovedcards as $card) {
+                $DB->set_field('cardbox_cards', 'approvedby', 0, ['cardbox' => $cardboxid, 'id' => $card->id]);
             }
         }
     }
