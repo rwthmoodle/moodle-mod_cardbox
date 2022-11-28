@@ -473,7 +473,7 @@ if ($action === 'editcard') {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
                     $itemid2 = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_AUDIO,
-                                                            $file->get_filename(), CARD_MAIN_INFORMATION,);
+                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid2, $context->id, $component, $filearea, $itemid2, $options);
                     break;
