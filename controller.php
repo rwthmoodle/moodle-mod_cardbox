@@ -472,7 +472,7 @@ if ($action === 'editcard') {
             }
         }
 
-        if ($from === 'overview') { // If the card had already been approved and has possibly been practiced.
+        if ($from === 'overview' && $cardbox->enablenotifications) { // If the card had already been approved and has possibly been practiced.
             cardbox_send_change_notification($cmid, $cardbox, $cardid);
         }
 

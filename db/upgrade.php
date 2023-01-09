@@ -644,6 +644,21 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2022060100, 'cardbox');
     }
 
+    if ($oldversion < 2023010400) {
+
+        // Define field autocorrection to be added to cardbox.
+        $table = new xmldb_table('cardbox');
+        $field = new xmldb_field('enablenotifications', XMLDB_TYPE_INTEGER, '4', null, XMLDB_NOTNULL, null, '0', 'introformat');
+
+        // Conditionally launch add field autocorrection.
+        if (!$dbman->field_exists($table, $field)) {
+            $dbman->add_field($table, $field);
+        }
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2023010400, 'cardbox');
+    }
+
     return true;
 
 }
