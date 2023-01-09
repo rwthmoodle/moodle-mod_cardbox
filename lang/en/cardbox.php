@@ -35,6 +35,9 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Allow autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = '<font color="red">only suitable for text</font>'; // 'Activate with care.';
+$string['setting_enablenotifications'] = 'Allow notifications';
+$string['setting_enablenotifications_help'] = 'Students receive notifications when cards have been edited or it is time to practice again.';
+$string['setting_enablenotifications_label'] = 'Enable sending notifications to students';
 $string['necessaryanswers_activity'] = 'Default settings for "How many answers are necessary?"';
 $string['necessaryanswers_activity_help'] = 'Set the default value for "How many answers are necessary?" in the card creation form.';
 $string['necessaryanswers_activity_locked'] = 'Allow to change the number of necessary answers afterwards?';
@@ -45,6 +48,8 @@ $string['numberofcardssetting'] = 'Number of cards to practice';
 $string['numberofcardssetting_help'] = 'Specifies how many cards students should learn per practice session. If "Students decide" is selected, they have free choice.';
 $string['studentschoose'] = 'Students choose';
 $string['messageprovider:changenotification'] = 'Notify when a flashcard was edited';
+$string['messageprovider:changedcard'] = 'Notify when a flashcard was edited';
+$string['messageprovider:timetopractice'] = 'Notify when its time to practice again';
 $string['changenotification:subject'] = 'Change notification';
 $string['changenotification:message'] = 'A flashcard was edited in your cardbox. Here is the card in its current form.';
 

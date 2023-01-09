@@ -58,6 +58,11 @@ class mod_cardbox_mod_form extends moodleform_mod {
         $attributes['rows'] = 5;
         $element->setAttributes($attributes);
 
+        $mform->addElement('advcheckbox', 'enablenotifications', get_string('setting_enablenotifications', 'cardbox'), get_string('setting_enablenotifications_label', 'cardbox'), null, array(0, 1));
+        $mform->setType('enablenotifications', PARAM_BOOL);
+        $mform->setDefault('enablenotifications', 0);
+        $mform->addHelpButton('enablenotifications', 'setting_enablenotifications', 'cardbox');
+
         $mform->addElement('advcheckbox', 'autocorrection', get_string('setting_autocorrection', 'cardbox'),
                     get_string('setting_autocorrection_label', 'cardbox'), null, array(0, 1));
         $mform->setType('autocorrection', PARAM_BOOL);
