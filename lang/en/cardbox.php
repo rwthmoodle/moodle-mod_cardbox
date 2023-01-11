@@ -282,7 +282,11 @@ $string['delete'] = 'Delete';
 
 
 $string['topicfilter'] = 'Topic ';
+$string['deckfilter'] = 'Deck';
 $string['noselection'] = 'all';
+$string['createddate'] = 'Created date';
+$string['alphabetical'] = 'Alphabetical';
+$string['sortdirection'] = 'Sort direction';
 
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';

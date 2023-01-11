@@ -107,4 +107,17 @@ class cardbox_cardcollection {
         return $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $cardboxid), IGNORE_MISSING);
     }
 
+    /**
+     *
+     * @global type $DB
+     * @param type $cardid
+     * @return type
+     */
+    public static function cardbox_get_question($cardid) {
+        global $DB;
+
+        $question = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'area' => CARD_MAIN_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_QUESTION));
+        return strip_tags($question);
+    }
+
 }
