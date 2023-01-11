@@ -8,6 +8,23 @@
         <option value="0" {{#cardswithouttopic}}selected{{/cardswithouttopic}}>{{# str }} notopic, cardbox {{/ str }}</option>
     </select></span>
 
+    <span>{{#str}} deckfilter, cardbox {{/str}} </span><span><select id="cardbox-overview-deckfilter" class="custom-select">
+        <option value="-1" {{#nopreferencedeck}}selected{{/nopreferencedeck}}>{{#str}} noselection, cardbox {{/str}}</option>
+        <option value="0" {{#newcard}}selected{{/newcard}}>{{#str}} new, cardbox {{/str}}</option>
+        {{#decks}}
+            <option value="{{deck}}" {{#selected}}selected{{/selected}}>{{deck}}</option>
+        {{/decks}}
+        <option value="6" {{#masteredcard}}selected{{/masteredcard}}>{{#str}} known, cardbox {{/str}}</option>
+    </select></span>
+
+    <span>
+        <select id="cardbox-filter-options" class="custom-select">
+            <option value="-1">{{#str}} createddate, cardbox {{/str}}</option>
+            <option value="0" {{#sort}}selected{{/sort}}>{{#str}} alphabetical, cardbox {{/str}}</option>
+        </select>
+        <button title="{{#str}} sortdirection, cardbox {{/str}}" id="sortdescending" aria-label="Sort direction" type="button" class="btn icon fa {{#desc}}fa-long-arrow-down{{/desc}} {{^desc}}fa-long-arrow-up{{/desc}} fa-fw "></button>
+    </span>
+
     <div class="container-fluid cardbox-studyview">            
 
         {{#cards}}

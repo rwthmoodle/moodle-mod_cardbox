@@ -412,10 +412,10 @@ function cardbox_get_answercontext($cardid) {
  * @param type $cardid
  * @return string or array
  */
-function cardbox_get_status($cardid) {
+function cardbox_get_status($cardid, $userid) {
 
     global $DB;
-    $status = $DB->get_field('cardbox_progress', 'cardposition', array('card' => $cardid), IGNORE_MISSING);
+    $status = $DB->get_field('cardbox_progress', 'cardposition', array('card' => $cardid, 'userid' => $userid), IGNORE_MISSING);
     if ($status === "0" || $status === false) {
         $status = get_string('newcard', 'cardbox');
     }

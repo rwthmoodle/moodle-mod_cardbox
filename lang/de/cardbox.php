@@ -276,7 +276,10 @@ $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte al
 $string['delete'] = 'Löschen';
 
 $string['topicfilter'] = 'Thema ';
+$string['deckfilter'] = 'Deck';
 $string['noselection'] = 'alle';
+$string['createddate'] = 'Erstellungsdatum';
+$string['alphabetical'] = 'Alphabetisch';
 
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';
@@ -293,6 +296,7 @@ $string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen?
 $string['createtopic'] = 'Hinzufügen';
 $string['existingtopics'] = 'Bereits existierende Themen';
 $string['notopics'] = 'Es sind noch keine Themen vorhanden';
+$string['sortdirection'] = 'Sortierrichtung';
 
 // Settings.
 $string['statistics_heading'] = 'Statistiken';
