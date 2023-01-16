@@ -48,8 +48,6 @@ $string['numberofcardssetting'] = 'Anzahl an zu übenden Karten';
 $string['numberofcardssetting_help'] = 'Gibt an, wie viele Karten die Studierenden pro Übungseinheit lernen sollen. Ist "Studierende entscheiden" ausgewählt, so haben sie die freie Wahl.';
 $string['studentschoose'] = 'Studierende entscheiden';
 $string['messageprovider:memo'] = 'Übungserinnerungen des Karteikastens';
-$string['messageprovider:changedcard'] = 'Benachrichtigung über geänderte Lernkarte';
-$string['messageprovider:timetopractice'] = 'Benachrichtigung, wenn es wieder Zeit ist zum Üben';
 $string['changenotification:subject'] = 'Änderungsmitteilung';
 $string['changenotification:message'] = 'Die folgende Lernkarte wurde bearbeitet. Sie sehen die bearbeitete Version.';
 
