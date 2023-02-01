@@ -284,7 +284,9 @@ $string['deckfilter'] = 'Deck';
 $string['noselection'] = 'all';
 $string['createddate'] = 'Created date';
 $string['alphabetical'] = 'Alphabetical';
-$string['sortdirection'] = 'Sort direction';
+$string['sorting'] = 'Sortierung';
+$string['descending'] = 'descending';
+$string['ascending'] = 'ascending';
 
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';

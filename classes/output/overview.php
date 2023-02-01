@@ -38,7 +38,7 @@ class cardbox_overview implements \renderable, \templatable {
     private $sort;
     private $desc;
 
-    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false,  $sort, $desc, $deck) {
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false,  $sort, $deck) {
 
         require_once('card.php');
 
@@ -84,8 +84,7 @@ class cardbox_overview implements \renderable, \templatable {
             $this->cards[] = $card->export_for_template($renderer);
         }
 
-        $this->sort = $sort === 0;
-        $this->desc = $desc === 0;
+        $this->sort = $sort;
 
     }
 
@@ -107,9 +106,10 @@ class cardbox_overview implements \renderable, \templatable {
             $data['masteredcard'] = true;
         }
         $data['decks'] = $this->decks;
-        $data['sort'] = $this->sort;
-        $data['desc'] = $this->desc;
         $data['topics'] = $this->topics;
+        $data['sortca'] = $this->sort === 1;
+        $data['sortad'] = $this->sort === 2;
+        $data['sortaa'] = $this->sort === 3;
         $data['cards'] = $this->cards;
         return $data;
     }
