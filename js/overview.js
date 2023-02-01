@@ -29,46 +29,34 @@
  * @param {type} __topic
  * @returns {undefined}
  */
-function startOverview(Y, __cmid, __topic, __sort, __DESC, __deck) { // Wrapper function that is called by controller.php.
+function startOverview(Y, __cmid, __topic, __sort, __deck) { // Wrapper function that is called by controller.php.
 
     require(['jquery', 'core/notification'], function ($, notification) {
         var topicfilter = document.getElementById('cardbox-overview-topicfilter');
         var filterselect = document.getElementById('cardbox-filter-options');
-        var descending = document.getElementById('sortdescending')
         var deckfilter = document.getElementById('cardbox-overview-deckfilter')
 
         document.getElementById('cardbox-filter-options').value = __sort;        
-
-        descending.onclick = function() {
-
-            if (__DESC === 0) {
-                __DESC = 1;
-            } else {
-                __DESC = 0;
-            }
-            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&desc=' + __DESC + '&deck=' + __deck;
-
-        }
 
         topicfilter.onchange = function() {
 
             var select = this.options[this.selectedIndex];        
             var topicid = select['value'];
-            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid + '&sort=' + __sort + '&desc=' + __DESC + '&deck=' + __deck;
+            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid + '&sort=' + __sort + '&deck=' + __deck;
 
         }
         deckfilter.onchange = function() {
 
             var select = this.options[this.selectedIndex];        
             __deck = select['value'];
-            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&desc=' + __DESC + '&deck=' + __deck;
+            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&deck=' + __deck;
 
         }
         filterselect.onchange = function() {
 
             var select = this.options[this.selectedIndex];        
             __sort = select['value'];
-            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&desc=' + __DESC + '&deck=' + __deck;
+            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&deck=' + __deck;
 
         }
         const editbtns = document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit');

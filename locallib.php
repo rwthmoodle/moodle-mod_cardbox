@@ -622,7 +622,7 @@ function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
 
     $topicid = $DB->get_field('cardbox_cards', 'topic', ['id' => $cardid], MUST_EXIST);
     $renderer = $PAGE->get_renderer('mod_cardbox');
-    $overview = new cardbox_overview(array($cardid), 0, $context, $cmid, $cardid, $topicid, true);
+    $overview = new cardbox_overview(array($cardid), 0, $context, $cmid, $cardid, $topicid, true, $sort, $deck);
 
     $recipients = get_enrolled_users($context, 'mod/cardbox:practice');
 

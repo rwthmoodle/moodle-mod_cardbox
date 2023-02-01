@@ -278,6 +278,10 @@ $string['deckfilter'] = 'Deck';
 $string['noselection'] = 'alle';
 $string['createddate'] = 'Erstellungsdatum';
 $string['alphabetical'] = 'Alphabetisch';
+$string['sorting'] = 'Sortierung';
+$string['descending'] = 'absteigend';
+$string['ascending'] = 'aufsteigend';
+
 
 $string['card'] = 'Frage/Antwort:';
 $string['cardposition'] = 'Fach:';

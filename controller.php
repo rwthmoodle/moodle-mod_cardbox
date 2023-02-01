@@ -936,8 +936,7 @@ if ($action === 'review') {
 if ($action === 'overview') {
 
     $topic = optional_param('topic', -1, PARAM_INT);
-    $sort = optional_param('sort', -1, PARAM_INT);
-    $desc = optional_param('desc', 1, PARAM_INT);
+    $sort = optional_param('sort', 0, PARAM_INT);
     $deck = optional_param('deck', -1, PARAM_INT);
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
@@ -961,17 +960,17 @@ if ($action === 'overview') {
     $list = $collection->cardbox_get_card_list();
 
     //Karten sortieren
-    if ($sort === -1 && $desc === 0) {
+    if ($sort === 0) {
         sort($list);
-    } else if ($sort === -1 && $desc === 1) {
+    } else if ($sort === 1) {
         rsort($list);
-    } else if ($sort === 0) {
+    } else if ($sort === 2 || $sort === 3) {
         $questions = [];
         for ($i = 0; $i < count($list); $i++) {
             $questions[$list[$i]] = $collection->cardbox_get_question($list[$i]);
         }
 
-        if ($desc === 0) {
+        if ($sort === 3) {
             asort($questions, SORT_STRING);
         } else {
             arsort($questions, SORT_STRING);
@@ -1026,10 +1025,10 @@ if ($action === 'overview') {
         $strings = $stringman->load_component_strings('cardbox', 'en');
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00007"));
-        $PAGE->requires->js_init_call('startOverview', array($cmid, $topic, $sort, $desc, $deck));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00008"));
+        $PAGE->requires->js_init_call('startOverview', array($cmid, $topic, $sort, $deck));
         // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, false, $sort, $desc, $deck);
+        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, false, $sort, $deck);
 
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');
