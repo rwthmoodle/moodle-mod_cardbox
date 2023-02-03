@@ -56,7 +56,7 @@ class remind extends \core\task\scheduled_task {
             $recipients = get_enrolled_users($cardbox->context, 'mod/cardbox:practice');
 
             foreach ($recipients as $recipient) {
-                $modinfo = get_fast_modinfo($cardbox->course, $recipient->id);
+                $modinfo = get_fast_modinfo($cardbox->courseid, $recipient->id);
                 $cm = $modinfo->get_cm($cardbox->coursemoduleid);
                 $info = new \core_availability\info_module($cm);
                 $information = '';
