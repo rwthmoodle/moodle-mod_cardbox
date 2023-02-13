@@ -47,9 +47,9 @@ class remind extends \core\task\scheduled_task {
 
         foreach ($cardboxes as $cardbox) {
 
-            $info = new \stdClass();
-            $info->cardboxname = $cardbox->cardboxname;
-            $info->coursename = $cardbox->coursename;
+            $a = new \stdClass();
+            $a->cardboxname = $cardbox->cardboxname;
+            $a->coursename = $cardbox->coursename;
 
             $cardbox->context = \context_module::instance($cardbox->coursemoduleid);
 
@@ -71,12 +71,12 @@ class remind extends \core\task\scheduled_task {
                 $message->subject = $sm->get_string('remindersubject', 'cardbox', null, $recipient->lang);
                 $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->firstname, $recipient->lang).' '.
                                         $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . ' ' .
-                                        $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang);
+                                        $sm->get_string('reminderfooting', 'cardbox', $a, $recipient->lang);
                 $message->fullmessageformat = FORMAT_MARKDOWN;
                 $message->fullmessagehtml = '<p>'.
                         $sm->get_string('remindergreeting', 'cardbox', $recipient->firstname, $recipient->lang).
                         '</p><p>'.$sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang).
-                '</p><p><em>'.$sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
+                '</p><p><em>'.$sm->get_string('reminderfooting', 'cardbox', $a, $recipient->lang) . '</em></p>';
                 $message->smallmessage = 'small message';
                 $message->notification = 1;
                 $message->courseid = $cardbox->courseid;
