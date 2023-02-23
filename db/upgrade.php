@@ -659,6 +659,17 @@ function xmldb_cardbox_upgrade($oldversion) {
         upgrade_mod_savepoint(true, 2023010400, 'cardbox');
     }
 
+    // Enable notifications for current cardboxes
+    if ($oldversion < 2023022300) {
+        global $DB;
+
+        $sql = "UPDATE {cardbox} SET enablenotifications = 1";
+        $DB->execute($sql);
+
+        // Cardbox savepoint reached.
+        upgrade_mod_savepoint(true, 2023022300, 'cardbox');
+    }
+
     return true;
 
 }
