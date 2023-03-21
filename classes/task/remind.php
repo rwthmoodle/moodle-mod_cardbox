@@ -38,8 +38,8 @@ class remind extends \core\task\scheduled_task {
                 . "LEFT JOIN {modules} m ON cm.module = m.id "
                 . "JOIN {cardbox} ca ON cm.instance = ca.id "
                 . "LEFT JOIN {course} co ON cm.course = co.id "
-                . "WHERE m.name = ?";
-        $cardboxes = $DB->get_records_sql($sql, array('cardbox'));
+                . "WHERE m.name = ? AND ca.enablenotifications = 1";
+        $cardboxes = $DB->get_records_sql($sql, ['cardbox']);
 
         foreach ($cardboxes as $cardbox) {
             $cardbox->context = \context_module::instance($cardbox->coursemoduleid);
