@@ -48,8 +48,8 @@ class remind extends \core\task\scheduled_task {
         foreach ($cardboxes as $cardbox) {
 
             $a = new \stdClass();
-            $a->cardboxname = $cardbox->cardboxname;
-            $a->coursename = $cardbox->coursename;
+            $a->cardboxname = format_text($cardbox->cardboxname);
+            $a->coursename = format_text($cardbox->coursename);
 
             $cardbox->context = \context_module::instance($cardbox->coursemoduleid);
 
