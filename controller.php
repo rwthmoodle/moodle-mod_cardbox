@@ -134,9 +134,10 @@ if ($action === 'addflashcard') {
 
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
-            if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
-                str_replace ( "&nbsp;", "", $formdata->{$answer}['text']), CARD_MAIN_INFORMATION);
+            $answertext = $formdata->{$answer}['text'];
+            if ($answertext != "") {
+                $answertext = str_replace("&nbsp;", " ", $answertext);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, $answertext, CARD_MAIN_INFORMATION);
             }
         }
 
@@ -408,9 +409,10 @@ if ($action === 'editcard') {
         // Save the text of the answer/s.
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
-            if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
-                str_replace ( "&nbsp;", "", $formdata->{$answer}['text']), CARD_MAIN_INFORMATION);
+            $answertext = $formdata->{$answer}['text'];
+            if ($answertext != "") {
+                $answertext = str_replace("&nbsp;", " ", $answertext);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, $answertext, CARD_MAIN_INFORMATION);
             }
         }
 
