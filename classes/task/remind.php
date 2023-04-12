@@ -63,7 +63,9 @@ class remind extends \core\task\scheduled_task {
                     $lang = $recipient->lang;
                 }
                 $forcelangisset = isset($SESSION->forcelang);
-                $forcelang = $SESSION->forcelang;
+                if ($forcelangisset) {
+                    $forcelang = $SESSION->forcelang;
+                }
                 $SESSION->forcelang = $lang;
 
                 $a = new \stdClass();
