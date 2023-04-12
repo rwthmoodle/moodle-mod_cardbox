@@ -31,7 +31,7 @@ use core_user;
 class remind extends \core\task\scheduled_task {
 
     public function execute() {
-        global $COURSE, $DB, $SESSION;
+        global $DB, $SESSION;
 
         $sql = "SELECT cm.id, cm.course AS courseid, cm.id AS coursemoduleid, ca.name AS cardboxname, co.fullname AS coursename "
                 . "FROM {course_modules} cm "
@@ -55,9 +55,10 @@ class remind extends \core\task\scheduled_task {
                 }
 
                 // Change language temporarily.
-                if (!empty($COURSE->lang)) {
+                $course = $info->get_course();
+                if (!empty($course->lang)) {
                     // Use course language if it's enforced.
-                    $lang = $COURSE->lang;
+                    $lang = $course->lang;
                 } else {
                     // Use recipient's preferred language.
                     $lang = $recipient->lang;
