@@ -284,7 +284,7 @@ $string['deckfilter'] = 'Deck';
 $string['noselection'] = 'all';
 $string['createddate'] = 'Created date';
 $string['alphabetical'] = 'Alphabetical';
-$string['sorting'] = 'Sortierung';
+$string['sorting'] = 'Sort';
 $string['descending'] = 'descending';
 $string['ascending'] = 'ascending';
 
