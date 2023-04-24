@@ -41,8 +41,8 @@ function startOverview(Y, __cmid, __topic, __sort, __deck) { // Wrapper function
         topicfilter.onchange = function() {
 
             var select = this.options[this.selectedIndex];        
-            var topicid = select['value'];
-            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + topicid + '&sort=' + __sort + '&deck=' + __deck;
+            __topic = select['value'];
+            window.location.href = window.location.pathname + '?id=' + __cmid + '&action=overview&topic=' + __topic + '&sort=' + __sort + '&deck=' + __deck;
 
         }
         deckfilter.onchange = function() {

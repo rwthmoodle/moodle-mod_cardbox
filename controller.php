@@ -1017,7 +1017,7 @@ if ($action === 'overview') {
         return;
     } else {
         $totalcount = count($list);
-        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
 
         $info = get_string('intro:overview', 'cardbox');
         echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
@@ -1027,7 +1027,7 @@ if ($action === 'overview') {
         $strings = $stringman->load_component_strings('cardbox', 'en');
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00008"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00009"));
         $PAGE->requires->js_init_call('startOverview', array($cmid, $topic, $sort, $deck));
         // 2. Create a view controller.
         $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, false, $sort, $deck);
