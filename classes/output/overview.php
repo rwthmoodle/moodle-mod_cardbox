@@ -31,10 +31,14 @@ defined('MOODLE_INTERNAL') || die();
 class cardbox_overview implements \renderable, \templatable {
 
     private $topicid;
+    private $deckid;
     private $topics = array();
     private $cards = array();
+    private $decks = array();
+    private $sort;
+    private $desc;
 
-    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false) {
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false,  $sort, $deck) {
 
         require_once('card.php');
 
@@ -42,11 +46,21 @@ class cardbox_overview implements \renderable, \templatable {
 
         $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
         $this->topicid = $topicid;
+
         foreach ($topics as $topic) {
             if ($topic->id == $topicid) {
                 $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true);
             } else {
                 $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => false);
+            }
+        }
+
+        $this->deckid = $deck;
+        for ($i = 1; $i < 6; $i++) {
+            if ($deck == $i) {
+                $this->decks[] = array('deck' => $i, 'selected' => true);
+            } else {
+                $this->decks[] = array('deck' => $i, 'selected' => false);
             }
         }
 
@@ -70,6 +84,8 @@ class cardbox_overview implements \renderable, \templatable {
             $this->cards[] = $card->export_for_template($renderer);
         }
 
+        $this->sort = $sort;
+
     }
 
     public function export_for_template(\renderer_base $output) {
@@ -80,8 +96,20 @@ class cardbox_overview implements \renderable, \templatable {
         } else if ($this->topicid == 0) {
             $data['cardswithouttopic'] = true;
         }
-
+        if ($this->deckid == -1) {
+            $data['nopreferencedeck'] = true;
+        }
+        if ($this->deckid == 0) {
+            $data['newcard'] = true;
+        }
+        if ($this->deckid == 6) {
+            $data['masteredcard'] = true;
+        }
+        $data['decks'] = $this->decks;
         $data['topics'] = $this->topics;
+        $data['sortca'] = $this->sort === 1;
+        $data['sortad'] = $this->sort === 2;
+        $data['sortaa'] = $this->sort === 3;
         $data['cards'] = $this->cards;
         return $data;
     }

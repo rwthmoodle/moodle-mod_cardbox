@@ -33,11 +33,11 @@ class cardbox_practice implements \renderable, \templatable {
     private $question = array('images' => array(), 'sounds' => array(), 'texts' => array());
     private $answer = array('images' => array(), 'sounds' => array(), 'texts' => array());
     private $case;
-    private $case1 = false; // Question_selfcheck.
-    private $case2 = false; // Question_autocheck.
-    private $case3 = false; // Answer_selfcheck.
-    private $case4 = false; // Answer_autocheck.
-    private $case5 = false; // Suggest_answer.
+    private $case1 = false; // question_selfcheck.
+    private $case2 = false; // question_autocheck.
+    private $case3 = false; // answer_selfcheck.
+    private $case4 = false; // answer_autocheck.
+    private $case5 = false; // suggest_answer.
     private $inputfields = array();
     private $questioncontext = null;
     private $answercontext = null;
@@ -112,8 +112,8 @@ class cardbox_practice implements \renderable, \templatable {
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($cardid);
 
         $topic = cardbox_get_topic($cardid);
-        if ($topic === 0 || $topic == "NULL") {
-            $this->topic = "";
+        if ($topic === 0 || $topic == "NULL" || $topic = -1) {
+            $this->topic = get_string('reviewtopic', 'cardbox').strtoupper(get_string('notopic', 'cardbox'));
         } else {
             $this->topic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic));
         }
@@ -145,7 +145,7 @@ class cardbox_practice implements \renderable, \templatable {
                     $this->answer['images'][] = array('imagesrc' => $downloadurl);
                 }
 
-            } else if ($content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) { // Audio files.
+            } else if ($content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) { // audio files
 
                 $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
@@ -187,8 +187,7 @@ class cardbox_practice implements \renderable, \templatable {
     public function cardbox_getcarddeck(int $cardid) {
         global $CFG, $DB, $USER;
         if ($DB->record_exists('cardbox_progress', ['userid' => $USER->id, 'card' => $cardid])) {
-            $this->deck = $DB->get_field('cardbox_progress', 'cardposition',
-                                         ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
+            $this->deck = $DB->get_field('cardbox_progress', 'cardposition', ['userid' => $USER->id, 'card' => $cardid], IGNORE_MISSING);
             if ($this->deck == 0) {
                 $this->deckimgurl = $CFG->wwwroot . '/mod/cardbox/pix/new.svg';
             } else if ($this->deck == 6) {

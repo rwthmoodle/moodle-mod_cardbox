@@ -26,6 +26,7 @@ define ('ENABLE_AUTOCORRECT', 0);
 define ('DISABLE_AUTOCORRECT', 1);
 
 
+
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 if (!isset($action)) {
@@ -46,7 +47,7 @@ if ($action === 'addflashcard') {
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
     $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00001"));
-    $params = array($cmid, 1, null); // True means: the user checks their own results.
+    $params = array($cmid, 1, null); // true means: the user checks their own results.
     $PAGE->requires->js_init_call('addCard', $params, true);
 
     // Contextual data to pass on to the card form.
@@ -68,13 +69,13 @@ if ($action === 'addflashcard') {
 
     if ($mform->is_cancelled()) {
 
-        if (has_capability('mod/cardbox:practice', $context)) { // For students and other participants.
+        if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.
             $action = 'practice';
 
         } else if (has_capability('mod/cardbox:approvecard', $context)) {
             $action = 'review';
 
-        } else { // For guests.
+        } else { // for guests.
             redirect($actionurl, '');
         }
 
@@ -127,16 +128,16 @@ if ($action === 'addflashcard') {
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
-            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT,
-                                         $formdata->question['text'], CARD_MAIN_INFORMATION);
+            cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_TEXT, $formdata->question['text'], CARD_MAIN_INFORMATION);
         }
         // Save the text of the answer/s.
 
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
-            if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
-                                            $formdata->{$answer}['text'], CARD_MAIN_INFORMATION);
+            $answertext = $formdata->{$answer}['text'];
+            if ($answertext != "") {
+                $answertext = str_replace("&nbsp;", " ", $answertext);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, $answertext, CARD_MAIN_INFORMATION);
             }
         }
 
@@ -152,7 +153,7 @@ if ($action === 'addflashcard') {
                                          $formdata->answercontext['text'], CARD_CONTEXT_INFORMATION);
         }
 
-        // Get the draft itemid.
+        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
         $draftitemid = file_get_submitted_draft_itemid('cardimage');
 
         // Copy all the files from the 'real' area, into the draft area.
@@ -178,7 +179,7 @@ if ($action === 'addflashcard') {
                                              $formdata->imagedescription, CARD_IMAGEDESCRIPTION_INFORMATION);
             }
         }
-        // Get the draft itemid.
+        // Get the draft itemid (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
         $draftitemidaudio = file_get_submitted_draft_itemid('cardsound');
 
         // Copy all the audio files from the 'real' area, into the draft area.
@@ -274,7 +275,6 @@ if ($action === 'editcard') {
 
     require_capability('mod/cardbox:approvecard', $context);
     require_capability('mod/cardbox:submitcard', $context);
-
     require_once('card_form.php');
 
     $cardid = required_param('cardid', PARAM_INT);
@@ -290,13 +290,11 @@ if ($action === 'editcard') {
 
     $actionurl = $returnurl;
 
-    $draftitemid = file_get_submitted_draft_itemid('cardimage'); // Name of the filemanager element.
-    $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid,
-                                                                 'contenttype' => CARDBOX_CONTENTTYPE_IMAGE), IGNORE_MISSING);
+    $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
+    $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => CARDBOX_CONTENTTYPE_IMAGE), IGNORE_MISSING);
 
-    $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // Name of the filemanager element.
-    $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid,
-                                                                  'contenttype' => CARDBOX_CONTENTTYPE_AUDIO), IGNORE_MISSING);
+    $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // name of the filemanager element
+    $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => CARDBOX_CONTENTTYPE_AUDIO), IGNORE_MISSING);
 
     $answers = [];
     $topic = cardbox_get_topic($cardid);
@@ -381,13 +379,11 @@ if ($action === 'editcard') {
             default: // Card belongs to an already existing topic.
                 $topicid = $formdata->topic;
         }
-        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked',
-                                                 array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+        $necessaryanswerslocked = $DB->get_field('cardbox', 'necessaryanswerslocked', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         if (!empty($formdata->answers)) {
             $necessaryanswers = $formdata->answers;
         } else if ($necessaryanswerslocked === "1") {
-            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers',
-                                               array('id' => $customdata['cardboxid']), IGNORE_MISSING);
+            $necessaryanswers = $DB->get_field('cardbox', 'necessaryanswers', array('id' => $customdata['cardboxid']), IGNORE_MISSING);
         } else {
             $necessaryanswers = CARDBOX_EVALUATE_ALL;
         }
@@ -397,12 +393,6 @@ if ($action === 'editcard') {
             } else {
                 $disableautocorrect = false;
             }
-        } else {
-            $disableautocorrect = false;
-        }
-
-        if ($formdata->disableautocorrect == DISABLE_AUTOCORRECT) {
-            $disableautocorrect = true;
         } else {
             $disableautocorrect = false;
         }
@@ -419,9 +409,10 @@ if ($action === 'editcard') {
         // Save the text of the answer/s.
         for ($i = 1; $i <= 10; $i++) {
             $answer = 'answer'. $i;
-            if ($formdata->{$answer}['text'] != "") {
-                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
-                                             $formdata->{$answer}['text'], CARD_MAIN_INFORMATION);
+            $answertext = $formdata->{$answer}['text'];
+            if ($answertext != "") {
+                $answertext = str_replace("&nbsp;", " ", $answertext);
+                cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT, $answertext, CARD_MAIN_INFORMATION);
             }
         }
 
@@ -448,7 +439,8 @@ if ($action === 'editcard') {
             if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false)) {
                 foreach ($files as $file) {
                     // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, $file->get_filename(), CARD_MAIN_INFORMATION);
+                    $itemid = cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                                           $file->get_filename(), CARD_MAIN_INFORMATION);
                     // Save the actual image data in moodle.
                     file_save_draft_area_files($draftitemid, $context->id, $component, $filearea, $itemid, $options);
                     break;
@@ -456,7 +448,8 @@ if ($action === 'editcard') {
             }
             // Save the imagedescription if there is any.
             if (!empty($formdata->imagedescription)) {
-                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE, $formdata->imagedescription, CARD_IMAGEDESCRIPTION_INFORMATION);
+                cardbox_save_new_cardcontent($cardid, 0, CARDBOX_CONTENTTYPE_IMAGE,
+                                             $formdata->imagedescription, CARD_IMAGEDESCRIPTION_INFORMATION);
             }
         }
 
@@ -481,7 +474,7 @@ if ($action === 'editcard') {
             }
         }
 
-        if ($from === 'overview') { // If the card had already been approved and has possibly been practiced.
+        if ($from === 'overview' && $cardbox->enablenotifications) { // If the card had already been approved and has possibly been practiced.
             cardbox_send_change_notification($cmid, $cardbox, $cardid);
         }
 
@@ -654,7 +647,7 @@ if ($action === 'practice') {
         $stringman = get_string_manager();
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00023"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00025"));
         $params = array($cmid, $selection, $case, $data, $correction, $autocorrectval); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 
@@ -715,7 +708,7 @@ if ($action === 'statistics') {
     $stringman = get_string_manager();
     $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
     $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js?ver=00009"));
+    $PAGE->requires->js(new moodle_url("/mod/cardbox/js/statistics.js?ver=00010"));
     $PAGE->requires->js_init_call('displayCharts', [$params], true);
 
     // 4. Render the page.
@@ -744,8 +737,7 @@ if ($action === 'massimport') {
             $readcount = $cir->load_csv_content($csvcontent, $formdata->encoding, $formdata->delimiter_name);
             $csvloaderror = $cir->get_error();
             if (!is_null($csvloaderror)) {
-                throw new moodle_exception('csvloaderror', '', $returnurl, $csvloaderror);
-                //print_error('csvloaderror', '', $returnurl, $csvloaderror);
+                print_error('csvloaderror', '', $returnurl, $csvloaderror);
             }
             if ($readcount > 1) {
                 // Show csv content preview.
@@ -855,7 +847,7 @@ if ($action === 'review') {
     if (!empty($cards)) {
         list($insql, $inparams) = $DB->get_in_or_equal(array_column($cards, 'id'), SQL_PARAMS_NAMED);
         $anssuggestions = $DB->get_records_select('cardbox_cardcontents', 'area = :area AND cardside = :cardside AND card ' . $insql,
-            array_merge(['area' => CARD_ANSERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
+            array_merge(['area' => CARD_ANSWERSUGGESTION_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_ANSWER], $inparams));
         foreach ($anssuggestions as $anssuggestion) {
             if (!in_array($anssuggestion->card, $reviewablecardids)) {
                 array_push($reviewablecardids, $anssuggestion->card);
@@ -932,6 +924,7 @@ if ($action === 'review') {
             }
             $rejectparams = array($cmid, $filtered, count($filtered));
             $PAGE->requires->js_init_call('rejectcard', $rejectparams, true);
+
         }
     } else {
 
@@ -945,32 +938,86 @@ if ($action === 'review') {
 if ($action === 'overview') {
 
     $topic = optional_param('topic', -1, PARAM_INT);
+    $sort = optional_param('sort', 0, PARAM_INT);
+    $deck = optional_param('deck', -1, PARAM_INT);
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
     $offset = $page * $perpage;
     $PAGE->requires->js_amd_inline("require(['jquery', 'theme_boost/bootstrap/tooltip'], function($){
-                                   $('[data-toggle=\"tooltip\"]').tooltip();});");
+        $('[data-toggle=\"tooltip\"]').tooltip();
+    });");
     require_once('model/cardcollection.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
+    require_once('classes/output/card.php');
 
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
     echo $OUTPUT->header();
     echo $OUTPUT->heading("$cardbox->name");
     echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
 
-    // 1. Create the model.
-    $collection = new cardbox_cardcollection($cardbox->id, $topic, true);
-    $list = $collection->cardbox_get_card_list();
-
     $context = context_module::instance($cmid);
 
-    if (empty($list)) {
+    // 1. Create the model.
+    $collection = new cardbox_cardcollection($cardbox->id, $topic, true, $deck);
+    $list = $collection->cardbox_get_card_list();
+
+    //Karten sortieren
+    if ($sort === 0) {
+        sort($list);
+    } else if ($sort === 1) {
+        rsort($list);
+    } else if ($sort === 2 || $sort === 3) {
+        $questions = [];
+        for ($i = 0; $i < count($list); $i++) {
+            $questions[$list[$i]] = $collection->cardbox_get_question($list[$i]);
+        }
+
+        if ($sort === 3) {
+            asort($questions, SORT_STRING);
+        } else {
+            arsort($questions, SORT_STRING);
+        }
+        $index = 0;
+        foreach ($questions as $key => $value) {
+            $list[$index] = $key;
+            $index++;
+        }
+    }
+
+    //filter cards deckwise 
+
+    if ($deck != -1) {
+        if (has_capability('mod/cardbox:approvecard', $context)) {
+            $allowedtoedit = true;
+        } else {
+            $allowedtoedit = false;
+        }
+
+        if (has_capability('mod/cardbox:seestatus', $context)) {
+            $seestatus = true;
+        } else {
+            $seestatus = false;
+        }
+        $filtereddeck = array();
+        $index = 0;
+        foreach ($list as $flashcard) {
+            $card = new cardbox_card($flashcard, $context, $cardbox->id, $allowedtoedit, $seestatus);
+            $card->cardbox_getcarddeck($flashcard, $allowedtoedit);
+            if ($card->cardbox_getcarddecknumber() == ($deck + 1)) {
+                $filtereddeck[$index] = $flashcard;
+                $index++;
+            }
+        }
+        $list = $filtereddeck;
+    }
+
+    if (empty($list) && $deck == -1) {
         $info = get_string('info:nocardsavailableforoverview', 'cardbox');
         echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
         return;
     } else {
         $totalcount = count($list);
-        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
 
         $info = get_string('intro:overview', 'cardbox');
         echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
@@ -980,10 +1027,10 @@ if ($action === 'overview') {
         $strings = $stringman->load_component_strings('cardbox', 'en');
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox');
 
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00000"));
-        $PAGE->requires->js_init_call('startOverview', array($cmid, $topic));
-        
-        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic);
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00009"));
+        $PAGE->requires->js_init_call('startOverview', array($cmid, $topic, $sort, $deck));
+        // 2. Create a view controller.
+        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, false, $sort, $deck);
 
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');

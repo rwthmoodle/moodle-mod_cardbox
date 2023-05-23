@@ -35,6 +35,9 @@ $string['pluginadministration'] = 'Flashcards Administration';
 $string['setting_autocorrection'] = 'Allow autocorrection';
 $string['setting_autocorrection_help'] = 'Autocorrection only works for normal text. If students may be expected to give formulae answers, you should deactivate autocorrection.';
 $string['setting_autocorrection_label'] = '<font color="red">only suitable for text</font>'; // 'Activate with care.';
+$string['setting_enablenotifications'] = 'Allow notifications';
+$string['setting_enablenotifications_help'] = 'Students receive notifications when cards have been edited or it is time to practice again.';
+$string['setting_enablenotifications_label'] = 'Enable sending notifications to students';
 $string['necessaryanswers_activity'] = 'Default settings for "How many answers are necessary?"';
 $string['necessaryanswers_activity_help'] = 'Set the default value for "How many answers are necessary?" in the card creation form.';
 $string['necessaryanswers_activity_locked'] = 'Allow to change the number of necessary answers afterwards?';
@@ -149,7 +152,7 @@ $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'There are no cards ready for practice.';
 $string['help:nocardsavailableforpractice'] = 'No cards';
-$string['help:nocardsavailableforpractice_help'] = 'You have correctly answered every card that is currently available 5 times over a period of at least two months. These cards are regarded as mastered and no longer repeated.</ul>';
+$string['help:nocardsavailableforpractice_help'] = 'You have correctly answered every card that is currently available 5 times over a period of at least two months. These cards are regarded as mastered and no longer repeated.';
 $string['info:nocardsdueforpractice'] = 'None of your cards are due for repetition yet.';
 $string['info:enrolledstudentsthreshold_manager'] = 'There must be at least {$a} students enrolled in this course for weekly practice statistics to be displayed.';
 $string['info:enrolledstudentsthreshold_student'] = 'Average progress among students is only displayed if there are at least {$a} students enrolled in the course.';
@@ -277,7 +280,13 @@ $string['delete'] = 'Delete';
 
 
 $string['topicfilter'] = 'Topic ';
+$string['deckfilter'] = 'Deck';
 $string['noselection'] = 'all';
+$string['createddate'] = 'Created date';
+$string['alphabetical'] = 'Alphabetical';
+$string['sorting'] = 'Sortierung';
+$string['descending'] = 'descending';
+$string['ascending'] = 'ascending';
 
 $string['card'] = 'Question/Answer:';
 $string['cardposition'] = 'Deck:';

@@ -129,8 +129,7 @@ if ($action === 'savesuggestedanswer') {
     $userinput = required_param('userinput', PARAM_TEXT);
 
     if (!(empty($userinput) || $userinput === "")) {
-        cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_ANSWER, CARDBOX_CONTENTTYPE_TEXT,
-                                     $userinput, CARD_ANSERSUGGESTION_INFORMATION);
+        cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_ANSWER, CARDBOX_CONTENTTYPE_TEXT, $userinput, CARD_ANSWERSUGGESTION_INFORMATION);
     }
 
 }

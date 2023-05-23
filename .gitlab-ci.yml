@@ -1,0 +1,9 @@
+include:
+  - project: 'moodle_l2p/moodle-ci'
+    file: '/build-package.gitlab-ci.yml'
+
+variables:
+  PACKAGE_NAME:         moodle-rwth-cardbox
+  PACKAGE_CAPABILITIES: moodle-rwth-rwth_cardbox
+  PACKAGE_SUMMARY:      RWTH plugin for learning with flashcards.
+  PACKAGE_DESCRIPTION:  Package to install the Moodle Plugin cardbox.

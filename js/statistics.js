@@ -652,9 +652,11 @@ function displayCharts(Y, __params) { // Wrapper function that is called by cont
                 var stepsize = 10;
                 break;
             case CARDS_OVER_TIME:
+                var __performance = __params['performance'];
                 var stepsize = compareStepSize(__performance.numberofcardsmax);
                 break;
             case SESSION_DURATION:
+                var __performance = __params['performance'];
                 var stepsize = compareStepSize(__performance.durationofsessionmax);
                 break;
         }
