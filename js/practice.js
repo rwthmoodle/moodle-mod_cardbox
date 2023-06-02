@@ -679,7 +679,7 @@ class Evaluate {
             (function (innerI){
                 var ui = document.getElementById('cardbox-userinput-' + innerI).value;  
                 if (ui.trim() !== '') {
-                    userinput.push(ui);
+                    userinput.push(ui.trim());
                 }
 
             })(i);

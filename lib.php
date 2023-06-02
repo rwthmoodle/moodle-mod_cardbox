@@ -29,6 +29,8 @@ function cardbox_supports($feature) {
             return true;
         case FEATURE_SHOW_DESCRIPTION:
             return true;
+        case FEATURE_MOD_PURPOSE:
+            return MOD_PURPOSE_COLLABORATION;
         default:
             return null;
     }
@@ -81,7 +83,7 @@ function cardbox_update_instance($cardbox) {
 
     $DB->update_record('cardbox', $cardbox);
 
-    $completiontimeexpected = !empty($cardbox->completionexpected) ? $data->completionexpected : null;
+    $completiontimeexpected = !empty($cardbox->completionexpected) ? $cardbox->completionexpected : null;
     \core_completion\api::update_completion_date_event($cardbox->coursemodule, 'cardbox', $cardbox->id, $completiontimeexpected);
 
     return true;

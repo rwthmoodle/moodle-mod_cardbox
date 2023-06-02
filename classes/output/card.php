@@ -45,7 +45,7 @@ class cardbox_card implements \renderable, \templatable {
         require_once('model/cardcollection.class.php');
         require_once('locallib.php');
 
-        global $CFG;
+        global $CFG, $USER;
         $this->cmid = $cmid;
         $this->cardid = $cardid;
         $answercount = 0;
@@ -58,7 +58,7 @@ class cardbox_card implements \renderable, \templatable {
             $this->seestatus = true;
         }
 
-        $this->status = cardbox_get_status($cardid);
+        $this->status = cardbox_get_status($cardid, $USER->id);
 
         $contents = cardbox_cardcollection::cardbox_get_cardcontents($cardid);
 
@@ -231,6 +231,10 @@ class cardbox_card implements \renderable, \templatable {
 
     }
 
+    public function cardbox_getcarddecknumber() {
+        return $this->deck;
+    }
+    
     public function export_for_template(\renderer_base $output) {
 
         global $OUTPUT;

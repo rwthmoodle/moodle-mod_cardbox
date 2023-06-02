@@ -8,6 +8,24 @@
         <option value="0" {{#cardswithouttopic}}selected{{/cardswithouttopic}}>{{# str }} notopic, cardbox {{/ str }}</option>
     </select></span>
 
+    <span>{{#str}} deckfilter, cardbox {{/str}} </span><span><select id="cardbox-overview-deckfilter" class="custom-select">
+        <option value="-1" {{#nopreferencedeck}}selected{{/nopreferencedeck}}>{{#str}} noselection, cardbox {{/str}}</option>
+        <option value="0" {{#newcard}}selected{{/newcard}}>{{#str}} new, cardbox {{/str}}</option>
+        {{#decks}}
+            <option value="{{deck}}" {{#selected}}selected{{/selected}}>{{deck}}</option>
+        {{/decks}}
+        <option value="6" {{#masteredcard}}selected{{/masteredcard}}>{{#str}} known, cardbox {{/str}}</option>
+    </select></span>
+
+    <span>{{#str}} sorting, cardbox {{/str}} </span><span>
+        <select id="cardbox-filter-options" class="custom-select">
+            <option value="0">{{#str}} createddate, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
+            <option value="1" {{#sortca}}selected{{/sortca}}>{{#str}} createddate, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
+            <option value="2" {{#sortad}}selected{{/sortad}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
+            <option value="3" {{#sortaa}}selected{{/sortaa}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
+        </select>
+    </span>
+
     <div class="container-fluid cardbox-studyview">            
 
         {{#cards}}
@@ -16,7 +34,7 @@
 
                 {{#allowedtoedit}}
 {{!                     <div class="col-xl-2"></div> }}
-                    <div class="col-xl-4 review-topic" >{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
+                    <div class="col-xl-4 review-topic topic" >{{#str}}reviewtopic, cardbox{{/str}} {{topic}}</div>
                     <div class="col-xl-4" style="padding-left: 0.4%; margin-right: 1em;"> 
                         <div class="card-icon-grid-div"> 
                         {{^disableautocorrect}}

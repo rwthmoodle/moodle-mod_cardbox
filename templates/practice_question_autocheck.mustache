@@ -7,7 +7,7 @@
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
 
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
-    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6">{{topic}}</div>
+    <div id="cardbox-cardcontainer" class="col-xs-12 col-md-10 col-lg-8 col-xl-6 topic">{{topic}}</div>
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
 
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3"></div>
@@ -32,13 +32,14 @@
     <div class="hidden-xs col-md-1 col-lg-2 col-xl-3 cardbox-userinput"></div>
     <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6">
         <form id="cardbox-inputform" autocomplete="off">
+
+            {{#contextquestionavailable}}
+                <div class="col-xs-12" >{{{contextquestion}}}</div>
+            {{/contextquestionavailable}}
+
             {{#inputfields}}
                 <input id="cardbox-userinput-{{number}}" type="text" name="answer" class="form-control cardbox-userinput">
             {{/inputfields}}
-
-            {{#contextquestionavailable}}
-            <div class="col-xs-12" >{{{contextquestion}}}</div>
-            {{/contextquestionavailable}}
 
             <input id="cardbox-submit-answer" type="submit" value="{{# str }} submitanswer, cardbox {{/ str }}" class="btn btn-primary">
             <input id="cardbox-do-not-know" type="submit" value="{{# str }} dontknow, cardbox {{/ str }}" class="btn btn-secondary" style="margin-right: 5px">

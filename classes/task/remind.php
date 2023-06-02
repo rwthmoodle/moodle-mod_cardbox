@@ -31,51 +31,74 @@ use core_user;
 class remind extends \core\task\scheduled_task {
 
     public function execute() {
-
-        global $DB;
-
-        $sm = get_string_manager();
+        global $DB, $SESSION;
 
         $sql = "SELECT cm.id, cm.course AS courseid, cm.id AS coursemoduleid, ca.name AS cardboxname, co.fullname AS coursename "
                 . "FROM {course_modules} cm "
                 . "LEFT JOIN {modules} m ON cm.module = m.id "
                 . "JOIN {cardbox} ca ON cm.instance = ca.id "
                 . "LEFT JOIN {course} co ON cm.course = co.id "
-                . "WHERE m.name = ?";
-
-        $cardboxes = $DB->get_records_sql($sql, array('cardbox'));
+                . "WHERE m.name = ? AND ca.enablenotifications = 1";
+        $cardboxes = $DB->get_records_sql($sql, ['cardbox']);
 
         foreach ($cardboxes as $cardbox) {
-
-            $info = new \stdClass();
-            $info->cardboxname = $cardbox->cardboxname;
-            $info->coursename = $cardbox->coursename;
-
             $cardbox->context = \context_module::instance($cardbox->coursemoduleid);
-
             $recipients = get_enrolled_users($cardbox->context, 'mod/cardbox:practice');
 
             foreach ($recipients as $recipient) {
+                $modinfo = get_fast_modinfo($cardbox->courseid, $recipient->id);
+                $cm = $modinfo->get_cm($cardbox->coursemoduleid);
+                $info = new \core_availability\info_module($cm);
+                $information = '';
+                if (!$info->is_available($information, false, $recipient->id)) {
+                    continue;
+                }
+
+                // Change language temporarily.
+                $course = $info->get_course();
+                if (!empty($course->lang)) {
+                    // Use course language if it's enforced.
+                    $lang = $course->lang;
+                } else {
+                    // Use recipient's preferred language.
+                    $lang = $recipient->lang;
+                }
+                $forcelangisset = isset($SESSION->forcelang);
+                if ($forcelangisset) {
+                    $forcelang = $SESSION->forcelang;
+                }
+                $SESSION->forcelang = $lang;
+
+                $a = new \stdClass();
+                $a->cardboxname = format_string($cardbox->cardboxname);
+                $a->coursename = format_string($cardbox->coursename);
+
                 $message = new \core\message\message();
                 $message->component = 'mod_cardbox';
                 $message->name = 'memo';
                 $message->userfrom = core_user::get_noreply_user();
                 $message->userto = $recipient;
-                $message->subject = $sm->get_string('remindersubject', 'cardbox', null, $recipient->lang);
-                $message->fullmessage = $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).' '.
-                                        $sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang) . ' ' .
-                                        $sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang);
+                $message->subject = get_string('remindersubject', 'cardbox');
+                $message->fullmessage = get_string('remindergreeting', 'cardbox', $recipient->firstname).' '.
+                                        get_string('remindermessagebody', 'cardbox') . ' ' .
+                                        get_string('reminderfooting', 'cardbox', $a);
                 $message->fullmessageformat = FORMAT_MARKDOWN;
                 $message->fullmessagehtml = '<p>'.
-                        $sm->get_string('remindergreeting', 'cardbox', $recipient->username, $recipient->lang).
-                        '</p><p>'.$sm->get_string('remindermessagebody', 'cardbox', null, $recipient->lang).
-                '</p><p><em>'.$sm->get_string('reminderfooting', 'cardbox', $info, $recipient->lang) . '</em></p>';
+                        get_string('remindergreeting', 'cardbox', $recipient->firstname).
+                        '</p><p>'.get_string('remindermessagebody', 'cardbox').
+                '</p><p><em>'.get_string('reminderfooting', 'cardbox', $a) . '</em></p>';
                 $message->smallmessage = 'small message';
                 $message->notification = 1;
                 $message->courseid = $cardbox->courseid;
 
                 message_send($message);
 
+                // Reset language.
+                if ($forcelangisset) {
+                    $SESSION->forcelang = $forcelang;
+                } else {
+                    unset($SESSION->forcelang);
+                }
             }
 
         }
