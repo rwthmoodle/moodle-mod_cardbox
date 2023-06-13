@@ -274,7 +274,7 @@ $string['deletecardinfo'] = 'Die Karte sowie der Lernfortschritt dieser Karte al
 $string['delete'] = 'Löschen';
 
 $string['topicfilter'] = 'Thema ';
-$string['deckfilter'] = 'Deck';
+$string['deckfilter'] = 'Fach';
 $string['noselection'] = 'alle';
 $string['createddate'] = 'Erstellungsdatum';
 $string['alphabetical'] = 'Alphabetisch';
