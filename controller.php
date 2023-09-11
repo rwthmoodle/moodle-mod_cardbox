@@ -200,49 +200,6 @@ if ($action === 'addflashcard') {
                 }
             }
         }
-        // Get the draft itemid.
-        // (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
-        $draftitemid3 = file_get_submitted_draft_itemid('answerimage');
-
-        // Copy all the files from the 'real' area, into the draft area.
-        file_prepare_draft_area($draftitemid3, $context->id, $component, $filearea, 0, array('subdirs' => true));
-
-        // Save the file.
-        if ($draftitemid3 != null) {
-            $fs = get_file_storage();
-            $usercontext = context_user::instance($USER->id);
-            if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid3, 'sortorder, id', false)) {
-                foreach ($files as $file) {
-                    // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid3 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_IMAGE,
-                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
-                    // Save the actual image data in moodle.
-                    file_save_draft_area_files($draftitemid3, $context->id, $component, $filearea, $itemid3, $options);
-                    break;
-                }
-            }
-        }
-
-        // Get the draft itemid.
-        // (Files in the drag-and-drop area are automatically saved as drafts in mdl_files even before the form is submitted).
-        $draftitemid4 = file_get_submitted_draft_itemid('answersound');
-        // Copy all the audio files from the 'real' area, into the draft area.
-        file_prepare_draft_area($draftitemid2, $context->id, $component, $filearea, 0, array('subdirs' => true));
-        // Save the audio file.
-        if ($draftitemid2 != null) {
-            $fs = get_file_storage();
-            $usercontext = context_user::instance($USER->id);
-            if ($files = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid4, 'sortorder, id', false)) {
-                foreach ($files as $file) {
-                    // Save a reference to the image data in cardbox_cardcontents.
-                    $itemid4 = cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_AUDIO,
-                                                            $file->get_filename(), CARD_MAIN_INFORMATION);
-                    // Save the actual image data in moodle.
-                    file_save_draft_area_files($draftitemid4, $context->id, $component, $filearea, $itemid4, $options);
-                    break;
-                }
-            }
-        }
 
         if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
             $message = get_string('success:addandapprovenewcard', 'cardbox');
