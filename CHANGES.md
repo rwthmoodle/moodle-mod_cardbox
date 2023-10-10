@@ -3,6 +3,10 @@ moodle-mod_cardbox
 
 Changes
 -------
+
+### 2023101000 v1.0.2b
+* added activity settings "enablenotifications" and "casesensitive" to backups
+
 ### 2022083000 v1.0.2
 
 * New Version, new release
