@@ -3,7 +3,11 @@ moodle-mod_cardbox
 
 Changes
 -------
-### 2022083000 v1.0.2
+
+### 2023101000 v1.0.4
+* added activity settings "enablenotifications" and "casesensitive" to backups
+
+### 2023060200 v1.0.3
 * FEATURE_MOD_PURPOSE defined
 * Moodle 4.x compatible icon set
 * Issue37: Improvement: trim spaces before and after user input
