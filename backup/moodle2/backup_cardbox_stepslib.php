@@ -51,8 +51,8 @@ class backup_cardbox_activity_structure_step extends backup_activity_structure_s
         $userinfo = $this->get_setting_value('userinfo'); // This variable is always 0.
 
         // 2. Define each element separately.
-        $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'autocorrection',
-                                                    'necessaryanswers', 'necessaryanswerslocked', 'timecreated', 'timemodified'));
+        $cardbox = new backup_nested_element('cardbox', array('id'), array('name', 'intro', 'introformat', 'enablenotifications',
+                'autocorrection', 'necessaryanswers', 'necessaryanswerslocked', 'casesensitive', 'timecreated', 'timemodified'));
 
         $cards = new backup_nested_element('cards');
         $card = new backup_nested_element('card', array('id'), array('topic', 'author', 'timecreated', 'timemodified', 'approved',
