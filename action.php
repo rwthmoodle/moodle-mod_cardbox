@@ -130,7 +130,7 @@ if ($action === 'savesuggestedanswer') {
 
     if (!(empty($userinput) || $userinput === "")) {
         cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_ANSWER, CARDBOX_CONTENTTYPE_TEXT,
-                                     $userinput, CARD_ANSERSUGGESTION_INFORMATION);
+                                     $userinput, CARD_ANSWERSUGGESTION_INFORMATION);
     }
 
 }

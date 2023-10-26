@@ -28,7 +28,7 @@ define('CARDBOX_EVALUATE_ONE', 1);
 define('CARD_MAIN_INFORMATION', 0);
 define('CARD_CONTEXT_INFORMATION', 1);
 define('CARD_IMAGEDESCRIPTION_INFORMATION', 2);
-define('CARD_ANSERSUGGESTION_INFORMATION', 3);
+define('CARD_ANSWERSUGGESTION_INFORMATION', 3);
 define('CARDBOX_CARDSIDE_QUESTION', 0);
 define('CARDBOX_CARDSIDE_ANSWER', 1);
 define('CARDBOX_CONTENTTYPE_IMAGE', 0);
@@ -365,7 +365,7 @@ function cardbox_get_notapproved_answers($cardid) {
     return $DB->get_fieldset_select('cardbox_cardcontents', 'content',
         'card = :cardid AND cardside = :cardside AND contenttype = :contenttype AND area = :area',
         ['cardid' => $cardid, 'cardside' => CARDBOX_CARDSIDE_ANSWER, 'contenttype' => CARDBOX_CONTENTTYPE_TEXT,
-        'area' => CARD_ANSERSUGGESTION_INFORMATION]);
+        'area' => CARD_ANSWERSUGGESTION_INFORMATION]);
 }
 
 /**
