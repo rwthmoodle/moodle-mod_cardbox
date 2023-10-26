@@ -4,6 +4,9 @@ moodle-mod_cardbox
 Changes
 -------
 
+### 2023102600 v1.0.5
+* fixed php error due to typo
+
 ### 2023101000 v1.0.4
 * added activity settings "enablenotifications" and "casesensitive" to backups
 
