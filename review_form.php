@@ -61,7 +61,7 @@ class mod_cardbox_review_form extends moodleform {
                 [
                     'cardid' => $cardid,
                     'areamain' => CARD_MAIN_INFORMATION,
-                    'areasugg' => CARD_ANSERSUGGESTION_INFORMATION
+                    'areasugg' => CARD_ANSWERSUGGESTION_INFORMATION
                 ]
             );
 
@@ -116,7 +116,7 @@ class mod_cardbox_review_form extends moodleform {
                     $countapprovedanswers = $DB->count_records('cardbox_cardcontents',
                         ['cardside' => $cardcontent->cardside, 'card' => $cardid, 'area' => CARD_MAIN_INFORMATION]);
                     $countsuggestedanswers = $countapprovedanswers + $DB->count_records('cardbox_cardcontents',
-                        ['cardside' => CARDBOX_CARDSIDE_ANSWER, 'card' => $cardid, 'area' => CARD_ANSERSUGGESTION_INFORMATION]);
+                        ['cardside' => CARDBOX_CARDSIDE_ANSWER, 'card' => $cardid, 'area' => CARD_ANSWERSUGGESTION_INFORMATION]);
 
                     if ($countsuggestedanswers > 1) {
                         $count++;
@@ -126,9 +126,9 @@ class mod_cardbox_review_form extends moodleform {
                         }
                         $height = (100 - ($countsuggestedanswers - 1)) / $countsuggestedanswers;
 
-                        $answerapproved = $cardcontent->area != CARD_ANSERSUGGESTION_INFORMATION;
+                        $answerapproved = $cardcontent->area != CARD_ANSWERSUGGESTION_INFORMATION;
                         $suggestedanswers = $DB->get_records('cardbox_cardcontents', ['card' => $cardid,
-                            'cardside' => CARDBOX_CARDSIDE_ANSWER, 'area' => CARD_ANSERSUGGESTION_INFORMATION], '', 'id, content');
+                            'cardside' => CARDBOX_CARDSIDE_ANSWER, 'area' => CARD_ANSWERSUGGESTION_INFORMATION], '', 'id, content');
                         $class = 'cardbox-cardside-multi';
                         if (!$answerapproved) {
                             $class .= ' suggestion';
