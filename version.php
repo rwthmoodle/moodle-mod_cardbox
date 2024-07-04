@@ -24,7 +24,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'mod_cardbox';
-$plugin->version = 2023101000;
+$plugin->version = 2024070300;
 $plugin->release = '1.2.2';
 $plugin->requires = 2018120302.05;
 $plugin->maturity = MATURITY_STABLE;

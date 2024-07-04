@@ -206,6 +206,18 @@ class cardbox_practice implements \renderable, \templatable {
         $data = array();
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;
+        $txt_ans = $this->answer;
+        $test_ans = $txt_ans['texts'][0]['text'];
+        $trimd_ans = trim(strip_tags($test_ans));
+        $render_ans = '';
+        if( str_starts_with($test_ans, '\(')) {
+            $render_ans = '<span class="filter_mathjaxloader_equation">'. $trimd_ans .'</span>';
+            //$this->displayanswer =$render_ans;
+        }
+        else {
+            $render_ans = $test_ans;
+        }
+        $data['renderanswer'] = $render_ans;
         $data['answer'] = $this->answer;
         $data['case1'] = $this->case1;
         $data['case2'] = $this->case2;
