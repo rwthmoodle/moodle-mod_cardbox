@@ -321,3 +321,14 @@ $string['status'] = 'status';
 $string['continue'] = 'Continue';
 $string['unmatchedanswers'] = 'CSV file requires {$a->csvschema} answers; only {$a->actual} given.';
 $string['emptyimportfile'] = 'Nothing to import - CSV file has no rows.';
+
+// Capabilities definitions.
+$string['cardbox:approvecard'] = 'Approve card';
+$string['cardbox:deletecard'] = 'Delete card';
+$string['cardbox:edittopics'] = 'Edit topics';
+$string['cardbox:seestatus'] = 'See status';
+$string['cardbox:submitcard'] = 'Submit card';
+$string['cardbox:view'] = 'View card';
+$string['cardbox:addinstance'] = 'Add a new Cardbox';
+$string['cardbox:practice'] = 'Practice cards';
+
