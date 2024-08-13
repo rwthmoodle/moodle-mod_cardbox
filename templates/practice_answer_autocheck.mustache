@@ -38,15 +38,15 @@
         <div id="cardbox-answer-text">
 
             {{#morethanonesolution}}
-            {{#texts}}
-            <li class="cardbox-card-text">{{{text}}}</li>
-            {{/texts}}
+            {{#renderanswer}}
+            <li class="cardbox-card-text">{{{renderans}}}</li>
+            {{/renderanswer}}
             {{/morethanonesolution}}
 
             {{^morethanonesolution}}
-            {{#texts}}
-            <div class="cardbox-card-text">{{{text}}}</div>
-            {{/texts}}
+            {{#renderanswer}}
+            <div class="cardbox-card-text">{{{renderans}}}</div>
+            {{/renderanswer}}
             {{/morethanonesolution}}
 
         </div>
