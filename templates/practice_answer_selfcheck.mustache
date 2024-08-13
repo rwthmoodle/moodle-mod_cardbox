@@ -36,15 +36,15 @@
     <div class="col-xs-12 col-md-10 col-lg-8 col-xl-6" style="margin-top: 20px">
 
         {{#morethanonesolution}}
-        {{#texts}}
-        <li class="cardbox-card-text">{{{text}}}</li>
-        {{/texts}}
+        {{#renderanswer}}
+        <li class="cardbox-card-text">{{{renderans}}}</li>
+        {{/renderanswer}}
         {{/morethanonesolution}}
 
         {{^morethanonesolution}}
-        {{#texts}}
-        <div class="cardbox-card-text">{{{text}}}</div>
-        {{/texts}}
+        {{#renderanswer}}
+        <div class="cardbox-card-text">{{{renderans}}}</div>
+        {{/renderanswer}}
         {{/morethanonesolution}}
 
     </div>
