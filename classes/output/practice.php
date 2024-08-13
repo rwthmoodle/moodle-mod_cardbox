@@ -45,6 +45,7 @@ class cardbox_practice implements \renderable, \templatable {
     private $casesensitive = 0;
     private $answercount = 0;
     private $cardsleft;
+    private $render_ans;
 
     /**
      * Function builds the view of a flashcard during practice.
@@ -163,6 +164,7 @@ class cardbox_practice implements \renderable, \templatable {
             } else {
 
                 $content->content = format_text($content->content, FORMAT_MOODLE, ['para' => false]);
+                $this->render_ans = $content->content;
                 if ($disableautocorrect) {
                     // We want the bare text for answer comparison, no HTML tags.
                     // Otherwise autocorrection doesn't work.
@@ -206,6 +208,7 @@ class cardbox_practice implements \renderable, \templatable {
         $data = array();
         $data['topic'] = $this->topic;
         $data['question'] = $this->question;
+        $data['renderanswer'] = $this->render_ans;
         $data['answer'] = $this->answer;
         $data['case1'] = $this->case1;
         $data['case2'] = $this->case2;
