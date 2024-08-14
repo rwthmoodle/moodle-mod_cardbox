@@ -39,13 +39,13 @@
 
             {{#morethanonesolution}}
             {{#renderanswer}}
-            <li class="cardbox-card-text">{{{renderans}}}</li>
+            <li class="cardbox-card-text">{{{.}}}</li>
             {{/renderanswer}}
             {{/morethanonesolution}}
 
             {{^morethanonesolution}}
             {{#renderanswer}}
-            <div class="cardbox-card-text">{{{renderans}}}</div>
+            <div class="cardbox-card-text">{{{.}}}</div>
             {{/renderanswer}}
             {{/morethanonesolution}}
 
