@@ -164,7 +164,7 @@ class cardbox_practice implements \renderable, \templatable {
             } else {
 
                 $content->content = format_text($content->content, FORMAT_MOODLE, ['para' => false]);
-                $this->render_ans[] = array('renderans' => $content->content);
+                $this->render_ans[] =  $content->content;
                 if ($disableautocorrect) {
                     // We want the bare text for answer comparison, no HTML tags.
                     // Otherwise autocorrection doesn't work.
