@@ -1030,7 +1030,7 @@ if ($action === 'overview') {
         $PAGE->requires->js(new moodle_url("/mod/cardbox/js/overview.js?ver=00009"));
         $PAGE->requires->js_init_call('startOverview', array($cmid, $topic, $sort, $deck));
         // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, false, $sort, $deck);
+        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, $sort, $deck, false);
 
         // 4. Render the page.
         $renderer = $PAGE->get_renderer('mod_cardbox');
