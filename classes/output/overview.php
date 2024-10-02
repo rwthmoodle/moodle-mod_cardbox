@@ -38,7 +38,7 @@ class cardbox_overview implements \renderable, \templatable {
     private $cards = array();
     private $decks = array();
 
-    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $usedforemail = false,  $sort, $deck) {
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $sort, $deck, $usedforemail = false) {
 
         require_once('card.php');
 
