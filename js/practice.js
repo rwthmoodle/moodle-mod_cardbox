@@ -818,7 +818,7 @@ class Evaluate {
     
     getEvaluation() {
         
-        if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || this.necessaryanswers === -1 ) {
+        if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || ((this.answeriscorrect === 1) && (this.necessaryanswers === -1)) ) {
             this.answeriscorrect === 1;
             this.answeriscomplete === 1;
             return 'correctandcomplete';
@@ -836,7 +836,7 @@ class Evaluate {
     }
     
     isCardCorrect() {
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) || this.necessaryanswers === -1) {
+        if (((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || ((this.answeriscorrect === 1) && (this.necessaryanswers === -1))) {
             return true;
         }
         return false;
