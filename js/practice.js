@@ -978,16 +978,16 @@ class Output {
             newdata['case'.concat(Ans_Autocheck)] = true;
             
             if (considercardcorrect) {
-                /* if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
-                    newdata['cardcorrect'] = false;    
-                } else {
-                    newdata['cardcorrect'] = true;
-                } */
                 newdata['cardcorrect'] = true;
                 newdata['showbuttonsuggestanswer'] = false;
             } else {
-                newdata['showbuttonsuggestanswer'] = true;
-                newdata['cardcorrect'] = false;    
+                if (evaluate.answergiven == 0){
+                    newdata['showbuttonsuggestanswer'] = false;
+                    newdata['cardcorrect'] = false; 
+                } else {
+                    newdata['showbuttonsuggestanswer'] = true;
+                    newdata['cardcorrect'] = false;    
+                }
             }
             
             if (considercardcorrect) {
