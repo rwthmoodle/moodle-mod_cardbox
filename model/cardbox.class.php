@@ -185,7 +185,10 @@ class cardbox_cardboxmodel {
     public static function cardbox_get_card_contents($cardid) {
 
         global $DB;
-        $contents = $DB->get_records('cardbox_cardcontents', array('card' => $cardid));
+        $select = "area <> ? AND  card = ?";
+        $params = [CARD_ANSWERSUGGESTION_INFORMATION, $cardid];
+        $contents = $DB->get_records_select('cardbox_cardcontents', $select, $params); // Restrict suggested answers.
+        //$contents = $DB->get_records_sql('cardbox_cardcontents', "area <> ? AND  card = ?", array(CARD_ANSWERSUGGESTION_INFORMATION, $cardid));
         usort($contents, array('cardbox_cardboxmodel', 'cardbox_compare_cardcontenttypes'));
         return $contents;
     }
