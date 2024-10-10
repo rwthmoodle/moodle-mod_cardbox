@@ -979,8 +979,13 @@
                  newdata['cardcorrect'] = true;
                  newdata['showbuttonsuggestanswer'] = false;
              } else {
-                newdata['showbuttonsuggestanswer'] = true;
-                newdata['cardcorrect'] = false;
+                if (evaluate.answergiven == 0){
+                    newdata['showbuttonsuggestanswer'] = false;
+                    newdata['cardcorrect'] = false; 
+                } else {
+                    newdata['showbuttonsuggestanswer'] = true;
+                    newdata['cardcorrect'] = false;    
+                }
              }
              
              if (considercardcorrect) {
