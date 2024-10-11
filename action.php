@@ -109,6 +109,9 @@ if ($action === 'saveperformance') {
     $data->percentcorrect = round($percentcorrect, 0, PHP_ROUND_HALF_UP);
     $success = $DB->insert_record('cardbox_statistics', $data);
 
+    $event = \mod_cardbox\event\practice_session_ended::create(['context' => $context,  'objectid' => $cm->instance]);
+    $event->trigger();
+
     if (empty($success)) {
         echo json_encode(['status' => 'error', 'reason' => 'failedtosaveperformance']);
     } else {

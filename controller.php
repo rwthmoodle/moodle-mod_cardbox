@@ -492,6 +492,9 @@ if ($action === 'deletecard') {
         $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
         $DB->delete_records('cardbox_progress', ['card' => $cardid]);
     }
+    $event = \mod_cardbox\event\card_deleted::create(['context' => $context,  'objectid' => $cardid]);
+    $event->trigger();
+
     $action = 'overview';
 
 }
@@ -517,6 +520,9 @@ if ($action === 'rejectcard') {
         } else if ($DB->record_exists('cardbox_cards', ['id' => $cardid])) {
             $DB->delete_records('cardbox_cards', ['id' => $cardid]);
             $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
+
+            $event = \mod_cardbox\event\card_deleted::create(['context' => $context,  'objectid' => $cardid]);
+            $event->trigger();
         }
     }
     $action = 'review';
@@ -610,6 +616,10 @@ if ($action === 'practice') {
 
         // 3. Render the page.
         echo $renderer->cardbox_render_practice($practice);
+
+        // Create an event.
+        $event = \mod_cardbox\event\practice_session_started::create(['context' => $context,  'objectid' => $cm->instance]);
+        $event->trigger();
 
     } else { // Render a modal dialogue that asks the user to select their practice preferences.
 
@@ -869,6 +879,9 @@ if ($action === 'review') {
                         $dataobject->approved = '1';
                         $dataobject->approvedby = $USER->id;
                         $success = $DB->update_record('cardbox_cards', $dataobject, false);
+
+                        $event = \mod_cardbox\event\card_accepted::create(['context' => $context,  'objectid' => $id]);
+                        $event->trigger();
                     }
                 }
             }

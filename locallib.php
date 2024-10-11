@@ -109,6 +109,9 @@ function cardbox_save_new_card($cardboxid, $context, $submitbutton = null, $topi
     $cardrecord->disableautocorrect = $disableautocorrect;
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
 
+    $event = \mod_cardbox\event\card_created::create(['context' => $context,  'objectid' => $cardid]);
+    $event->trigger();
+
     return $cardid;
 
 }
@@ -178,6 +181,9 @@ function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disa
     }
 
     $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
+
+    $event = \mod_cardbox\event\card_updated::create([['context' => $context,  'objectid' => $cardid]]);
+    $event->trigger();
 
     return $success;
 
