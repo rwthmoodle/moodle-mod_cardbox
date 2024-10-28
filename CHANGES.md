@@ -4,6 +4,12 @@ moodle-mod_cardbox
 Changes
 -------
 
+### 2024081300 v1.0.7
+* correct display of answers in practise(without HTML stripping)
+
+### 2024071700 v1.0.6
+* defining capability related strings
+
 ### 2023102600 v1.0.5
 * fixed php error due to typo
 
