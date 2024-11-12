@@ -42,11 +42,9 @@ class mod_cardbox_card_form extends moodleform {
      * @param array $preselected This param is saved by the constructor in $this->_customdata.
      */
     public function definition($action = null, $preselected = null, $cardid=0) {
-
-        global $CFG, $DB, $USER, $COURSE;
+        global $DB;
 
         $mform = $this->_form;
-
         $customdata = $this->_customdata;
 
         // Pass contextual parameters to the form (via set_data() in controller.php).
@@ -198,7 +196,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $buttonarray[] = &$mform->createElement('submit', 'save', get_string('savecard', 'cardbox'));
         $buttonarray[] = &$mform->createElement('submit', 'saveandaccept', get_string('saveandaccept', 'cardbox'));
-            $buttonarray[] = &$mform->createElement('cancel');
+        $buttonarray[] = &$mform->createElement('cancel');
 
         $mform->addGroup($buttonarray, 'buttonar', '', array(' '), false);
         $mform->setType('buttonar', PARAM_RAW);
