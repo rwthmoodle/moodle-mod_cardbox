@@ -82,11 +82,7 @@ if ($action === 'addflashcard') {
         // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
 
-        if (!empty($formdata->submitbutton)) {
-            $submitbutton = $formdata->submitbutton;
-        } else {
-            $submitbutton = null;
-        }
+        $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
 
         // Create or select a topic for the card.
         switch ($formdata->topic) {
@@ -124,7 +120,7 @@ if ($action === 'addflashcard') {
             $disableautocorrect = false;
         }
         // Create a new entry in cardbox_cards table.
-        $cardid = cardbox_save_new_card($cardbox->id, $context, $submitbutton, $topicid, $necessaryanswers, $disableautocorrect);
+        $cardid = cardbox_save_new_card($cardbox->id, $context, $accept, $topicid, $necessaryanswers, $disableautocorrect);
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
@@ -201,7 +197,7 @@ if ($action === 'addflashcard') {
             }
         }
 
-        if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        if ($accept) {
             $message = get_string('success:addandapprovenewcard', 'cardbox');
         } else {
             $message = get_string('success:addnewcard', 'cardbox');
@@ -315,11 +311,7 @@ if ($action === 'editcard') {
         }
     } else if ($formdata = $mform->get_data()) {
         // If submitted: get files from filemanager.
-        if (!empty($formdata->submitbutton)) {
-            $submitbutton = $formdata->submitbutton;
-        } else {
-            $submitbutton = null;
-        }
+        $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
 
         // Create or select a topic for the card.
         switch ($formdata->topic) {
@@ -355,7 +347,7 @@ if ($action === 'editcard') {
         }
 
         // Update the entry in cardbox_cards table and delete the original content items.
-        $success = cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $submitbutton);
+        $success = cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $accept);
 
         // TODO: Fehlerbehandlung.
 
@@ -435,7 +427,7 @@ if ($action === 'editcard') {
             cardbox_send_change_notification($cmid, $cardbox, $cardid);
         }
 
-        if (!empty($nextcardid) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        if (!empty($nextcardid) && $accept) {
             $cardid = $nextcardid;
         }
 
