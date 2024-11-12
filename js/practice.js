@@ -1156,8 +1156,8 @@
                  legend: {
                      position: 'bottom'
                  },
-                 rotation: 1 * Math.PI,
-                 circumference: 1 * Math.PI,
+                 rotation: -90,
+                 circumference: 180,
                  cutoutPercentage: 60
              }
          }); 
