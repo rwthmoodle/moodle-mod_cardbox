@@ -34,10 +34,7 @@ class mod_cardbox_card_form extends moodleform {
     /**
      * This function is called by the constructor.
      *
-     * @global type $CFG
      * @global type $DB
-     * @global type $USER
-     * @global type $COURSE
      * @param type $action
      * @param array $preselected This param is saved by the constructor in $this->_customdata.
      */
