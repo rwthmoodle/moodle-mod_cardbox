@@ -146,15 +146,6 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $
 
 }
 
-function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
-
-    global $DB;
-
-    $existsalready = $DB->record_exists('cardbox_cardcontents', array('card' => $cardid, 'cardside' => $cardside, 'contenttype' => $contenttype));
-
-}
-
-
 /**
  * Function updates a card that was edited via the card_form.
  *
