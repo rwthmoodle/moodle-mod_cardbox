@@ -297,6 +297,7 @@ $string['createtopic'] = 'Hinzufügen';
 $string['existingtopics'] = 'Bereits existierende Themen';
 $string['notopics'] = 'Es sind noch keine Themen vorhanden';
 $string['sortdirection'] = 'Sortierrichtung';
+$string['nulltopic'] = 'Nicht zugeordnet';
 
 // Settings.
 $string['statistics_heading'] = 'Statistiken';
