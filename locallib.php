@@ -88,7 +88,7 @@ function cardbox_get_topics($cardboxid, $extra = false) {
  * @param string $topic
  * @return int
  */
-function cardbox_save_new_card($cardboxid, $context, $submitbutton = null, $topicid = null, $necessaryanswers = 0, $disableautocorrect = 0) {
+function cardbox_save_new_card($cardboxid, $context, $accept = false, $topicid = null, $necessaryanswers = 0, $disableautocorrect = 0) {
 
     global $DB, $USER;
 
@@ -98,7 +98,7 @@ function cardbox_save_new_card($cardboxid, $context, $submitbutton = null, $topi
     $cardrecord->author = $USER->id;
     $cardrecord->timecreated = time();
     $cardrecord->timemodified = null;
-    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+    if ($accept) {
         $cardrecord->approved = 1;
         $cardrecord->approvedby = $USER->id;
     } else {
@@ -108,6 +108,9 @@ function cardbox_save_new_card($cardboxid, $context, $submitbutton = null, $topi
     $cardrecord->necessaryanswers = $necessaryanswers;
     $cardrecord->disableautocorrect = $disableautocorrect;
     $cardid = $DB->insert_record('cardbox_cards', $cardrecord, true, false);
+
+    $event = \mod_cardbox\event\card_created::create(['context' => $context,  'objectid' => $cardid]);
+    $event->trigger();
 
     return $cardid;
 
@@ -156,7 +159,7 @@ function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
  * @param int $topicid
  * @return bool whether or not the update was successful
  */
-function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $submitbutton = null) {
+function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $accept = false) {
 
     global $DB, $USER;
 
@@ -165,7 +168,7 @@ function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disa
     $record->topic = $topicid;
     $record->timemodified = time();
 
-    if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+    if ($accept) {
         $record->approved = 1;
         $record->approvedby = $USER->id;
     }
@@ -180,6 +183,9 @@ function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disa
 
     $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
 
+    $event = \mod_cardbox\event\card_updated::create([['context' => $context,  'objectid' => $cardid]]);
+    $event->trigger();
+    
     return $success;
 
 }
