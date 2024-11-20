@@ -304,6 +304,8 @@ $string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For
 $string['createtopic'] = 'Add';
 $string['existingtopics'] = 'already existing topics';
 $string['notopics'] = 'there are no topics yet';
+$string['nulltopic'] = 'Not Assigned';
+
 
 // Settings.
 $string['statistics_heading'] = 'Statistics';
