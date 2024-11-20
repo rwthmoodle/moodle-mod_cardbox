@@ -43,7 +43,7 @@ class mod_cardbox_card_form extends moodleform {
      */
     public function definition($action = null, $preselected = null, $cardid=0) {
 
-        global $CFG, $DB, $USER, $COURSE;
+        global $DB;
 
         $mform = $this->_form;
 
