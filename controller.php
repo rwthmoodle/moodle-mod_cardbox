@@ -82,11 +82,7 @@ if ($action === 'addflashcard') {
         // If submitted: get files from filemanager.
     } else if ($formdata = $mform->get_data()) {
 
-        if (!empty($formdata->submitbutton)) {
-            $submitbutton = $formdata->submitbutton;
-        } else {
-            $submitbutton = null;
-        }
+        $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
 
         // Create or select a topic for the card.
         switch ($formdata->topic) {
@@ -124,7 +120,7 @@ if ($action === 'addflashcard') {
             $disableautocorrect = false;
         }
         // Create a new entry in cardbox_cards table.
-        $cardid = cardbox_save_new_card($cardbox->id, $context, $submitbutton, $topicid, $necessaryanswers, $disableautocorrect);
+        $cardid = cardbox_save_new_card($cardbox->id, $context, $accept, $topicid, $necessaryanswers, $disableautocorrect);
 
         // Save the question text if there is any.
         if (!empty($formdata->question['text'])) {
@@ -244,7 +240,7 @@ if ($action === 'addflashcard') {
             }
         }
 
-        if (!empty($submitbutton) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        if ($accept) {
             $message = get_string('success:addandapprovenewcard', 'cardbox');
         } else {
             $message = get_string('success:addnewcard', 'cardbox');
@@ -358,11 +354,7 @@ if ($action === 'editcard') {
         }
     } else if ($formdata = $mform->get_data()) {
         // If submitted: get files from filemanager.
-        if (!empty($formdata->submitbutton)) {
-            $submitbutton = $formdata->submitbutton;
-        } else {
-            $submitbutton = null;
-        }
+        $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
 
         // Create or select a topic for the card.
         switch ($formdata->topic) {
@@ -398,7 +390,7 @@ if ($action === 'editcard') {
         }
 
         // Update the entry in cardbox_cards table and delete the original content items.
-        $success = cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $submitbutton);
+        $success = cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disableautocorrect, $accept);
 
         // TODO: Fehlerbehandlung.
 
@@ -478,7 +470,7 @@ if ($action === 'editcard') {
             cardbox_send_change_notification($cmid, $cardbox, $cardid);
         }
 
-        if (!empty($nextcardid) && $submitbutton == get_string('saveandaccept', 'cardbox') && has_capability('mod/cardbox:approvecard', $context)) {
+        if (!empty($nextcardid) && $accept) {
             $cardid = $nextcardid;
         }
 
@@ -535,6 +527,9 @@ if ($action === 'deletecard') {
         $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
         $DB->delete_records('cardbox_progress', ['card' => $cardid]);
     }
+    $event = \mod_cardbox\event\card_deleted::create(['context' => $context,  'objectid' => $cardid]);
+    $event->trigger();
+
     $action = 'overview';
 
 }
@@ -647,12 +642,16 @@ if ($action === 'practice') {
         $stringman = get_string_manager();
         $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
         $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00024"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00025"));
         $params = array($cmid, $selection, $case, $data, $correction, $autocorrectval); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 
         // 3. Render the page.
         echo $renderer->cardbox_render_practice($practice);
+
+        // Create an event.
+        $event = \mod_cardbox\event\practice_session_started::create(['context' => $context,  'objectid' => $cm->instance]);
+        $event->trigger();
 
     } else { // Render a modal dialogue that asks the user to select their practice preferences.
 
@@ -912,6 +911,9 @@ if ($action === 'review') {
                         $dataobject->approved = '1';
                         $dataobject->approvedby = $USER->id;
                         $success = $DB->update_record('cardbox_cards', $dataobject, false);
+
+                        $event = \mod_cardbox\event\card_accepted::create(['context' => $context,  'objectid' => $id]);
+                        $event->trigger();
                     }
                 }
             }
