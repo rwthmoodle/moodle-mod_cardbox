@@ -112,6 +112,11 @@ function cardbox_save_new_card($cardboxid, $context, $accept = false, $topicid =
     $event = \mod_cardbox\event\card_created::create(['context' => $context,  'objectid' => $cardid]);
     $event->trigger();
 
+    if ($accept) {
+        $event = \mod_cardbox\event\card_accepted::create(['context' => $context,  'objectid' => $cardid]);
+        $event->trigger();
+    }
+
     return $cardid;
 
 }
@@ -141,15 +146,6 @@ function cardbox_save_new_cardcontent($cardid, $cardside, $contenttype, $name, $
     return $itemid;
 
 }
-
-function cardbox_update_cardcontent($cardid, $cardside, $contenttype, $name) {
-
-    global $DB;
-
-    $existsalready = $DB->record_exists('cardbox_cardcontents', array('card' => $cardid, 'cardside' => $cardside, 'contenttype' => $contenttype));
-
-}
-
 
 /**
  * Function updates a card that was edited via the card_form.
@@ -185,7 +181,12 @@ function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disa
 
     $event = \mod_cardbox\event\card_updated::create([['context' => $context,  'objectid' => $cardid]]);
     $event->trigger();
-    
+
+    if ($accept) {
+        $event = \mod_cardbox\event\card_accepted::create(['context' => $context,  'objectid' => $cardid]);
+        $event->trigger();
+    }
+
     return $success;
 
 }
