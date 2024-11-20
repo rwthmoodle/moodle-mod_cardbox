@@ -4,6 +4,10 @@ moodle-mod_cardbox
 Changes
 -------
 ### 2024081300 v1.0.8
+* Code Cleanup 
+* Basic events logging
+* Fix card flow when language is changed while creation
+* Fix graph display after practise session
 * Hide Suggest Answer button when no answer is given
 * Iss43: Fix incorrect feedback while practise for cards where only one answer is necessary
 * Code cleanup: Fix optional parameter comes before required warning
