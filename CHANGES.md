@@ -4,6 +4,7 @@ moodle-mod_cardbox
 Changes
 -------
 ### 2024081300 v1.0.8
+* Icon changed for Moodle 4.4+
 * Code Cleanup 
 * Basic events logging
 * Fix card flow when language is changed while creation
