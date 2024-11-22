@@ -818,7 +818,7 @@ class Evaluate {
     
     getEvaluation() {
         
-        if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || this.necessaryanswers === -1 ) {
+        if ( ((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || ((this.answeriscorrect === 1) && (this.necessaryanswers === -1)) ) {
             this.answeriscorrect === 1;
             this.answeriscomplete === 1;
             return 'correctandcomplete';
@@ -836,7 +836,7 @@ class Evaluate {
     }
     
     isCardCorrect() {
-        if ( (this.answeriscorrect === 1) && (this.answeriscomplete === 1) || this.necessaryanswers === -1) {
+        if (((this.answeriscorrect === 1) && (this.answeriscomplete === 1)) || ((this.answeriscorrect === 1) && (this.necessaryanswers === -1))) {
             return true;
         }
         return false;
@@ -978,16 +978,16 @@ class Output {
             newdata['case'.concat(Ans_Autocheck)] = true;
             
             if (considercardcorrect) {
-                /* if (newdata['morethanonesolution'] && (newdata['necessaryanswers']==="1")) {
-                    newdata['cardcorrect'] = false;    
-                } else {
-                    newdata['cardcorrect'] = true;
-                } */
                 newdata['cardcorrect'] = true;
                 newdata['showbuttonsuggestanswer'] = false;
             } else {
-                newdata['showbuttonsuggestanswer'] = true;
-                newdata['cardcorrect'] = false;    
+                if (evaluate.answergiven == 0){
+                    newdata['showbuttonsuggestanswer'] = false;
+                    newdata['cardcorrect'] = false; 
+                } else {
+                    newdata['showbuttonsuggestanswer'] = true;
+                    newdata['cardcorrect'] = false;    
+                }
             }
             
             if (considercardcorrect) {
@@ -1158,8 +1158,8 @@ class Statistics {
                 legend: {
                     position: 'bottom'
                 },
-                rotation: 1 * Math.PI,
-                circumference: 1 * Math.PI,
+                rotation: -90,
+                circumference: 180,
                 cutoutPercentage: 60
             }
         }); 

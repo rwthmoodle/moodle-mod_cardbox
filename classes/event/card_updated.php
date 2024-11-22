@@ -14,17 +14,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-/**
- * @package   mod_cardbox
- * @copyright 2019 RWTH Aachen (see README.md)
- * @author    Anna Heynkes
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+namespace mod_cardbox\event;
 
-defined('MOODLE_INTERNAL') || die();
-
-$plugin->component = 'mod_cardbox';
-$plugin->version = 2024112000;
-$plugin->release = '1.0.8';
-$plugin->requires = 2018120302.05;
-$plugin->maturity = MATURITY_STABLE;
+class card_updated extends \core\event\base {
+    protected function init() {
+        $this->data['crud'] = 'u';
+        $this->data['edulevel'] = self::LEVEL_TEACHING;
+        $this->data['objecttable'] = 'cardbox_cards';
+    }
+}

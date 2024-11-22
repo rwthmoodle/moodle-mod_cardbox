@@ -27,6 +27,8 @@ define ('QUESTION_AUTOCHECK', 2);
 define ('ANSWER_SELFCHECK', 3);
 define ('ANSWER_AUTOCHECK', 4);
 define('SUGGEST_ANSWER', 5);
+define ('TOPIC_IS_NULL', -1);
+
 class cardbox_practice implements \renderable, \templatable {
 
     private $topic;
@@ -113,10 +115,10 @@ class cardbox_practice implements \renderable, \templatable {
         $contents = cardbox_cardboxmodel::cardbox_get_card_contents($cardid);
 
         $topic = cardbox_get_topic($cardid);
-        if ($topic === 0 || $topic == "NULL") {
-            $this->topic = "";
+        if ($topic == TOPIC_IS_NULL) {
+            $this->topic = get_string('nulltopic', 'cardbox');
         } else {
-            $this->topic = strtoupper($DB->get_field('cardbox_topics', 'topicname', array('id' => $topic)));
+            $this->topic = $DB->get_field('cardbox_topics', 'topicname', array('id' => $topic));
         }
 
         $this->casesensitive = cardbox_cardboxmodel::cardbox_get_casesensitive($cardid);
@@ -207,7 +209,7 @@ class cardbox_practice implements \renderable, \templatable {
     public function export_for_template(\renderer_base $output) {
 
         $data = array();
-        $data['topic'] = $this->topic;
+        $data['topic'] = get_string('choosetopic', 'cardbox').' : '.$this->topic;
         $data['renderanswer'] = $this->render_ans;
         $data['question'] = $this->question;
         $data['answer'] = $this->answer;
