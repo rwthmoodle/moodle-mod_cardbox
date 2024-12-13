@@ -1113,11 +1113,11 @@
       */
      finishPractice(cmid) {
  
-         // 1. Hide the last card that was practiced.
-         $('#cardbox-practice-replacable').toggleClass('hidden');
- 
-         // 2. Save this session's performance in cardbox_statistics.
-         require(['jquery'], function($) {
+        require(['jquery'], function($) {  
+            // 1. Hide the last card that was practiced.
+            $('#cardbox-practice-replacable').toggleClass('hidden');
+    
+            // 2. Save this session's performance in cardbox_statistics.
             $.ajax({
                 type: 'POST',
                 url: 'action.php',
@@ -1126,7 +1126,7 @@
                     result = JSON.parse(result);
                 }
             });
-         }.bind(this));
+        }.bind(this));
  
          // 3. Then display it as a doughnut chart.
          var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
