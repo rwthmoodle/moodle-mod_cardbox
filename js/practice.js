@@ -438,20 +438,22 @@ class Coordinate {
             }
 
             // 2. Update the status of the current card and request the next card (if there is one).
-            $.ajax({
-                type: 'POST',
-                url: 'action.php',
-                data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, cardsleft: this.cardsleft, mode: this.mode}
-            }).then(function(data) {
-                var result = JSON.parse(data);
-                
-                // 3. Adjust the statistics etc..
-                this.registerProgress(iscorrect);
+            require(['jquery'], function($) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'action.php',
+                    data: {id: this.cmid, action: 'updateandnext', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, cardsleft: this.cardsleft, mode: this.mode}
+                }).then(function(data) {
+                    var result = JSON.parse(data);
+                    
+                    // 3. Adjust the statistics etc..
+                    this.registerProgress(iscorrect);
 
-                // 4. Show the next card or finish the practice session with a doughnut progress chart.
-                
-                this.registerAndRenderNextCard(result.newdata);
+                    // 4. Show the next card or finish the practice session with a doughnut progress chart.
+                    
+                    this.registerAndRenderNextCard(result.newdata);
 
+                }.bind(this));
             }.bind(this));
         }
 
@@ -472,19 +474,21 @@ class Coordinate {
 
             var userinput = document.getElementById('cardbox-suggestanswer-input').value;  
 
-            $.ajax({
-                type: 'POST',
-                url: 'action.php',
-                data: {id: this.cmid, action: 'savesuggestedanswer', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, userinput: userinput}
-            }).then(function(iscorrect) {
+            require(['jquery'], function($) {
+                $.ajax({
+                    type: 'POST',
+                    url: 'action.php',
+                    data: {id: this.cmid, action: 'savesuggestedanswer', case: this.case, cardid: this.cardId, iscorrect: iscorrect, next: this.next, isrepetition: this.isrepetition, sesskey: M.cfg.sesskey, userinput: userinput}
+                }).then(function(iscorrect) {
 
-                if(iscorrect) {
-                    this.proceed(1);
-                } else {
-                    var quescase = Ques_Autocheck;
-                    this.proceed(0);
-                }
-            }.bind(this, iscorrect));
+                    if(iscorrect) {
+                        this.proceed(1);
+                    } else {
+                        var quescase = Ques_Autocheck;
+                        this.proceed(0);
+                    }
+                }.bind(this, iscorrect));
+            }.bind(this));
         }
 
         getRandomInt(max) {
@@ -1112,18 +1116,20 @@ class Statistics {
      */
     finishPractice(cmid) {
 
-        // 1. Hide the last card that was practiced.
-        $('#cardbox-practice-replacable').toggleClass('hidden');
+        require(['jquery'], function($) { 
+            // 1. Hide the last card that was practiced.
+            $('#cardbox-practice-replacable').toggleClass('hidden');
 
-        // 2. Save this session's performance in cardbox_statistics.
-        $.ajax({
-            type: 'POST',
-            url: 'action.php',
-            data: {id: cmid, action: 'saveperformance', countright: this.countright, countwrong: this.countwrong, sesskey: M.cfg.sesskey, starttime: this.starttime},
-            success: function(result){
-                result = JSON.parse(result);
-            }
-        });
+            // 2. Save this session's performance in cardbox_statistics.
+            $.ajax({
+                type: 'POST',
+                url: 'action.php',
+                data: {id: cmid, action: 'saveperformance', countright: this.countright, countwrong: this.countwrong, sesskey: M.cfg.sesskey, starttime: this.starttime},
+                success: function(result){
+                    result = JSON.parse(result);
+                }
+            });
+        }.bind(this));
 
         // 3. Then display it as a doughnut chart.
         var ctx = document.getElementById("cardbox-practice-feedback").getContext("2d");
