@@ -1,21 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Ebene_2" data-name="Ebene 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.09 23.92">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: #231f20;
-      }
-    </style>
-  </defs>
-  <g id="Icons">
-    <g id="Card_Box_new" data-name="Card Box_new">
-      <g>
-        <path class="cls-1" d="m4.01,0v2.43h16.07V0H4.01Zm-.5,4.43v1.62h17.07v-1.62H3.51Z"/>
-        <path class="cls-1" d="m20.08,4.43v1.12H4.01v-1.12h-1v2.12h18.07v-2.12h-1Z"/>
-      </g>
-      <rect class="cls-1" x="2" y="4.43" width="20.09" height="2.75"/>
-      <path class="cls-1" d="m20.87,9.18H3.22c-1.78,0-3.22,1.44-3.22,3.21v8.32c0,1.77,1.44,3.21,3.22,3.21h17.65c1.77,0,3.22-1.44,3.22-3.21v-8.32c0-1.77-1.45-3.21-3.22-3.21Zm1.22,11.53c0,.67-.55,1.21-1.22,1.21H3.22c-.67,0-1.22-.54-1.22-1.21v-8.32c0-.66.55-1.21,1.22-1.21h17.65c.67,0,1.22.55,1.22,1.21v8.32Z"/>
-      <path class="cls-1" d="m16.22,17H7.87c-.55,0-1-.45-1-1s.45-1,1-1h8.35c.55,0,1,.45,1,1s-.45,1-1,1Z"/>
-    </g>
-  </g>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="24"
+   height="24"
+   viewBox="0 0 24 24"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="cardbox4.svg"
+   inkscape:version="1.4 (86a8ad7, 2024-10-11)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="23.069359"
+     inkscape:cx="8.040969"
+     inkscape:cy="12.419071"
+     inkscape:window-width="1920"
+     inkscape:window-height="1001"
+     inkscape:window-x="4391"
+     inkscape:window-y="-9"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     fill-rule="evenodd"
+     clip-rule="evenodd"
+     d="M 5.4125626,6.6182623 H 18.587438 M 8.2357503,3.0304374 H 15.76425 M 9.6473446,15.587824 h 4.7053114 m 6.116907,-2.989854 v 5.979709 c 0,1.321038 -0.842627,2.391884 -1.882125,2.391884 H 5.4125626 c -1.0394696,0 -1.8821251,-1.070846 -1.8821251,-2.391884 V 12.59797 c 0,-1.321001 0.8426555,-2.391885 1.8821251,-2.391885 H 18.587438 c 1.039498,0 1.882125,1.070884 1.882125,2.391885 z"
+     stroke="#000000"
+     id="path1"
+     style="stroke-width:1;stroke-dasharray:none" />
+  <rect
+     id="rect1"
+     width="23.537716"
+     height="23.494368"
+     x="-22.395094"
+     y="1.6627932"
+     style="fill:none;stroke:none" />
 </svg>
