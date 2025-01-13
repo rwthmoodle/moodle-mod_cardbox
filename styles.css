@@ -563,3 +563,8 @@
 .path-mod-cardbox .cardbox-card-text p {
     display: inline-block;
 }
+
+/* iss121: Fix position of checkbox for image is decorative */
+#id_imgdescriptionnecessary {
+    position: relative;
+}
