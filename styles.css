@@ -559,3 +559,7 @@
 .path-mod-cardbox .cardbox-card-text p {
     display: inline-block;
 }
+/* Moodle 4.5 Fix position of checkbox for image is decorative */
+#id_imgdescriptionnecessary {
+    position: relative;
+}
