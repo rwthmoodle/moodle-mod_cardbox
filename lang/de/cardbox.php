@@ -325,3 +325,11 @@ $string['cardbox:submitcard'] = 'Karte abgeben';
 $string['cardbox:view'] = 'Karte ansehen';
 $string['cardbox:addinstance'] = 'Eine neue Cardbox hinzufügen';
 $string['cardbox:practice'] = 'Karten üben';
+
+// Events.
+$string['event:card_accepted'] = 'Karte genehmigt';
+$string['event:card_created'] = 'Karte erstellt';
+$string['event:card_deleted'] = 'Karte gelöscht';
+$string['event:card_updated'] = 'Karte bearbeitet';
+$string['event:practice_session_ended'] = 'Übung beendet';
+$string['event:practice_session_started'] = 'Übung begonnen';
