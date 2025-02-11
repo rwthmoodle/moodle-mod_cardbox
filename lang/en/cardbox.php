@@ -333,3 +333,11 @@ $string['cardbox:submitcard'] = 'Submit card';
 $string['cardbox:view'] = 'View card';
 $string['cardbox:addinstance'] = 'Add a new Cardbox';
 $string['cardbox:practice'] = 'Practice cards';
+
+// Events.
+$string['event:card_accepted'] = 'Card accepted';
+$string['event:card_created'] = 'Card created';
+$string['event:card_deleted'] = 'Card deleted';
+$string['event:card_updated'] = 'Card updated';
+$string['event:practice_session_ended'] = 'Practice session ended';
+$string['event:practice_session_started'] = 'Practice session started';
