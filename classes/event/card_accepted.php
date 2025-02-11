@@ -22,4 +22,13 @@ class card_accepted extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_TEACHING;
         $this->data['objecttable'] = 'cardbox_cards';
     }
+
+    public static function get_name() {
+        return get_string('event:card_accepted', 'cardbox');
+    }
+
+    public function get_description() {
+        return "The user with id '$this->userid' accepted the card with id '$this->objectid'.";
+    }
+
 }

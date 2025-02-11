@@ -555,6 +555,9 @@ if ($action === 'rejectcard') {
         } else if ($DB->record_exists('cardbox_cards', ['id' => $cardid])) {
             $DB->delete_records('cardbox_cards', ['id' => $cardid]);
             $DB->delete_records('cardbox_cardcontents', ['card' => $cardid]);
+
+            $event = \mod_cardbox\event\card_deleted::create(['context' => $context,  'objectid' => $cardid]);
+            $event->trigger();
         }
     }
     $action = 'review';
