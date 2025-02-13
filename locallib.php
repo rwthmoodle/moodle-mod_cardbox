@@ -179,7 +179,7 @@ function cardbox_edit_card($cardid, $topicid, $context, $necessaryanswers, $disa
 
     $success = $DB->delete_records('cardbox_cardcontents', array('card' => $cardid));
 
-    $event = \mod_cardbox\event\card_updated::create([['context' => $context,  'objectid' => $cardid]]);
+    $event = \mod_cardbox\event\card_updated::create(['context' => $context,  'objectid' => $cardid]);
     $event->trigger();
 
     if ($accept) {
