@@ -28,7 +28,7 @@ class practice_session_ended extends \core\event\base {
     }
 
     public function get_description() {
-        return "The user with id '$this->userid' started a practice session.";
+        return "The user with id '$this->userid' ended a practice session.";
     }
 
 }
