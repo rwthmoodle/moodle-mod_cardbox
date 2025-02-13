@@ -4,6 +4,8 @@ moodle-mod_cardbox
 Changes
 -------
 ### 2025012100 v1.0.8
+* Bug63 Add event name and description
+### 2025012100 v1.0.8
 * fix checkbox display in Add card
 ### 2024121600 v1.0.8
 * jquery fix for practise
