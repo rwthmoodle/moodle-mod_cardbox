@@ -22,4 +22,13 @@ class card_created extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'cardbox_cards';
     }
+
+    public static function get_name() {
+        return get_string('event:card_created', 'cardbox');
+    }
+
+    public function get_description() {
+        return "The user with id '$this->userid' created a card with id '$this->objectid'.";
+    }
+
 }

@@ -22,4 +22,13 @@ class practice_session_ended extends \core\event\base {
         $this->data['edulevel'] = self::LEVEL_PARTICIPATING;
         $this->data['objecttable'] = 'cardbox';
     }
+
+    public static function get_name() {
+        return get_string('event:practice_session_ended', 'cardbox');
+    }
+
+    public function get_description() {
+        return "The user with id '$this->userid' ended a practice session.";
+    }
+
 }
