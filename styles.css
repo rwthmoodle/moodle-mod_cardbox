@@ -205,14 +205,6 @@
     display: none;
 }
 
-.path-mod-cardbox .sticky-review-arr {
-    position: fixed;
-    bottom: 50%;
-    left: 80%;
-    right: 50%;
-    width: 400px;
-}
-
 .path-mod-cardbox .cardbox-card-context {
     font-size: 0.9375rem;
     margin-bottom: 1%;

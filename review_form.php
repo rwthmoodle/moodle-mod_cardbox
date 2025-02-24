@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-require_once("$CFG->libdir/formslib.php"); // moodleform is defined in formslib.php
+use moodleform;
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class mod_cardbox_review_form extends moodleform {
@@ -214,11 +214,12 @@ class mod_cardbox_review_form extends moodleform {
             '</div></div><div class="col-xl-4" style="padding-left:0.5%;"><div class="cardbox-column" ><div>'.$acontext.'</div></div></div></div>');
 
         }
-        $mform->addElement('html', '<div id= "review-div" class="cardbox-card-in-review sticky-review-arr">');
+        $mform->addElement('html', '<div id= "review-div" class="cardbox-card-in-review">');
         $reviewbtngrp = array();
         $reviewbtngrp[] =& $mform->createElement('submit', 'approvebtn', get_string('approve', 'cardbox'));
         $reviewbtngrp[] =& $mform->createElement('submit', 'rejectbtn', get_string('reject', 'cardbox'));
         $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', array(''), false);
+        $mform->set_sticky_footer('reviewbtnarr');
         $mform->setType('reviewbtnarr', PARAM_RAW);
         $mform->closeHeaderBefore('reviewbtnarr');
         $mform->addElement('html', '</div></div></div>');
