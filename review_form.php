@@ -26,7 +26,7 @@
 defined('MOODLE_INTERNAL') || die();
 
 
-use moodleform;
+require_once("$CFG->libdir/formslib.php");
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class mod_cardbox_review_form extends moodleform {
