@@ -215,10 +215,11 @@ class mod_cardbox_review_form extends moodleform {
 
         }
         $mform->addElement('html', '<div id= "review-div" class="cardbox-card-in-review">');
-        $reviewbtngrp = array();
-        $reviewbtngrp[] =& $mform->createElement('submit', 'approvebtn', get_string('approve', 'cardbox'));
-        $reviewbtngrp[] =& $mform->createElement('submit', 'rejectbtn', get_string('reject', 'cardbox'));
-        $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', array(''), false);
+        $reviewbtngrp = [
+            $mform->createElement('submit', 'approvebtn', get_string('approve', 'cardbox')),
+            $mform->createElement('submit', 'rejectbtn', get_string('reject', 'cardbox')),
+        ];
+        $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', [' '], false);
         $mform->set_sticky_footer('reviewbtnarr');
         $mform->setType('reviewbtnarr', PARAM_RAW);
         $mform->closeHeaderBefore('reviewbtnarr');

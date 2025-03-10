@@ -58,6 +58,7 @@ function startReview(Y, __cmid) {
                     } else {
                         // there are some checked checkboxes
                         document.getElementById('review-div').style.display = 'block';
+                        document.getElementById('fgroup_id_reviewbtnarr').children[1].classList.add("sticky-review-arr");
                     }
                 });
               });
