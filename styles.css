@@ -205,6 +205,12 @@
     display: none;
 }
 
+.path-mod-cardbox .sticky-review-arr {
+    flex-basis: 100%;
+    max-width: 100%;
+}
+
+
 .path-mod-cardbox .cardbox-card-context {
     font-size: 0.9375rem;
     margin-bottom: 1%;
