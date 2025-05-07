@@ -696,7 +696,7 @@ if ($action === 'massimport') {
             $readcount = $cir->load_csv_content($csvcontent, $formdata->encoding, $formdata->delimiter_name);
             $csvloaderror = $cir->get_error();
             if (!is_null($csvloaderror)) {
-                print_error('csvloaderror', '', $returnurl, $csvloaderror);
+                throw new \moodle_exception('csvloaderror', '', $returnurl, $csvloaderror);
             }
             if ($readcount > 1) {
                 // Show csv content preview.
