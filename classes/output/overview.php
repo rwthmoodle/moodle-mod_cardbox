@@ -21,20 +21,22 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use core\output\renderable;
+use core\output\renderer_base;
+use core\output\templatable;
 
 /**
  * Description of overview
  *
  * @author ah105090
  */
-class cardbox_overview implements \renderable, \templatable {
+class cardbox_overview implements renderable, templatable {
 
     private $topicid;
     private $deckid;
-    private $topics = array();
-    private $cards = array();
-    private $decks = array();
+    private $topics = [];
+    private $cards = [];
+    private $decks = [];
     private $sort;
     private $desc;
 
@@ -44,23 +46,23 @@ class cardbox_overview implements \renderable, \templatable {
 
         global $DB, $PAGE;
 
-        $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
+        $topics = $DB->get_records('cardbox_topics', ['cardboxid' => $cardboxid]);
         $this->topicid = $topicid;
 
         foreach ($topics as $topic) {
             if ($topic->id == $topicid) {
-                $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true);
+                $this->topics[] = ['topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true];
             } else {
-                $this->topics[] = array('topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => false);
+                $this->topics[] = ['topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => false];
             }
         }
 
         $this->deckid = $deck;
         for ($i = 1; $i < 6; $i++) {
             if ($deck == $i) {
-                $this->decks[] = array('deck' => $i, 'selected' => true);
+                $this->decks[] = ['deck' => $i, 'selected' => true];
             } else {
-                $this->decks[] = array('deck' => $i, 'selected' => false);
+                $this->decks[] = ['deck' => $i, 'selected' => false];
             }
         }
 
@@ -88,8 +90,8 @@ class cardbox_overview implements \renderable, \templatable {
 
     }
 
-    public function export_for_template(\renderer_base $output) {
-        $data = array();
+    public function export_for_template(renderer_base $output) {
+        $data = [];
 
         if ($this->topicid == -1) {
             $data['nopreference'] = true;

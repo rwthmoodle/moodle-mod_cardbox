@@ -25,12 +25,12 @@ namespace mod_cardbox\output;
 defined('MOODLE_INTERNAL') || die();
 
 require_once($CFG->libdir.'/csvlib.class.php');
-require_once($CFG->libdir.'/formslib.php'); // moodleform is defined in formslib.php
+require_once($CFG->libdir.'/formslib.php'); // Moodleform is defined in formslib.php.
 require_once($CFG->dirroot . '/user/editlib.php');
 require_once($CFG->dirroot.'/mod/cardbox/locallib.php');
 
 class massimportpreview_form extends \moodleform {
-    public function definition ($action = null, $preselected = null) {
+    public function definition($action = null, $preselected = null) {
         $mform = $this->_form;
         $data = $this->_customdata;
 
@@ -56,12 +56,12 @@ class massimportpreview_form extends \moodleform {
         $mform->addElement('hidden', 'error');
         $mform->setType('error', PARAM_INT);
 
-        $reviewbtngrp = array();
+        $reviewbtngrp = [];
         if ($data['error'] == 0) {
             $reviewbtngrp[] =& $mform->createElement('submit', 'importbtn', get_string('massimport', 'cardbox'));
         }
         $reviewbtngrp[] =& $mform->createElement('submit', 'rejectbtn', get_string('cancel', 'cardbox'));
-        $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', array(''), false);
+        $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', [''], false);
         $mform->setType('reviewbtnarr', PARAM_RAW);
         $mform->closeHeaderBefore('reviewbtnarr');
 

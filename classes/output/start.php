@@ -21,17 +21,20 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use core\output\renderer_base;
+use core\output\renderable;
+use core\output\templatable;
 
 /**
  * Description of start
  *
  */
-class cardbox_start implements \renderable, \templatable {
+class cardbox_start implements renderable, templatable {
 
     private $topics;
     private $autocorrectionoption = false;
     private $amountcards;
+    private $choicestopics;
 
     public function __construct($autocorrection, $cardboxid) {
 
@@ -49,38 +52,36 @@ class cardbox_start implements \renderable, \templatable {
      * Function includes the list of topics in the practice options modal.
      * The user can then choose to prioritise one of the topics in the
      * selection of cards for a practice session.
-     *
-     * @global type $CFG
      */
     public function cardbox_prepare_topics_to_study($cardboxid) {
 
         global $CFG;
         require_once($CFG->dirroot . '/mod/cardbox/locallib.php');
 
-        $this->topics = array();
-        $this->choicestopics = array();
+        $this->topics = [];
+        $this->choicestopics = [];
 
         $topiclist = cardbox_get_topics($cardboxid);
 
         foreach ($topiclist as $key => $value) {
-            $this->topics[] = array('value' => $key, 'label' => $value);
+            $this->topics[] = ['value' => $key, 'label' => $value];
             if ($key === -1) {
-                $this->choicestopics[] = array('value' => $key, 'label' => 'all');
+                $this->choicestopics[] = ['value' => $key, 'label' => 'all'];
             } else {
-                $this->choicestopics[] = array('value' => $key, 'label' => $value);
+                $this->choicestopics[] = ['value' => $key, 'label' => $value];
             }
         }
 
     }
 
     public function cardbox_define_amount_of_cards_to_study() {
-        $this->amountcards = array();
-        $this->amountcards[] = array('value' => 0, 'label' => get_string('undefined', 'cardbox'));
-        $this->amountcards[] = array('value' => 10, 'label' => 10);
-        $this->amountcards[] = array('value' => 20, 'label' => 20);
-        $this->amountcards[] = array('value' => 30, 'label' => 30);
-        $this->amountcards[] = array('value' => 40, 'label' => 40);
-        $this->amountcards[] = array('value' => 50, 'label' => 50);
+        $this->amountcards = [];
+        $this->amountcards[] = ['value' => 0, 'label' => get_string('undefined', 'cardbox')];
+        $this->amountcards[] = ['value' => 10, 'label' => 10];
+        $this->amountcards[] = ['value' => 20, 'label' => 20];
+        $this->amountcards[] = ['value' => 30, 'label' => 30];
+        $this->amountcards[] = ['value' => 40, 'label' => 40];
+        $this->amountcards[] = ['value' => 50, 'label' => 50];
 
     }
 
@@ -88,11 +89,10 @@ class cardbox_start implements \renderable, \templatable {
      * Function returns an array with data. The keys of the array have matching variables
      * in the template. These are replaced with the array values by the renderer.
      *
-     * @global type $OUTPUT
      * @param \renderer_base $output
      * @return type
      */
-    public function export_for_template(\renderer_base $output) {
+    public function export_for_template(renderer_base $output) {
 
         global $OUTPUT;
 

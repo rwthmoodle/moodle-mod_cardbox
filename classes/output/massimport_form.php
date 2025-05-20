@@ -29,7 +29,7 @@ require_once($CFG->libdir.'/formslib.php'); // moodleform is defined in formslib
 require_once($CFG->dirroot . '/user/editlib.php');
 
 class massimport_form extends \moodleform {
-    public function definition () {
+    public function definition() {
         $mform = $this->_form;
         $cbxdata = $this->_customdata;
 

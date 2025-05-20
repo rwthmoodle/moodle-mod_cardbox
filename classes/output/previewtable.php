@@ -15,17 +15,16 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 namespace mod_cardbox\output;
+use core_table\output\html_table;
 
-/*
+/**
+ *
  * @package   mod_cardbox
  * @copyright 2021 ITCenter RWTH Aachen (see README.md)
  * @author    Amrita Deb
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-defined('MOODLE_INTERNAL') || die();
-
-class previewtable extends \html_table {
+class previewtable extends html_table {
     /** @var \csv_import_reader  */
     protected $cir;
     /** @var array */
@@ -50,7 +49,7 @@ class previewtable extends \html_table {
 
         $this->id = "cbxpreview";
         $this->attributes['class'] = 'generaltable';
-        $this->head = array();
+        $this->head = [];
         $this->data = $this->read_data($filecolumns);
         $this->head[] = get_string('uucsvline', 'tool_uploaduser');
         foreach ($filecolumns as $column) {
@@ -63,10 +62,10 @@ class previewtable extends \html_table {
         $this->cir->init();
         $i = 1; // Always start from 1 since 0 is csv column header.
         while ($fields = $this->cir->next()) {
-            $errors = array();
+            $errors = [];
             $atleastoneanswer = 0;
             $status = "";
-            $rowcols = array();
+            $rowcols = [];
             $rowcols['line'] = $i;
             foreach ($fields as $key => $field) {
                 $rowcols[$this->filecolumns[$key]] = s(trim($field));
