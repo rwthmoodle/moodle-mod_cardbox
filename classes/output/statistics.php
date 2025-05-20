@@ -21,13 +21,16 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
+use core\output\renderable;
+use core\output\templatable;
+
 defined('MOODLE_INTERNAL') || die();
 
 /**
  * Description of statistics
  *
  */
-class cardbox_statistics implements \renderable, \templatable {
+class cardbox_statistics implements renderable, templatable {
 
     private $ismanager;
     private $infoenrolledstudentsthreshold;

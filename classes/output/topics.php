@@ -29,13 +29,13 @@ defined('MOODLE_INTERNAL') || die();
  */
 class cardbox_topics implements \renderable, \templatable {
 
-    private $topics = array();
+    private $topics = [];
 
     public function __construct($list, $offset, /* $context, */ $cmid, $cardboxid) {
 
         global $DB, $PAGE;
 
-        $topic = array();
+        $topic = [];
         foreach ($list as $topicid => $titel) {
             if ($topicid != -1) {
                 $topic['id'] = $topicid;
@@ -50,7 +50,7 @@ class cardbox_topics implements \renderable, \templatable {
     }
 
     public function export_for_template(\renderer_base $output) {
-        $data = array();
+        $data = [];
         $data['topic'] = $this->topics;
         $data['notopics'] = empty($this->topics);
         return $data;

@@ -21,15 +21,17 @@
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-defined('MOODLE_INTERNAL') || die();
+use core\output\renderable;
+use core\output\templatable;
+
 define ('MASTERED_POSITION', 6);
-class cardbox_card implements \renderable, \templatable {
+class cardbox_card implements renderable, templatable {
 
     private $cmid;
     private $cardid;
     private $topic;
-    private $question = array('images' => array(), 'texts' => array());
-    private $answer = array('images' => array(), 'texts' => array());
+    private $question = ['images' => [], 'texts' => []];
+    private $answer = ['images' => [], 'texts' => []];
     private $multipleanswers = false;
     private $allowedtoedit = false;
     private $questioncontext = null;
@@ -37,9 +39,15 @@ class cardbox_card implements \renderable, \templatable {
     private $seestatus = false;
     private $status;
     private $howmanyanswersnecessary;
+    private $allansnecessary;
     private $decktext;
     private $repsnummer;
     private $acimgurl;
+    private $reps;
+    private $disableautocorrect;
+    private $deck;
+    private $deckimgurl;
+
     public function __construct($cardid, $context, $cmid, $allowedtoedit, $seestatus) {
 
         require_once('model/cardcollection.class.php');
@@ -99,29 +107,29 @@ class cardbox_card implements \renderable, \templatable {
                 $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
                 if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
                     if ($content->area == CARD_IMAGEDESCRIPTION_INFORMATION) {
-                        $this->question['images'][0] += array('imagealt' => $content->content);
+                        $this->question['images'][0] += ['imagealt' => $content->content];
                         continue;
                     }
-                    $this->question['images'][] = array('imagesrc' => $downloadurl);
+                    $this->question['images'][] = ['imagesrc' => $downloadurl];
                 } else {
-                    $this->answer['images'][] = array('imagesrc' => $downloadurl);
+                    $this->answer['images'][] = ['imagesrc' => $downloadurl];
                     $answercount++;
                 }
 
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION && $content->contenttype == CARDBOX_CONTENTTYPE_AUDIO) {
 
                 $downloadurl = cardbox_get_download_url($context, $content->id, $content->content);
-                $this->question['sounds'][] = array('soundsrc' => $downloadurl);
+                $this->question['sounds'][] = ['soundsrc' => $downloadurl];
 
             } else if ($content->cardside == CARDBOX_CARDSIDE_QUESTION) {
 
                 $content->content = format_text($content->content);
-                $this->question['texts'][] = array('text' => $content->content);
+                $this->question['texts'][] = ['text' => $content->content];
 
             } else {
 
                 $content->content = format_text($content->content);
-                $this->answer['texts'][] = array('text' => $content->content);
+                $this->answer['texts'][] = ['text' => $content->content];
                 $answercount++;
             }
         }
@@ -238,7 +246,7 @@ class cardbox_card implements \renderable, \templatable {
 
         global $OUTPUT;
 
-        $data = array();
+        $data = [];
         $data['cmid'] = $this->cmid;
         $data['cardid'] = $this->cardid;
         $data['topic'] = $this->topic;
