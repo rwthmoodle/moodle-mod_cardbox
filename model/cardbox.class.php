@@ -163,7 +163,11 @@ class cardbox_cardboxmodel {
             $cards = [];
             $topicname = $DB->get_record_select('cardbox_topics', 'id=' . $topic, null, 'topicname');
             foreach ($this->flashcards as $card) {
-                if (strcmp($card->topicname, $topicname->topicname) == 0) {
+                if (
+                    isset($card->topicname) &&
+                    isset($topicname->topicname) &&
+                    strcmp($card->topicname, $topicname->topicname) == 0
+                ) {
                     $cards[] = $card;
                 }
             }
