@@ -40,7 +40,13 @@ class cardbox_topics implements \renderable, \templatable {
             if ($topicid != -1) {
                 $topic['id'] = $topicid;
                 $topic['titel'] = $titel;
-                $topic['cards'] = $DB->count_records('cardbox_cards', [ "topic" => $topicid, "cardbox" => $cardboxid]);
+                $topic['cards'] = $DB->count_records('cardbox_cards', ["topic" => $topicid, "cardbox" => $cardboxid]);
+                $topic['exporturl'] = (new \moodle_url('/mod/cardbox/view.php', [
+                    'id' => $cmid,
+                    'action' => 'exporttopiccsv',
+                    'topicid' => $topicid,
+                    'sesskey' => sesskey(),
+                ]))->out(false);
                 $this->topics[] = $topic;
             }
         }

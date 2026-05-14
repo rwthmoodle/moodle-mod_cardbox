@@ -305,6 +305,8 @@ $string['createtopic'] = 'Add';
 $string['existingtopics'] = 'already existing topics';
 $string['notopics'] = 'there are no topics yet';
 $string['nulltopic'] = 'Not Assigned';
+$string['exporttopiccsv'] = 'Export CSV';
+$string['exporttopiccsvfilename'] = 'topic_{$a}.csv';
 
 
 // Settings.
