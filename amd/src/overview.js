@@ -12,117 +12,116 @@
 //
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
-define(['jquery', 'core/notification', 'core/str'], function ($, notification, Str) {
+import $ from 'jquery';
+import Notification from 'core/notification';
+import {get_strings} from 'core/str';
 
-    const init = (cmid, topic, sort, deck) => {
+export const init = (cmid, topic, sort, deck) => {
+    if (!topicfilter || !filterselect || !deckfilter) {
+        return;
+    }
+    const topicfilter = document.getElementById('cardbox-overview-topicfilter');
+    const filterselect = document.getElementById('cardbox-filter-options');
+    const deckfilter = document.getElementById('cardbox-overview-deckfilter');
 
-        const topicfilter = document.getElementById('cardbox-overview-topicfilter');
-        const filterselect = document.getElementById('cardbox-filter-options');
-        const deckfilter = document.getElementById('cardbox-overview-deckfilter');
+    filterselect.value = sort;
 
-        filterselect.value = sort;
+    topicfilter.onchange = function () {
+        const select = this.options[this.selectedIndex];
+        topic = select.value;
 
-        topicfilter.onchange = function () {
-            const select = this.options[this.selectedIndex];
-            topic = select.value;
+        window.location.href = buildUrl(cmid, topic, sort, deck);
+    };
 
-            window.location.href = buildUrl(cmid, topic, sort, deck);
-        };
+    deckfilter.onchange = function () {
+        const select = this.options[this.selectedIndex];
+        deck = select.value;
 
-        deckfilter.onchange = function () {
-            const select = this.options[this.selectedIndex];
-            deck = select.value;
+        window.location.href = buildUrl(cmid, topic, sort, deck);
+    };
 
-            window.location.href = buildUrl(cmid, topic, sort, deck);
-        };
+    filterselect.onchange = function () {
+        const select = this.options[this.selectedIndex];
+        sort = select.value;
 
-        filterselect.onchange = function () {
-            const select = this.options[this.selectedIndex];
-            sort = select.value;
+        window.location.href = buildUrl(cmid, topic, sort, deck);
+    };
 
-            window.location.href = buildUrl(cmid, topic, sort, deck);
-        };
+    document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit')
+        .forEach(btn => {
+            const card = btn.closest('#cardbox-card-in-overview');
+            const cardid = card.getAttribute('data-cardid');
 
-        document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit')
-            .forEach(btn => {
-                const card = btn.closest('#cardbox-card-in-overview');
-                const cardid = card.getAttribute('data-cardid');
-
-                btn.addEventListener('click', () => {
-                    openCardFormForEditing(cardid);
-                });
-            });
-
-        $('.cardbox-delete-button').each(function (_, button) {
-            const id = button.id.split('-');
-            const cardid = id[2];
-
-            $('#' + button.id).click(function () {
-                deleteCard(cardid);
+            btn.addEventListener('click', () => {
+                openCardFormForEditing(cardid);
             });
         });
-        /**
-         * create URLs
-         *
-         * @param {int} cmid
-         * @param {int} topic
-         * @param {int} sort
-         * @param {int} deck
-         */
-        function buildUrl(cmid, topic, sort, deck) {
-            return window.location.pathname +
-                '?id=' + cmid +
-                '&action=overview' +
-                '&topic=' + topic +
-                '&sort=' + sort +
-                '&deck=' + deck;
-        }
-        /**
-         * Open card foe editing
-         *
-         * @param {String} cardid
-         */
-        function openCardFormForEditing(cardid) {
-            window.location.href =
-                window.location.pathname +
-                '?id=' + cmid +
-                '&action=editcard' +
-                '&cardid=' + cardid +
-                '&from=overview';
-        }
-        /**
-         * Delete card
-         *
-         * @param {String} cardid
-         */
-        function deleteCard(cardid) {
 
-            Str.get_strings([
-                {key: 'deletecard', component: 'cardbox'},
-                {key: 'deletecardinfo', component: 'cardbox'},
-                {key: 'yes', component: 'cardbox'},
-                {key: 'cancel', component: 'cardbox'}
-            ]).then(([title, message, yes, cancel]) => {
+    $('.cardbox-delete-button').each(function (_, button) {
+        const id = button.id.split('-');
+        const cardid = id[2];
 
-                notification.confirm(
-                    title,
-                    message,
-                    yes,
-                    cancel,
-                    function () {
-                        window.location.href =
-                            window.location.pathname +
-                            '?id=' + cmid +
-                            '&action=deletecard' +
-                            '&cardid=' + cardid +
-                            '&sesskey=' + M.cfg.sesskey;
-                    }
-                );
+        $('#' + button.id).click(function () {
+            deleteCard(cardid);
+        });
+    });
+    /**
+     * create URLs
+     *
+     * @param {int} cmid
+     * @param {int} topic
+     * @param {int} sort
+     * @param {int} deck
+     */
+    function buildUrl(cmid, topic, sort, deck) {
+        return window.location.pathname +
+            '?id=' + cmid +
+            '&action=overview' +
+            '&topic=' + topic +
+            '&sort=' + sort +
+            '&deck=' + deck;
+    }
+    /**
+     * Open card foe editing
+     *
+     * @param {String} cardid
+     */
+    function openCardFormForEditing(cardid) {
+        window.location.href =
+            window.location.pathname +
+            '?id=' + cmid +
+            '&action=editcard' +
+            '&cardid=' + cardid +
+            '&from=overview';
+    }
+    /**
+     * Delete card
+     *
+     * @param {String} cardid
+     */
+    function deleteCard(cardid) {
+
+        get_strings([
+            {key: 'deletecard', component: 'cardbox'},
+            {key: 'deletecardinfo', component: 'cardbox'},
+            {key: 'yes', component: 'cardbox'},
+            {key: 'cancel', component: 'cardbox'}
+        ]).then(([title, message, yes, cancel]) => {
+            Notification.confirm(
+                title,
+                message,
+                yes,
+                cancel
+            ).then(() => {
+                window.location.href =
+                    window.location.pathname +
+                    '?id=' + cmid +
+                    '&action=deletecard' +
+                    '&cardid=' + cardid +
+                    '&sesskey=' + M.cfg.sesskey;
+            }).catch(() => {
+                // User cancelled.
             });
-        }
-    };
-
-    return {
-        init: init
-    };
-});
+        });
+    }
+};
