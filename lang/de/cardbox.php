@@ -119,6 +119,10 @@ $string['success:reject'] = 'Die Karte wurde gelöscht.';
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie entweder keine Frage und/oder keine Lösung enthält oder falls ein Bild hochgeladen wurde die Bildbeschreibung fehlt.';
+$string['error:createcard:noques'] = 'Die Karte wurde nicht erstellt, da das Fragefeld nicht ausgefüllt wurde.';
+$string['error:createcard:noans'] = 'Die Karte wurde nicht erstellt, da das Antwortfeld nicht ausgefüllt wurde.';
+$string['error:imagedescription'] = 'Ein Bild wurde auf die Karte hochgeladen. Es muss eine Beschreibung des Bildes angegeben werden.';
+$string['error:createcard:inconclusive'] = 'Es ist ein Fehler aufgetreten. Die Karte kann nicht erstellt werden. Bitte versuche es erneut.';
 
 // Import cards
 $string['examplesinglecsv'] = 'Beispieltextdatei für Karten mit nur einer Antwort.';

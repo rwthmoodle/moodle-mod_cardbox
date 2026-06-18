@@ -121,8 +121,11 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
-$string['error:createcard'] = 'The card was not created, because it is either missing a question and/or answer or if you uploaded a picture the imagedescription might be missing.';
-
+$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer or if you uploaded a picture the imagedescription might be missing.';
+$string['error:createcard:noques'] = 'The card was not created, because the question field was left empty';
+$string['error:createcard:noans'] = 'The card was not created, because the answer field was left empty';
+$string['error:imagedescription'] = 'You have uploaded an image to the card. You need to give a description of the image';
+$string['error:createcard:inconclusive'] = 'Something went wrong. Card cannot be created. Please try again.';
 
 // Import cards
 $string['examplesinglecsv'] = 'Example text file for cards having single answers';
