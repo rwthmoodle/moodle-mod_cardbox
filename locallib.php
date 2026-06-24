@@ -1055,3 +1055,121 @@ function cardbox_save_filemanager_content(
     }
 }
 ##---------------- OVERVIEW -------------------------------------------##
+/**
+ * Function to sort cards on overview page
+ *
+ * @param int $sort
+ * @param array $list
+ * @param cardbox_cardcollection $collection
+ * @param int $deck,
+ * @param context_module $context
+ * @param int $cardboxid
+ * @return array $list
+ */
+function sort_cards_on_overview(int $sort, array $list, cardbox_cardcollection $collection, int $deck, context_module $context, int $cardboxid) {
+    switch($sort) {
+        case SORT_CREATIONDATE_ASC:
+            sort($list);
+            break;
+        case SORT_CREATIONDATE_DESC:
+            rsort($list);
+            break;
+        default:
+            $questions = [];
+            for ($i = 0; $i < count($list); $i++) {
+                $questions[$list[$i]] = $collection->cardbox_get_question($list[$i]);
+            }
+
+            if ($sort === SORT_ALPHABETIC_ASC) {
+                asort($questions, SORT_STRING);
+            } else {
+                arsort($questions, SORT_STRING);
+            }
+            $index = 0;
+            foreach ($questions as $key => $value) {
+                $list[$index] = $key;
+                $index++;
+            }
+
+    }
+    if ($deck != SHOW_CARDS_OF_ALL_DECKS) {
+        $list = filter_cards_deckwise_overview($deck, $context, $list, $cardboxid);
+    }
+    return $list;
+
+}
+/**
+ * Function to sort cards on overview page
+ *
+ * @param int $sort
+ * @param array $list
+ * @param cardbox_cardcollection $collection
+ * @return array $list
+ */
+function filter_cards_deckwise_overview(int $deck, context_module $context, array $list, int $cardboxid) {
+    $allowedtoedit = false;
+    $seestatus = false;
+    if (has_capability('mod/cardbox:approvecard', $context)) {
+        $allowedtoedit = true;
+    } else {
+        $allowedtoedit = false;
+    }
+
+    if (has_capability('mod/cardbox:seestatus', $context)) {
+        $seestatus = true;
+    } else {
+        $seestatus = false;
+    }
+    $filtereddeck = array();
+    $index = 0;
+    foreach ($list as $flashcard) {
+        $card = new cardbox_card($flashcard, $context, $cardboxid, $allowedtoedit, $seestatus);
+        $card->cardbox_getcarddeck($flashcard, $allowedtoedit);
+        if ($card->cardbox_getcarddecknumber() == ($deck + 1)) {
+            $filtereddeck[$index] = $flashcard;
+            $index++;
+        }
+    }
+    $list = $filtereddeck;
+    return $list;
+}
+/**
+ * Function to search cards
+ *
+ * @param string $search
+ * @param array $list
+ * @return array $list
+ */
+function get_search_result_overview(string $search, array $list) {
+    global $DB;
+    $results = [];
+    foreach ($list as $entry) {
+        $cardcontents = $DB->get_records('cardbox_cardcontents', ['card' => $entry]);
+        foreach ($cardcontents as $cardcontent) {
+            if (stripos($cardcontent->content, $search) !== false) {
+                if (!in_array($cardcontent->card, $results, true)) {
+                    $results[] = $entry;
+                }
+            }
+        }
+    }
+    return $results;
+}
+
+function fetch_card_values_for_editing($from, $cmid, $cardid) {
+    global $DB;
+    $answers = [];
+    if ($from === 'review') {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
+    } else {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+    }
+    $topic = cardbox_get_topic($cardid);
+    $answers = cardbox_get_answers($cardid);
+    $answersnotapproved = cardbox_get_notapproved_answers($cardid);
+    $answers = array_merge($answers, $answersnotapproved);
+    $answercount = count($answers);
+    $necessaryanswers = cardbox_get_necessaryanswers($cardid);
+    $disableautocorrect = $DB->get_field('cardbox_cards', 'disableautocorrect', array('id' => $cardid), IGNORE_MISSING);
+
+}

@@ -17,12 +17,13 @@ import Notification from 'core/notification';
 import {get_strings} from 'core/str';
 
 export const init = (cmid, topic, sort, deck) => {
-    if (!topicfilter || !filterselect || !deckfilter) {
-        return;
-    }
     const topicfilter = document.getElementById('cardbox-overview-topicfilter');
     const filterselect = document.getElementById('cardbox-filter-options');
     const deckfilter = document.getElementById('cardbox-overview-deckfilter');
+    const searchbtn = document.getElementById('cardbox-search-btn');
+    if (!topicfilter || !filterselect || !deckfilter) {
+        return;
+    }
 
     filterselect.value = sort;
 
@@ -46,7 +47,12 @@ export const init = (cmid, topic, sort, deck) => {
 
         window.location.href = buildUrl(cmid, topic, sort, deck);
     };
-
+    searchbtn.addEventListener('click', function() {
+        const searchText = document.getElementById('cardbox-search').value;
+        // eslint-disable-next-line no-console
+        console.log('Search text:', searchText);
+        window.location.href = buildUrl(cmid, topic, sort, deck, searchText);
+    });
     document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit')
         .forEach(btn => {
             const card = btn.closest('#cardbox-card-in-overview');
@@ -57,13 +63,13 @@ export const init = (cmid, topic, sort, deck) => {
             });
         });
 
-    $('.cardbox-delete-button').each(function (_, button) {
-        const id = button.id.split('-');
+    $('.cardbox-delete-button').on('click', function(e) {
+        e.preventDefault();
+
+        const id = this.id.split('-');
         const cardid = id[2];
 
-        $('#' + button.id).click(function () {
-            deleteCard(cardid);
-        });
+        deleteCard(cardid);
     });
     /**
      * create URLs
@@ -72,14 +78,19 @@ export const init = (cmid, topic, sort, deck) => {
      * @param {int} topic
      * @param {int} sort
      * @param {int} deck
+     * @param {string} search
      */
-    function buildUrl(cmid, topic, sort, deck) {
-        return window.location.pathname +
+    function buildUrl(cmid, topic, sort, deck, search) {
+        let targeturl = window.location.pathname +
             '?id=' + cmid +
             '&action=overview' +
             '&topic=' + topic +
             '&sort=' + sort +
             '&deck=' + deck;
+        if (search) {
+            targeturl += '&search=' + encodeURIComponent(search);
+        }
+        return targeturl;
     }
     /**
      * Open card foe editing
@@ -94,34 +105,38 @@ export const init = (cmid, topic, sort, deck) => {
             '&cardid=' + cardid +
             '&from=overview';
     }
+     // eslint-disable-next-line no-console
+        //console.log('deleteCard called');
     /**
      * Delete card
      *
      * @param {String} cardid
      */
     function deleteCard(cardid) {
-
+        // eslint-disable-next-line no-console
+        console.log('deleteCard called');
         get_strings([
             {key: 'deletecard', component: 'cardbox'},
             {key: 'deletecardinfo', component: 'cardbox'},
             {key: 'yes', component: 'cardbox'},
             {key: 'cancel', component: 'cardbox'}
         ]).then(([title, message, yes, cancel]) => {
+
             Notification.confirm(
                 title,
                 message,
                 yes,
-                cancel
-            ).then(() => {
-                window.location.href =
-                    window.location.pathname +
-                    '?id=' + cmid +
-                    '&action=deletecard' +
-                    '&cardid=' + cardid +
-                    '&sesskey=' + M.cfg.sesskey;
-            }).catch(() => {
-                // User cancelled.
-            });
+                cancel,
+                function() {
+                    // User clicked YES.
+                    window.location.href =
+                        window.location.pathname +
+                        '?id=' + cmid +
+                        '&action=deletecard' +
+                        '&cardid=' + cardid +
+                        '&sesskey=' + M.cfg.sesskey;
+                }
+            );
         });
     }
 };

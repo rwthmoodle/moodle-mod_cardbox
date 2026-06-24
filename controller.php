@@ -33,7 +33,6 @@ if (!isset($action)) {
 $viewurl = '/mod/cardbox/view.php';
 $actionoutput = '';
 /* *********************************************** Add a new flashcard *********************************************** */
-
 if ($action === 'addflashcard') {
     require_capability('mod/cardbox:submitcard', $context);
     $PAGE->set_url($viewurl, array('id' => $cm->id, 'action' => 'addflashcard'));
@@ -78,7 +77,15 @@ if ($action === 'addflashcard') {
 }
 
 /* ************************************************ Edit a flashcard ************************************************* */
-
+if ($action === 'editcard2') {
+    require_capability('mod/cardbox:approvecard', $context);
+    require_capability('mod/cardbox:submitcard', $context);
+    require_once('card_form.php');
+    $cardid = required_param('cardid', PARAM_INT);
+    $nextcardid = optional_param('next', 0, PARAM_INT);
+    $from = optional_param('from', 'review', PARAM_ALPHA);
+    fetch_card_values_for_editing();
+}
 if ($action === 'editcard') {
 
     require_capability('mod/cardbox:approvecard', $context);
@@ -306,10 +313,15 @@ if ($action === 'editcard') {
         $data['showquesimage'] = ($entry->cardimage != 0);
         $data['showquessound'] = ($entry->cardsound != 0);
 
-        $stringman = get_string_manager();
-        $strings = $stringman->load_component_strings('cardbox', 'en'); // Method gets the strings of the language files.
-        $PAGE->requires->strings_for_js(array_keys($strings), 'cardbox'); // Method to use the language-strings in javascript.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/addcard.js?ver=00001"));
+        $PAGE->requires->js_call_amd(
+            'mod_cardbox/addcard',
+            'init',
+            [
+                $cmid,
+                1,
+                null
+            ]
+        );
         $params = array($cmid, $answercount, $data); // True means: the user checks their own results.
         $PAGE->requires->js_init_call('addCard', $params, true);
 
@@ -758,6 +770,7 @@ if ($action === 'overview') {
     $sort = optional_param('sort', 0, PARAM_INT);
     $deck = optional_param('deck', -1, PARAM_INT);
     $page = optional_param('page', 0, PARAM_INT);
+    $search = optional_param('search', '', PARAM_TEXT);
     $perpage = 10;
     $offset = $page * $perpage;
     $PAGE->requires->js_amd_inline("require(['jquery', 'theme_boost/bootstrap/tooltip'], function($){
@@ -766,93 +779,42 @@ if ($action === 'overview') {
     require_once('model/cardcollection.class.php');
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/overview.php');
     require_once('classes/output/card.php');
-
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'overview'));
-    echo $OUTPUT->header();
-    echo $OUTPUT->heading("$cardbox->name");
-    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
-
-    $context = context_module::instance($cmid);
+    $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id, $topic, true, $deck);
     $list = $collection->cardbox_get_card_list();
-
-    //Karten sortieren
-    if ($sort === 0) {
-        sort($list);
-    } else if ($sort === 1) {
-        rsort($list);
-    } else if ($sort === 2 || $sort === 3) {
-        $questions = [];
-        for ($i = 0; $i < count($list); $i++) {
-            $questions[$list[$i]] = $collection->cardbox_get_question($list[$i]);
-        }
-
-        if ($sort === 3) {
-            asort($questions, SORT_STRING);
-        } else {
-            arsort($questions, SORT_STRING);
-        }
-        $index = 0;
-        foreach ($questions as $key => $value) {
-            $list[$index] = $key;
-            $index++;
-        }
-    }
-
-    //filter cards deckwise 
-
-    if ($deck != -1) {
-        if (has_capability('mod/cardbox:approvecard', $context)) {
-            $allowedtoedit = true;
-        } else {
-            $allowedtoedit = false;
-        }
-
-        if (has_capability('mod/cardbox:seestatus', $context)) {
-            $seestatus = true;
-        } else {
-            $seestatus = false;
-        }
-        $filtereddeck = array();
-        $index = 0;
-        foreach ($list as $flashcard) {
-            $card = new cardbox_card($flashcard, $context, $cardbox->id, $allowedtoedit, $seestatus);
-            $card->cardbox_getcarddeck($flashcard, $allowedtoedit);
-            if ($card->cardbox_getcarddecknumber() == ($deck + 1)) {
-                $filtereddeck[$index] = $flashcard;
-                $index++;
-            }
-        }
-        $list = $filtereddeck;
-    }
-
-    if (empty($list) && $deck == -1) {
-        $info = get_string('info:nocardsavailableforoverview', 'cardbox');
-        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
-        return;
-    } else {
-        $totalcount = count($list);
-        $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
-
-        $info = get_string('intro:overview', 'cardbox');
-        echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
-
-        $PAGE->requires->js_call_amd(
-            'mod_cardbox/overview',
-            'init',
-            [$cmid, $topic, $sort, $deck]
+    if (empty($list)) {
+        \core\notification::info(
+            get_string('info:nocardsavailableforoverview', 'cardbox')
         );
-        // 2. Create a view controller.
-        $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, $sort, $deck, false);
+    } else {
+        if ($search !== '') {
+            $list = get_search_result_overview($search, $list);
 
-        // 4. Render the page.
-        $renderer = $PAGE->get_renderer('mod_cardbox');
-        echo $renderer->cardbox_render_overview($overview);
-        echo $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
+        }
+        //Karten sortieren
+        $list = sort_cards_on_overview($sort, $list, $collection, $deck, $context, $cardbox->id);
     }
+    $totalcount = count($list);
+    $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
 
+    $info = get_string('intro:overview', 'cardbox');
+    echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
+
+    $PAGE->requires->js_call_amd(
+        'mod_cardbox/overview',
+        'init',
+        [$cmid, $topic, $sort, $deck]
+    );
+    // 2. Create a view controller.
+    $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, $sort, $deck, $search, false);
+
+    // 4. Render the page.
+    $renderer = $PAGE->get_renderer('mod_cardbox');
+    $actionoutput .= $renderer->cardbox_render_overview($overview);
+    $actionoutput .= $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
 }
 
 /* **************************************************** Edit topics **************************************************** */
