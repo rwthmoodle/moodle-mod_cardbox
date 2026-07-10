@@ -1,93 +1,116 @@
-// This file is part of Moodle - http://moodle.org/
-//
-// Moodle is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// Moodle is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+import ModalFactory from 'core/modal_factory';
+import * as Str from 'core/str';
+export const init = async (cmid, openmodal) => {
 
-export const init = (cmid, openmodal) => {
-    // eslint-disable-next-line no-console
-    console.log(openmodal);
-    const modal = document.getElementById('cardboxPracticeSettings');
-    if (openmodal) {
-        modal.classList.add('show');
-        modal.classList.add('modal-open');
-        modal.style.display = 'block';
-    }
+    const optionsTemplate = document.getElementById('cardbox-options-template');
+    const optionsButton = document.getElementById('cardbox-see-options');
+    const [title, beginpractice, cancel] = await Str.get_strings([
+        {key: 'titleforchoosesettings', component: 'cardbox'},
+        {key: 'beginpractice', component: 'cardbox'},
+        {key: 'cancel', component: 'cardbox'}
+    ]);
+    let modal;
 
-    document.getElementById('cardbox-onlyonetopic').addEventListener('change', () => {
-        if (document.getElementById('cardbox-onlyonetopic').value !== '-1') {
-            document.getElementById('cardbox-topic-select').style.display = 'none';
-            document.getElementById('cardbox-topic-description').style.display = 'none';
+    ModalFactory.create({
+        title: title,
+        body: optionsTemplate.innerHTML
+    }).then(createdModal => {
+
+        modal = createdModal;
+
+        modal.setFooter(`
+            <button type="button" class="btn btn-primary" data-action="save">
+                ${beginpractice}
+            </button>
+            <button type="button" class="btn btn-secondary" data-action="cancel">
+                ${cancel}
+            </button>
+        `);
+
+        modal.getRoot().on('click', '[data-action="save"]', () => {
+            applySettings(modal, cmid);
+        });
+
+        modal.getRoot().on('click', '[data-action="cancel"]', () => {
+            modal.hide();
+        });
+
+        if (openmodal) {
+            modal.show();
+        }
+
+        addEventListeners(modal, cmid);
+
+    });
+
+
+    optionsButton.addEventListener('click', () => {
+
+        if (modal) {
+            modal.show();
+        }
+
+    });
+
+};
+
+
+const addEventListeners = (modal) => {
+
+    const root = modal.getRoot();
+
+    root.on('change', '#cardbox-onlyonetopic', () => {
+
+        const value = root.find('#cardbox-onlyonetopic').val();
+
+        if (value !== '-1') {
+            root.find('#cardbox-topic-select').hide();
+            root.find('#cardbox-topic-description').hide();
         } else {
-            document.getElementById('cardbox-topic-select').style.display = 'flex';
-            document.getElementById('cardbox-topic-description').style.display = 'flex';
-            document.getElementById('cardbox-onlyonetopic-select').style.marginBottom = '2em';
-            document.getElementById('cardbox-onlyonetopic-choices').style.marginBottom = '2em';
+            root.find('#cardbox-topic-select').show();
+            root.find('#cardbox-topic-description').show();
+        }
+
+    });
+
+};
+
+
+const applySettings = (modal, cmid) => {
+
+    const root = modal.getRoot();
+
+    const topic = root.find('#cardbox-topic').val();
+
+    const practiceall =
+        root.find('#cardbox-practiceall-yes').is(':checked');
+
+    const onlyonetopic =
+        root.find('#cardbox-onlyonetopic').val();
+
+    const amountcards =
+        root.find('#cardbox-amountcards').val();
+
+    let correctionmode;
+
+    const radios =
+        root.find('#cardbox-form input[name="correctionmode"]');
+
+    radios.each(function() {
+        if (this.checked) {
+            correctionmode = this.value;
         }
     });
 
-    document.getElementById('cardbox-apply-settings').addEventListener('click', e => {
-        e.preventDefault();
-        applySettings();
-    });
+    const url =
+        `${window.location.pathname}?id=${cmid}` +
+        `&action=practice` +
+        `&start=true` +
+        `&mode=${correctionmode}` +
+        `&topic=${topic}` +
+        `&practiceall=${practiceall}` +
+        `&onlyonetopic=${onlyonetopic}` +
+        `&amountcards=${amountcards}`;
 
-    document.getElementById('cardbox-cancel-settings').addEventListener('click', () => {
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-    });
-    document.getElementById('cardbox-close-settings').addEventListener('click', () => {
-        modal.classList.remove('show');
-        modal.style.display = 'none';
-    });
-
-    document.getElementById('cardbox-see-options').addEventListener('click', () => {
-        document.getElementById('cardbox-practiceall-select').style.display = 'none';
-        document.getElementById('cardbox-practiceall-choices').style.display = 'none';
-        document.getElementById('cardbox-practiceall-yes').checked = true;
-        modal.classList.add('show');
-        modal.style.display = 'block';
-    });
-
-    // If the user clicks anywhere outside of the modal, close it.
-    window.addEventListener('click', event => {
-        if (event.target === modal) {
-            modal.classList.remove('show');
-            modal.style.display = 'none';
-        }
-    });
-
-    const applySettings = () => {
-        const topic = document.getElementById('cardbox-topic').value;
-        const practiceall = document.getElementById('cardbox-practiceall-yes').checked;
-        const onlyonetopic = document.getElementById('cardbox-onlyonetopic').value;
-        const amountcards = document.getElementById('cardbox-amountcards').value;
-        let correctionmode;
-        const radios =
-            document.getElementById('cardbox-form').elements['correctionmode'];
-        for (const radio of radios) {
-            if (radio.checked) {
-                correctionmode = radio.value;
-                break;
-            }
-        }
-        const url =
-            `${window.location.pathname}?id=${cmid}` +
-            `&action=practice` +
-            `&start=true` +
-            `&mode=${correctionmode}` +
-            `&topic=${topic}` +
-            `&practiceall=${practiceall}` +
-            `&onlyonetopic=${onlyonetopic}` +
-            `&amountcards=${amountcards}`;
-        window.location.href = url;
-    };
+    window.location.href = url;
 };
