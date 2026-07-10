@@ -53,6 +53,8 @@ export const init = (cmid, openmodal) => {
         document.getElementById('cardbox-practiceall-select').style.display = 'none';
         document.getElementById('cardbox-practiceall-choices').style.display = 'none';
         document.getElementById('cardbox-practiceall-yes').checked = true;
+        modal.classList.add('show');
+        modal.style.display = 'block';
     });
 
     // If the user clicks anywhere outside of the modal, close it.
