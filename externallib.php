@@ -41,24 +41,94 @@ class mod_cardbox_external extends external_api {
     public static function deletetopic_parameters() {
         return new external_function_parameters(
             array(
-                "topicid" => new external_value(PARAM_INT, "topicid")
+                "topicid" => new external_value(PARAM_INT, "topicid"),
+                "deletecards" => new external_value(PARAM_BOOL),
             )
         );
     }
 
-    public static function deletetopic($topicid) {
+    public static function deletetopic($topicid, $deletecards) {
         global $DB;
 
         $params = self::validate_parameters(
             self::deletetopic_parameters(),
-            array('topicid' => $topicid)
+            array('topicid' => $topicid, 'deletecards' => $deletecards)
         );
 
         $cmid = self::get_cmid($params['topicid']);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
-
-        $success = $DB->set_field_select('cardbox_cards', 'topic', null, 'topic = :id', ['id' => $params['topicid']]);
+        if ($deletecards) {
+            // Delete topic and cards.
+            $success = false;
+            $cardids = $DB->get_fieldset_select(
+                'cardbox_cards',
+                'id',
+                'topic = :topic',
+                ['topic' => $topicid]
+            );
+            if (!empty($cardids)) {
+                [$insql, $params] = $DB->get_in_or_equal($cardids, SQL_PARAMS_NAMED);
+                $countbefore = $DB->count_records_select(
+                    'cardbox_progress',
+                    "card {$insql}",
+                    $params
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_progress',
+                        "card {$insql}",
+                        $params
+                    );
+                }
+                $countbefore = $DB->count_records_select(
+                    'cardbox_cardcontents',
+                    "card {$insql}",
+                    $params
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_cardcontents',
+                        "card {$insql}",
+                        $params
+                    );
+                }
+                $countbefore = $DB->count_records_select(
+                    'cardbox_cards',
+                    "card {$insql}",
+                    $params
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_cards',
+                        "card {$insql}",
+                        $params
+                    );
+                }
+                $countaftercards = $DB->count_records_select(
+                    'cardbox_cards',
+                    "card {$insql}",
+                    $params
+                );
+                $countaftercardcontents = $DB->count_records_select(
+                    'cardbox_cardcontents',
+                    "card {$insql}",
+                    $params
+                );
+                $countafterprogress = $DB->count_records_select(
+                    'cardbox_progress',
+                    "card {$insql}",
+                    $params
+                );
+                
+                if ($countafterprogress == 0 and $countaftercardcontents == 0 and $countaftercards == 0 ) {
+                    $success = true;
+                }
+            }
+        } else {
+            // Delete topic only. Associated cards will have topic set to 
+            $success = $DB->set_field_select('cardbox_cards', 'topic', null, 'topic = :id', ['id' => $params['topicid']]);
+        }
         $DB->delete_records('cardbox_topics', ['id' => $params['topicid']]);
         return $success;
     }

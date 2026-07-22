@@ -824,9 +824,11 @@ function add_card_to_instance(stdClass $formdata, context_module $context, int $
     global $DB;
     #--------------- SAVE CARD ---------------------------------------#
     $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
-    $topic = !empty($formdata->newtopic)
-        ? assign_topic_to_card(NEW_TOPIC_CREATED, $cardboxid)
-        : assign_topic_to_card($formdata->topic, null);
+    $topic = assign_topic_to_card(
+        !empty($formdata->newtopic) ? NEW_TOPIC_CREATED : $formdata->topic,
+        $cardboxid,
+        $formdata->newtopic ?? null
+    );
     $howmanyansreqd = check_no_of_answers($cardboxid, $formdata->answers);
     $enabledautocheck = property_exists($formdata, 'disableautocorrect')? (int)$formdata->disableautocorrect : 0;
     $cardid = cardbox_save_new_card($cardboxid, $context, $accept, $topic, $howmanyansreqd, $enabledautocheck);
@@ -853,23 +855,22 @@ function add_card_to_instance(stdClass $formdata, context_module $context, int $
  * @param int $topic
  * @param int $cardboxid
  */
-function assign_topic_to_card(int $topic, ?int $cardboxid = null ) {
-    $topicid = 0;
+function assign_topic_to_card(
+    int $topic,
+    ?int $cardboxid = null,
+    ?string $newtopic = null
+) {
     switch ($topic) {
         case NULL_TOPIC: // Card belongs to no topic.
-            $topicid = null;
-            break;
+            return null;
         case NEW_TOPIC_CREATED: // Card belongs to a new topic that is to be created.
-            if (!empty($formdata->newtopic)) {
-                $topicid = cardbox_save_new_topic(NEW_TOPIC_CREATED, $cardboxid);
-            } else {
-                $topicid = null;
+            if (!empty($newtopic)) {
+                return cardbox_save_new_topic($newtopic, $cardboxid);
             }
-            break;
+            return null;
         default: // Card belongs to an already existing topic.
-            $topicid = $topic;
+            return $topic;
     }
-    return $topicid;
 }
 /**
  * Function to assign how many answers are required

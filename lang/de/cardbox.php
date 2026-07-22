@@ -296,7 +296,13 @@ $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gele
 
 // Edit topics Tab.
 $string['deletetopic'] = 'Thema löschen';
-$string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen? Bei Karten, die diesem Thema zugeordnet waren, wird das Thema dadurch auf "nicht zugeordnet" gesetzt.';
+$string['deletetopicinfo'] = 'Möchten Sie nur das ausgewählte Thema {$a} löschen oder auch alle ihm zugeordneten Karten?
+<p class="mt-3 p-3 bg-light rounded small" style="background-color: #CFD1D2 !important;">
+    <i class="icon fa fa-info-circle mr-2" aria-hidden="true"></i>
+    Wenn Sie das Thema einfach löschen, bleiben alle Karten, die diesem Thema derzeit zugeordnet sind, weiterhin bestehen, erhalten jedoch das Standardthema „Nicht zugeordnet“.
+</p>';
+$string['deletetopiconly'] = 'Nur Thema löschen';
+$string['deletetopicandcards'] = 'Thema und zugehörige Karten löschen'; 
 $string['createtopic'] = 'Hinzufügen';
 $string['existingtopics'] = 'Bereits existierende Themen';
 $string['notopics'] = 'Es sind noch keine Themen vorhanden';

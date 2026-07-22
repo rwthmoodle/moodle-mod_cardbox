@@ -301,9 +301,15 @@ $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
 
 // Edit topics Tab.
 $string['deletetopic'] = 'Delete topic';
-$string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For cards assigned to this topic, this will set the topic to "not assigned".';
+$string['deletetopicinfo'] = 'Do you want to delete only the selected topic {$a} or all cards assigned to it as well? 
+<p class="mt-3 p-3 bg-light rounded small" style="background-color: #CFD1D2 !important;">
+    <i class="icon fa fa-info-circle mr-2" aria-hidden="true"></i>
+    If only the topic is deleted, all cards currently assigned to this topic will continue to exist but will have the default topic "Not assigned".
+</p>';
+$string['deletetopiconly'] = 'Delete topic only';
+$string['deletetopicandcards'] = 'Delete topic and its cards'; 
 $string['createtopic'] = 'Add';
-$string['existingtopics'] = 'already existing topics';
+$string['existingtopics'] = 'Existing topics';
 $string['notopics'] = 'there are no topics yet';
 $string['nulltopic'] = 'Not Assigned';
 

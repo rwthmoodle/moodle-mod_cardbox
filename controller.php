@@ -63,7 +63,6 @@ if ($action === 'addflashcard') {
         } 
     } else if ($formdata = $mform->get_data()) {
         add_card_to_instance($formdata, $context, $cardbox->id, $cmid);
-
     } else {
         $actionoutput .= $myrenderer->cardbox_render_tabs(
             $taburl,
@@ -77,15 +76,6 @@ if ($action === 'addflashcard') {
 }
 
 /* ************************************************ Edit a flashcard ************************************************* */
-if ($action === 'editcard2') {
-    require_capability('mod/cardbox:approvecard', $context);
-    require_capability('mod/cardbox:submitcard', $context);
-    require_once('card_form.php');
-    $cardid = required_param('cardid', PARAM_INT);
-    $nextcardid = optional_param('next', 0, PARAM_INT);
-    $from = optional_param('from', 'review', PARAM_ALPHA);
-    fetch_card_values_for_editing();
-}
 if ($action === 'editcard') {
 
     require_capability('mod/cardbox:approvecard', $context);
@@ -848,15 +838,12 @@ if ($action === 'edittopic') {
 
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/topics.php');
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'edittopic'));
-    echo $OUTPUT->header();
-    echo $OUTPUT->heading(format_string($cardbox->name));
-    echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
+    $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
     $renderer = $PAGE->get_renderer('mod_cardbox');
 
     $list = cardbox_get_topics($cardbox->id);
 
     $topics = new cardbox_topics($list, $offset, /* $context, */ $cmid, $cardbox->id);
     $PAGE->requires->js_call_amd('mod_cardbox/topics', 'init', array($cmid));
-
-    echo $renderer->cardbox_render_topics($topics);
+    $actionoutput .= $renderer->cardbox_render_topics($topics);
 }
