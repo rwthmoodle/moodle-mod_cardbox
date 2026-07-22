@@ -68,57 +68,57 @@ class mod_cardbox_external extends external_api {
                 ['topic' => $topicid]
             );
             if (!empty($cardids)) {
-                [$insql, $params] = $DB->get_in_or_equal($cardids, SQL_PARAMS_NAMED);
+                [$insql, $cardids] = $DB->get_in_or_equal($cardids, SQL_PARAMS_NAMED);
                 $countbefore = $DB->count_records_select(
                     'cardbox_progress',
                     "card {$insql}",
-                    $params
+                    $cardids
                 );
                 if ($countbefore > 0) {
                     $DB->delete_records_select(
                         'cardbox_progress',
                         "card {$insql}",
-                        $params
+                        $cardids
                     );
                 }
                 $countbefore = $DB->count_records_select(
                     'cardbox_cardcontents',
                     "card {$insql}",
-                    $params
+                    $cardids
                 );
                 if ($countbefore > 0) {
                     $DB->delete_records_select(
                         'cardbox_cardcontents',
                         "card {$insql}",
-                        $params
+                        $cardids
                     );
                 }
                 $countbefore = $DB->count_records_select(
                     'cardbox_cards',
-                    "card {$insql}",
-                    $params
+                    "id {$insql}",
+                    $cardids
                 );
                 if ($countbefore > 0) {
                     $DB->delete_records_select(
                         'cardbox_cards',
-                        "card {$insql}",
-                        $params
+                        "id {$insql}",
+                        $cardids
                     );
                 }
                 $countaftercards = $DB->count_records_select(
                     'cardbox_cards',
-                    "card {$insql}",
-                    $params
+                    "id {$insql}",
+                    $cardids
                 );
                 $countaftercardcontents = $DB->count_records_select(
                     'cardbox_cardcontents',
                     "card {$insql}",
-                    $params
+                    $cardids
                 );
                 $countafterprogress = $DB->count_records_select(
                     'cardbox_progress',
                     "card {$insql}",
-                    $params
+                    $cardids
                 );
                 
                 if ($countafterprogress == 0 and $countaftercardcontents == 0 and $countaftercards == 0 ) {
