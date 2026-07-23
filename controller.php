@@ -775,11 +775,28 @@ if ($action === 'overview') {
 
     // 1. Create the model.
     $collection = new cardbox_cardcollection($cardbox->id, $topic, true, $deck);
+    $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
+    $actionoutput .=  \core\notification::info(
+                get_string('intro:overview', 'cardbox')
+            );
+
+    $PAGE->requires->js_call_amd(
+        'mod_cardbox/overview',
+        'init',
+        [$cmid, $topic, $sort, $deck]
+    );
     $list = $collection->cardbox_get_card_list();
     if (empty($list)) {
-        \core\notification::info(
-            get_string('info:nocardsavailableforoverview', 'cardbox')
-        );
+        if ($topic == -1) {
+            // All topics.
+           $actionoutput .=  \core\notification::warning(
+                get_string('info:nocardsavailable', 'cardbox')
+            );
+        } else {
+           $actionoutput .=  \core\notification::warning(
+                get_string('info:nocardsavailablefilters', 'cardbox')
+            );
+        }
     } else {
         if ($search !== '') {
             $list = get_search_result_overview($search, $list);
@@ -789,16 +806,6 @@ if ($action === 'overview') {
         $list = sort_cards_on_overview($sort, $list, $collection, $deck, $context, $cardbox->id);
     }
     $totalcount = count($list);
-    $baseurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview',  'topic' => $topic, 'sort' => $sort, 'deck' => $deck));
-
-    $info = get_string('intro:overview', 'cardbox');
-    echo "<span class='notification alert alert-info alert-block fade in' role='alert' style='display:block'>" . $info . "</span>";
-
-    $PAGE->requires->js_call_amd(
-        'mod_cardbox/overview',
-        'init',
-        [$cmid, $topic, $sort, $deck]
-    );
     // 2. Create a view controller.
     $overview = new cardbox_overview($list, $offset, $context, $cmid, $cardbox->id, $topic, $sort, $deck, $search, false);
 
@@ -827,14 +834,18 @@ if ($action === 'savenewtopic') {
 if ($action === 'edittopic') {
 
     require_capability('mod/cardbox:edittopics', $context);
+
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
     $offset = $page * $perpage;
+
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/topics.php');
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'edittopic'));
     $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
     $renderer = $PAGE->get_renderer('mod_cardbox');
+
     $list = cardbox_get_topics($cardbox->id);
+
     $topics = new cardbox_topics($list, $offset, /* $context, */ $cmid, $cardbox->id);
     $PAGE->requires->js_call_amd('mod_cardbox/topics', 'init', array($cmid));
     $actionoutput .= $renderer->cardbox_render_topics($topics);

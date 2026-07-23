@@ -132,8 +132,8 @@ class mod_cardbox_renderer extends plugin_renderer_base {
      * @param \templatable $review
      * @return type
      */
-    public function cardbox_render_overview(\templatable $review) {
-        $data = $review->export_for_template($this);
+    public function cardbox_render_overview(\templatable $overview) {
+        $data = $overview->export_for_template($this);
         return $this->render_from_template('mod_cardbox/overview', $data);
     }
     /**

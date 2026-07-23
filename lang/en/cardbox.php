@@ -111,6 +111,7 @@ $string['addanswer'] = 'Add another solution';
 $string['autocorrectlocked'] = 'Disable Automatic Check';
 $string['savecard'] = 'Save';
 $string['saveandaccept'] = 'Save and accept';
+$string['topicalreadyexists'] = 'A topic with same name already exists.';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
@@ -147,7 +148,7 @@ $string['acdisable'] = 'Column name to disable Automatic Check for a card. Yes =
 $string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
-$string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
+$string['info:nocardsavailablefilters'] = 'There are no cards in this cardbox matching the criteria.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
 $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';

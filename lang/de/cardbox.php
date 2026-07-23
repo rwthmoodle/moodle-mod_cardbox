@@ -108,6 +108,7 @@ $string['autocorrectlocked'] = 'Automatische Kontrolle deaktivieren';
 $string['autocorrectlocked_help'] = 'Aktivieren Sie diese Checkbox, wenn trotz Wahl des Übungsmodus „Automatische Kontrolle“ die Antwort der Lernkarte nicht eingetippt werden soll. Im Modus „Automatische Kontrolle“ wird die Lernkarte dann weiterhin angezeigt, jedoch nur als Selbstkontrolle. Diese Option bietet sich insbesondere für Lernkarten an, deren Antworten sich nicht zur manuellen Eingabe eignen (z.B. Definitionen), jedoch trotzdem zusammen mit weiteren Lernkarten geübt werden sollen, deren Antworten manuell eingebeben werden.';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
+$string['topicalreadyexists'] = 'Ein Thema mit demselben Namen existiert bereits.';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
@@ -144,8 +145,8 @@ $string['acdisable'] = 'Spaltenname zur Deaktivierung der automatischen Kontroll
 $string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
 $string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
-$string['info:nocardsavailableforoverview'] = 'In dieser Kartenbox befinden sich keine Karten.';
-$string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
+$string['info:nocardsavailablefilters'] = 'Es gibt keine Karten in dieser Kartekasten, die den Kriterien entsprechen.';
+$string['info:nocardsavailable'] = 'Ihre Karteikasten enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'Derzeit liegen keine Karten zur Übung bereit.';
