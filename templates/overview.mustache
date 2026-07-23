@@ -56,20 +56,20 @@
                         <div></div>
                         {{/disableautocorrect}} 
                         {{#disableautocorrect}}
-                        <div><span class="badge badge-secondary" data-toggle = "tooltip" title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span></div>
+                        <div><span class="badge bg-secondary" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span></div>
                         {{/disableautocorrect}} 
                         <div class="common-margin">
                         {{#multipleanswers}}
                         {{#allansnecessary}}
-                        <span class="badge badge-dark" data-toggle = "tooltip" title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span>
+                        <span class="badge bg-dark" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span>
                         {{/allansnecessary}}
                         {{^allansnecessary}}
-                        <span class="badge badge-dark" data-toggle = "tooltip" title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span> 
+                        <span class="badge bg-dark" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span> 
                         {{/allansnecessary}}{{/multipleanswers}}</div>
-                            <div class="rep-icon-grid-div common-margin" data-toggle = "tooltip" title = "{{#str}}manager:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
+                            <div class="rep-icon-grid-div common-margin" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}manager:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
                             {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}</div>
                             <div class="common-margin"><img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
-                            data-toggle = "tooltip" title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
+                            data-bs-toggle = "tooltip" data-bs-title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 
@@ -82,23 +82,23 @@
                         <div class="card-icon-grid-div"> <div class="common-margin">
                         {{#multipleanswers}} 
                            {{#allansnecessary}}
-                        <span class="badge badge-dark" data-toggle = "tooltip" title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span>
+                        <span class="badge bg-dark" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span>
                         {{/allansnecessary}}
                         {{^allansnecessary}}
-                        <span class="badge badge-dark" data-toggle = "tooltip" title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span> 
+                        <span class="badge bg-dark" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span> 
                         {{/allansnecessary}}
                         {{/multipleanswers}}</div>
-                            <div class="rep-icon-grid-div common-margin" data-toggle = "tooltip" title = "{{#str}}student:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
+                            <div class="rep-icon-grid-div common-margin" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}student:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
                             {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}
                             </div>
                             {{^disableautocorrect}}
                         <div></div>
                         {{/disableautocorrect}} 
                         {{#disableautocorrect}}
-                        <div><span class="badge badge-secondary" data-toggle = "tooltip" title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span></div>
+                        <div><span class="badge bg-secondary" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span></div>
                         {{/disableautocorrect}}
                             <div class="common-margin"><img src={{deckimgurl}} alt="This card belongs to Deck {{deck}}" class="cardbox_card_deck_icon" 
-                            style="margin-bottom: 10px" data-toggle = "tooltip" title = "{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
+                            style="margin-bottom: 10px" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
                         </div>
                     </div>
                     <div class="col-xl-2"></div> 
@@ -158,7 +158,7 @@
                 {{/ismobile}}
                 {{#allowedtoedit}}
 
-                <div class="col-xs-2">
+                <div class="col-auto">
                     <div id="review-button-wrapper">
                     {{#ismobile}}
                         <div class="btn-group" role="group" aria-label="review-actions">
@@ -166,15 +166,15 @@
                     {{^ismobile}}
                         <div class="btn-group-vertical" role="group" aria-label="review-actions">
                     {{/ismobile}}
-                            <button id="cardbox-edit-{{cardid}}" type="button" class="btn btn-primary cardbox-overview-button-edit"  data-toggle = "tooltip" title={{# str }} edit, cardbox {{/ str }}><i class="icon fa fa-pencil fa-fw"></i></button>
-                            <button id="cardbox-delete-{{cardid}}" type="button" class="btn btn-primary cardbox-delete-button cardbox-overview-button-delete" data-toggle = "tooltip" title="{{# str }} delete, cardbox {{/ str }}"><i class="icon fa fa-trash fa-fw"></i></button>
+                            <button id="cardbox-edit-{{cardid}}" type="button" class="btn btn-primary cardbox-overview-button-edit"  data-bs-toggle = "tooltip" data-bs-title={{# str }} edit, cardbox {{/ str }}><i class="icon fa fa-pencil fa-fw"></i></button>
+                            <button id="cardbox-delete-{{cardid}}" type="button" class="btn btn-primary cardbox-delete-button cardbox-overview-button-delete" data-bs-toggle = "tooltip" data-bs-title="{{# str }} delete, cardbox {{/ str }}"><i class="icon fa fa-trash fa-fw"></i></button>
                         </div>
                     </div>
                 </div>
 
             </div>
             {{^ismobile}}
-            <div id="cardbox-card-in-overview" class="row overviewcontent" style="display: -webkit-box; margin-top: 10px">
+            <div id="cardbox-card-in-overview" class="row overviewcontent" style="display: flex; margin-top: 10px">
                 <div class="col-xl-4" style="margin-left: 15%; padding-right: 0px; padding-left: 1%;">
                     <div class="cardbox-column" >{{{questioncontext}}}</div>
                 </div>
@@ -189,7 +189,7 @@
             
             {{^allowedtoedit}}
             </div>
-            <div id="cardbox-card-in-overview" class="row overviewcontent" style="display: -webkit-box; margin-top: 10px">
+            <div id="cardbox-card-in-overview" class="row overviewcontent" style="display: flex; margin-top: 10px">
                 <div class="col-xl-2"></div>
                 <div class="col-xl-4">{{{questioncontext}}}</div>
                 <div class="col-xl-4" style="padding-left: 0.4%">{{{answercontext}}}</div>

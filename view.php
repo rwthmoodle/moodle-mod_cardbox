@@ -61,7 +61,7 @@ $myrenderer = $PAGE->get_renderer('mod_cardbox');
 $cardbox->revision = 1;
 
 require_once($CFG->dirroot . '/mod/cardbox/controller.php');
-if ($action == 'addflashcard' || $action == 'overview' || $action == 'practice' || $action == 'edittopic') {//Remove this once all transformation is done.
+if ($action == 'addflashcard' || $action == 'overview' || $action == 'practice' || $action == 'edittopic' || $action == 'massimport') {//Remove this once all transformation is done.
     echo $OUTPUT->header();
     echo $OUTPUT->heading(format_string($cardbox->name));
     echo $actionoutput;

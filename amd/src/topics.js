@@ -125,8 +125,7 @@ function deleteTopicAjax(topicid, deletecards) {
             deletecards: deletecards
         },
         done: () => {
-            document.getElementById("cardbox-topic-" + topicid)
-                .parentElement.parentElement.remove();
+            window.location.reload();
         },
         fail: Notification.exception
     }]);

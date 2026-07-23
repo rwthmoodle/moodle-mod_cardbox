@@ -598,10 +598,8 @@ if ($action === 'massimport') {
             }
         } else {
             $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
-            echo $OUTPUT->header();
-            echo $OUTPUT->heading(format_string($cardbox->name));
-            echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
-            $mform->display();
+            $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
+            $actionoutput .= $mform->render();
         }
     } else if ($step == 2) {
         // Processing.
@@ -614,9 +612,7 @@ if ($action === 'massimport') {
                 $cir = new csv_import_reader($iid, 'cardbox');
                 $cir->init();
                 $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
-                echo $OUTPUT->header();
-                echo $OUTPUT->heading(format_string($cardbox->name));
-                echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
+                $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
                 $errlines = cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
                 $cir->close();
                 $cir->cleanup();
@@ -627,13 +623,13 @@ if ($action === 'massimport') {
                     $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
                     $errorlines['continueurl'] = $returnurl->out(false);
                     $renderer = $PAGE->get_renderer('mod_cardbox');
-                    echo $renderer->cardbox_render_errimport($errorlines);
+                    $actionoutput .= $renderer->cardbox_render_errimport($errorlines);
                 } else {
                     $errorlines['err'] = false;
                     $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
                     $errorlines['continueurl'] = $returnurl->out(false);
                     $renderer = $PAGE->get_renderer('mod_cardbox');
-                    echo $renderer->cardbox_render_errimport($errorlines);
+                    $actionoutput .= $renderer->cardbox_render_errimport($errorlines);
                 }
             } else {
                 redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
@@ -831,18 +827,14 @@ if ($action === 'savenewtopic') {
 if ($action === 'edittopic') {
 
     require_capability('mod/cardbox:edittopics', $context);
-
     $page = optional_param('page', 0, PARAM_INT);
     $perpage = 10;
     $offset = $page * $perpage;
-
     require_once($CFG->dirroot . '/mod/cardbox/classes/output/topics.php');
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'edittopic'));
     $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
     $renderer = $PAGE->get_renderer('mod_cardbox');
-
     $list = cardbox_get_topics($cardbox->id);
-
     $topics = new cardbox_topics($list, $offset, /* $context, */ $cmid, $cardbox->id);
     $PAGE->requires->js_call_amd('mod_cardbox/topics', 'init', array($cmid));
     $actionoutput .= $renderer->cardbox_render_topics($topics);
