@@ -156,9 +156,21 @@ class mod_cardbox_external extends external_api {
         );
 
         $cmid = self::get_cmid($params['topicid']);
+        $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $cmid]);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
-
+        $exists = $DB->record_exists_select(
+            'cardbox_topics',
+            'id <> :topicid AND LOWER(TRIM(topicname)) = LOWER(:topicname) AND cardboxid = :cardboxid',
+            [
+                'topicid' => $params['topicid'],
+                'topicname' => $newtopicname,
+                'cardboxid' => $cardboxid,
+            ]
+        );
+        if ($exists) {
+            throw new moodle_exception('topicalreadyexists', 'cardbox');
+        }
         $success = $DB->set_field_select('cardbox_topics', 'topicname', $params['newtopicname'], 'id = :id', ['id' => $params['topicid']]);
 
         return $success;

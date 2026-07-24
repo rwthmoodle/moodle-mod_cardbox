@@ -39,9 +39,18 @@ function cardbox_save_new_topic($topicname, $cardboxid) {
     $topic = new stdClass();
     $topic->topicname = $topicname;
     $topic->cardboxid = $cardboxid;
-
+    $exists = $DB->record_exists_select(
+        'cardbox_topics',
+        'TRIM(topicname) = :topicname AND cardboxid = :cardboxid',
+        [
+            'topicname' => $topic->topicname,
+            'cardboxid' => $topic->cardboxid
+        ]
+    );
+    if ($exists) {
+        throw new moodle_exception('topicalreadyexists', 'cardbox');
+    }
     return $DB->insert_record('cardbox_topics', $topic, true);
-
 }
 /**
  * Function returns an array of options for the 'select/create a topic' dropdown
