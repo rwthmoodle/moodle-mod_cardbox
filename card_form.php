@@ -86,6 +86,7 @@ class mod_cardbox_card_form extends moodleform {
 
         $mform->addElement('editor', 'question', get_string('enterquestion', 'cardbox'), 'wrap="virtual" rows="5" cols="150"');
         $mform->setType('question', PARAM_RAW);
+        $mform->addRule('question', get_string('error:createcard:noques', 'cardbox'), 'required', null,'client');
 
         $btnarrayquestion = array();
         $btnarrayquestion[] =& $mform->createElement('button', 'addimage', get_string('addimage', 'cardbox'));
@@ -134,6 +135,7 @@ class mod_cardbox_card_form extends moodleform {
                 $infoanswer."</div></div></div>");
             }
         }
+        $mform->addRule('answer1', get_string('error:createcard:noans', 'cardbox'), 'required', null,'client');
 
         $btnarrayanswer = array();
         $btnarrayanswer[] =& $mform->createElement('button', 'addanswer', get_string('answer_repeat', 'cardbox'));
@@ -161,10 +163,6 @@ class mod_cardbox_card_form extends moodleform {
 
         /****************** Disable Auto check setting ****************** */
         if ($customdata['allowautocorrection'] == ALLOW_AUTOCORRECTION_FOR_ENTIRE_CARDBOX) {
-            $mform->addElement('checkbox', 'disableautocorrect', get_string('autocorrectlocked', 'cardbox'));
-            $mform->addHelpButton('disableautocorrect', 'autocorrectlocked', 'cardbox');
-            $mform->setDefault('disableautocorrect', 0);
-        } else {
             $mform->addElement('checkbox', 'disableautocorrect', get_string('autocorrectlocked', 'cardbox'));
             $mform->addHelpButton('disableautocorrect', 'autocorrectlocked', 'cardbox');
             $mform->setDefault('disableautocorrect', 0);
@@ -215,28 +213,14 @@ class mod_cardbox_card_form extends moodleform {
         global $USER;
 
         $errors = parent::validation($data, $files);
-
-        $question = $data['question'];
-        $questiontext = $question['text'];
-
         $fs = get_file_storage();
         $usercontext = context_user::instance($USER->id);
 
         $draftitemid = $data['cardimage'];
         $imagefiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false);
-
-        $draftitemid2 = $data['cardsound'];
-        $audiofiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid2, 'sortorder, id', false);
-
-        $answer = $data['answer1'];
-        $answertext = $answer['text'];
-
-        if (empty($data['imgdescriptionnecessary']) && !empty($imagefiles) && $data['imagedescription'] === "") {
-            $errors['files'] = get_string('error:imagedescription', 'cardbox');
-        }
-
-        if ( (empty($questiontext) && empty($imagefiles) && empty($audiofiles)) || empty($answertext) ) {
-            $errors['files'] = get_string('required');
+        $ifimguploaded = !empty($imagefiles);
+        if ($ifimguploaded && trim($data['imagedescription']) === '') {
+            $errors['imagedescription'] = get_string('error:imagedescription', 'cardbox');
         }
         return $errors;
     }

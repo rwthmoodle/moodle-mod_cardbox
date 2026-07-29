@@ -566,3 +566,26 @@
 #id_imgdescriptionnecessary {
     position: relative;
 }
+/*----NEW OVERVIEW----*/
+#cardbox-overview {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1%;
+}
+
+.cardbox-filters {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1%;
+    flex: 1 1 65%;
+}
+
+.cardbox-search {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 30%;
+}

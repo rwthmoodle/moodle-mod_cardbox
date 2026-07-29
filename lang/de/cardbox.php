@@ -108,6 +108,7 @@ $string['autocorrectlocked'] = 'Automatische Kontrolle deaktivieren';
 $string['autocorrectlocked_help'] = 'Aktivieren Sie diese Checkbox, wenn trotz Wahl des Übungsmodus „Automatische Kontrolle“ die Antwort der Lernkarte nicht eingetippt werden soll. Im Modus „Automatische Kontrolle“ wird die Lernkarte dann weiterhin angezeigt, jedoch nur als Selbstkontrolle. Diese Option bietet sich insbesondere für Lernkarten an, deren Antworten sich nicht zur manuellen Eingabe eignen (z.B. Definitionen), jedoch trotzdem zusammen mit weiteren Lernkarten geübt werden sollen, deren Antworten manuell eingebeben werden.';
 $string['savecard'] = 'Speichern';
 $string['saveandaccept'] = 'Speichern und freigeben';
+$string['topicalreadyexists'] = 'Ein Thema mit demselben Namen existiert bereits.';
 
 // Success notifications
 $string['success:addnewcard'] = 'Die Lernkarte wurde erstellt und wartet auf Freigabe.';
@@ -119,6 +120,10 @@ $string['success:reject'] = 'Die Karte wurde gelöscht.';
 // Error notifications
 $string['error:updateafterreview'] = 'Die Aktion konnte nicht gespeichert werden.';
 $string['error:createcard'] = 'Die Karte wurde noch nicht gespeichert, da sie entweder keine Frage und/oder keine Lösung enthält oder falls ein Bild hochgeladen wurde die Bildbeschreibung fehlt.';
+$string['error:createcard:noques'] = 'Die Karte wurde nicht erstellt, da das Fragefeld nicht ausgefüllt wurde.';
+$string['error:createcard:noans'] = 'Die Karte wurde nicht erstellt, da das Antwortfeld nicht ausgefüllt wurde.';
+$string['error:imagedescription'] = 'Ein Bild wurde auf die Karte hochgeladen. Es muss eine Beschreibung des Bildes angegeben werden.';
+$string['error:createcard:inconclusive'] = 'Es ist ein Fehler aufgetreten. Die Karte kann nicht erstellt werden. Bitte versuche es erneut.';
 
 // Import cards
 $string['examplesinglecsv'] = 'Beispieltextdatei für Karten mit nur einer Antwort.';
@@ -140,8 +145,8 @@ $string['acdisable'] = 'Spaltenname zur Deaktivierung der automatischen Kontroll
 $string['info:statisticspage'] = 'Hier sehen Sie, wie viele fällige und nicht-fällige Karten sich in Ihrem Karteikasten befinden und wie erfolgreich Ihre Übungen waren.';
 $string['info:nocardsavailableforreview'] = 'Es liegen keine (weiteren) Karten zur Überprüfung vor.';
 $string['info:waslastcardforreview'] = 'Dies war die letzte zu überprüfende Karte.';
-$string['info:nocardsavailableforoverview'] = 'In dieser Kartenbox befinden sich keine Karten.';
-$string['info:nocardsavailable'] = 'Ihre Lernkartei enthält zurzeit keine Karten.';
+$string['info:nocardsavailablefilters'] = 'Es gibt keine Karten in dieser Kartekasten, die den Kriterien entsprechen.';
+$string['info:nocardsavailable'] = 'Ihre Karteikasten enthält zurzeit keine Karten.';
 $string['help:nocardsavailable'] = 'Karteikasten leer';
 $string['help:nocardsavailable_help'] = 'Mögliche Gründe:<ul><li>Es wurden noch keine Karten angelegt.</li><li>Die/Der Dozent/in hat die Karten noch nicht überprüft und freigegeben.</li></ul>';
 $string['info:nocardsavailableforpractice'] = 'Derzeit liegen keine Karten zur Übung bereit.';
@@ -292,7 +297,13 @@ $string['student:repeatdesc'] = 'Diese Karte wurde nach {$a} Wiederholungen gele
 
 // Edit topics Tab.
 $string['deletetopic'] = 'Thema löschen';
-$string['deletetopicinfo'] = 'Möchten Sie das ausgewählte Thema {$a} löschen? Bei Karten, die diesem Thema zugeordnet waren, wird das Thema dadurch auf "nicht zugeordnet" gesetzt.';
+$string['deletetopicinfo'] = 'Möchten Sie nur das ausgewählte Thema {$a} löschen oder auch alle ihm zugeordneten Karten?
+<p class="mt-3 p-3 bg-light rounded small" style="background-color: #CFD1D2 !important;">
+    <i class="icon fa fa-info-circle mr-2" aria-hidden="true"></i>
+    Wenn Sie das Thema einfach löschen, bleiben alle Karten, die diesem Thema derzeit zugeordnet sind, weiterhin bestehen, erhalten jedoch das Standardthema „Nicht zugeordnet“.
+</p>';
+$string['deletetopiconly'] = 'Nur Thema löschen';
+$string['deletetopicandcards'] = 'Thema und zugehörige Karten löschen'; 
 $string['createtopic'] = 'Hinzufügen';
 $string['existingtopics'] = 'Bereits existierende Themen';
 $string['notopics'] = 'Es sind noch keine Themen vorhanden';

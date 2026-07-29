@@ -41,24 +41,94 @@ class mod_cardbox_external extends external_api {
     public static function deletetopic_parameters() {
         return new external_function_parameters(
             array(
-                "topicid" => new external_value(PARAM_INT, "topicid")
+                "topicid" => new external_value(PARAM_INT, "topicid"),
+                "deletecards" => new external_value(PARAM_BOOL),
             )
         );
     }
 
-    public static function deletetopic($topicid) {
+    public static function deletetopic($topicid, $deletecards) {
         global $DB;
 
         $params = self::validate_parameters(
             self::deletetopic_parameters(),
-            array('topicid' => $topicid)
+            array('topicid' => $topicid, 'deletecards' => $deletecards)
         );
 
         $cmid = self::get_cmid($params['topicid']);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
-
-        $success = $DB->set_field_select('cardbox_cards', 'topic', null, 'topic = :id', ['id' => $params['topicid']]);
+        if ($deletecards) {
+            // Delete topic and cards.
+            $success = false;
+            $cardids = $DB->get_fieldset_select(
+                'cardbox_cards',
+                'id',
+                'topic = :topic',
+                ['topic' => $topicid]
+            );
+            if (!empty($cardids)) {
+                [$insql, $cardids] = $DB->get_in_or_equal($cardids, SQL_PARAMS_NAMED);
+                $countbefore = $DB->count_records_select(
+                    'cardbox_progress',
+                    "card {$insql}",
+                    $cardids
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_progress',
+                        "card {$insql}",
+                        $cardids
+                    );
+                }
+                $countbefore = $DB->count_records_select(
+                    'cardbox_cardcontents',
+                    "card {$insql}",
+                    $cardids
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_cardcontents',
+                        "card {$insql}",
+                        $cardids
+                    );
+                }
+                $countbefore = $DB->count_records_select(
+                    'cardbox_cards',
+                    "id {$insql}",
+                    $cardids
+                );
+                if ($countbefore > 0) {
+                    $DB->delete_records_select(
+                        'cardbox_cards',
+                        "id {$insql}",
+                        $cardids
+                    );
+                }
+                $countaftercards = $DB->count_records_select(
+                    'cardbox_cards',
+                    "id {$insql}",
+                    $cardids
+                );
+                $countaftercardcontents = $DB->count_records_select(
+                    'cardbox_cardcontents',
+                    "card {$insql}",
+                    $cardids
+                );
+                $countafterprogress = $DB->count_records_select(
+                    'cardbox_progress',
+                    "card {$insql}",
+                    $cardids
+                );
+                
+                if ($countafterprogress == 0 and $countaftercardcontents == 0 and $countaftercards == 0 ) {
+                    $success = true;
+                }
+            }
+        } else {
+            // Delete topic only. Associated cards will have topic set to 
+            $success = $DB->set_field_select('cardbox_cards', 'topic', null, 'topic = :id', ['id' => $params['topicid']]);
+        }
         $DB->delete_records('cardbox_topics', ['id' => $params['topicid']]);
         return $success;
     }
@@ -86,9 +156,21 @@ class mod_cardbox_external extends external_api {
         );
 
         $cmid = self::get_cmid($params['topicid']);
+        $cardboxid = $DB->get_field('course_modules', 'instance', ['id' => $cmid]);
         $context = context_module::instance($cmid);
         require_capability('mod/cardbox:edittopics', $context);
-
+        $exists = $DB->record_exists_select(
+            'cardbox_topics',
+            'id <> :topicid AND LOWER(TRIM(topicname)) = LOWER(:topicname) AND cardboxid = :cardboxid',
+            [
+                'topicid' => $params['topicid'],
+                'topicname' => $newtopicname,
+                'cardboxid' => $cardboxid,
+            ]
+        );
+        if ($exists) {
+            throw new moodle_exception('topicalreadyexists', 'cardbox');
+        }
         $success = $DB->set_field_select('cardbox_topics', 'topicname', $params['newtopicname'], 'id = :id', ['id' => $params['topicid']]);
 
         return $success;

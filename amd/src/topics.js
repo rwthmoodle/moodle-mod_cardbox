@@ -19,6 +19,7 @@ import Ajax from 'core/ajax';
 import {
     get_strings as getStrings,
 } from 'core/str';
+import Modal from 'core/modal';
 
 export const init = (cmid) => {
         registerEventListeners(cmid);
@@ -65,23 +66,69 @@ function deletetopic(cmid, topicid, topictitel) {
     getStrings([
         {key: 'deletetopic', component: 'cardbox'},
         {key: 'deletetopicinfo', component: 'cardbox', param: "'" + topictitel + "'"},
-        {key: 'yes'},
+        {key: 'deletetopicandcards', component: 'cardbox'},
+        {key: 'deletetopiconly', component: 'cardbox'},
         {key: 'cancel'}
     ])
     .then(strings => {
-        Notification.confirm(strings[0], strings[1], strings[2], strings[3], () => {
-            Ajax.call([{
-                methodname:'mod_cardbox_deletetopic',
-                args: {
-                    'topicid': topicid,
-                },
-                done: () => {
-                    document.getElementById("cardbox-topic-"+topicid).parentElement.parentElement.remove();
-                },
-                fail: Notification.exception
-            }]);
+
+        Modal.create({
+            title: strings[0],
+            body: strings[1],
+        }).then(modal => {
+
+            // Create custom buttons
+            const root = modal.getRoot();
+
+            root[0].querySelector('.modal-footer').innerHTML = `
+                <button type="button" class="btn btn-primary" data-action="delete-all">
+                    ${strings[2]}
+                </button>
+                <button type="button" class="btn btn-secondary" data-action="delete-topic">
+                    ${strings[3]}
+                </button>
+                <button type="button" class="btn btn-secondary" data-action="cancel">
+                    ${strings[4]}
+                </button>
+            `;
+
+            root.on('click', '[data-action="delete-all"]', () => {
+                deleteTopicAjax(topicid, true);
+                modal.hide();
+            });
+
+            root.on('click', '[data-action="delete-topic"]', () => {
+                deleteTopicAjax(topicid, false);
+                modal.hide();
+            });
+
+            root.on('click', '[data-action="cancel"]', () => {
+                modal.hide();
+            });
+
+            modal.show();
         });
-    }).catch(Notification.exception);
+
+    })
+    .catch(Notification.exception);
+}
+/**
+ * Helper function for aja calls
+ * @param {int} topicid
+ * @param {bool} deletecards
+ */
+function deleteTopicAjax(topicid, deletecards) {
+    Ajax.call([{
+        methodname: 'mod_cardbox_deletetopic',
+        args: {
+            topicid: topicid,
+            deletecards: deletecards
+        },
+        done: () => {
+            window.location.reload();
+        },
+        fail: Notification.exception
+    }]);
 }
 /**
  * Function to edit an existing topic from the cardbox instance

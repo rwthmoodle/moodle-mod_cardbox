@@ -39,8 +39,9 @@ class cardbox_overview implements renderable, templatable {
     private $decks = [];
     private $sort;
     private $desc;
+    private $search;
 
-    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $sort, $deck, $usedforemail = false) {
+    public function __construct($list, $offset, $context, $cmid, $cardboxid, $topicid, $sort, $deck, $search, $usedforemail = false) {
 
         require_once('card.php');
 
@@ -48,7 +49,7 @@ class cardbox_overview implements renderable, templatable {
 
         $topics = $DB->get_records('cardbox_topics', ['cardboxid' => $cardboxid]);
         $this->topicid = $topicid;
-
+        $this->search = $search;
         foreach ($topics as $topic) {
             if ($topic->id == $topicid) {
                 $this->topics[] = ['topicid' => $topic->id, 'topic' => $topic->topicname, 'selected' => true];
@@ -109,6 +110,9 @@ class cardbox_overview implements renderable, templatable {
         }
         $data['decks'] = $this->decks;
         $data['topics'] = $this->topics;
+        if ($this->search !== '') {
+            $data['search'] = $this->search;
+        }
         $data['sortca'] = $this->sort === 1;
         $data['sortad'] = $this->sort === 2;
         $data['sortaa'] = $this->sort === 3;

@@ -111,6 +111,7 @@ $string['addanswer'] = 'Add another solution';
 $string['autocorrectlocked'] = 'Disable Automatic Check';
 $string['savecard'] = 'Save';
 $string['saveandaccept'] = 'Save and accept';
+$string['topicalreadyexists'] = 'A topic with same name already exists.';
 
 // Success notifications
 $string['success:addnewcard'] = 'The card was created and awaits approval.';
@@ -121,8 +122,11 @@ $string['success:reject'] = 'The card was deleted.';
 
 // Error notifications
 $string['error:updateafterreview'] = 'Update failed.';
-$string['error:createcard'] = 'The card was not created, because it is either missing a question and/or answer or if you uploaded a picture the imagedescription might be missing.';
-
+$string['error:createcard'] = 'The card was not created, because it is missing a question and/or answer or if you uploaded a picture the imagedescription might be missing.';
+$string['error:createcard:noques'] = 'The card was not created, because the question field was left empty';
+$string['error:createcard:noans'] = 'The card was not created, because the answer field was left empty';
+$string['error:imagedescription'] = 'You have uploaded an image to the card. You need to give a description of the image';
+$string['error:createcard:inconclusive'] = 'Something went wrong. Card cannot be created. Please try again.';
 
 // Import cards
 $string['examplesinglecsv'] = 'Example text file for cards having single answers';
@@ -144,7 +148,7 @@ $string['acdisable'] = 'Column name to disable Automatic Check for a card. Yes =
 $string['info:statisticspage'] = 'This page tells you how many cards there are in your cardbox (due and not-due) and how well you did in your previous practice sessions.';
 $string['info:nocardsavailableforreview'] = 'There are no new cards to review at present.';
 $string['info:waslastcardforreview'] = 'This was the last card to be reviewed.';
-$string['info:nocardsavailableforoverview'] = 'There are no cards in this cardbox.';
+$string['info:nocardsavailablefilters'] = 'There are no cards in this cardbox matching the criteria.';
 $string['info:nocardsavailable'] = 'There are no cards in your cardbox at present.';
 $string['help:nocardsavailable'] = 'Empty Cardbox';
 $string['help:nocardsavailable_help'] = 'Possible reasons:<ul><li>No cards have been created.</li><li>The teacher has yet to check and accept a card.</li></ul>';
@@ -298,9 +302,15 @@ $string['student:repeatdesc'] = 'This card was mastered after {$a} repetitions';
 
 // Edit topics Tab.
 $string['deletetopic'] = 'Delete topic';
-$string['deletetopicinfo'] = 'Do you want to delete the selected topic {$a}? For cards assigned to this topic, this will set the topic to "not assigned".';
+$string['deletetopicinfo'] = 'Do you want to delete only the selected topic {$a} or all cards assigned to it as well? 
+<p class="mt-3 p-3 bg-light rounded small" style="background-color: #CFD1D2 !important;">
+    <i class="icon fa fa-info-circle mr-2" aria-hidden="true"></i>
+    If only the topic is deleted, all cards currently assigned to this topic will continue to exist but will have the default topic "Not assigned".
+</p>';
+$string['deletetopiconly'] = 'Delete topic only';
+$string['deletetopicandcards'] = 'Delete topic and its cards'; 
 $string['createtopic'] = 'Add';
-$string['existingtopics'] = 'already existing topics';
+$string['existingtopics'] = 'Existing topics';
 $string['notopics'] = 'there are no topics yet';
 $string['nulltopic'] = 'Not Assigned';
 

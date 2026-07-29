@@ -22,21 +22,10 @@
  * @author    Anna Heynkes
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-
-define('CARDBOX_EVALUATE_ALL', 0);
-define('CARDBOX_EVALUATE_ONE', 1);
-define('CARD_MAIN_INFORMATION', 0);
-define('CARD_CONTEXT_INFORMATION', 1);
-define('CARD_IMAGEDESCRIPTION_INFORMATION', 2);
 define('CARD_ANSWERSUGGESTION_INFORMATION', 3);
-define('CARDBOX_CARDSIDE_QUESTION', 0);
-define('CARDBOX_CARDSIDE_ANSWER', 1);
-define('CARDBOX_CONTENTTYPE_IMAGE', 0);
-define('CARDBOX_CONTENTTYPE_TEXT', 1);
-define('CARDBOX_CONTENTTYPE_AUDIO', 2);
 define ('LONG_DESCRIPTION', 1);
 define ('SHORT_DESCRIPTION', 0);
-
+require_once($CFG->dirroot.'/mod/cardbox/constants.php');
 /**
  * Function creates a new record in cardbox_topics table.
  *
@@ -50,9 +39,18 @@ function cardbox_save_new_topic($topicname, $cardboxid) {
     $topic = new stdClass();
     $topic->topicname = $topicname;
     $topic->cardboxid = $cardboxid;
-
+    $exists = $DB->record_exists_select(
+        'cardbox_topics',
+        'TRIM(topicname) = :topicname AND cardboxid = :cardboxid',
+        [
+            'topicname' => $topic->topicname,
+            'cardboxid' => $topic->cardboxid
+        ]
+    );
+    if ($exists) {
+        throw new moodle_exception('topicalreadyexists', 'cardbox');
+    }
     return $DB->insert_record('cardbox_topics', $topic, true);
-
 }
 /**
  * Function returns an array of options for the 'select/create a topic' dropdown
@@ -822,4 +820,366 @@ function cardbox_import_validate_row(int $atleastoneanswer, array $rowcols) {
 
 function cardbox_string_starts_with($fullvalue, $searchvalue) {
     return substr_compare($fullvalue, $searchvalue, 0, strlen($searchvalue)) === 0;
+}
+#----------------- NEW FUNCTIONS ----------------------------------------#
+##---------------- ADD CARDS -------------------------------------------##
+/**
+ * Function to add cards
+ *
+ * @param stdClass $formdata
+ * @param context_module $context
+ */
+function add_card_to_instance(stdClass $formdata, context_module $context, int $cardboxid, int $cmid) {
+    global $DB;
+    #--------------- SAVE CARD ---------------------------------------#
+    $accept = !empty($formdata->saveandaccept) && has_capability('mod/cardbox:approvecard', $context);
+    $topic = assign_topic_to_card(
+        !empty($formdata->newtopic) ? NEW_TOPIC_CREATED : $formdata->topic,
+        $cardboxid,
+        $formdata->newtopic ?? null
+    );
+    $howmanyansreqd = check_no_of_answers($cardboxid, $formdata->answers);
+    $enabledautocheck = property_exists($formdata, 'disableautocorrect')? (int)$formdata->disableautocorrect : 0;
+    $cardid = cardbox_save_new_card($cardboxid, $context, $accept, $topic, $howmanyansreqd, $enabledautocheck);
+    #--------------- SAVE CARD CONTENT ---------------------------------------#
+    $message = '';
+    $cardcontentcreated = create_card_content($formdata, $cardid, $context);
+    if ($accept) {
+        $message = get_string('success:addandapprovenewcard', 'cardbox');
+    } else {
+        $message = get_string('success:addnewcard', 'cardbox');
+    }
+    $redirecturl = $actionurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'addflashcard'));
+    if ($cardcontentcreated) {
+        redirect($redirecturl, $message, null, \core\output\notification::NOTIFY_INFO);
+    } else {
+        $message = get_string('error:createcard:inconclusive', 'cardbox');
+        redirect($redirecturl, $message, null, \core\output\notification::NOTIFY_ERROR);
+    }
+
+}
+/**
+ * Function to assign topic to card
+ *
+ * @param int $topic
+ * @param int $cardboxid
+ */
+function assign_topic_to_card(
+    int $topic,
+    ?int $cardboxid = null,
+    ?string $newtopic = null
+) {
+    switch ($topic) {
+        case NULL_TOPIC: // Card belongs to no topic.
+            return null;
+        case NEW_TOPIC_CREATED: // Card belongs to a new topic that is to be created.
+            if (!empty($newtopic)) {
+                return cardbox_save_new_topic($newtopic, $cardboxid);
+            }
+            return null;
+        default: // Card belongs to an already existing topic.
+            return $topic;
+    }
+}
+/**
+ * Function to assign how many answers are required
+ *
+ * @param int $cardboxid
+ * @param int $formanswer
+ */
+function check_no_of_answers(int $cardboxid, int $formanswer) {
+    global $DB;
+    $necessaryanswerslocked = $DB->get_field(
+        'cardbox',
+        'necessaryanswerslocked',
+        array('id' => $cardboxid),
+        IGNORE_MISSING
+    );
+    $noofanswers = ($necessaryanswerslocked == CANNOT_CHANGE_NO_OF_NECESSARY_ANSWERS)
+    ? $necessaryanswerslocked
+    : $formanswer;
+    return $noofanswers;
+}
+/**
+ * Function to add card contents
+ *
+ * @param stdClass $formdata
+ * @param int $cardid
+ */
+function create_card_content(stdClass $formdata, int $cardid, context_module $context) {
+    // Main question.
+    if (!empty(trim($formdata->question['text']))) {
+        cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_QUESTION, CARDBOX_CONTENTTYPE_TEXT, $formdata->question['text'], CARD_MAIN_INFORMATION);
+    }
+    // Question context.
+    if (!empty(trim($formdata->questioncontext['text']))) {
+        cardbox_save_new_cardcontent($cardid, CARDBOX_CARDSIDE_QUESTION, CARDBOX_CONTENTTYPE_TEXT,
+                                        $formdata->questioncontext['text'], CARD_CONTEXT_INFORMATION);
+    }
+    // Image
+    $imgoptions = array('subdirs' => 0, 'maxbytes' => 0, 'areamaxbytes' => 10485760, 'maxfiles' => 3,
+                          'accepted_types' => array('bmp', 'gif', 'jpeg', 'jpg', 'png', 'svg'), 'return_types' => 1 | 2);
+    cardbox_save_filemanager_content(
+        'cardimage',
+        $context,
+        'mod_cardbox',
+        'content',
+        $cardid,
+        CARDBOX_CONTENTTYPE_IMAGE,
+        CARD_MAIN_INFORMATION,
+        $formdata->imagedescription ?? null,
+        CARD_IMAGEDESCRIPTION_INFORMATION,
+        $imgoptions
+    );
+    // Audio
+    $audiooptions = array(
+        'subdirs' => 0,
+        'maxbytes' => 0,
+        'areamaxbytes' => 10485760,
+        'maxfiles' => 1,
+        'accepted_types' => array(
+            'mp3',
+            'wav',
+            'ogg',
+            'm4a',
+            'aac',
+            'flac'
+        ),
+        'return_types' => FILE_INTERNAL | FILE_EXTERNAL
+    );
+    cardbox_save_filemanager_content(
+        'cardsound',
+        $context,
+        'mod_cardbox',
+        'content',
+        $cardid,
+        CARDBOX_CONTENTTYPE_AUDIO,
+        CARD_MAIN_INFORMATION,
+        null,
+        null,
+        $audiooptions
+    );
+    // Answer(s)
+    for ($i = 1; $i <= 10; $i++) {
+        $answer = 'answer'. $i;
+        if (!property_exists($formdata, $answer)) {
+            continue;
+        }
+        $answertext = str_replace('&nbsp;', ' ', $formdata->{$answer}['text']);
+        if (trim(strip_tags($answertext)) === '') {
+            continue;
+        }
+        cardbox_save_new_cardcontent(
+            $cardid,
+            CARDBOX_CARDSIDE_ANSWER,
+            CARDBOX_CONTENTTYPE_TEXT,
+            $answertext,
+            CARD_MAIN_INFORMATION
+        );
+    }
+    // Answer context.
+    if (!empty(trim($formdata->answercontext['text']))) {
+        cardbox_save_new_cardcontent($cardid, 1, CARDBOX_CONTENTTYPE_TEXT,
+                                        $formdata->answercontext['text'], CARD_CONTEXT_INFORMATION);
+    }
+    return 1;
+}
+/**
+ * Function to save file manager files
+ *
+ * @param string $formfield
+ * @param context_module  $context,
+ * @param string $component,
+ * @param string $filearea,
+ * @param int $cardid,
+ * @param int $filetype,
+ * @param int $contenttype,
+ * @param string $description = null,
+ * @param int  $descriptiontype = null,
+ * @param array $options
+ */
+function cardbox_save_filemanager_content(
+    $formfield,
+    $context,
+    $component,
+    $filearea,
+    $cardid,
+    $filetype,
+    $contenttype,
+    $description = null,
+    $descriptiontype = null,
+    $options = []
+) {
+    global $USER;
+
+    $draftitemid = file_get_submitted_draft_itemid($formfield);
+    if (!$draftitemid) {
+        return;
+    }
+
+    $fs = get_file_storage();
+    $usercontext = context_user::instance($USER->id);
+
+    $files = $fs->get_area_files(
+        $usercontext->id,
+        'user',
+        'draft',
+        $draftitemid,
+        'sortorder, id',
+        false
+    );
+
+    if (empty($files)) {
+        return;
+    }
+
+    $file = reset($files);
+
+    $itemid = cardbox_save_new_cardcontent(
+        $cardid,
+        0,
+        $filetype,
+        $file->get_filename(),
+        $contenttype
+    );
+
+    file_save_draft_area_files(
+        $draftitemid,
+        $context->id,
+        $component,
+        $filearea,
+        $itemid,
+        $options
+    );
+
+    if ($description !== null && trim($description) !== '') {
+        cardbox_save_new_cardcontent(
+            $cardid,
+            0,
+            $filetype,
+            $description,
+            $descriptiontype
+        );
+    } else {
+        throw new moodle_exception(get_string('error:imagedescription', 'cardbox'));
+    }
+}
+##---------------- OVERVIEW -------------------------------------------##
+/**
+ * Function to sort cards on overview page
+ *
+ * @param int $sort
+ * @param array $list
+ * @param cardbox_cardcollection $collection
+ * @param int $deck,
+ * @param context_module $context
+ * @param int $cardboxid
+ * @return array $list
+ */
+function sort_cards_on_overview(int $sort, array $list, cardbox_cardcollection $collection, int $deck, context_module $context, int $cardboxid) {
+    switch($sort) {
+        case SORT_CREATIONDATE_ASC:
+            sort($list);
+            break;
+        case SORT_CREATIONDATE_DESC:
+            rsort($list);
+            break;
+        default:
+            $questions = [];
+            for ($i = 0; $i < count($list); $i++) {
+                $questions[$list[$i]] = $collection->cardbox_get_question($list[$i]);
+            }
+
+            if ($sort === SORT_ALPHABETIC_ASC) {
+                asort($questions, SORT_STRING);
+            } else {
+                arsort($questions, SORT_STRING);
+            }
+            $index = 0;
+            foreach ($questions as $key => $value) {
+                $list[$index] = $key;
+                $index++;
+            }
+
+    }
+    if ($deck != SHOW_CARDS_OF_ALL_DECKS) {
+        $list = filter_cards_deckwise_overview($deck, $context, $list, $cardboxid);
+    }
+    return $list;
+
+}
+/**
+ * Function to sort cards on overview page
+ *
+ * @param int $sort
+ * @param array $list
+ * @param cardbox_cardcollection $collection
+ * @return array $list
+ */
+function filter_cards_deckwise_overview(int $deck, context_module $context, array $list, int $cardboxid) {
+    $allowedtoedit = false;
+    $seestatus = false;
+    if (has_capability('mod/cardbox:approvecard', $context)) {
+        $allowedtoedit = true;
+    } else {
+        $allowedtoedit = false;
+    }
+
+    if (has_capability('mod/cardbox:seestatus', $context)) {
+        $seestatus = true;
+    } else {
+        $seestatus = false;
+    }
+    $filtereddeck = array();
+    $index = 0;
+    foreach ($list as $flashcard) {
+        $card = new cardbox_card($flashcard, $context, $cardboxid, $allowedtoedit, $seestatus);
+        $card->cardbox_getcarddeck($flashcard, $allowedtoedit);
+        if ($card->cardbox_getcarddecknumber() == ($deck + 1)) {
+            $filtereddeck[$index] = $flashcard;
+            $index++;
+        }
+    }
+    $list = $filtereddeck;
+    return $list;
+}
+/**
+ * Function to search cards
+ *
+ * @param string $search
+ * @param array $list
+ * @return array $list
+ */
+function get_search_result_overview(string $search, array $list) {
+    global $DB;
+    $results = [];
+    foreach ($list as $entry) {
+        $cardcontents = $DB->get_records('cardbox_cardcontents', ['card' => $entry]);
+        foreach ($cardcontents as $cardcontent) {
+            if (stripos($cardcontent->content, $search) !== false) {
+                if (!in_array($cardcontent->card, $results, true)) {
+                    $results[] = $entry;
+                }
+            }
+        }
+    }
+    return $results;
+}
+
+function fetch_card_values_for_editing($from, $cmid, $cardid) {
+    global $DB;
+    $answers = [];
+    if ($from === 'review') {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'review'));
+    } else {
+        $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+    }
+    $topic = cardbox_get_topic($cardid);
+    $answers = cardbox_get_answers($cardid);
+    $answersnotapproved = cardbox_get_notapproved_answers($cardid);
+    $answers = array_merge($answers, $answersnotapproved);
+    $answercount = count($answers);
+    $necessaryanswers = cardbox_get_necessaryanswers($cardid);
+    $disableautocorrect = $DB->get_field('cardbox_cards', 'disableautocorrect', array('id' => $cardid), IGNORE_MISSING);
+
 }

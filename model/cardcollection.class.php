@@ -117,7 +117,7 @@ class cardbox_cardcollection {
     public static function cardbox_get_question($cardid) {
         global $DB;
 
-        $question = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'area' => CARD_MAIN_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_QUESTION));
+        $question = $DB->get_field('cardbox_cardcontents', 'content', array('card' => $cardid, 'area' => CARD_MAIN_INFORMATION, 'cardside' => CARDBOX_CARDSIDE_QUESTION, 'contenttype' => CARDBOX_CONTENTTYPE_TEXT));
         return strip_tags($question);
     }
 

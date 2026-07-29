@@ -40,17 +40,19 @@ $context = context_module::instance($cm->id);
 
 $PAGE->set_title(get_string('activityname', 'cardbox'));
 $PAGE->set_heading($course->fullname); // Set course name for display.
+$action = optional_param('action', null, PARAM_ALPHA);
+if ($action === null) {
+    if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.
+        $action = optional_param('action', 'practice', PARAM_ALPHA);
 
-// Go to (default) page.
-if (has_capability('mod/cardbox:practice', $context)) { // for students and other participants.
-    $action = optional_param('action', 'practice', PARAM_ALPHA);
+    } else if (has_capability('mod/cardbox:approvecard', $context)) {
+        $action = optional_param('action', 'review', PARAM_ALPHA);
 
-} else if (has_capability('mod/cardbox:approvecard', $context)) {
-    $action = optional_param('action', 'review', PARAM_ALPHA);
-
-} else { // For guests.
-    $action = optional_param('action', 'addflashcard', PARAM_ALPHA);
+    } else { // For guests.
+        $action = optional_param('action', 'addflashcard', PARAM_ALPHA);
+    }
 }
+
 
 $taburl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid));
 
@@ -59,5 +61,10 @@ $myrenderer = $PAGE->get_renderer('mod_cardbox');
 $cardbox->revision = 1;
 
 require_once($CFG->dirroot . '/mod/cardbox/controller.php');
+if ($action == 'addflashcard' || $action == 'overview' || $action == 'practice' || $action == 'edittopic' || $action == 'massimport') {//Remove this once all transformation is done.
+    echo $OUTPUT->header();
+    echo $OUTPUT->heading(format_string($cardbox->name));
+    echo $actionoutput;
+}
 
 echo $OUTPUT->footer();
