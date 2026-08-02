@@ -96,7 +96,17 @@ if ($action === 'editcard') {
     $actionurl = $returnurl;
 
     $draftitemid = file_get_submitted_draft_itemid('cardimage'); // name of the filemanager element
-    $itemid = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => CARDBOX_CONTENTTYPE_IMAGE), IGNORE_MISSING);
+    $itemid = $DB->get_field_select(
+        'cardbox_cardcontents',
+        'id',
+        'card = ? AND contenttype = ? AND area <> ?',
+        [
+            $cardid,
+            CARDBOX_CONTENTTYPE_IMAGE,
+            CARD_IMAGEDESCRIPTION_INFORMATION
+        ],
+        IGNORE_MISSING
+    );
 
     $draftitemid2 = file_get_submitted_draft_itemid('cardsound'); // name of the filemanager element
     $itemid2 = $DB->get_field('cardbox_cardcontents', 'id', array('card' => $cardid, 'contenttype' => CARDBOX_CONTENTTYPE_AUDIO), IGNORE_MISSING);

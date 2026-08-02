@@ -246,14 +246,14 @@
     border-radius: 3px;
     /* margin-bottom: 2em; */
     padding: 1em;
-    height: 100%;
+    flex: 1;
 }
 .path-mod-cardbox .cardbox-card-right-side-multi {
     border-radius: 3px;
     /* margin-bottom: 2em; */
     margin-right: 1em;
     margin-left: 0.2em;
-    height: 100%;
+    flex: 1;
     display: grid;
 }
 .path-mod-cardbox .cardbox-cardside-multi {
@@ -587,13 +587,16 @@
     max-width: 100%;
 
 }
-.row.card-content,
-.row.card-header,
-.row.card-context {
+.row.cardbox-card-content,
+.row.cardbox-card-header,
+.row.cardbox-card-context {
     display: grid;
     grid-template-columns: 1fr 1fr auto;
     column-gap: 0;
     align-items: start;
+}
+.cardbox-card-content > .col {
+    display: flex;
 }
 
 .ques-teil {
@@ -623,4 +626,7 @@
 }
 .cardtopic {
     margin-left: 1em;
+}
+.col.cardbox-column.card-icons{
+    padding-right:4rem;
 }

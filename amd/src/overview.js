@@ -55,7 +55,7 @@ export const init = (cmid, topic, sort, deck) => {
     });
     document.querySelectorAll('#cardbox-overview .cardbox-overview-button-edit')
         .forEach(btn => {
-            const card = btn.closest('#cardbox-card-in-overview');
+            const card = btn.closest('.cardbox-card-in-overview');
             const cardid = card.getAttribute('data-cardid');
 
             btn.addEventListener('click', () => {

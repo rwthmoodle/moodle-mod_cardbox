@@ -51,7 +51,7 @@
         {{#cards}}
             <div class = "cardbox-card-in-overview" data-cardid="{{cardid}}" >
                 {{! ---- C A R D - H E A D E R ---- }}
-                <div class = "row card-header">
+                <div class = "row cardbox-card-header">
                     {{! ---- T O P I C ---- }}
                     <div class = "col cardbox-column cardtopic" >
                         {{#str}}reviewtopic, cardbox{{/str}} {{topic}}
@@ -115,7 +115,7 @@
                 </div>
                 {{! ---- E N D - O F - C A R D - H E A D E R ---- }}         
                 {{! ---- C A R D - C O N T E N T ---- }}
-                <div class="row card-content">
+                <div class="row cardbox-card-content">
                     {{! ---- Q U E S T I O N - P A R T ---- }}
                     <div class="col cardbox-column ques-teil">
                         <div class="cardbox-card-left-side">
@@ -176,7 +176,7 @@
                     {{! ---- E N D - O F - R E V I E W - B U T T O N - G R O U P ---- }}
                 </div>
                 {{! ---- C A R D - C O N T E X T ---- }}
-                <div class="row card-context">
+                <div class="row cardbox-card-context">
                     <div class="col cardbox-column ques-context">
                         {{^ismobile}}
                         <em>{{{answercontext}}}</em>
