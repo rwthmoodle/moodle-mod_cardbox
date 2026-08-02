@@ -516,12 +516,6 @@
 .path-mod-cardbox .autocorrect_icon {
     height: 1.6em;
 }
-.path-mod-cardbox .ques-teil {
-    padding: 0px;
-}
-.path-mod-cardbox .ans-teil {
-    padding: 0px;
-}
 
 @media (max-width: 800px) {
     .path-mod-cardbox .review-topic {
@@ -533,12 +527,6 @@
     .path-mod-cardbox .cardbox-card-right-side-multi {
         margin-right: 0em;
         margin-left: 0em;
-    }
-    .path-mod-cardbox .ques-teil {
-        padding: 0px;
-    }
-    .path-mod-cardbox .ans-teil {
-        padding: 0px;
     }
     .path-mod-cardbox .review-button-wrapper {
         margin-top: 2em;
@@ -572,20 +560,67 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1%;
+    gap: 1rem;
 }
-
+.filters-search{
+    width: 100%;
+}
 .cardbox-filters {
     display: flex;
-    align-items: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 1%;
+    gap: 1rem;
     flex: 1 1 65%;
 }
 
 .cardbox-search {
     display: flex;
-    align-items: center;
     justify-content: flex-end;
-    flex: 1 1 30%;
+    flex-wrap: wrap;
+    flex: 1 1 35%;
+}
+.cardbox-studyview{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 100%;
+
+}
+.row.card-content,
+.row.card-header,
+.row.card-context {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    column-gap: 0;
+    align-items: start;
+}
+
+.ques-teil {
+    grid-column: 1;
+    margin-right: 1rem;
+}
+.ques-context {
+    margin-left: 1rem;
+}
+
+.ans-teil {
+    grid-column: 2;
+    margin-right: 0.3rem;
+}
+.ans-context {
+    margin-left: 0.3rem;
+}
+
+
+.review-button-wrapper {
+    grid-column: 3;
+}
+.cardbox-card-in-overview {
+    width: 100%;
+    margin-right:3rem;
+    margin-left: 3rem;
+}
+.cardtopic {
+    margin-left: 1em;
 }
