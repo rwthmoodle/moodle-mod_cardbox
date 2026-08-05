@@ -65,7 +65,7 @@
                         {{/disableautocorrect}} 
                         {{#disableautocorrect}}
                         <div>
-                            <span class="badge bg-light text-dark border" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span>
+                            <span class="badge bg-light text-dark border" data-bs-toggle = "tooltip" title = "{{#str}}autocorrecticon_help, cardbox, {{decktext}}{{/str}}">{{acimgurl}}</span>
                         </div>
                         {{/disableautocorrect}} 
                         {{! ---- E N D - O F - A U T O C O R R E C T ---- }}
@@ -73,39 +73,39 @@
                         {{#multipleanswers}}
                         {{#allansnecessary}}
                         <div>
-                            <span class="badge bg-dark  text-white border" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span>
+                            <span class="badge bg-dark  text-white border" data-bs-toggle = "tooltip" title = "{{#str}}allanswersnecessary_help, cardbox, {{decktext}}{{/str}}" style="cursor:default">{{howmanyanswersnecessary}}</span>
                         </div>
                         {{/allansnecessary}}
                         {{^allansnecessary}}
                         <div>
-                            <span class="badge bg-dark" data-bs-toggle = "tooltip" data-bs-title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}">{{howmanyanswersnecessary}}</span> 
+                            <span class="badge bg-dark" data-bs-toggle = "tooltip" title = "{{#str}}oneanswersnecessary_help, cardbox, {{decktext}}{{/str}}" style="cursor:default">{{howmanyanswersnecessary}}</span> 
                         </div>
                         {{/allansnecessary}}
                         {{/multipleanswers}}
                         {{! ---- E N D - O F - M U L T. A N S : A L L / O N E ---- }}
                         {{#allowedtoedit}} {{! Manager view }}
                         {{! ---- R E P S ---- }}
-                        <div data-bs-toggle = "tooltip" data-bs-title = "{{#str}}manager:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
-                            {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}
+                        <div data-bs-toggle = "tooltip" title = "{{#str}}manager:repeatdesc, cardbox, {{repsnummer}}{{/str}}" style="cursor:default">
+                            {{#reps}}<i class="fa-solid fa-repeat"></i> {{repsnummer}}{{/reps}}
                         </div>
                         {{! ---- E N D - O F - R E P S ---- }}
                         {{! ---- D E C K ---- }}
                         <div>
                             <img src={{deckimgurl}} alt="{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}" class="cardbox_card_deck_icon" 
-                            data-bs-toggle = "tooltip" data-bs-title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}">
+                            data-bs-toggle = "tooltip" title = "{{#str}}manager:deckdescription, cardbox, {{decktext}}{{/str}}">
                         </div>
                         {{! ---- E N D - O F - D E C K ---- }}
                         {{/allowedtoedit}}
                         {{^allowedtoedit}} {{! Student view }}
                         {{! ---- R E P S ---- }}
-                        <div data-bs-toggle = "tooltip" data-bs-title = "{{#str}}student:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
-                            {{#reps}}<img src="https://img.icons8.com/ios-glyphs/30/000000/repeat.png"/> {{repsnummer}}{{/reps}}
+                        <div data-bs-toggle = "tooltip" title = "{{#str}}student:repeatdesc, cardbox, {{repsnummer}}{{/str}}">
+                            {{#reps}}<i class="fa-solid fa-repeat"></i>{{repsnummer}}{{/reps}}
                         </div>
                         {{! ---- E N D - O F - R E P S ---- }}
                         {{! ---- D E C K ---- }}
                         <div>
                             <img src={{deckimgurl}} alt="{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}" class="cardbox_card_deck_icon" data-bs-toggle="tooltip"
-                                data-bs-title="{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
+                                title="{{#str}}student:deckdescription, cardbox, {{decktext}}{{/str}}"></div>
                         </div>
                         {{! ---- E N D - O F - D E C K ---- }}
                         {{/allowedtoedit}}
@@ -122,14 +122,13 @@
                             {{#question}}
                                 {{> mod_cardbox/cardside }}
                             {{/question}}
-                            {{#ismobile}}
-                                <em>{{questioncontext}}</em>
-                            {{/ismobile}}
+                            <div class="for-smaller-screens"><em>{{questioncontext}}</em></div>
                         </div>
                     </div>
                     {{! ---- E N D - O F - Q U E S T I O N - P A R T ---- }}
                     {{! ---- A N S W E R - P A R T ---- }}
                     <div class="col cardbox-column ans-teil">
+                        {{! ---- M U L T I P L E - A N S W E R ---- }}
                         {{#multipleanswers}}
                         {{#answer}}
                             <div class="cardbox-card-right-side-multi">
@@ -138,9 +137,14 @@
                                     <div class="cardbox-card-text">{{{text}}}</div>
                                 </div>
                             {{/texts}}
+                            <div class="for-smaller-screens">
+                                <em>{{{answercontext}}}</em>
+                            </div>
                             </div>
                         {{/answer}}
                         {{/multipleanswers}}
+                        {{! ---- E N D - O F - M U L T I P L E - A N S W E R ---- }}
+                        {{! ---- S I N G L E - A N S W E R ---- }}
                         {{^multipleanswers}}
                         <div class="cardbox-card-right-side">
                             <div class="cardbox-cardside">
@@ -148,26 +152,22 @@
                                     {{> mod_cardbox/cardside }}
                                 {{/answer}}
                             </div>
+                            <div class="for-smaller-screens">
+                                <em>{{{answercontext}}}</em>
+                            </div>
                         </div>
                         {{/multipleanswers}}
-                        {{#ismobile}}
-                            <em>{{{answercontext}}}</em>
-                        {{/ismobile}}
+                        {{! ---- E N D - O F - S I N G L E - A N S W E R ---- }}
                     </div>
                     {{! ---- E N D - O F - A N S W E R - P A R T ---- }}
                     {{! ---- R E V I E W - B U T T O N - G R O U P ---- }}
                     {{#allowedtoedit}}
                     <div class="col review-button-wrapper">
-                        {{#ismobile}}
-                        <div class="btn-group" role="group" aria-label="review-actions">
-                        {{/ismobile}}
-                        {{^ismobile}}
-                        <div class="btn-group-vertical" role="group" aria-label="review-actions">
-                        {{/ismobile}}
-                            <button id="cardbox-edit-{{cardid}}" type="button" class="btn btn-primary cardbox-overview-button-edit"  data-bs-toggle = "tooltip" data-bs-title="{{# str }} edit, cardbox {{/ str }}">
+                        <div class="d-flex flex-row flex-md-column">
+                            <button id="cardbox-edit-{{cardid}}" type="button" class="btn btn-primary cardbox-overview-button-edit"  data-bs-toggle = "tooltip" title="{{# str }} edit, cardbox {{/ str }}">
                                 <i class="icon fa fa-pencil fa-fw"></i>
                             </button>
-                            <button id="cardbox-delete-{{cardid}}" type="button" class="btn btn-primary cardbox-delete-button cardbox-overview-button-delete" data-bs-toggle = "tooltip" data-bs-title="{{# str }} delete, cardbox {{/ str }}">
+                            <button id="cardbox-delete-{{cardid}}" type="button" class="btn btn-primary cardbox-delete-button cardbox-overview-button-delete" data-bs-toggle = "tooltip" title="{{# str }} delete, cardbox {{/ str }}">
                                 <i class="icon fa fa-trash fa-fw"></i>
                             </button>
                         </div>
@@ -178,14 +178,14 @@
                 {{! ---- C A R D - C O N T E X T ---- }}
                 <div class="row cardbox-card-context">
                     <div class="col cardbox-column ques-context">
-                        {{^ismobile}}
-                        <em>{{{answercontext}}}</em>
-                        {{/ismobile}}
+                        <div class="for-bigger-screens ">
+                            <em>{{{questioncontext}}}</em>
+                        </div>
                     </div>
                     <div class="col cardbox-column ans-context">
-                        {{^ismobile}}
-                        <em>{{{answercontext}}}</em>
-                        {{/ismobile}}
+                        <div class="for-bigger-screens ">
+                            <em>{{{answercontext}}}</em>
+                        </div>
                     </div>
                     <div class="col"></div>
                 </div>
