@@ -653,7 +653,73 @@ function cardbox_send_change_notification($cmid, $cardbox, $cardid) {
     }
 
 }
-
+/**
+ * Import cards specified in CSV
+ *
+ * @param array $importedcards
+ * @param int $cardboxid
+ */
+function cardbox_create_cards_from_import (array $importedcards, int $cardboxid) {
+    global $DB, $USER;    
+    // First create topics if it doesnt exist
+    $topics = []; 
+    foreach ($importedcards as $card) {
+        $trimmedTopic = trim($card['topic']);
+        $params = ['topicname' => $trimmedTopic];
+        $matchingtopic = $DB->get_record('cardbox_topics', $params, 'id', IGNORE_MULTIPLE);
+        if ($matchingtopic !== false) {
+            $topics[$matchingtopic->id] = $trimmedTopic;
+        } else {
+            $data = new stdClass();
+            $data->topicname = $trimmedTopic;
+            $data->cardboxid = $cardboxid;
+            $topicid = $DB->insert_record('cardbox_topics', $data);
+            $topics[$topicid] = $trimmedTopic;
+        }
+        $cardentry = new stdClass();
+        $cardentry->cardbox = $cardboxid;
+        $cardentry->topic = array_search($trimmedTopic, $topics, true);
+        $cardentry->author = $USER->id;
+        $cardentry->timecreated = time();
+        $cardentry->timemodified = null;
+        $cardentry->approved = CARD_APPROVED;
+        $cardentry->approvedby = $USER->id;
+        $cardentry->necessaryanswers = CARDBOX_EVALUATE_ALL;
+        $cardentry->disableautocorrect = $card['acdisable'];
+        $cardid = $DB->insert_record('cardbox_cards', $cardentry);
+        foreach ($card as $column => $value) {
+            $cardcontententry = new stdClass();
+            $cardcontententry->card = $cardid;
+            $cardcontententry->contenttype = CARDBOX_CONTENTTYPE_TEXT;
+            switch (strtolower($column)) {
+                case 'ques':
+                    $cardcontententry->cardside = CARDBOX_CARDSIDE_QUESTION;
+                    $cardcontententry->area = CARD_MAIN_INFORMATION;
+                    $cardcontententry->content = $value;
+                    break;
+                case 'qcontext':
+                    $cardcontententry->cardside = CARDBOX_CARDSIDE_QUESTION;
+                    $cardcontententry->area = CARD_CONTEXT_INFORMATION;
+                    $cardcontententry->content = $value;
+                    break;
+                case 'acontext':
+                    $cardcontententry->cardside = CARDBOX_CARDSIDE_ANSWER;
+                    $cardcontententry->area = CARD_CONTEXT_INFORMATION;
+                    $cardcontententry->content = $value;
+                    break;
+                default:
+                    if (str_starts_with(strtolower($column), 'ans')) {
+                        $cardcontententry->cardside = CARDBOX_CARDSIDE_ANSWER;
+                        $cardcontententry->area = CARD_MAIN_INFORMATION;
+                        $cardcontententry->content = $value;
+                        break;
+                    } 
+            }
+            $cardcontentid = $DB->insert_record('cardbox_cardcontents', $cardcontententry);
+            return;
+        }
+    }
+}
 function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $cardboxid) {
     global $DB, $USER;
     $topiccache = [];
@@ -1165,7 +1231,81 @@ function get_search_result_overview(string $search, array $list) {
     }
     return $results;
 }
+/*----------------------------------- I M P O R T - C A R D S -------------------------------*/
+/**
+ * Show import errors
+ *
+ * @param csv_import_reader $cir
+ * @param array $errarr
+ */
+function show_import_errors (csv_import_reader $cir) {
+    $csvcolumns = $cir->get_columns();
+    $errorflag = NO_ERROR_AT_IMPORT;
+    $erroroutput = '';
+    $columnexceptions = cardbox_import_validate_columns($csvcolumns, LONG_DESCRIPTION);
+    if (!empty($columnexceptions[0]) && !empty($columnexceptions[1])) {
+        if (!empty($columnexceptions[0])) {
+            $erroroutput .= '<div class="alert alert-danger" role="alert">Error(s)<ul>';
+            foreach ($columnexceptions[0] as $error) {
+                $erroroutput .= '<li>'.$error.'</li>';
+            }
+            $erroroutput .= '</ul></div>';
+            if ($errorflag !== ERRORS_AT_IMPORT) {
+                $errorflag = ERRORS_AT_IMPORT;
+            }
+        } else {
+            $erroroutput .= '<div class="alert alert-warning" role="alert">Warning(s)<ul>';
+            foreach ($columnexceptions[1] as $warning) {
+                $erroroutput .= '<li>'.$warning.'</li>';
+            }
+            $erroroutput .= '</ul></div>';
+            if ($errorflag !== ERRORS_AT_IMPORT) {
+                $errorflag = WARNINGS_AT_IMPORT;
+            } 
+        }
+        if ($errorflag == ERRORS_AT_IMPORT) {
+            return [ERRORS_AT_IMPORT => $erroroutput];
+        } else {
+            return [WARNINGS_AT_IMPORT => $erroroutput];
+        }
+    } else {
+        return [NO_ERROR_AT_IMPORT => null];
+    }
+}
+/**
+ * Build array out of imported cards
+ *
+ * @param csv_import_reader $cir
+ * @param array $cards
+ */
+function generate_imported_cards_arr (csv_import_reader $cir) {
+    $cards = [];
+    $cir->init();
+    $singleanswer = true;
+    $csvcolumns = $cir->get_columns();
+    $checkerrors = show_import_errors($cir);
+    if (!array_key_exists(NO_ERROR_AT_IMPORT, $checkerrors)) {
+        $card ['FAIL'] = reset($checkerrors);
+    } else {
+        $ans_columns_count = count(array_filter($csvcolumns, fn($col) => str_starts_with($col, 'ans')));
+        if ($ans_columns_count > 1) {
+            $singleanswer = false;
+        }
+        $linecount = 1;
+        while ($line = $cir->next()) {
+            $eachcard = [];
+            for ($i=0; $i < count($csvcolumns); $i++) {
+                $arrkey = $csvcolumns[$i];
+                $arrval = $line[$i];     
+                $eachcard[$arrkey] = $arrval;
+            }
+            $cards[$linecount] = $eachcard;
+            $linecount ++;
 
+        }
+    }
+    return $cards;
+}
 function fetch_card_values_for_editing($from, $cmid, $cardid) {
     global $DB;
     $answers = [];

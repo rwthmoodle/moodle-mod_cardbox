@@ -555,12 +555,11 @@ if ($action === 'massimport') {
     if (!empty($cancelclicked)) {
         echo "<span id='cardbox-review-notification' class='notification'><div class='alert alert-info alert-block fade in' role='alert'>" . $cancelclicked. "</div></span>";
     }
-    if ($step == 1) {
+    if ($step == CSV_SUBMITTED) {
         // Data provision.
         $customdata = array('cardboxid' => $cardbox->id, 'cmid' => $cmid, 'context' => $context);
         $mform = new \mod_cardbox\output\massimport_form(null, $customdata);
         if ($formdata = $mform->get_data()) {
-
             // Store csv content in moodledata/temp for next step.
             $iid = csv_import_reader::get_new_iid('cardbox');
             $csvcontent = $mform->get_file_content('cardimportfile'); // Full content of the file.
@@ -573,77 +572,48 @@ if ($action === 'massimport') {
             if ($readcount > 1) {
                 // Show csv content preview.
                 $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'massimport'));
-                echo $OUTPUT->header();
-                echo $OUTPUT->heading(format_string($cardbox->name));
-                echo $myrenderer->cardbox_render_tabs($taburl, $context, $action);
-                echo "<h2>". get_string('importpreview', 'cardbox')."</h2>";
+                $actionoutput .=  $myrenderer->cardbox_render_tabs($taburl, $context, $action);
+                $actionoutput .= html_writer::tag('h2', get_string('importpreview', 'cardbox'));
                 $csvcolumns = $cir->get_columns();
-                $errorflag = 0; // No error.
-                $columnexceptions = cardbox_import_validate_columns($csvcolumns, LONG_DESCRIPTION);
-                if (!empty($columnexceptions[0])) {
-                    echo '<div class="alert alert-danger" role="alert">Error(s)<ul>';
-                    foreach ($columnexceptions[0] as $error) {
-                        echo '<li>'.$error.'</li>';
-                    }
-                    echo '</ul></div>';
-                }
-                if (!empty($columnexceptions[1])) {
-                    echo '<div class="alert alert-warning" role="alert">Warning(s)<ul>';
-                    foreach ($columnexceptions[1] as $warning) {
-                        echo '<li>'.$warning.'</li>';
-                    }
-                    echo '</ul></div>';
-                }
-                if (!empty($columnexceptions[0])) {
-                    $errorflag = 1;
-                }
+                //$errorflag = 0; // No error.
+                $importedcards = [];
+                /*$checkerrors = show_import_errors($cir);
+                if (!array_key_exists(NO_ERROR_AT_IMPORT, $checkerrors)) {
+                    $actionoutput .= reset($checkerrors);
+                }*/
+                $importedcards = generate_imported_cards_arr($cir);
+                if (count($importedcards) === 1 && array_key_first($importedcards) === 'FAIL') {
+                    // The array has exactly 1 element, and its key is 'FAIL'
+                    throw new \moodle_exception('csvloaderror', '', $retrunurl, $importedcards['FAIL']);
+                } 
                 $importpreviewtable = new \mod_cardbox\output\previewtable($cir, $csvcolumns);
-                echo html_writer::tag('div', html_writer::table($importpreviewtable), ['class' => 'flexible-wrap']);
+                $actionoutput .= html_writer::tag('div', html_writer::table($importpreviewtable), ['class' => 'flexible-wrap']);
                 $customdata = ['id' => $cmid, 'cardboxid' => $cardbox->id, 'context' => $context, 'iid' => $iid,
-                'step' => 2, 'count' => $readcount, 'error' => $errorflag];
+                'step' => PROCESSCSV_AND_CREATE_CARDS, 'count' => $readcount, 'importedcards' => $importedcards];
+
                 $mform2 = new \mod_cardbox\output\massimportpreview_form(null, $customdata);
-                $mform2->display();
+                $actionoutput .= $mform2->render();
             } else {
                 redirect($returnurl, get_string('emptyimportfile', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
             }
         } else {
+            // Massimport form displayed
             $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
-            $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
+            $actionoutput .=  $myrenderer->cardbox_render_tabs($taburl, $context, $action);
             $actionoutput .= $mform->render();
         }
-    } else if ($step == 2) {
+    } else if ($step == PROCESSCSV_AND_CREATE_CARDS) {
         // Processing.
         $iid = required_param('iid', PARAM_INT);
-        $mform2 = new \mod_cardbox\output\massimportpreview_form(null, []);
-        if ($formdata2 = $mform2->get_data()) {
-            $btn = preg_grep('/btn/', array_keys(get_object_vars($formdata2)));
-            $btnfunc = substr(array_values($btn)[0], 0, -3);
-            if (($btnfunc) == 'import') {
-                $cir = new csv_import_reader($iid, 'cardbox');
-                $cir->init();
-                $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'massimport'));
-                $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
-                $errlines = cardbox_import_cards($cir, $cir->get_columns(), $cardbox->id);
-                $cir->close();
-                $cir->cleanup();
-                if (!empty($errlines)) {
-                    $errorlines = array();
-                    $errorlines['err'] = true;
-                    $errorlines['rows'] = $errlines;
-                    $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
-                    $errorlines['continueurl'] = $returnurl->out(false);
-                    $renderer = $PAGE->get_renderer('mod_cardbox');
-                    $actionoutput .= $renderer->cardbox_render_errimport($errorlines);
-                } else {
-                    $errorlines['err'] = false;
-                    $errorlines['successfullyimported'] = ($formdata2->count) - (1 + count($errlines));
-                    $errorlines['continueurl'] = $returnurl->out(false);
-                    $renderer = $PAGE->get_renderer('mod_cardbox');
-                    $actionoutput .= $renderer->cardbox_render_errimport($errorlines);
-                }
-            } else {
-                redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
-            }
+        $confirmed = optional_param('importbtn', 0, PARAM_BOOL);
+        if ($confirmed) {
+            $importedcardsarr = optional_param('importedcards_json', '', PARAM_TEXT);
+            $importedcards = json_decode($importedcardsarr, true);
+            cardbox_create_cards_from_import($importedcards, $cardbox->id);
+            $returnurl = new moodle_url('/mod/cardbox/view.php', array('id' => $cmid, 'action' => 'overview'));
+            redirect($returnurl, get_string('importsuccess', 'cardbox', count($importedcards)), null, \core\output\notification::NOTIFY_SUCCESS);
+        } else {
+            redirect($returnurl, get_string('cancelimport', 'cardbox'), null, \core\output\notification::NOTIFY_INFO);
         }
     }
 }
