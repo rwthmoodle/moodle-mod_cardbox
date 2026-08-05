@@ -574,7 +574,11 @@
     gap: 1rem;
     flex: 1 1 65%;
 }
-
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* 4px → 0.25rem */
+}
 .cardbox-search {
     display: flex;
     justify-content: flex-end;
@@ -641,6 +645,27 @@
     }
     .for-smaller-screens {
         display: inline;
+    }
+    .filters-search {
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Spacing between rows */
+    }
+
+    .cardbox-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    .cardbox-filters > span {
+        white-space: nowrap; /* Prevents label wrapping */
+    }
+
+    .cardbox-search {
+        width: 100%;
+        max-width: 300px;
+        margin-left: 0;
     }
     .row.cardbox-card-content {
         grid-template-columns: 1fr;

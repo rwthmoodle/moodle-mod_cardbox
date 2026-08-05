@@ -2,37 +2,42 @@
     <div class ="row filters-search">
         {{! ----------------- F I L T E R S --------------- }}
         <div class="cardbox-filters">
-            <span>{{#str}} topicfilter, cardbox {{/str}} </span>
-            <span>
-                <select id="cardbox-overview-topicfilter" class="custom-select">
-                    <option value="-1" {{#nopreference}}selected{{/nopreference}}>{{#str}} noselection, cardbox {{/str}}</option>
-                    {{#topics}}
-                        <option value="{{topicid}}" {{#selected}}selected{{/selected}}>{{topic}}</option>
-                    {{/topics}}
-                    <option value="0" {{#cardswithouttopic}}selected{{/cardswithouttopic}}>{{# str }} notopic, cardbox {{/ str }}</option>
-                </select>
-            </span>
-            <span>{{#str}} deckfilter, cardbox {{/str}} </span>
-            <span>
-                <select id="cardbox-overview-deckfilter" class="custom-select">
-                    <option value="-1" {{#nopreferencedeck}}selected{{/nopreferencedeck}}>{{#str}} noselection, cardbox {{/str}}</option>
-                    <option value="0" {{#newcard}}selected{{/newcard}}>{{#str}} new, cardbox {{/str}}</option>
-                    {{#decks}}
-                        <option value="{{deck}}" {{#selected}}selected{{/selected}}>{{deck}}</option>
-                    {{/decks}}
-                    <option value="6" {{#masteredcard}}selected{{/masteredcard}}>{{#str}} known, cardbox {{/str}}</option>
-                </select>
-            </span>
-
-            <span>{{#str}} sorting, cardbox {{/str}} </span>
-            <span>
-                <select id="cardbox-filter-options" class="custom-select">
-                    <option value="0">{{#str}} createddate, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
-                    <option value="1" {{#sortca}}selected{{/sortca}}>{{#str}} createddate, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
-                    <option value="2" {{#sortad}}selected{{/sortad}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
-                    <option value="3" {{#sortaa}}selected{{/sortaa}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
-                </select>
-            </span>
+            <div class="filter-group">
+                <span>{{#str}} topicfilter, cardbox {{/str}} </span>
+                <span>
+                    <select id="cardbox-overview-topicfilter" class="custom-select">
+                        <option value="-1" {{#nopreference}}selected{{/nopreference}}>{{#str}} noselection, cardbox {{/str}}</option>
+                        {{#topics}}
+                            <option value="{{topicid}}" {{#selected}}selected{{/selected}}>{{topic}}</option>
+                        {{/topics}}
+                        <option value="0" {{#cardswithouttopic}}selected{{/cardswithouttopic}}>{{# str }} notopic, cardbox {{/ str }}</option>
+                    </select>
+                </span>
+            </div>
+            <div class="filter-group">
+                <span>{{#str}} deckfilter, cardbox {{/str}} </span>
+                <span>
+                    <select id="cardbox-overview-deckfilter" class="custom-select">
+                        <option value="-1" {{#nopreferencedeck}}selected{{/nopreferencedeck}}>{{#str}} noselection, cardbox {{/str}}</option>
+                        <option value="0" {{#newcard}}selected{{/newcard}}>{{#str}} new, cardbox {{/str}}</option>
+                        {{#decks}}
+                            <option value="{{deck}}" {{#selected}}selected{{/selected}}>{{deck}}</option>
+                        {{/decks}}
+                        <option value="6" {{#masteredcard}}selected{{/masteredcard}}>{{#str}} known, cardbox {{/str}}</option>
+                    </select>
+                </span>
+            </div>
+            <div class="filter-group">
+                <span>{{#str}} sorting, cardbox {{/str}} </span>
+                <span>
+                    <select id="cardbox-filter-options" class="custom-select">
+                        <option value="0">{{#str}} createddate, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
+                        <option value="1" {{#sortca}}selected{{/sortca}}>{{#str}} createddate, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
+                        <option value="2" {{#sortad}}selected{{/sortad}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} ascending, cardbox {{/str}}</option>
+                        <option value="3" {{#sortaa}}selected{{/sortaa}}>{{#str}} alphabetical, cardbox {{/str}} {{#str}} descending, cardbox {{/str}}</option>
+                    </select>
+                </span>
+            </div>
         </div>
         {{! ----------------- E N D - O F - F I L T E R S --------------- }}
         {{! ----------------- O V E R V I E W - S E A R C H --------------- }}
