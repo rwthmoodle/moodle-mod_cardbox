@@ -56,7 +56,7 @@ class massimportpreview_form extends \moodleform {
 
         $mform->addElement('hidden', 'error');
         $mform->setType('error', PARAM_INT);
-
+        $mform->addElement('html', '<br>');
         $reviewbtngrp = [];
         $reviewbtngrp[] =& $mform->createElement('submit', 'importbtn', get_string('massimport', 'cardbox'));
         $reviewbtngrp[] =& $mform->createElement('cancel');

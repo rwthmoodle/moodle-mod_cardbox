@@ -679,138 +679,55 @@ function cardbox_create_cards_from_import (array $importedcards, int $cardboxid)
         $cardentry = new stdClass();
         $cardentry->cardbox = $cardboxid;
         $cardentry->topic = array_search($trimmedTopic, $topics, true);
-        $cardentry->author = $USER->id;
+        $cardentry->author = (int)$USER->id;
         $cardentry->timecreated = time();
         $cardentry->timemodified = null;
         $cardentry->approved = CARD_APPROVED;
-        $cardentry->approvedby = $USER->id;
+        $cardentry->approvedby = (int)$USER->id;
         $cardentry->necessaryanswers = CARDBOX_EVALUATE_ALL;
-        $cardentry->disableautocorrect = $card['acdisable'];
+        $cardentry->disableautocorrect = (int)$card['acdisable'];
         $cardid = $DB->insert_record('cardbox_cards', $cardentry);
         foreach ($card as $column => $value) {
             $cardcontententry = new stdClass();
             $cardcontententry->card = $cardid;
             $cardcontententry->contenttype = CARDBOX_CONTENTTYPE_TEXT;
+            // Flag to track if we should insert
+            $shouldInsert = false;
             switch (strtolower($column)) {
                 case 'ques':
                     $cardcontententry->cardside = CARDBOX_CARDSIDE_QUESTION;
                     $cardcontententry->area = CARD_MAIN_INFORMATION;
                     $cardcontententry->content = $value;
+                    $shouldInsert = true;
                     break;
                 case 'qcontext':
                     $cardcontententry->cardside = CARDBOX_CARDSIDE_QUESTION;
                     $cardcontententry->area = CARD_CONTEXT_INFORMATION;
                     $cardcontententry->content = $value;
+                    $shouldInsert = true;
                     break;
                 case 'acontext':
                     $cardcontententry->cardside = CARDBOX_CARDSIDE_ANSWER;
                     $cardcontententry->area = CARD_CONTEXT_INFORMATION;
                     $cardcontententry->content = $value;
+                    $shouldInsert = true;
                     break;
                 default:
                     if (str_starts_with(strtolower($column), 'ans')) {
                         $cardcontententry->cardside = CARDBOX_CARDSIDE_ANSWER;
                         $cardcontententry->area = CARD_MAIN_INFORMATION;
                         $cardcontententry->content = $value;
-                        break;
-                    } 
+                        $shouldInsert = true;
+                    }
+                    break;
             }
-            $cardcontentid = $DB->insert_record('cardbox_cardcontents', $cardcontententry);
-            return;
+            // Only insert if we processed a valid column
+            if ($shouldInsert) {
+                $cardcontentid = $DB->insert_record('cardbox_cardcontents', $cardcontententry);
+            }
         }
     }
 }
-function cardbox_import_cards(\csv_import_reader $cir, array $columns, int $cardboxid) {
-    global $DB, $USER;
-    $topiccache = [];
-    $i = 1;
-    $j = 0;
-    $errorlines = array();
-    while ($line = $cir->next()) {
-        $errors = array();
-        $atleastoneanswer = 0;
-        $rowcols = array();
-        $rowcols['line'] = $i;
-        foreach ($line as $key => $field) {
-            $rowcols[$columns[$key]] = s(trim($field));
-        }
-        $errors = cardbox_import_validate_row($atleastoneanswer, $rowcols);
-        if (empty($errors)) {
-            $card = new stdClass;
-            $card->topic = null;
-            if ($topicidx = array_search('topic', $columns)) {
-                $topic = trim($line[$topicidx]);
-                if (array_key_exists($topic, $topiccache)) {
-                    $card->topic = $topiccache[$topic];
-                } else {
-                    if (!empty($topic) && $topic != "null" ) {
-                        if (!$DB->record_exists('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid])) {
-                            $card->topic = $DB->insert_record('cardbox_topics', ['topicname' => $topic, 'cardboxid' => $cardboxid], true);
-                        } else {
-                            $card->topic = $DB->get_field("cardbox_topics", "id", array("topicname" => $topic, 'cardboxid' => $cardboxid));
-                        }
-                    }
-                    $topiccache[$topic] = $card->topic;
-                }
-            }
-            $card->cardbox = $cardboxid;
-            $card->author = $USER->id;
-            $card->timecreated = time();
-            $card->approved = '1';
-            $card->approvedby = $USER->id;
-            $card->necessaryanswers = '0';
-            if ($disableautocorrect = array_search('acdisable', $columns)) {
-                $card->disableautocorrect = trim($line[$disableautocorrect]);
-            } else {
-                $card->disableautocorrect = '0';
-            }
-            $cardid = $DB->insert_record('cardbox_cards', $card, true); // New row in cardbox_cards table created.
-            $cardcontent = new stdClass;
-            foreach ($line as $key => $value) {
-                $value = trim($value);
-                if ($value !== "") {
-                    // Common to all content.
-                    $cardcontent->card = $cardid;
-                    $cardcontent->contenttype = CARDBOX_CONTENTTYPE_TEXT;
-                    $cardcontent->content = '<p>'.$value.'</p>';
-                    // Based on which info it is, create DB records
-                    // ques : This is the main question
-                    // ans : This is the main answer. Multiple answer not supported yet
-                    // qcontext: This is the context info for question
-                    // acontext: This is the context info for answer
-                    $columnname = $columns[$key];
-                    if ($columnname == 'ques') {
-                        $cardcontent->cardside = CARDBOX_CARDSIDE_QUESTION;
-                        $cardcontent->area = CARD_MAIN_INFORMATION;
-                    } else if (preg_match('/^ans[0-9]*$/', $columnname)) {
-                        $cardcontent->cardside = CARDBOX_CARDSIDE_ANSWER;
-                        $cardcontent->area = CARD_MAIN_INFORMATION;
-                    } else if ($columnname == 'qcontext') {
-                        $cardcontent->cardside = CARDBOX_CARDSIDE_QUESTION;
-                        $cardcontent->area = CARD_CONTEXT_INFORMATION;
-                    } else if ($columnname == 'acontext') {
-                        $cardcontent->cardside = CARDBOX_CARDSIDE_ANSWER;
-                        $cardcontent->area = CARD_CONTEXT_INFORMATION;
-                    } else {
-                        continue;
-                    }
-                    $cardcontent->id = $DB->insert_record('cardbox_cardcontents', $cardcontent, true);
-                }
-            }
-        } else {
-            $status = "";
-            foreach ($errors as $error) {
-                $status .= $error;
-            }
-            $rowcols['status'] = $status;
-            $errorlines[$j] = $rowcols;
-            $j++;
-        }
-        $i++;
-    }
-    return $errorlines;
-}
-
 function cardbox_import_validate_columns(array $filecolumns, int $descriptiontype) {
     $errors = [];
     $processed = [];
@@ -1301,7 +1218,6 @@ function generate_imported_cards_arr (csv_import_reader $cir) {
             }
             $cards[$linecount] = $eachcard;
             $linecount ++;
-
         }
     }
     return $cards;
