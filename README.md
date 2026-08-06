@@ -5,3 +5,4 @@ To-Do:
 * [ ] Check if Overview new template works with Moodle5
 * [x] Search text input in overview is too large for mobiles
 * [ ] The question context has tags in smaller screens at Overview
+* [ ] imported topics are not getting displayed in Manage Topics

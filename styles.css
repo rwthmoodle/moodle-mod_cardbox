@@ -574,6 +574,7 @@
     gap: 1rem;
     flex: 1 1 65%;
 }
+
 .filter-group {
   display: flex;
   align-items: center;
@@ -650,6 +651,8 @@
         display: flex;
         flex-direction: column;
         gap: 8px; /* Spacing between rows */
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
     }
 
     .cardbox-filters {
