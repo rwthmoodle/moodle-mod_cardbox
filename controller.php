@@ -390,15 +390,9 @@ if ($action === 'rejectcard') {
 
 /* **************************************************** Practice cards **************************************************** */
 if ($action === 'practice') {
-    require_once('model/cardbox.class.php');
-    require_once('model/card_selection_algorithm.php');
-    require_once('model/card_sorting_algorithm.php');
     $PAGE->set_url('/mod/cardbox/view.php', array('id' => $cm->id, 'action' => 'practice'));
-    
     $actionoutput .= $myrenderer->cardbox_render_tabs($taburl, $context, $action);
-
     $renderer = $PAGE->get_renderer('mod_cardbox');
-
     $startnow = optional_param('start', false, PARAM_BOOL);
     $correction = optional_param('mode', 0, PARAM_INT); // Automatic check against solution (default) or self check.
     $topic = optional_param('topic', null, PARAM_INT); // Topic to prioritize.
@@ -406,15 +400,15 @@ if ($action === 'practice') {
     $practiceall = optional_param('practiceall', true, PARAM_BOOL);
     $amountcards = optional_param('amountcards', 0, PARAM_INT); // Topic to prioritize.
     $openmodal = true;
-
-    // 1. Create a virtual cardbox for this practice session, i.e. create the model.
+    require_once('model/cardbox.class.php');
+    require_once('model/card_selection_algorithm.php');
+    require_once('model/card_sorting_algorithm.php');
     $select = new cardbox_card_selection_algorithm($topic, $practiceall, $onlyonetopic);
     $sort = new cardbox_card_sorting_algorithm();
     $cardboxmodel = new cardbox_cardboxmodel($cardbox->id, $select, $sort, $onlyonetopic);
 
     $cardcount = $cardboxmodel->cardbox_count_cards();
     $duecardcount = $cardboxmodel->cardbox_count_due_cards();
-
     // Inform the user that their cardbox is empty.
     if (empty($cardcount)) {
 
@@ -451,7 +445,6 @@ if ($action === 'practice') {
         );
         $openmodal = false;
     }
-
     if ($startnow && !( empty($duecardcount) &&  $practiceall == false)) {
         //Practise selected cards
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/practice.php');
@@ -470,34 +463,17 @@ if ($action === 'practice') {
         }
         $practice = new cardbox_practice($case, $context, $selection[0], count($selection), !$correction);
         $data = $practice->export_for_template($renderer);
-
-        // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00025"));
-        $params = array($cmid, $selection, $case, $data, $correction, $autocorrectval); // true means: the user checks their own results.
-        $PAGE->requires->js_init_call('startPractice', $params, true);
-
-        // 3. Render the page.
-        $actionoutput .= $renderer->cardbox_render_practice($practice);
-
-        // Create an event.
-        $event = \mod_cardbox\event\practice_session_started::create(['context' => $context,  'objectid' => $cm->instance]);
-        $event->trigger();
-
+        $PAGE->requires->js_call_amd('mod_cardbox/practise', 'init', [$cmid, $selection, $acvalue->disableautocorrect]);
     } else { // Render a modal dialogue that asks the user to select their practice preferences.
-
         require_once($CFG->dirroot . '/mod/cardbox/classes/output/start.php');
         $PAGE->requires->js_call_amd(
             'mod_cardbox/startOptions',
             'init',
             [$cm->id, $openmodal]
         );
-
         $start = new cardbox_start($cardbox->autocorrection, $cardbox->id);
-
         $actionoutput .= $renderer->cardbox_render_practice_start($start);
-
     }
-
 }
 
 /* **************************************************** View progress **************************************************** */
