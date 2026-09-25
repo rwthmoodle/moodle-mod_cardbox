@@ -44,4 +44,14 @@ $functions = array(
         'ajax'         => true,
         'capabilities' => 'mod/cardbox:edittopics'
     ),
+    'mod_cardbox_get_practice_data' => [
+        'classname' => 'mod_cardbox_external',
+        'methodname' => 'get_practice_data',
+        'classpath' => 'mod/cardbox/externallib.php',
+        'description' => 'Get practice data for cardbox module',
+        'type' => 'read',
+        'ajax' => true,
+        'capabilities' => '', // Add required capabilities if needed
+        'services' => [MOODLE_OFFICIAL_MOBILE_SERVICE]
+    ]
 );

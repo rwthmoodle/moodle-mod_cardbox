@@ -40,19 +40,18 @@
   * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
   * @returns {undefined}
   */
- function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals) { // Wrapper function that is called by controller.php.
+ function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals, __strings) { // Wrapper function that is called by controller.php.
  
      require(['jquery', 'core/templates', 'core/notification', 'core/chartjs'], function ($, templates, notification, chart) {
          
          /*********** 1. Variables and Calls ***********/
  
-         removeNotifications();
- 
+         removeNotifications();   
          var evaluate = new Evaluate();
-         var output = new Output(__case, templates, notification);
-         var statistics = new Statistics(chart);
+         var output = new Output(__case, templates, __strings, notification);
+         var statistics = new Statistics(chart, __strings);
  
-         var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case, __mode, __disableacvals);
+         var coordinate = new Coordinate(__cmid, __strings, evaluate, output, statistics, __selection, __data, __case, __mode, __disableacvals);
          var eventhandling = new EventHandling(coordinate);
          coordinate.addEventHandler(eventhandling);
          var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
@@ -301,7 +300,7 @@
  
  class Coordinate {
  
-     constructor(cmid, evaluate, output, statistics, selection, data, __case, __mode, __disableacvals) {
+     constructor(cmid, strings, evaluate, output, statistics, selection, data, __case, __mode, __disableacvals) {
  
              this.cmid = cmid;
              this.selection = selection;
@@ -330,6 +329,7 @@
              this.output = output;
              this.statistics = statistics;
              this.acvals = __disableacvals;
+             this.strings = strings;
          }
  
          addEventHandler(eventhandling) {
@@ -338,7 +338,8 @@
  
          reactTo(clicked) {
  
-             switch(clicked) {
+            console.log(this.strings); 
+            switch(clicked) {
                  
                  // I. question-view events for flipping the card.
                  

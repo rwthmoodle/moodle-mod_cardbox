@@ -665,7 +665,7 @@ function cardbox_create_cards_from_import (array $importedcards, int $cardboxid)
     $topics = []; 
     foreach ($importedcards as $card) {
         $trimmedTopic = trim($card['topic']);
-        $params = ['topicname' => $trimmedTopic];
+        $params = ['topicname' => $trimmedTopic, 'cardboxid' => $cardboxid];
         $matchingtopic = $DB->get_record('cardbox_topics', $params, 'id', IGNORE_MULTIPLE);
         if ($matchingtopic !== false) {
             $topics[$matchingtopic->id] = $trimmedTopic;

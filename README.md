@@ -1,8 +1,10 @@
 To-Do:
-* [ ] Delete is not working
+* [x] Delete is not working => its working but slow
 * [x] Import for multiple answers is yet to be done
 * [ ] Review template rebuild
-* [ ] Check if Overview new template works with Moodle5
+* [x] Check if Overview new template works with Moodle5
 * [x] Search text input in overview is too large for mobiles
 * [ ] The question context has tags in smaller screens at Overview
-* [ ] imported topics are not getting displayed in Manage Topics
+* [x] imported topics are not getting displayed in Manage Topics
+* [ ] feedback strings not generated in practice
+* [ ] multiple answers sections remains hidden in edit mode (editCard)
