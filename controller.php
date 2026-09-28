@@ -566,7 +566,7 @@ if ($action === 'practice') {
             'titleprogresschart' => get_string('titleprogresschart', 'cardbox'),
         ];
         // 3. Give javascript access to the language string repository and to the relevant model data and add it to the page.
-        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00026"));
+        $PAGE->requires->js(new moodle_url("/mod/cardbox/js/practice.js?ver=00027"));
         $params = array($cmid, $selection, $case, $data, $correction, $autocorrectval, $jsstrings); // true means: the user checks their own results.
         $PAGE->requires->js_init_call('startPractice', $params, true);
 
