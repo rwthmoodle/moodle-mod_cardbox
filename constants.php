@@ -27,8 +27,13 @@ defined('MOODLE_INTERNAL') || die();
 /**
  * IMPORT CARDS
  */
-define ('LOAD_FORM_AND_CSVPREVIEW', 1);
+define ('CSV_SUBMITTED', 1);
 define ('PROCESSCSV_AND_CREATE_CARDS', 2);
+define ('NO_ERROR_AT_IMPORT', 0);
+define ('WARNINGS_AT_IMPORT', 1);
+define ('ERRORS_AT_IMPORT', 2);
+define ('CARD_IN_REVIEW', 0);
+define ('CARD_APPROVED', 1);
 /**
  * ADD CARDS
  */

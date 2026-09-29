@@ -40,19 +40,18 @@
   * @param {type} __data card contents (question and answer) to be passed to the template for rendering.
   * @returns {undefined}
   */
- function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals) { // Wrapper function that is called by controller.php.
+ function startPractice(Y, __cmid, __selection, __case, __data, __mode, __disableacvals, __strings) { // Wrapper function that is called by controller.php.
  
      require(['jquery', 'core/templates', 'core/notification', 'core/chartjs'], function ($, templates, notification, chart) {
          
          /*********** 1. Variables and Calls ***********/
  
-         removeNotifications();
+         removeNotifications();   
+         var evaluate = new Evaluate(__strings);
+         var output = new Output(__case, templates, __strings, notification);
+         var statistics = new Statistics(chart, __strings);
  
-         var evaluate = new Evaluate();
-         var output = new Output(__case, templates, notification);
-         var statistics = new Statistics(chart);
- 
-         var coordinate = new Coordinate(__cmid, evaluate, output, statistics, __selection, __data, __case, __mode, __disableacvals);
+         var coordinate = new Coordinate(__cmid, __strings, evaluate, output, statistics, __selection, __data, __case, __mode, __disableacvals);
          var eventhandling = new EventHandling(coordinate);
          coordinate.addEventHandler(eventhandling);
          var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
@@ -301,7 +300,7 @@
  
  class Coordinate {
  
-     constructor(cmid, evaluate, output, statistics, selection, data, __case, __mode, __disableacvals) {
+     constructor(cmid, strings, evaluate, output, statistics, selection, data, __case, __mode, __disableacvals) {
  
              this.cmid = cmid;
              this.selection = selection;
@@ -330,6 +329,7 @@
              this.output = output;
              this.statistics = statistics;
              this.acvals = __disableacvals;
+             this.strings = strings;
          }
  
          addEventHandler(eventhandling) {
@@ -338,7 +338,8 @@
  
          reactTo(clicked) {
  
-             switch(clicked) {
+            console.log(this.strings); 
+            switch(clicked) {
                  
                  // I. question-view events for flipping the card.
                  
@@ -392,7 +393,7 @@
                      var feedbackbox = document.getElementById("cardbox-feedback");
                      feedbackbox.classList.remove('cardbox-error');                
                      feedbackbox.classList.add('cardbox-success');
-                     feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
+                     feedbackbox.innerHTML = this.strings.feedback_correctandcomplete;
                      document.getElementById('cardbox-user-solution').classList.replace('cardbox-input-color-incorrect', 'cardbox-input-color-correct');
                      break;
                  
@@ -627,9 +628,10 @@
   */
  class Evaluate {
      
-     constructor() {
+     constructor(strings) {
          
          this.considercardcorrect = false;
+         this.strings = strings;
          this.answeriscorrect = 0;
          this.answeriscomplete = 0;
          this.answergiven = 1;
@@ -857,9 +859,10 @@
  
  class Output {
      
-     constructor(casex, templates, notification) {
+     constructor(casex, templates, strings, notification) {
          this.case = casex;
          this.templates = templates;
+         this.strings = strings;
          this.notification = notification;
      }
      /**
@@ -933,6 +936,7 @@
       * @returns {undefined}
       */
      renderAnswer(evaluate, eventhandling, data = null) {
+        console.log(this.strings);
          var acval = eventhandling.controller.acvals.filter(checkacvalue, eventhandling.controller.cardId);
          if (eventhandling.controller.case == Case_SelfCheck) {
              var quescase = Ques_Selfcheck;
@@ -992,9 +996,9 @@
              }
              
              if (considercardcorrect) {
-                 newdata['overridelabel'] = M.util.get_string('override_isincorrect', 'cardbox');
+                 newdata['overridelabel'] = this.strings.override_isincorrect;
              } else {
-                 newdata['overridelabel'] = M.util.get_string('override_iscorrect', 'cardbox');
+                 newdata['overridelabel'] = this.strings.override_iscorrect;
              }
              
              
@@ -1053,48 +1057,32 @@
           * @param {type} evaluation
           * @returns {undefined}
           */
-         function giveFeedback(evaluation) {
- 
- /*             var wrapper = document.getElementById("cardbox-feedback-wrapper"); */
-             var feedbackbox = document.getElementById("cardbox-feedback");
- 
-             if (evaluation === 'correctandcomplete') {
-                 
- //                feedbackbox.classList.add('cardbox-success');
-                 feedbackbox.innerHTML = M.util.get_string('feedback:correctandcomplete', 'cardbox');
- 
- 
-             } else if (evaluation === 'incomplete') {
- 
- //                feedbackbox.classList.add('cardbox-warning');
-                 feedbackbox.innerHTML = M.util.get_string('feedback:incomplete', 'cardbox');
- 
- 
-             } else if (evaluation === 'notknown') {
- 
- //                feedbackbox.classList.add('cardbox-error');
-                 feedbackbox.innerHTML = M.util.get_string('feedback:notknown', 'cardbox');
-                 document.getElementById('cardbox-override').disabled = true; 
- 
- 
-             } else {
- 
- //                feedbackbox.classList.add('cardbox-error');
-                 feedbackbox.innerHTML = M.util.get_string('feedback:incorrectandpossiblyincomplete', 'cardbox');
-             }
- 
-         }
+         const giveFeedback = (evaluation) => {  // ← Change to arrow function
+            var feedbackbox = document.getElementById("cardbox-feedback");
+
+            if (evaluation === 'correctandcomplete') {
+                feedbackbox.innerHTML = this.strings.feedback_correctandcomplete;
+            } else if (evaluation === 'incomplete') {
+                feedbackbox.innerHTML = this.strings.feedback_incomplete;
+            } else if (evaluation === 'notknown') {
+                feedbackbox.innerHTML = this.strings.feedback_notknown;
+                document.getElementById('cardbox-override').disabled = true;
+            } else {
+                feedbackbox.innerHTML = this.strings.feedback_incorrectandpossiblyincomplete; // ← Now works!
+            }
+        };
      }
      
  }
  
  class Statistics {
      
-     constructor(chart) {
+     constructor(chart, strings) {
          // Statistical information that will be displayed to the user at the end of practice.
          this.countright = 0;
          this.countwrong = 0;
          this.chart = chart;
+         this.strings = strings;
          this.starttime = Math.floor(new Date().getTime()/1000.0);
      }
      
@@ -1143,8 +1131,8 @@
  
              // These labels appear in the legend and in the tooltips when hovering different arcs.
              labels: [
-                 M.util.get_string('right', 'cardbox'),
-                 M.util.get_string('wrong', 'cardbox')
+                 this.strings.right,
+                 this.strings.wrong
              ]
          };
  
@@ -1154,7 +1142,7 @@
              options: {
                  title: {
                      display: true,
-                     text: M.util.get_string('titleprogresschart', 'cardbox'),
+                     text: this.strings.titleprogresschart,
                      fontSize: 16,
                      position: 'top'
                  },

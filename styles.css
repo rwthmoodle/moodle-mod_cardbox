@@ -76,7 +76,7 @@
 .path-mod-cardbox #review-button-wrapper {
     text-align: center;
     max-width: fit-content;
-    padding-right: 0px;
+    padding-left: 0px !important;
 }
 
 .path-mod-cardbox #cardbox-topic-in-review {
@@ -242,22 +242,22 @@
 
 .path-mod-cardbox .cardbox-card-left-side,
 .path-mod-cardbox .cardbox-card-right-side {
-    border: 1px solid #e6e6e6;
+    border: 1px solid #CFCCCC;
     border-radius: 3px;
     /* margin-bottom: 2em; */
     padding: 1em;
-    height: 100%;
+    flex: 1;
 }
 .path-mod-cardbox .cardbox-card-right-side-multi {
     border-radius: 3px;
     /* margin-bottom: 2em; */
     margin-right: 1em;
     margin-left: 0.2em;
-    height: 100%;
+    flex: 1;
     display: grid;
 }
 .path-mod-cardbox .cardbox-cardside-multi {
-    border: 1px solid #e6e6e6;
+    border: 1px solid #CFCCCC;
     padding: 1em;
     margin-bottom: 1%;
 }
@@ -516,12 +516,6 @@
 .path-mod-cardbox .autocorrect_icon {
     height: 1.6em;
 }
-.path-mod-cardbox .ques-teil {
-    padding: 0px;
-}
-.path-mod-cardbox .ans-teil {
-    padding: 0px;
-}
 
 @media (max-width: 800px) {
     .path-mod-cardbox .review-topic {
@@ -534,14 +528,10 @@
         margin-right: 0em;
         margin-left: 0em;
     }
-    .path-mod-cardbox .ques-teil {
-        padding: 0px;
-    }
-    .path-mod-cardbox .ans-teil {
-        padding: 0px;
-    }
     .path-mod-cardbox .review-button-wrapper {
-        margin-top: 2em;
+        margin-top: 0.2rem;
+        margin-bottom: 2em;
+        justify-content: center;
     }
     .path-mod-cardbox .cardbox-card-left-side {
         margin-right: 2%;
@@ -572,20 +562,145 @@
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    gap: 1%;
+    gap: 1rem;
 }
-
+.filters-search{
+    width: 100%;
+}
 .cardbox-filters {
     display: flex;
-    align-items: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    gap: 1%;
+    gap: 1rem;
     flex: 1 1 65%;
 }
 
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* 4px → 0.25rem */
+}
 .cardbox-search {
     display: flex;
-    align-items: center;
     justify-content: flex-end;
-    flex: 1 1 30%;
+    flex-wrap: wrap;
+    flex: 1 1 35%;
+}
+.cardbox-studyview{
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    max-width: 100%;
+
+}
+.row.cardbox-card-content,
+.row.cardbox-card-header,
+.row.cardbox-card-context {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    column-gap: 0;
+    align-items: start;
+}
+.cardbox-card-content > .col {
+    display: flex;
+}
+
+.ques-teil {
+    grid-column: 1;
+    margin-right: 1rem;
+}
+.ques-context {
+    margin-left: 1rem;
+}
+
+.ans-teil {
+    grid-column: 2;
+    margin-right: 0.3rem;
+}
+.ans-context {
+    margin-left: 0.3rem;
+}
+
+
+.review-button-wrapper {
+    grid-column: 3;
+}
+.cardbox-card-in-overview {
+    width: 100%;
+    margin-right:3rem;
+    margin-left: 3rem;
+}
+.cardtopic {
+    margin-left: 1em;
+}
+.col.cardbox-column.card-icons{
+    padding-right:4.5rem;
+}
+.for-smaller-screens {
+    display: none;
+}
+@media (max-width: 767.98px) {
+    .for-bigger-screens {
+        display: none;
+    }
+    .for-smaller-screens {
+        display: inline;
+    }
+    .filters-search {
+        display: flex;
+        flex-direction: column;
+        gap: 8px; /* Spacing between rows */
+        margin-left: 0.5rem !important;
+        margin-right: 0.5rem !important;
+    }
+
+    .cardbox-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.8rem;
+    }
+
+    .cardbox-filters > span {
+        white-space: nowrap; /* Prevents label wrapping */
+    }
+
+    .cardbox-search {
+        width: 100%;
+        max-width: 300px;
+        margin-left: 0;
+    }
+    .row.cardbox-card-content {
+        grid-template-columns: 1fr;
+        row-gap: 0.1rem;
+    }
+
+    .ques-teil,
+    .ans-teil,
+    .review-button-wrapper {
+        grid-column: 1;
+    }
+
+    .row.cardbox-card-context {
+        grid-template-columns: 1fr;
+    }
+
+    .ques-context,
+    .ans-context {
+        grid-column: 1;
+    }
+    .col.cardbox-column.card-icons{
+        padding-right: 0.1rem;
+    }
+    .row .filters-search {
+        margin-left: 0rem;
+        margin-right: 0rem;
+    }
+    .row .filters-search .cardbox-filters {
+        grid-template-columns: 1fr;
+    }
+    .row .filters-search .cardbox-filters > span {
+        grid-column: 1;
+    }
+
 }

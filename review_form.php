@@ -175,7 +175,7 @@ class mod_cardbox_review_form extends moodleform {
                 .$answer.'</div></div></div></div>');
             }
 
-            $mform->addElement('html', '<div class="col-xs-2"><div id="review-button-wrapper">
+            $mform->addElement('html', '<div class="col-auto"><div id="review-button-wrapper">
                 <div class="btn-group-vertical" role="group" aria-label="review-actions">
                 <button id="cardbox-edit-'.$cardid.'" type="button" class="btn btn-primary cardbox-review-button" title="Edit"><i class="icon fa fa-pencil fa-fw"></i></button>
                 </div></div></div>');

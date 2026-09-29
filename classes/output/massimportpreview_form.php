@@ -33,6 +33,7 @@ class massimportpreview_form extends \moodleform {
     public function definition($action = null, $preselected = null) {
         $mform = $this->_form;
         $data = $this->_customdata;
+        $importedcards = $data['importedcards'];
 
         $mform->addElement('hidden', 'cardboxid');
         $mform->setType('cardboxid', PARAM_INT);
@@ -55,16 +56,16 @@ class massimportpreview_form extends \moodleform {
 
         $mform->addElement('hidden', 'error');
         $mform->setType('error', PARAM_INT);
-
+        $mform->addElement('html', '<br>');
         $reviewbtngrp = [];
-        if ($data['error'] == 0) {
-            $reviewbtngrp[] =& $mform->createElement('submit', 'importbtn', get_string('massimport', 'cardbox'));
-        }
-        $reviewbtngrp[] =& $mform->createElement('submit', 'rejectbtn', get_string('cancel', 'cardbox'));
+        $reviewbtngrp[] =& $mform->createElement('submit', 'importbtn', get_string('massimport', 'cardbox'));
+        $reviewbtngrp[] =& $mform->createElement('cancel');
         $mform->addGroup($reviewbtngrp, 'reviewbtnarr', '', [''], false);
         $mform->setType('reviewbtnarr', PARAM_RAW);
         $mform->closeHeaderBefore('reviewbtnarr');
-
+        $encodedArray = json_encode($importedcards);
+        $mform->addElement('hidden', 'importedcards_json', $encodedArray);
+        $mform->setType('importedcards_json', PARAM_TEXT);
         $this->set_data($data);
     }
 }

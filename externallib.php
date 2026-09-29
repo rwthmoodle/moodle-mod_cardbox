@@ -147,7 +147,7 @@ class mod_cardbox_external extends external_api {
     }
 
     public static function renametopic($topicid, $newtopicname) {
-        global $DB;
+        global $DB, $USER;
 
         $params = self::validate_parameters(
             self::renametopic_parameters(),
@@ -188,5 +188,48 @@ class mod_cardbox_external extends external_api {
         $module = $DB->get_field_sql($sql);
         $sql = 'SELECT id FROM {course_modules} WHERE module = :module AND instance= :cardboxid';
         return $DB->get_field_sql($sql, ['cardboxid' => $cardboxid, 'module' => $module]);
+    }
+
+    public static function get_practice_data($cmid) {
+        global $USER;
+
+        // Validate course module
+        $cm = get_coursemodule_from_id('cardbox', $cmid, MUST_EXIST);
+        $context = context_module::instance($cm->id);
+        self::validate_context($context);
+
+        return [
+            'translations' => [
+                'correctcomplete' => get_string('feedback:correctandcomplete', 'cardbox'),
+                'overrideincorrect' => get_string('override_isincorrect', 'cardbox'),
+                'overridecorrect' => get_string('override_iscorrect', 'cardbox'),
+                'incomplete' => get_string('feedback:incomplete', 'cardbox'),
+                'notknown' => get_string('feedback:notknown', 'cardbox'),
+                'incorrectandpossiblyincomplete' => get_string('feedback:incorrectandpossiblyincomplete', 'cardbox'),
+                'right' => get_string('right', 'cardbox'),
+                'wrong' => get_string('wrong', 'cardbox'),
+                'progresschart' => get_string('titleprogresschart', 'cardbox')
+            ],
+            'userId' => $USER->id,
+            'cmid' => $cmid
+            // Add any other data you need
+        ];
+    }
+    public static function get_practice_data_returns() {
+        return new external_single_structure([
+            'translations' => new external_single_structure([
+                'correctcomplete' => new external_value(PARAM_TEXT, 'Correct and complete'),
+                'overrideincorrect' => new external_value(PARAM_TEXT, 'Override incorrect'),
+                'overridecorrect' => new external_value(PARAM_TEXT, 'Override correct'),
+                'incomplete' => new external_value(PARAM_TEXT, 'Incomplete'),
+                'notknown' => new external_value(PARAM_TEXT, 'Not known'),
+                'incorrectandpossiblyincomplete' => new external_value(PARAM_TEXT, 'Incorrect and possibly incomplete'),
+                'right' => new external_value(PARAM_TEXT, 'Right'),
+                'wrong' => new external_value(PARAM_TEXT, 'Wrong'),
+                'progresschart' => new external_value(PARAM_TEXT, 'Progress chart')
+            ]),
+            'userId' => new external_value(PARAM_INT, 'User ID'),
+            'cmid' => new external_value(PARAM_INT, 'Course module ID')
+        ]);
     }
 }
