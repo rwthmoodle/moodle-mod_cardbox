@@ -2,6 +2,8 @@ import * as Str from 'core/str';
 /**
  * Initializes the practice module.
  * @param {number} cmid - Course module ID (unused in current implementation)
+ * @param {number} selection - selection of cards for practise
+ * @param {number} disableautocorrect - value for disableautocorrect
  * @returns {Promise<void>}
  */
 export const init = async (cmid, selection, disableautocorrect) => {// eslint-disable-line no-unused-vars
