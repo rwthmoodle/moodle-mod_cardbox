@@ -81,10 +81,10 @@ function deletetopic(cmid, topicid, topictitel) {
             const root = modal.getRoot();
 
             root[0].querySelector('.modal-footer').innerHTML = `
-                <button type="button" class="btn btn-primary" data-action="delete-all">
+                <button type="button" class="btn btn-primary" data-action="delete-all" style ="background-color:#ca3120">
                     ${strings[2]}
                 </button>
-                <button type="button" class="btn btn-secondary" data-action="delete-topic">
+                <button type="button" class="btn btn-secondary" data-action="delete-topic" style ="background-color:#ca3120">
                     ${strings[3]}
                 </button>
                 <button type="button" class="btn btn-secondary" data-action="cancel">

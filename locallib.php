@@ -64,7 +64,7 @@ function cardbox_save_new_topic($topicname, $cardboxid) {
 function cardbox_get_topics($cardboxid, $extra = false) {
 
     global $DB;
-    $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid));
+    $topics = $DB->get_records('cardbox_topics', array('cardboxid' => $cardboxid), 'topicname ASC');
     $options = array(-1 => get_string('notopic', 'cardbox'));
     if ($extra) {
         $options = array(-1 => get_string('notopic', 'cardbox'), 0 => get_string('addnewtopic', 'cardbox'));
@@ -1036,15 +1036,17 @@ function cardbox_save_filemanager_content(
     );
 
     if ($description !== null && trim($description) !== '') {
-        cardbox_save_new_cardcontent(
+        if ($filetype !== CARDBOX_CONTENTTYPE_IMAGE) {
+            cardbox_save_new_cardcontent(
             $cardid,
             0,
             $filetype,
             $description,
             $descriptiontype
         );
-    } else {
-        throw new moodle_exception(get_string('error:imagedescription', 'cardbox'));
+        } else {
+            throw new moodle_exception(get_string('error:imagedescription', 'cardbox'));
+        }
     }
 }
 ##---------------- OVERVIEW -------------------------------------------##
