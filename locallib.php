@@ -1241,3 +1241,128 @@ function fetch_card_values_for_editing($from, $cmid, $cardid) {
     $disableautocorrect = $DB->get_field('cardbox_cards', 'disableautocorrect', array('id' => $cardid), IGNORE_MISSING);
 
 }
+
+/**
+ * Convert stored card HTML/text into plain text suitable for CSV export.
+ *
+ * @param string $content
+ * @return string
+ */
+function cardbox_export_clean_text(string $content): string {
+    $text = html_to_text($content, 0);
+    $text = html_entity_decode($text, ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text = str_replace("\xc2\xa0", ' ', $text);
+    $text = preg_replace('/\s+/u', ' ', $text);
+    return trim($text);
+}
+
+/**
+ * Return the approved cards of a topic with their plain-text question and answers.
+ *
+ * @param int $cardboxid
+ * @param int $topicid
+ * @return array{topic:stdClass,cards:array<int,array<string,mixed>>,maxanswers:int}
+ */
+function cardbox_get_topic_cards_for_csv_export(int $cardboxid, int $topicid): array {
+    global $DB;
+
+    $topic = $DB->get_record('cardbox_topics', ['id' => $topicid, 'cardboxid' => $cardboxid], '*', MUST_EXIST);
+    $cards = $DB->get_records('cardbox_cards', ['cardbox' => $cardboxid, 'topic' => $topicid, 'approved' => 1], 'id ASC');
+
+    $rows = [];
+    $maxanswers = 1;
+
+    foreach ($cards as $card) {
+        $contents = $DB->get_records('cardbox_cardcontents', ['card' => $card->id], 'id ASC');
+        $question = '';
+        $answers = [];
+
+        foreach ($contents as $content) {
+            if ((int)$content->contenttype !== CARDBOX_CONTENTTYPE_TEXT) {
+                continue;
+            }
+            if ((int)$content->area !== CARD_MAIN_INFORMATION) {
+                continue;
+            }
+
+            $clean = cardbox_export_clean_text((string)$content->content);
+            if ($clean === '') {
+                continue;
+            }
+
+            if ((int)$content->cardside === CARDBOX_CARDSIDE_QUESTION && $question === '') {
+                $question = $clean;
+            } else if ((int)$content->cardside === CARDBOX_CARDSIDE_ANSWER) {
+                $answers[] = $clean;
+            }
+        }
+
+        if (count($answers) > $maxanswers) {
+            $maxanswers = count($answers);
+        }
+
+        $rows[] = [
+            'question' => $question,
+            'answers' => $answers,
+        ];
+    }
+
+    return ['topic' => $topic, 'cards' => $rows, 'maxanswers' => max(1, $maxanswers)];
+}
+
+/**
+ * Stream a CSV export of the approved cards of a single topic.
+ *
+ * @param int $cardboxid
+ * @param int $topicid
+ * @return void
+ */
+function cardbox_export_topic_csv(int $cardboxid, int $topicid): void {
+    $data = cardbox_get_topic_cards_for_csv_export($cardboxid, $topicid);
+    $topic = $data['topic'];
+    $rows = $data['cards'];
+    $maxanswers = $data['maxanswers'];
+
+    $columns = ['ques'];
+    if ($maxanswers <= 1) {
+        $columns[] = 'ans';
+    } else {
+        for ($i = 1; $i <= $maxanswers; $i++) {
+            $columns[] = 'ans' . $i;
+        }
+    }
+    $columns[] = 'topic';
+
+    $filenamebase = clean_filename(core_text::strtolower((string)$topic->topicname));
+    if ($filenamebase === '') {
+        $filenamebase = 'topic';
+    }
+    $filename = get_string('exporttopiccsvfilename', 'cardbox', $filenamebase);
+
+    header('Content-Type: text/csv; charset=utf-8');
+    header('Content-Disposition: attachment; filename="' . $filename . '"');
+    header('Pragma: no-cache');
+    header('Expires: 0');
+
+    $out = fopen('php://output', 'w');
+    fprintf($out, chr(0xEF) . chr(0xBB) . chr(0xBF));
+    fputcsv($out, $columns, ',', '"', '');
+
+    foreach ($rows as $row) {
+        $csvrow = [$row['question']];
+        $answers = $row['answers'];
+
+        if ($maxanswers <= 1) {
+            $csvrow[] = $answers[0] ?? '';
+        } else {
+            for ($i = 0; $i < $maxanswers; $i++) {
+                $csvrow[] = $answers[$i] ?? '';
+            }
+        }
+
+        $csvrow[] = cardbox_export_clean_text((string)$topic->topicname);
+        fputcsv($out, $csvrow, ',', '"', '');
+    }
+
+    fclose($out);
+}

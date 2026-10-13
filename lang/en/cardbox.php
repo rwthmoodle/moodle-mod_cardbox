@@ -313,6 +313,10 @@ $string['createtopic'] = 'Add';
 $string['existingtopics'] = 'Existing topics';
 $string['notopics'] = 'there are no topics yet';
 $string['nulltopic'] = 'Not Assigned';
+$string['exporttopiccsv'] = 'Export CSV';
+$string['exporttopiccsvhelp'] = 'Export the approved cards of this topic as a CSV file';
+$string['exporttopiccsvnocards'] = 'This topic has no approved cards to export';
+$string['exporttopiccsvfilename'] = 'topic_{$a}.csv';
 
 // Settings.
 $string['statistics_heading'] = 'Statistics';
