@@ -888,6 +888,19 @@ if ($action === 'overview') {
     $actionoutput .= $OUTPUT->paging_bar($totalcount, $page, $perpage, $baseurl);
 }
 
+/* **************************************************** Export topic CSV **************************************************** */
+
+if ($action === 'exporttopiccsv') {
+
+    require_capability('mod/cardbox:edittopics', $context);
+    require_sesskey();
+
+    $topicid = required_param('topicid', PARAM_INT);
+    cardbox_export_topic_csv((int)$cardbox->id, $topicid);
+    exit;
+
+}
+
 /* **************************************************** Edit topics **************************************************** */
 
 if ($action === 'savenewtopic') {

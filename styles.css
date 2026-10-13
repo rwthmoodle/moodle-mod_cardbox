@@ -83,6 +83,12 @@
     display: flex;
 }
 
+.path-mod-cardbox .cardbox-export-topic-button {
+    margin-left: 0.5rem;
+    margin-right: 0.25rem;
+    vertical-align: baseline;
+}
+
 .path-mod-cardbox .reviewcontent,
 .path-mod-cardbox .overviewcontent {
     margin-top: 50px;
