@@ -189,14 +189,32 @@ class mod_cardbox_external extends external_api {
         $sql = 'SELECT id FROM {course_modules} WHERE module = :module AND instance= :cardboxid';
         return $DB->get_field_sql($sql, ['cardboxid' => $cardboxid, 'module' => $module]);
     }
+    
+    public static function get_practice_data_parameters() {
+        return new external_function_parameters(
+	    [
+		'cmid' => new external_value(
+		    PARAM_INT,
+		    'Course module ID',
+		    VALUE_REQUIRED
+		),
+	    ]
+	);
+    }
 
     public static function get_practice_data($cmid) {
         global $USER;
+        
+	$params = self::validate_parameters(
+	    self::get_practice_data_parameters(),
+	    ['cmid' => $cmid]
+	);
 
         // Validate course module
         $cm = get_coursemodule_from_id('cardbox', $cmid, MUST_EXIST);
         $context = context_module::instance($cm->id);
         self::validate_context($context);
+        require_capability('mod/cardbox:view', $context);
 
         return [
             'translations' => [
@@ -227,7 +245,7 @@ class mod_cardbox_external extends external_api {
                 'right' => new external_value(PARAM_TEXT, 'Right'),
                 'wrong' => new external_value(PARAM_TEXT, 'Wrong'),
                 'progresschart' => new external_value(PARAM_TEXT, 'Progress chart')
-            ]),
+            ], 'Translation strings for practice page'),
             'userId' => new external_value(PARAM_INT, 'User ID'),
             'cmid' => new external_value(PARAM_INT, 'Course module ID')
         ]);
