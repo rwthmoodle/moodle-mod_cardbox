@@ -219,7 +219,7 @@ class mod_cardbox_card_form extends moodleform {
         $draftitemid = $data['cardimage'];
         $imagefiles = $fs->get_area_files($usercontext->id, 'user', 'draft', $draftitemid, 'sortorder, id', false);
         $ifimguploaded = !empty($imagefiles);
-        if ($ifimguploaded && trim($data['imagedescription']) === '') {
+        if ($ifimguploaded && empty($data['imgdescriptionnecessary']) && trim($data['imagedescription']) === '') {
             $errors['imagedescription'] = get_string('error:imagedescription', 'cardbox');
         }
         return $errors;

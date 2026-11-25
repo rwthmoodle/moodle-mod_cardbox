@@ -1036,7 +1036,7 @@ function cardbox_save_filemanager_content(
     );
 
     if ($description !== null && trim($description) !== '') {
-        if ($filetype !== CARDBOX_CONTENTTYPE_IMAGE) {
+        if ($filetype === CARDBOX_CONTENTTYPE_IMAGE) {
             cardbox_save_new_cardcontent(
             $cardid,
             0,
